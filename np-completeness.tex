@@ -1,0 +1,91 @@
+In order to show NP-completeness of our problem we will perform
+reduction from 3-SAT. Let's take any formula $\Phi$ in 3-CNF. First,
+transform $\Phi$ to equivalent formula $\Psi$ the following way:
+
+\begin{itemize}
+\item let's assign every clause its unique number from 1 to number of
+  clauses
+\item for every occurence of variable $v$ we replace it to $v_{number
+    of clauses}$
+\item for every variable $v$ we add set of clauses in form $v_i \iff v_{i+1}$
+\end{itemize}
+
+Let's construct our tree out of gadgets for every variable connected
+to tree root. The gadget is constructed as follows:
+
+\begin{itemize}
+\item i-th occurence of $v$ we create two leaves labeled $v_i$ and
+  $\neg v_i$
+\item we connect positive leaves in one subtree with root vertex called ``positive'' and negative leaves in
+  another subtree with root vertex called ``negative''
+\item we connect ``positive'' and ``negative'' into one subtree with
+  root vertex called $v$
+\item we set bandwidth constraints between $v_i$ and ``positive'' to
+  $vms - 1$
+\item we set bandwidth constraints between $\neg v_i$ and ``negative''
+  to $vms - 1$
+\item we set bandwidth constraints between ``negative'' and $v$ to
+  $vms - \binom{number of occurences of v}{2}$
+\item we set bandwidth constraints between ``positive'' and $v$ to
+  $vms - \binom{number of occurences of v}{2}$
+\item we set bandwidth constraints between $v$ and root to
+  $vms - \binom{number of occurences of v}{2}$
+\end{itemize}
+
+For each clause we place 3 chunks in 3 leaves labeled as literals in
+this clause.
+
+We set number of virtual machines to place to be $3 \cdot number of
+clauses$.
+
+We set chunk transfer cost to be any positive integer, let's say 1.
+We set VM communication transfer cost to be 1.
+
+Let's define $C$ as VM communication cost when all machines are in
+positive literals.
+
+This ends our construction. Now we need to decide $\Phi$. We do it the
+following way:
+
+\begin{itemize}
+\item if there is no solution that doesn't exceed bandwidth, we
+  answer: $\Phi$ is unsatisfiable
+\item if minimal solution has value larger than $C$, we answer: $\Phi$
+  is unsatisfiable
+\item if minimal solution has value $C$, we answer: $\Phi$ is satisfiable
+\end{itemize}
+
+Proof of correctness.
+
+First, we will proove that if $\Phi$ is satisfiable then our VC
+instance has solution with cost equal to $C$. Let's take any valuation $F$
+that satisfies $\Phi$. For every variable $v$ that is set to true we
+place virtual machines in every vertex with label $v_i$. For every
+variable $v$ that is set to false we place virtual machines in every
+vertex with label $\neg v_i$. For every virtual machine we either have
+a chunk in the same vertex - then we match the VM with the chunk - or
+we do not have a chunk in the same vertex - then we do not match the
+VM with any chunk. We need to proove two claims:
+\begin{itemize}
+\item This placement of virtual machines does not exceed the bandwidth
+\item This placement of virtual machines matches every chunk
+\end{itemize}
+
+TODO: prove claims above.
+
+Second, we will proove that if our VC instance has solution with cost
+equal to $C$ than $\Phi$ is satisifiable. Let's create valuation $F$
+in the following way:
+
+\begin{itemize}
+\item if $v_1$ has machine in it then $F(v) = true$
+\item if $\neg v_1$ has machine in it then $F(v) = false$
+\end{itemize}
+
+In order to prove that $F$ satisfies $\Phi$ we will need to proove
+following claim. If $v_1$ has virtual machine then for all $i$ we have
+that $v_i$ has virtual machine and for all $i$ we have that $\neg v_i$
+does not have a virtual machine. Also, if $\neg v_1$ has virtual
+machine then for all $i$ we have that $\neg v_i$ has virtual machine
+in it and for all $i$ we have that $v_i$ does not have a virtual
+machine. To do: prove this claim.
