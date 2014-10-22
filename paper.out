@@ -4,4 +4,5 @@
 \BOOKMARK [2][-]{subsection.3.1}{Model variants}{section.3}% 4
 \BOOKMARK [2][-]{subsection.3.2}{Dynamic programming solution to single virtual cluster embedding, footprint minimization, one chunk per VM}{section.3}% 5
 \BOOKMARK [2][-]{subsection.3.3}{Dynamic programming solution to single virtual cluster embedding, footprint minimization, VMs have unlimited processing power}{section.3}% 6
-\BOOKMARK [1][-]{section.4}{Appendix}{}% 7
+\BOOKMARK [1][-]{section.4}{NP-completeness of r + fp + cv + bw}{}% 7
+\BOOKMARK [1][-]{section.5}{Appendix}{}% 8

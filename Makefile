@@ -1,5 +1,5 @@
 FILE = paper
-FILES = dynamic_embedding.tex dynamic_embedding2.tex models.tex
+FILES = dynamic_embedding.tex dynamic_embedding2.tex models.tex np-completeness.tex
 PICT = 
 
 all: $(FILE).pdf
