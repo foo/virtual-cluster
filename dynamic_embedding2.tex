@@ -1,0 +1,18 @@
+Model will be a modification of model from previous chapter. The only
+difference is that each VM can process arbitrary amount of chunks
+instead of only one.
+
+Our approach will be tree binarization, followed by dynamic
+programming algorithm. This time, instead of just having one array
+with costs, now we have 3 arrays, named cost[T, x], up[T, x] and
+down[T, x]. Array cost[T, x] is the
+same as previously, the sum of bandwidth allocated in subtree T,
+knowing that it contains x VMs. Array up[T, x] is amount of transfer
+from chunks that did not fit inside tree T because of capacity
+constraints and have to be pointed outside. Array down[T, x] is amount
+of processing power of the subtree; in other words it is the amount of
+transfer that can be pointed towards VMs in T. Both up[T,x] and
+down[T,x] are closely related to cost[T,x] in the sense that we assume
+that the same decisions about placing VMs were taken in up, down as in
+cost.
+

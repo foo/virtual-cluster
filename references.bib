@@ -1,0 +1,3132 @@
+@string{proc = "Proc.~of the "}
+
+@string{spaaold = " ACM Symp. on Parallel Algorithms and Architectures (SPAA)"}
+@string{spaa = " ACM Symp. on Parallelism in Algorithms and Architectures (SPAA)"}
+@string{focs = " IEEE Symp. on Foundations of Computer Science (FOCS)"}
+@string{stoc = " ACM Symp. on Theory of Computing (STOC)"}
+@string{esa = " European Symp. on Algorithms (ESA)"}
+@string{stacs = " Symp. on Theoretical Aspects of Computer Science (STACS)"}
+@string{soda = " ACM-SIAM Symp. on Discrete Algorithms (SODA)"}
+@string{europar = " Int. European Conference on Parallel and Distributed Computing (Euro-Par)"}
+@string{mfcs = " Int. Symp. on Mathematical Foundations of Computer Science (MFCS)"}
+@string{icalp = " Int. Colloq. on Automata, Languages and Programming (ICALP)"}
+@string{wads = " Int. Workshop on Algorithms and Data Structures (WADS)"}
+@string{swat = " Scandinavian Symposium and Workshops on Algorithm Theory (SWAT)"}
+@string{isaac = " Int. Symp. on Algorithms and Computation (ISAAC)"}
+@string{iptps = " Int. Workshop on Peer-to-Peer Systems"}
+@string{approx = " Int. Workshop on Approximation Algorithms for Combinatorial Optimization (APPROX)"}
+@string{socg = " ACM Symp. on Computational Geometry (SoCG)"}
+@string{arcs = " Int. Conf. on Architecture of Computing Systems"}
+@string{infocom = " IEEE Int. Conference on Computer Communications (INFOCOM)"}
+@string{sigcomm = " ACM SIGCOMM"}
+@string{podc = " ACM Symp. on Principles of Distributed Computing (PODC)"}
+@string{disc = " Int. Symp. on Distributed Computing (DISC)"}
+@string{ipdps = " IEEE Int. Parallel and Distributed Processing Symposium (IPDPS)"}
+@string{latin = " Latin American Theoretical Informatics Symposium (LATIN)"}
+@string{sirocco = " Int. Colloq. on Structural Information and Communication Complexity (SIROCCO)"}
+@string{sofsem = " Int. Conf. on Current Trends in Theory and Practice of Computer Science (SOFSEM)"}
+@string{cocoon = " Int. Computing and Combinatorics Conference (COCOON)"},
+@string{opodis = " Int. Conf. on Principles of DIstributed Systems"}
+@string{waoa = " Workshop on Approximation and Online Algorithms (WAOA)"}
+@string{ewcg = " European Workshop on Computational Geometry (EWCG)"}
+@string{iptcomm = " Int. Conf. on Principles, Systems and Applications of IP Telecommunications (IPTComm)"}
+@string{conext = " Int. Conference on Emerging Networking Experiments and Technologies (CoNEXT)"}
+
+@string{jacm = " Journal of the ACM"}
+@string{cacm = " Communications of the ACM"}
+@string{transcomm = "IEEE Transactions on Communications"}
+@string{transcomp = "IEEE Transactions on Computers"}
+@string{transnetw = "IEEE/ACM Transactions on Networking"}
+@string{jalgo = " Journal of Algorithms"}
+@string{jda = " Journal of Discrete Algorithms"}
+@string{talg = " ACM Transactions on Algorithms"}
+@string{jcomp = " SIAM Journal on Computing"}
+@string{sigcomm = " ACM SIGCOMM"}
+@string{lncs = " Lecture Notes in Computer Science"}
+@string{jcss = " Journal of Computer and System Sciences"}
+@string{tcs = " Theoretical Computer Science"}
+@string{algorithmica = " Algorithmica"}
+@string{ipl = " Information Processing Letters"}
+@string{tocs  = " Theory of Computing Systems"}
+@string{jdmath = " SIAM Journal on Discrete Mathematics"}
+@string{combinatorica = " Combinatorica"}
+@string{games_economic = " Games and Economic Behavior"}
+@string{dc = " Distributed Computing"}
+@string{siamreview = "SIAM Review"}
+@string{sigact_news = "SIGACT News"}
+@string{ccr = "ACM SIGCOMM Computer Communication Review"}
+@string{ton = "IEEE/ACM Transactions on Networking"}
+@string{josh = "Journal of Scheduling"}
+@string{ijfcs = "International Journal of Foundations of Computer Science"}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% TCP acknowledgement, packet aggregation, joint replenishment problem
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+@article{tcp-ack,
+	author = "Anna R. Karlin and Claire Kenyon and Dana Randall",
+	title = "Dynamic {TCP} acknowledgement and other stories about e/(e - 1)",
+	journal = algorithmica,
+	volume = 36,
+	number = 3,
+	pages = "209--224",
+	year = 2003,
+	note = "Also appeared in {\em Proc.~of the 33rd STOC}, pages 502--509, 2001"
+}
+
+@article{tcp-ack-det-journal,
+	author = "Daniel R. Dooly and Sally A. Goldman and Stephen D. Scott",
+	title = "On-line analysis of the {TCP} acknowledgment delay problem",
+	journal = jacm,
+	volume = 48,
+	number = 2,
+	pages = "243--273",
+	year = 2001,
+	note = "Also appeared as {\em {TCP} Dynamic Acknowledgment Delay: Theory and Practice} in {\em Proc.~of the 30th STOC}, pages 389--398, 1998",
+}
+
+@article{tcp-ack-albers,
+	author = "Susanne Albers and Helge Bals",
+	title = "Dynamic {TCP} Acknowledgment: Penalizing Long Delays",
+	journal = jdmath,
+	volume = 19,
+	number = 4,
+	year = 2005,
+	pages = "938--951",
+	note = "Also appeared in {\em Proc.~of the 14th SODA}, pages 47--55, 2003",
+}
+
+@inproceedings{ad-auctions-buchbinder,
+	author = "Niv Buchbinder and Kamal Jain and Joseph Naor",
+	title = "Online Primal-Dual Algorithms for Maximizing Ad-Auctions Revenue",
+	booktitle = proc # "15th" # esa,
+	year = 2007,
+	pages = "253--264",
+}
+
+@inproceedings{delay-sensitive-aggregation,
+	author = "Yvonne Anne Oswald and Stefan Schmid and Roger Wattenhofer",
+	title =	"Tight Bounds for Delay-Sensitive Aggregation",
+	booktitle =	proc # "27th" # podc,
+	pages = "195--202",
+	year = 2008,
+}
+
+@article{wattenhofer-k-selection,
+	author = "Fabian Kuhn and Thomas Locher and Roger Wattenhofer",
+	title = "Distributed selection: a missing piece of data aggregation",
+	journal = cacm,
+	volume = 51,
+	number = 9,
+	year = 2008,
+	pages = "93--99",
+	note = "Also appeared as {\em Tight bounds for distributed selection} in {\em Proc.~of the 19th SPAA}",
+}
+
+@inproceedings{online-tracking-multidim,
+    author = "Ke Yi and Qin Zhang",
+    title = "Multi-dimensional Online Tracking",
+    booktitle = proc # "19th" # soda,
+    year = 2009,
+    pages = "1098--1107",
+}
+
+@inproceedings{function-tracking,
+	author = "Marcin Bienkowski and Stefan Schmid",
+	title = "Online Function Tracking with Generalized Penalties",
+	booktitle = proc # "12th" # swat,
+	year = 2010,
+	pages = "359--370",
+	OPTpublisher = "Springer",
+	OPTseries = lncs,
+	volume = 6139,
+}
+
+@inproceedings{khanna-message-aggregation,
+    author = "Sanjeev Khanna and Joseph Naor and Danny Raz",
+    title = "Control Message Aggregation in Group Communication Protocols",
+    booktitle = proc # "29th" # icalp,
+    pages = "135--146",
+    year = 2002, 
+}
+
+@article{packet-aggregation-becchetti, 
+	author = "Luca Becchetti and Alberto Marchetti-Spaccamela and Andrea Vitaletti and Peter Korteweg and Martin Skutella and Leen Stougie",
+	title = "Latency-constrained aggregation in sensor networks",
+	journal = talg,
+	volume = 6,
+	number = 1,
+	year = 2009,
+	pages = "13:1--13:20",
+	publisher = "ACM",
+	note = "Also appeared in {\em Proc.~of the 14th ESA}, pages 88-99, 2006",
+}
+
+@article{aggregation-bkv,
+	author = "Carlos Brito and Elias Koutsoupias and Shailesh Vaya",
+	title = "Competitive analysis of organization networks or multicast acknowledgement: {How} much to wait?",
+	journal = algorithmica,
+	volume = 64,
+	number = 4,
+	year = 2012,
+	pages = "584--605",
+	note = "Also appeared in {\em Proc.~of the 15th SODA}, pages 627--635, 2004",
+}
+
+@inproceedings{aggregation-wads,
+	author = "Marcin Bienkowski and Jaroslaw Byrka and Marek Chrobak and {\L}ukasz Je{\.z} and Ji\v{r}i Sgall and Grzegorz Stachowiak",
+	title = "Online Control Message Aggregation in Chain Networks",
+	booktitle = proc # "13th" # wads,
+	publisher = "Springer",
+	series = lncs,
+	volume = 8037,
+	pages = "133--145",
+	year = 2013,
+}
+
+@inproceedings{karp-np-complete,
+	author = "Richard M.~Karp",
+	title = "Reducibility Among Combinatorial Problems",
+	booktitle = "Complexity of Computer Computations",
+	year = 1972,
+	pages = "85--103",
+}
+
+@article{alimonti-apx-complete-cubic,
+	author = "Paola Alimonti and Viggo Kann",
+	title = "Some {APX}-completeness results for cubic graphs",
+	journal = tcs,
+	volume = 237,
+	number = "1--2",
+	pages = "123--134",
+	year = 2000
+}
+
+@article{jrp-heuristics-review,
+	author = "Moutaz Khouja and Suresh Goyal",
+	title = "A review of the joint replenishment problem literature: 1989-2005",
+	journal = "European Journal of Operational Research",
+	volume = 186,
+	number = 1,
+	pages = "1--16",
+	year = 2008,
+}
+
+@article{jrp-deadlines-nonner,
+	author = "Tim Nonner and Alexander Souza",
+	title = "Approximating the Joint replenishment Problem with Deadlines",
+	journal = "Discrete Mathematics, Algorithms and Applications",
+	volume = 1,
+	number = 2,
+	year = 2009,
+	pages = "153--174",
+	note = "Also appeared as {\em A 5/3-Approximation Algorithm for Joint Replenishment with Deadlines} in {\em Proc.~of the 3rd COCOA}, pages 24--35, 2009",
+}
+
+@article{jrp-levi-2-approx,
+	author = "Retsef Levi and Robin Roundy and David B.~Shmoys",
+	title = "Primal-Dual Algorithms for Deterministic Inventory Problems",
+	journal = "Mathematics of Operations Research",
+	volume = 31,
+	number = 2,
+	year = 2006,
+	pages = "267--284",
+	note = "Also appeared in {\em Proc.~of the 36th STOC}, pages 353--362, 2004",
+}
+
+@inproceedings{jrp-owmr-levi-soda,
+	author = "Retsef Levi and Robin Roundy and David B.~Shmoys",
+	title = "A constant approximation algorithm for the one-warehouse multi-retailer problem",
+	booktitle = proc # "16th" # soda,
+	year = 2005,
+	pages = "365--374",
+}
+
+@inproceedings{jrp-owmr-levi-approx,
+	author = "Retsef Levi and Maxim Sviridenko",
+	title = "Improved Approximation Algorithm for the One-Warehouse Multi-Retailer Problem",
+	booktitle = proc # "9th" # approx,
+	year = 2006,
+	pages = "188--199",
+}	
+
+@article{jrp-owmr-levi-journal,
+	author = "Retsef Levi and Robin Roundy and David B.~Shmoys and Maxim Sviridenko",
+	title = "A Constant Approximation Algorithm for the One-Warehouse Multiretailer Problem",
+	journal = "Management Science",
+	volume = 54,
+	number = 4,
+	year = 2008,
+	pages = "763--776",
+}
+
+@article{jrp-arkin,
+	author = "Esther Arkin and Dev Joneja and Robin Roundy",
+	title = "Computational complexity of uncapacitated multi-echelon production planning problems",
+	journal = "Operations Research Letters",
+	volume = 8,
+	number = 2,
+	pages = "61--66",
+	year = 1989,
+}
+
+@inproceedings{jrp-online-buchbinder,
+	author = "Niv Buchbinder and Tracy Kimbrel and Retsef Levi and Konstantin Makarychev and Maxim Sviridenko",
+	title = "Online make-to-order joint replenishment model: primal dual competitive algorithms",
+	booktitle = proc # "19th" # soda,
+	year = 2008,
+	pages = "952--961",
+}
+
+@inproceedings{jrp-icalp,
+	author = "Marcin Bienkowski and Jaroslaw Byrka and Marek Chrobak and Neil Dobbs and Tomasz Nowicki and Maxim Sviridenko and Grzegorz Świrszcz and Neal E. Young",
+	title = "Approximation Algorithms for the Joint Replenishment Problem with Deadlines",
+	booktitle = proc # "40th" # icalp,
+	publisher = "Springer",
+	series = lncs,
+	volume = 7965,
+	pages = "135--147",
+	year = 2013,
+}
+
+@article{jrp-survey,
+    author = "Y.~Askoy, S.~S.~Erenguk",
+    title = "Multi-item inventory models with coordinated replenishment: a survey",
+    journal = "International Journal of Operations and Production Management",
+    volume = 8,
+    pages = "63--73",
+    year = 1988,
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Exploration
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+@article{tree-exploration-memory,
+	author = "Krzysztof Diks and Pierre Fraigniaud and Evangelos Kranakis and Andrzej Pelc",
+	title = "Tree exploration with little memory",
+	journal = jalgo,
+	volume = 51,
+	year = 2004,
+	pages = "38--63",
+	note = "Also appeared in {\em Proc.~of the 13th SODA}, pages 588--597, 2002"
+}
+
+@article{graph-exploration-memory,
+	author = "Pierre Fraigniaud and David Ilcinkas and Guy Peer and Andrzej Pelc and David Peleg",
+	title = "Graph Exploration by a Finite Automaton",
+	journal = tcs,
+	volume = 345,
+	number = "2--3",
+	year = 2005,
+	pages = "331--344",
+}
+	
+@inproceedings{bender-two-robots,
+	author = "Michael A. Bender and Donna K. Slonim",
+	title = "The power of team exploration: two robots can learn unlabeled directed graphs",
+	booktitle = proc # "35th" # focs,
+	pages = "75--85",
+	year = 1994,
+}
+
+@inproceedings{collective-tree-exploration,
+	author = "Pierre Fraigniaud and Leszek Gasieniec and Dariusz R. Kowalski and Andrzej Pelc",
+	title = "Collective Tree Exploration",
+	booktitle = proc # "6th" # latin,
+	year = 2004,
+	pages = "141--151",
+}
+
+@inproceedings{collective-tree-exploration-energy,
+	author = "Miroslaw Dynia and Miroslaw Korzeniowski and Christian Schindelhauer",
+	title = "Power-aware collective Tree Exploration",
+	booktitle = proc # "19th" # arcs,
+	year = 2006,
+	pages = "341--351"
+}
+	
+@inproceedings{tree-exploration-sirocco,
+	author = "Miroslaw Dynia and Jakub {\L}opusza{\'n}ski and Christian Schindelhauer",
+	title = "Why Robots Need Maps",
+	booktitle = proc # "14th" # sirocco,
+	year = 2007,
+	pages = "41--51",
+}
+
+@mastersthesis{lopuszanski-mgr,
+	author = "Jakub {\L}opusza{\'n}ski",
+	title = "Eksploracja drzew",
+	school = "Uniwersytet Wroc{\l}awski",
+	year = 2007,
+}
+
+@techreport{exploration-known-depth,
+	author = "Jakub {\L}opusza{\'n}ski",
+	title = "Exploration of Trees of Known Depth by the Team of Mobile Robots",
+	institution = "Institute of Computer Science, University of Wroc{\l}aw",
+	year = 2008,
+	number = "05/2008",
+}
+
+@article{cow-search-2d,
+	author = "Artur Je{\.z} and Jakub {\L}opusza{\'n}ski",
+	title = "On the Two-Dimensional Cow Search Problem",
+	journal = ipl,
+	year = 2009,
+	volume = 109,
+ 	number = 11,
+	pages = "543--547",
+ 	publisher = "Elsevier",
+} 
+
+@article{rendezvous-asynchronous,
+	author = "Gianluca De Marco and Luisa Gargano and Evangelos Kranakis and Danny Krizanc and Andrzej Pelc and Ugo Vaccaro",
+	title = "Asynchronous deterministic rendezvous in graphs",
+	journal = tcs,
+	volume = 355,
+	number = 3,
+	year = 2006,
+	pages = "315--326",
+}
+
+@inproceedings{rendezvous-stachowiak,
+	author = "Grzegorz Stachowiak",
+	title = "Asynchronous Deterministic Rendezvous in the Infinite Line",
+	booktitle = proc # "35th" # sofsem,
+	year = 2009,
+	pages = "497--508",
+} 
+
+@inproceedings{mst-dynamic-graphs,
+	author = "Miroslaw Dynia and Miroslaw Korzeniowski and Jaros{\l}aw Kuty{\l}owski",
+	title = "Competitive Maintenance of Minimum Spanning Trees in Dynamic Graphs",
+	booktitle = proc # "33rd" # sofsem,
+	year = 2007,
+	pages = "260--271",
+}
+
+@article{searching-in-the-plane,
+	author = "Ricardo A. Baeza-Yates and Joseph C. Culberson and Gregory J. E. Rawlins",
+	title = "Searching in the Plane",
+	journal = "Information and Computation",
+	volume = 106,
+	number = 2,
+	pages = "234--252",
+	year = 1993,
+}
+
+@inproceedings{cow-path-randomized,
+	author = "Ming-Yang Kao and John H. Reif and Stephen R. Tate",
+	title = "Searching in an unknown environment: an optimal randomized algorithm for the cow-path problem",
+	booktitle = proc # "4th" # soda,
+	year = 1993,
+	pages = "441--447",
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% FIB lookups and compressions
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+@inproceedings{fibium,
+	author = "Nadi Sarrar and Anja Feldmann and Steve Uhlig and Rob Sherwood and Xin Huang",
+	title = "Towards Hardware Accelerated Software Routers",
+	booktitle = proc # "CoNEXT Student Workshop",
+	year = 2010,
+}
+
+
+@inproceedings{ortc,
+    author = "Richard P.~Draves and Christopher King and Srinivasan Venkatachary and Brian D.~Zill",
+    title = "Constructing optimal {IP} routing tables",
+    booktitle = proc # infocom,
+    year = 1999,
+    pages = "88--97",
+}
+
+@article{fib-compression-two-dimensional,
+	author = "Subhash Suri and Tuomas Sandholm and Priyank Ramesh Warkhede",
+	title = "Compressing Two-Dimensional Routing Tables",
+	journal = algorithmica,
+	volume = 35,
+	number = 4,
+	year = 2003,
+	pages = "287--300",
+}
+
+@article{steve-myth,
+	author = "Luca Cittadini and Wolfgang Muhlbauer and Steve Uhlig and Randy Bushy and Pierre Francois and Olaf Maennel",
+	title = "Evolution of internet address space deaggregation: myths and reality",
+	journal = "IEEE J.Sel. A. Commun.",
+	volume = 28,
+	issue = 8,
+	year = 2010,
+	pages = "1238--1249",
+}
+
+@inproceedings{steve-virtu,
+	author = "Layong Luo and Gaogang Xie and Steve Uhlig and Laurent Mathy and Kav{\'e} Salamatian and Yingke Xie",
+	title = "Towards TCAM-based scalable virtual routers",
+	booktitle = proc # "8th" # conext,
+	year = 2012,
+	pages = "73--84",
+}
+
+@article{trie,
+	author = "Edward Fredkin",
+	title = "Trie memory",
+	journal = cacm,
+	volume = 3,
+	number = 9,
+	year = 1960,
+	pages = "490--499",
+	note = "See also wikipedia entry: \url{http://en.wikipedia.org/wiki/Trie}"
+} 
+
+@inproceedings{fib-compression-fifa,
+	author = "Yaoqing Liu and Beichuan Zhang and Lan Wang",
+	title = "Fast Incremental FIB Aggregation",
+	booktitle = proc # "32nd" # infocom,
+	year = 2013,
+}
+
+@inproceedings{fib-compression-smalta,
+	author = "Uzmi, Zartash Afzal and Nebel, Markus and Tariq, Ahsan and Jawad, Sana and Chen, Ruichuan and Shaikh, Aman and Wang, Jia and Francis, Paul",
+	title = "{SMALTA}: {Practical} and Near-Optimal FIB Aggregation",
+	booktitle = proc # "7th" # conext,
+	year = 2011,
+}
+
+@inproceedings{fib-compression-infocom10,
+	author = "Zhao, Xin and Liu, Yaoqing and Wang, Lan and Zhang, Beichuan",
+	title = "On the aggregatability of router forwarding tables",
+	booktitle = proc # "29th" # infocom,
+	year = 2010,
+	pages = "848--856",
+}
+
+@inproceedings{fib-sirocco,
+	author = "Marcin Bienkowski and Stefan Schmid",
+	title = "Competitive {FIB} Aggregation for Independent Prefixes: Online Ski Rental on the Trie",
+	booktitle = proc # "20th" # sirocco,
+	year = 2013,
+	publisher = "Springer",
+	series = lncs,
+	volume = 8179,
+	pages = "92--103",
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Lukasz's references
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+@inproceedings{throughput-open,
+  author    = {Jiri Sgall},
+  title     = {Open Problems in Throughput Scheduling},
+  booktitle = proc # "20th" # esa,
+  year      = {2012},
+  pages     = {2-11},
+  ee        = {http://dx.doi.org/10.1007/978-3-642-33090-2_2},
+}
+
+@inproceedings{packet-dependencies,
+  author    = {Alexander Kesselman and
+               Boaz Patt-Shamir and
+               Gabriel Scalosub},
+  title     = {Competitive buffer management with packet dependencies},
+  booktitle = proc # "23rd" # ipdps,
+  year      = {2009},
+  pages     = {1-12},
+  ee        = {http://dx.doi.org/10.1109/IPDPS.2009.5161033},
+}
+
+@article{stream-dependencies,
+  author    = {Gabriel Scalosub and
+               Peter Marbach and
+               J{\"o}rg Liebeherr},
+  title     = {Buffer Management for Aggregated Streaming Data with Packet
+               Dependencies},
+  journal   = {IEEE Trans. Parallel Distrib. Syst.},
+  volume    = {24},
+  number    = {3},
+  year      = {2013},
+  pages     = {439-449},
+  ee        = {http://doi.ieeecomputersociety.org/10.1109/TPDS.2012.65},
+}
+
+@article{packets-survey-oldest,
+        AUTHOR = "Leah Epstein and Rob van Stee",
+        TITLE = "Buffer management problems",
+        JOURNAL = sigact_news,
+        YEAR = 2004,
+	VOLUME = 35,
+        PAGES = "58--66"
+}
+
+@article{CIOQ1,
+  author    = {Alexander Kesselman and
+               Adi Ros{\'e}n},
+  title     = {Scheduling policies for {CIOQ} switches},
+  journal   = {J. Algorithms},
+  volume    = {60},
+  number    = {1},
+  year      = {2006},
+  pages     = {60-83},
+  ee        = {http://dx.doi.org/10.1016/j.jalgor.2004.09.003},
+}
+
+@article{CIOQ2,
+  author    = {Alexander Kesselman and
+               Adi Ros{\'e}n},
+  title     = {Controlling {CIOQ} Switches with Priority Queuing and in Multistage
+               Interconnection Networks},
+  journal   = {Journal of Interconnection Networks},
+  volume    = {9},
+  number    = {1/2},
+  year      = {2008},
+  pages     = {53-72},
+  ee        = {http://dx.doi.org/10.1142/S0219265908002151},
+}
+
+@article{crossbar1,
+  author    = {Alexander Kesselman and
+               Kirill Kogan and
+               Michael Segal},
+  title     = {Packet mode and {QoS} algorithms for buffered crossbar switches
+               with FIFO queuing},
+  journal   = {Distributed Computing},
+  volume    = {23},
+  number    = {3},
+  year      = {2010},
+  pages     = {163-175},
+  ee        = {http://dx.doi.org/10.1007/s00446-010-0114-4},
+}
+
+@article{crossbar2,
+  author    = {Alexander Kesselman and
+               Kirill Kogan and
+               Michael Segal},
+  title     = {Best Effort and Priority Queuing Policies for Buffered Crossbar
+               Switches},
+  journal   = {Chicago J. Theor. Comput. Sci.},
+  volume    = {2012},
+  year      = {2012},
+  ee        = {http://cjtcs.cs.uchicago.edu/articles/2012/5/contents.html},
+}
+
+@article{shared-memory-switches-2,
+  author    = {William Aiello and
+               Alexander Kesselman and
+               Yishay Mansour},
+  title     = {Competitive buffer management for shared-memory switches},
+  journal   = {ACM Transactions on Algorithms},
+  volume    = {5},
+  number    = {1},
+  year      = {2008},
+  ee        = {http://doi.acm.org/10.1145/1435375.1435378},
+}
+
+@inproceedings{shared-memory-switches-1,
+  author    = {Ellen L. Hahne and
+               Alexander Kesselman and
+               Yishay Mansour},
+  title     = {Competitive buffer management for shared-memory switches},
+  booktitle = proc # "13th" # spaa,
+  year      = {2001},
+  pages     = {53-58},
+  ee        = {http://doi.acm.org/10.1145/378580.378589},
+}
+
+@article{harmonic-BM,
+  author    = {Alexander Kesselman and
+               Yishay Mansour},
+  title     = {Harmonic buffer management policy for shared memory switches},
+  journal   = {Theor. Comput. Sci.},
+  volume    = {324},
+  number    = {2-3},
+  year      = {2004},
+  pages     = {161-182},
+  ee        = {http://dx.doi.org/10.1016/j.tcs.2004.05.014},
+}
+
+@article{colored-packets,
+  author    = {Yossi Azar and
+               Uriel Feige and
+               Iftah Gamzu and
+               Thomas Moscibroda and
+               Prasad Raghavendra},
+  title     = {Buffer Management for Colored Packets with Deadlines},
+  journal   = {Theory Comput. Syst.},
+  volume    = {49},
+  number    = {4},
+  year      = {2011},
+  pages     = {738-756},
+  ee        = {http://dx.doi.org/10.1007/s00224-011-9346-3},
+}
+
+@inproceedings{Li-combo-1,
+  author    = {Fei Li},
+  title     = {Competitive Scheduling of Packets with Hard Deadlines in
+               a Finite Capacity Queue},
+  booktitle = proc # "28th" # infocom,
+  year      = {2009},
+  pages     = {1062-1070},
+  ee        = {http://dx.doi.org/10.1109/INFCOM.2009.5062018},
+}
+
+@inproceedings{Li-combo-2,
+  author    = {Fei Li},
+  title     = {Improved Online Algorithms for Multiplexing Weighted Packets
+               in Bounded Buffers},
+  booktitle = proc # "5th Int.\ Conf.\ on Algorithmic Aspects in Information and Management (AAIM)",
+  year      = {2009},
+  pages     = {265-278},
+  ee        = {http://dx.doi.org/10.1007/978-3-642-02158-9_23},
+}
+
+@inproceedings{Li-combo-3,
+  author    = {Fei Li},
+  title     = {Scheduling Packets with Values and Deadlines in Size-Bounded
+               Buffers},
+  booktitle = proc # "4th Int. Conf. on Combinatorial Optimization and Applications (COCOA)",
+  year      = {2010},
+  pages     = {398-407},
+  ee        = {http://dx.doi.org/10.1007/978-3-642-17458-2_32},
+}
+
+@inproceedings{mixed-crit-packets,
+  author    = {Chad R. Meiners and
+               Eric Torng},
+  title     = {Mixed Criteria Packet Scheduling},
+  booktitle = proc # "3rd Int.\ Conf.\ on Algorithmic Aspects in Information and Management (AAIM)",
+  year      = {2007},
+  pages     = {120-133},
+  ee        = {http://dx.doi.org/10.1007/978-3-540-72870-2_12},
+}
+
+@inproceedings{latency1,
+  author    = {Amos Fiat and
+               Yishay Mansour and
+               Uri Nadav},
+  title     = {Competitive queue management for latency sensitive packets},
+  booktitle = proc # "19th" # soda,
+  year      = {2008},
+  pages     = {228-237},
+  ee        = {http://dl.acm.org/citation.cfm?id=1347082.1347108},
+}
+
+@inproceedings{latency2,
+  author    = {Moran Feldman and
+               Joseph Naor},
+  title     = {Non-Preemptive Buffer Management for Latency Sensitive Packets},
+  booktitle = proc # "29th" # infocom,
+  year      = {2010},
+  pages     = {186-190},
+  ee        = {http://dx.doi.org/10.1109/INFCOM.2010.5462248},
+}
+
+@article{xtof-journal-a,
+  author    = {Christoph D{\"u}rr and
+               {\L}ukasz Je{\.z} and
+               Nguyen Kim Thang},
+  title     = "{Online Scheduling of Bounded Length Jobs to Maximize Throughput}",
+  journal	= josh,
+  volume    = "15",
+  number    = "5",
+  year      = "2012",
+  pages     = "653--664",
+  ee        = {http://dx.doi.org/10.1007/s10951-011-0233-1},
+  note	= "Also appeared in " # proc # "7th" # waoa # " pp.\ 116--127 (2009)"
+}
+
+
+@article{frequency-invited-a,
+	author = "Marek Chrobak and {\L}ukasz Je{\.z} and Ji\v{r}i Sgall",
+	title = "Better Bounds for Incremental Frequency Allocation in Bipartite Graphs",
+	journal = tcs,
+	volume = 514,
+	pages = "75--83",
+	year = 2013,
+	publisher = "Elsevier",
+	note = "Also appeared in " # proc # "19th" # ESA # ", pp.\ 251--262 (2011).  \url{http://dx.doi.org/10.1016/j.tcs.2012.05.020}",
+}
+
+
+@inproceedings{relint,
+	author = "Leah Epstein and {\L}ukasz Je{\.z} and Ji\v{r}\'i Sgall and Rob van Stee",
+	title =	"Online Scheduling of Jobs with Fixed Start Times on Related Machines",
+ 	booktitle =	proc # "15th" # approx,
+	year = 2012,
+	pages = "134--145",
+	publisher = "Springer", 
+	series = lncs,
+	volume = 7408,
+}
+
+
+@article{remix-invited-a,
+	author = "{\L}ukasz Je\.{z}",
+	title = "{A Universal Randomized Packet Scheduling Algorithm}",
+	journal = algorithmica,
+	volume = 67,
+	number = 4,
+	year = 2013,
+	pages = "498--515",
+ 	note = "Also appeared in " # proc # "19th" # ESA # ", pp.\ 239--250 (2011). \url{http://dx.doi.org/10.1007/s00453-012-9700-0}",
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Misc algorithmic papers and books
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+@inproceedings{yao,
+	author = "Andrew Chi-Chih Yao",
+  	title = "Probabilistic computation: towards a uniform measure of complexity",
+	booktitle = proc # "18th" # focs, 
+	pages = "222-227", 
+	year = 1977,
+}
+
+@book{neumann,
+	author = "{John von} Neumann and Oskar Morgenstern",
+	title = "Theory of Games and Economic Behavior",
+	publisher = "Princeton University Press",
+	year = 1944,
+	edition = "1st"	
+}
+
+@article{amortized-complexity-tarjan,
+    author = "Robert E.~Tarjan",
+	title = "Amortized Computational Complexity",
+	journal = "SIAM Journal on Algebraic and Discrete Methods",
+	year = 1985, 
+	volume = 6,
+	number = 2,
+	pages = "306--318"
+}
+
+@article{randomized-rounding,
+	author = "Prabhakar Raghavan and Clark D.~Tompson",
+	title = "Randomized rounding: a technique for provably good algorithms and algorithmic proofs",
+	journal = combinatorica,
+	volume = 7,
+	number = 4,
+	year = 1987,
+	pages = "365--374",
+}
+
+@book{anacomb,
+	title = "Analytic Combinatorics",
+	author = "Philippe Flajolet and Robert Sedgewick",
+	publisher = "Cambridge University Press",
+	year = 2008,
+}
+
+@book{borodin-book,
+	author = "Allan Borodin and Ran {El-Yaniv}",
+	title = "Online Computation and Competitive Analysis",
+	publisher = "Cambridge University Press",
+	year = 1998,
+}
+
+@proceedings{fiat-woeginger-book,
+	editor = "Amos Fiat and Gerhard J.~Woeginger",
+	title = "Online Algorithms, The State of the Art",
+	publisher = "Springer",
+	series = lncs,
+	volume = 442,
+	year = 1998,
+}
+
+@book{cormen-book,
+	author = "Thomas H.~Cormen and Charles E.~Leiserson and Ronald L.~Rivest",
+	title = "Introduction to Algorithms",
+	publisher = "The MIT Press",
+	year = 1997,
+	edition = "Eighteenth"
+}		
+
+@book{motwani-book,
+	author = "Rajeev Motwani and Prabhakar Raghavan",
+	title = "Randomized Algorithms",
+	publisher = "Cambridge University Press",
+	year = 1995,
+}
+
+@book{approximation-book,
+	author = "Vijay V. Vazirani",
+	title = "Approximation Algorithms",
+	publisher = "Springer Verlag",
+	year = 2001,
+}
+
+@book{williamson-shmoys-book,
+	author = "David P.~Williamson and David B.~Shmoys",
+	title = "The Design of Approximation Algorithms",
+	year = 2011,
+	publisher = "Cambridge University Press",
+}
+
+@book{handbook-randomized,
+	author = "Sanguthevar Rajesekaran and Panos M.~Pardalos and John H.~Reif and Jose Rolim",
+	title = "Handbook of Randomized Computing",
+	publisher = "Kluwer Academic Publishers",
+	year = 2001,
+	volume = "I and II",
+}
+	  
+@book{mobile-book,
+	author = "Theodore S. Rappaport",
+	title = "Wireless Communications: Principles and Practices",
+	publisher = "Prentice Hall",
+	year = 1996,
+}
+
+@book{feller-book,
+	author = "William Feller",
+	title = "An Introduction to Probability Theory and Its Applications",
+	publisher = "John Wiley \& Sons, Inc.",
+	edition = "Third",
+	year = "1968",
+	volume = "I",
+}
+
+@book{graham-notation-book,
+	title = "Scheduling algorithms",
+	author = "Peter Brucker",
+	year = 2007,
+	publisher = "Springer"
+}
+
+@book{inequalities,
+	author = "Godfrey H.~Hardy and John E.~Littlewood and George P{\'o}lya",
+	title = "Inequalities",
+	publisher = "Cambridge University Press",
+	year = 1988,
+	edition = "2nd",
+}
+
+@book{leighton-book,
+	author = "Frank T.~Leighton",
+	title = "Introduction to parallel algorithms and architectures: array, trees, hypercubes",
+	publisher = "Morgan Kaufmann Publishers",
+	year = 1992,
+}
+
+@book{peleg-book,
+	author = "David Peleg",
+	title = "Distributed computing: a locality-sensitive approach",
+	publisher = "Society for Industrial and Applied Mathematics",
+	year = 2000,
+}
+
+@book{flows-book,
+	author = "Ravindra K.~Ahuja and Thomas L.~Magnanti and James B.~Orlin",
+	title = "Network Flows: Theory, Algorithms, and Applications",
+	publisher = "Prentice Hall",
+	year = 1993,
+}
+
+@inproceedings{valentina-voronoi,
+	author = "Marcin Bienkowski and Valentina Damerow and Friedhelm {Meyer auf der Heide} and Christian Sohler",
+	title = "Average case complexity of Voronoi diagrams of n sites from the unit cube",
+	booktitle = proc # "21st" # ewcg,
+	pages = "167--170",
+	year = 2005,
+}
+
+@inproceedings{event-extent-estimation,
+	author = "Marcin Bienkowski and Leszek G\k{a}sieniec and Marek Klonowski and Miroslaw Korzeniowski and Stefan Schmid",
+	title = "Event Extent Estimation",
+	booktitle = proc # "17th" # sirocco,
+	year = 2010,
+	pages = "57--71",
+	publisher = "Springer",
+	series = lncs,
+	volume = 6058,
+}
+
+@inproceedings{dynamic-sharing-mac,
+	author = "Marcin Bienkowski and Marek Klonowski and Miroslaw Korzeniowski and Dariusz R.~Kowalski",
+	title = "Dynamic Sharing of a Multiple Access Channel",
+	booktitle = proc # "27th" # stacs,
+	year = 2010,
+	pages = "83--94",
+	publisher = "Schloss Dagstuhl -- Leibniz-Zentrum für Informatik",
+	series = "LIPIcs",
+	volume = 5,
+}
+
+@article{pagerank-original,
+	author = "Sergey Brin and Lawrence Page",
+	title = "The Anatomy of a Large-Scale Hypertextual Web Search Engine",
+	journal = "Computer Networks",
+	volume = 30,
+	number = "1--7",
+	year = 1998,
+	pages = "107--117",
+}
+
+@article{google-eigenvectors,
+	author = "Kurt Bryan and Tanya Leise",
+	title = "The \$25,000,000,000 Eigenvector: The Linear Algebra behind Google",
+	journal = siamreview,
+	volume = 48,
+	issue = 3,
+	year = 2006,
+	pages = "569--581",
+	numpages = 13,
+}
+
+@techreport{google-2nd-eigenvalue,
+	author = "Taher Haveliwala and Sepandar Kamvar",
+	title = "The Second Eigenvalue of the Google Matrix",
+	institution = "Stanford InfoLab",
+	year = 2003,
+}
+
+@inproceedings{kowalski-cars,
+  author    = "Dariusz R.~Kowalski and
+               Zeev Nutov and
+               Michael Segal",
+  title     = "Scheduling of Vehicles in Transportation Networks",
+  booktitle = "Nets4Cars/Nets4Trains",
+  year      = 2012,
+  pages     = "124--136", 
+}
+
+@article{hoeffding,
+	author = "Wassily Hoeffding",
+	title = "Probability inequalities for sums of bounded random variables",
+	journal = "Journal of the American Statistics Association",
+	volume = 58,
+	number = 301,
+	pages = "13--30",
+	year = 1963,
+}
+
+@article{chernoff,
+	author = "Herman Chernoff",
+	title = "A measure of assymptotic efficiency for tests of a hypothesis based on the sum of observations",
+	journal = "Annals of Mathematical Statistics",
+	volume = 23,
+	pages = "493--509",
+	year = 1952,
+}
+
+@article{rosenthal-convergence,
+	author = "Jeffrey S.~Rosenthal",
+	title = "Convergence Rates for {Markov} Chains",
+    journal = siamreview,
+    volume = 37,
+    number = 3,
+    pages = "387--405",
+	year = 1995,
+}
+
+@book{markov-seneta,
+	author = "Eugene Seneta",
+	title = "Non-negative Matrices and Markov Chains",
+	publisher = "Springer-Verlag, New York",
+	year = 1981,
+	edition = "2nd",
+}
+
+
+@inproceedings{auctions-digital-goods,
+	author = "Andrew V.~Goldberg and Jason D.~Hartline and Andrew Wright",
+	title = "Competitive auctions and digital goods",
+	booktitle = proc # "12th" # soda,
+	pages = "735--744",
+	year = 2001,
+}
+
+@inproceedings{auctions-generalized,
+	author = "Amos Fiat and Andrew V.~Goldberg and Jason D.~Hartline and Anna R.~Karlin",
+	title = "Competitive generalized auctions",
+	booktitle = proc # "34th" # stoc,
+	year = 2002,
+	pages = "72--81",
+}
+
+@article{competitive-auctions,
+	author = "Andrew V.~Goldberg and Jason D.~Hartline and Anna R.~Karlin and Michael Saks and Andrew Wright",
+	title = "Competitive auctions",
+	journal = games_economic,
+	volume = 55,
+	number = 2,
+	year = 2006,
+	pages = "242--269",
+}
+
+@article{algorithmic-mechanism-design,
+	author = "Noam Nisan and Amir Ronen",
+	title = "Algorithmic Mechanism Design",
+	journal = games_economic,
+	volume = 35,
+	year = 2001,
+	pages = "166--196",
+	note = "Also appeared in {\em Proc.~of the 31st STOC}, pages 129--140, 1999",
+}
+
+@article{hastad-mac,
+	author = "Johan H{\aa}stad and Frank Thomson Leighton and Brian Rogoff",
+	title = "Analysis of Backoff Protocols for Multiple Access Channels",
+	journal = jcomp,
+	volume = 25,
+	number = 4,
+	year = 1996,
+	pages = "740--774",
+	note = "Also appeared in {\em Proc.~of the 19th STOC}, pages 241--253, 1987", 
+}
+
+@article{shmoys-stochastic,
+	author = "David B. Shmoys and Chaitanya Swamy",
+	title = "An approximation scheme for stochastic linear programming and its application to stochastic integer programs",
+	journal = jacm,
+	volume = 53,
+	number = 6,
+	year = 2006,
+	pages = "978--1012",
+}
+
+@inproceedings{facility-location,
+	author = "David B. Shmoys and {\'E}va Tardos and Karen Aardal",
+	title = "Approximation Algorithms for Facility Location Problems (Extended Abstract)",
+	booktitle = proc # "29th" # stoc,
+	year = 1997,
+	pages = "265--274",
+}
+
+@incollection{facility-location-encyclopedia,
+	author = "Karen Aardal and Jaroslaw Byrka and Mohammad Mahdian",
+	title = "Facility Location",
+	booktitle = "Encyclopedia of Algorithms",
+	year = "2008",
+	editor = "Ming-Yang Kao",
+}
+
+@article{network-design-survey,
+	author = "Anupam Gupta and Jochen Könemann",
+	title = "Approximation algorithms for network design: A survey",
+	journal = "Surveys in Operations Research and Management Science",
+	volume = 16,
+	number = 1,
+	year = 2011,
+}
+
+@article{atsp-kaplan,
+	author = "Haim Kaplan and Moshe Lewenstein and Nira Shafrir and Maxim Sviridenko",
+	title = "Approximation algorithms for asymmetric {TSP} by decomposing directed regular multigraphs",
+	journal = jacm,
+	volume = 52,
+	number = 4,
+	year = 2005,
+	pages = "602--626",
+}
+
+@book{schrijver-book,
+	title = "Combinatorial Optimization: Polyhedra and Efficiency",
+	author= "Alexander Schrijver",
+	series = "Algorithms and combinatorics",
+	year = 2003,
+	publisher = "Springer"
+}
+
+@article{popular-matchings,
+	author = "David J. Abraham and Robert W. Irving and Telikepalli Kavitha and Kurt Mehlhorn",
+	title = "Popular Matchings",
+	journal = jcomp,
+	volume = 37,
+	number = 4,
+	year = 2007,
+	pages = "1030--1045",
+}
+
+@incollection{knapsack-encyclopedia,
+	author = "Hans Kellerer",
+	title = "Knapsack",
+	booktitle = "Encyclopedia of Algorithms",
+	year = "2008",
+	editor = "Ming-Yang Kao",
+}
+
+@article{k-level-ufl-chudak,
+	author = "Karen Aardal and Fabi{\'a}n A.~Chudak and David B.~Shmoys",
+	title = "A 3-Approximation Algorithm for the k-Level Uncapacitated Facility Location Problem",
+	journal = ipl,
+	volume = 72,
+	number = "5--6",
+	year = 1999,
+	pages = "161--167",
+}
+
+@article{steiner-robins-zelikovsky,
+	author = "Gabriel Robins and Alexander Zelikovsky",
+	title = "Tighter Bounds for Graph Steiner Tree Approximation",
+	journal = jdmath,
+	volume = 19,
+	number = 1,
+	year = 2005,
+	pages = "122--134",
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Metrical task systems, k-server, metric embeddings
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+@inproceedings{metrics-approximation,
+	author = "Yair Bartal",
+	title = "Probabilistic Approximations of Metric Spaces and Its Algorithmic Applications",
+	booktitle = proc # "37th" # focs,
+	pages = "184--193",
+	year = 1996
+}
+
+@inproceedings{metrics-approximation-improved,
+	author = "Yair Bartal",
+	title = "On approximating arbitrary metrics by tree metrics",
+	booktitle = proc # "30th" # stoc,
+	pages = "161--168",
+	year = 1998
+}
+
+@article{metrics-approximation-optimal,
+	author = "Jittat Fakcharoenphol and Satish Rao and Kunal Talwar",
+	title = "A tight bound on approximating arbitrary metrics by tree metrics",
+	journal = jcss,
+	volume = 69,
+	number = 3,
+	year = 2004,
+	pages = "485--497",
+	note = "Also appeared in {\em Proc.~of the 35th STOC}, pages 448--455, 2003",
+}
+
+@article{smoothed-metrical-task-systems,
+	author = "Guido Sch{\"a}fer and Naveen Sivadasan",
+	title = "Topology matters: Smoothed competitiveness of metrical task systems",
+	journal = tcs,
+	volume = 341,
+	number = "1--3",
+	year = 2005,
+	pages = "216--246",
+	note = "Also appeared in {\em Proc.~of the 21st STACS},	pages 489--500, 2004",
+}
+
+@article{metrical-task-systems,
+	author = "Alan Borodin and Nati Linial and Michael E. Saks",
+	title = "An optimal on-line algorithm for metrical task system",
+	journal = jacm,
+	year = 1992,
+	volume = 39,
+	number = 4,
+	pages = "745--763",
+	note = "Also appeared in {\em Proc.~of the 19th STOC}, pages 373--382, 1987",
+}
+
+@article{metrical-task-systems-fiat,
+	author = "Amos Fiat and Manor Mendel",
+	title = "Better Algorithms for Unfair Metrical Task Systems and Applications",
+	journal = jcomp,
+	volume = 32,
+	number = 6,
+	year = 2003,
+	pages = "1403--1422",
+	note = "Also appeared in {\em Proc.~of the 32nd STOC}, pages 725--734, 2000",
+}
+
+@article{k-server,
+	author = "Mark S.~Manasse and Lyle A.~McGeoch and Daniel D.~Sleator",
+	title = "Competitive algorithms for server problems",
+	journal = jacm,
+	volume = 11,
+	number = 2,
+	pages = "208--230", 
+	year = 1990,
+	note = "Also appeared as {\em Competitive algorithms for on-line problems} in {\em Proc.~of the 20th STOC}, 
+		 	pages 322--333, 1988",
+}
+
+@article{k-server-wfa,
+	author = "Elias Koutsoupias and Christos H.~Papadimitriou",
+	title = "On the k-Server Conjecture",
+	journal = jacm,
+	volume = 42,
+	number = 5,
+	pages = "971--983",
+	year = 1995,
+	note = "Also appeared in {\em Proc.~of the 26th STOC}, pages 507--511, 1994",
+}
+
+@inproceedings{k-server-wfa-weak,
+	author = "Elias Koutsoupias",
+	title = "Weak Adversaries for the k-Server Problem",
+	booktitle = proc # "40th" # focs,
+	year = 1999,
+	pages = "444--449",
+}
+
+@article{wfa-bartal,
+	author = "Yair Bartal and Elias Koutsoupias",
+	title = "On the competitive ratio of the work function algorithm for the k-server problem",
+	journal = tcs,
+	volume = 324,
+	number = "2-3",
+	year = 2004,
+	pages = "337--345",
+	note = "Also appeared in {\em Proc.~of the 17th STACS}, pages 605--613, 2000",
+}
+
+@article{double-coverage,
+	author = "Marek Chrobak and Howard J.~Karloff and Thomas H.~Payne and Sundar Vishwanathan",
+	title = "New Results on Server Problems",
+	journal = jdmath,
+	volume = 4,
+	number = 2,
+	year = 1991,
+	pages = "172--181",
+	note = "Also appeared in {\em Proc.~of the 1st SODA}, pages 291--300, 1990",
+}
+
+@article{double-coverage-tree,
+	author = "Marek Chrobak and Lawrence L.~Larmore",
+	title = "An Optimal On-Line Algorithm for k-Servers on Trees",
+	journal = jcomp,
+	volume = 20,
+	number = 1,
+	pages = "144--148",
+	year = 1991,
+}
+
+@unpublished{slack-coverage,
+	author = "Yair Bartal",
+	title = "A fast memoryless 2-server algorithm in {Euclidean} spaces",
+	year = 1994,
+	note = "Unpublished manuscript",
+}
+
+@article{weak-k-server-conjecture,
+	author = "Amos Fiat and Yuval Rabani and Yiftach Ravid",
+	title = "Competitive k-Server Algorithms",
+	journal = jcss,
+	volume = 48,
+	number = 3,
+	pages = "410--428",
+	year = 1994,
+	note = "Also appeared in {\em Proc.~of the 31st FOCS}, pages 454--463, 1990",
+}
+
+@inproceedings{ramsey-focs,
+	author = "Yair Bartal and B. Bollob{\'a}s and Manor Mendel",
+	title = "A {Ramsey}-Type Theorem for Metric Spaces and its Applications for Metrical Task Systems and Related Problems",
+	booktitle = proc # "42nd" # focs,
+	year = 2001,
+	pages = "396--405",
+}
+
+@inproceedings{ramsey-stoc,
+	author = "Yair Bartal and Nathan Linial and Manor Mendel and Assaf Naor",
+	title = "On metric {Ramsey}-type phenomena",
+	booktitle = proc # "35th" # stoc,
+    year = 2003,
+	pages = "463--472",
+}
+
+@inproceedings{decomposition-esa,
+  author = "Steven S. Seiden",
+  title = "A General Decomposition Theorem for the k-Server Problem",
+  booktitle = proc # "9th" # esa,
+  pages = "86-97",
+  year = "2001"
+}
+
+@article{k-server-on-line,
+  author = "B. Csaba and S. Lodha",
+  title = "A randomized on-line algorithm for the $k$-server problem on a line",
+  journal = "Random Structures and Algorithms",
+  volume = 29,
+  number = 1,
+  pages = "82--104",
+  year = 2006
+}
+
+@inproceedings{k-server-on-line-randomized,
+	author = "Nikhil Bansal and Niv Buchbinder and Joseph Naor",
+	title = "Metrical Task Systems and the k-Server Problem on HSTs",
+	booktitle = proc # "37th" # icalp,
+	year = 2010,
+	pages = "287--298",
+}
+
+@article{k-server-growth-rate,
+	author = "Yair Bartal and Manor Mendel",
+	title = "Randomized $k$-server algorithms for growth-rate bounded graphs",
+	journal = jalgo,
+	volume = 55,
+	number = 2,
+	year = 2005,
+	pages = "192--202",
+}
+
+@inproceedings{k-server-lp,
+	author = "Nikhil Bansal, Niv Buchbinder and Seffi Naor",
+	title = "Towards the Randomized k-Server Conjecture: A Primal-Dual Approach",
+	booktitle = proc # "21st" # soda,
+	note = "To appear",
+	year = 2010,
+}
+
+@article{k-server-koutsoupias-survey,
+	author = "Elias Koutsoupias",
+	title = "The k-server problem",
+	journal = "Computer Science Review",
+	volume = 3,
+	number = 2,
+	year = 2009,
+	pages = "105--118",
+}
+
+@article{k-server-2-evader,
+	author = "Elias Koutsoupias and Christos H.~Papadimitriou",
+	title = "The 2-evader problem",
+	journal = ipl,
+	volume = 57,
+	number = 5,
+	pages = "249--252",
+	year = 1996,
+}
+
+@inproceedings{k-server-binary-hst,
+	author = "Aaron Cote and Adam Meyerson and Laura J.~Poplawski",
+	title = "Randomized k-server on hierarchical binary trees",
+	booktitle = proc # "40th" # stoc,
+	year = 2008,
+	pages = "227--234",
+}
+
+@inproceedings{k-server-madry,
+	author = "Nikhil Bansal and Niv Buchbinder and Aleksander M\k{a}dry and Joseph Naor",
+	title = "A Polylogarithmic-Competitive Algorithm for the k-Server Problem",
+	booktitle = proc # "52nd" # focs,
+	year = 2011,
+	pages = "267--276",
+}
+
+@inproceedings{k-resource,
+    author = "Marcin Bienkowski and Jaros{\l}aw Kuty{\l}owski",
+    title = "The k-Resource Problem on Uniform and on Uniformly Decomposable Metric Spaces",
+    booktitle = proc # "10th" # wads,
+    year = 2007,
+	pages = "337--348",
+	OPTpublisher = "Springer",
+	OPTseries = lncs,
+	OPTvolume = 4619,
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Computer networks
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+@book{network-routing-book,
+    author = "Deepankar Medhi and Karthikeyan Ramasamy",
+    title = "Network Routing: Algorithms, Protocols, and Architectures",
+    year = 2007,
+    publisher = "Morgan Kaufmann Publishers Inc.",
+}
+
+@book{tcp-illustrated-book,
+	author = "Stevens, W.~Richard",
+	title = "{TCP}/{IP} illustrated (vol. 1): the protocols",
+	year = 1993,
+	publisher = "Addison-Wesley",
+} 
+
+@article{aimd-analysis,
+	author = "Dah-Ming Chiu and Raj Jain",
+	title = "Analysis of the increase and decrease algorithms for congestion avoidance in computer networks",
+	journal = "Comput. Netw. ISDN Syst.",
+	volume = 17,
+	number = 1,
+	year = 1989,
+	pages = "1--14",
+}
+
+@article{frost-traffic-modelling,
+	author = "Victor S.~Frost and Benjamin Melamed",
+	title = "Traffic Modeling For Telecommunications Networks",
+	journal = "IEEE Communications Magazine",
+	year = 1994,
+	month = "March",
+}
+
+@article{ethernet-self-similar,
+	author = "Will E.~Leland and Murad S.~Taqqu and Walter Willinger and Daniel V.~Wilson",
+	title = "On the self-similar nature of Ethernet traffic (extended version)",
+	journal = transnetw,
+    volume = 2,
+	number = 1,
+	pages = "1--15",
+	year = 1994,
+}
+
+@inproceedings{tcp-self-similar,
+	author = "Andras Veres and Mikl{\'o}s Boda",
+	title = "The Chaotic Nature of {TCP} Congestion Control",
+	booktitle = proc # "19th" # infocom,
+	year = 2000,
+	pages = "1715--1723",
+}
+
+@article{self-similarity-proof,
+	author = "Murad S.~Taqqu and Walter Willinger and Robert Sherman",
+	title = "Proof of a Fundamental Result in Self-Similar Traffic Modeling",
+	journal = ccr,
+	year = 1997,
+	volume = 27,
+	pages = "5--23"
+}
+
+@inproceedings{buffers-poison,
+	author = "Martin May and {Jean-Chrysostome} Bolot and Alain {Jean-Marie} and Christophe Diot",
+	title = "Simple Performance Models of Differentiated Services Schemes for the Internet",
+	booktitle = proc # "18th" # infocom,
+	pages = "1385--1394",
+	year = 1999,
+}
+
+@misc{pgm-multicast,
+	title = "{Pragmatic} {General} {Multicast}",
+	note = "\url{http://tools.ietf.org/html/rfc3208}",
+}
+
+@misc{diffserv,
+	title = "Request for Comments 4594: Configuration Guidelines for {DiffServ} Service Classes",
+	note = "\url{http://tools.ietf.org/html/rfc4594}",
+}
+
+@article{red,
+	author = "Sally Floyd and Van Jacobson",
+	title = "Random Early Detection (RED) gateways for Congestion Avoidance",
+	journal = ton,
+	volume = 1,
+	number = 4,
+	pages = "397--413",
+	year = 1993,
+}
+
+@misc{content-distribution-networks,
+	title = "{Content} {Distribution} {Networks}",
+	note = "\url{http://en.wikipedia.org/wiki/Content_delivery_network}",
+}
+
+@article{virtualization-survey,
+	author = "Chowdhury, N.M. Mosharaf Kabir and Boutaba, Raouf",
+	title = "A survey of network virtualization",
+	journal = "Computer Networks",
+	volume = 54,
+	number = 5,
+	year = 2010,
+	pages = "862--876",
+}
+
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Ski rental problem
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+@article{snoopy-caching,
+	author = "Anna R. Karlin and Mark S. Manasse and Larry Rudolph and Daniel D. Sleator",
+	title = "Competitive Snoopy Caching",
+	journal = algorithmica,
+	volume = 3,	
+	number = 1,
+	year = 1988,
+	pages = "77--119",
+	note = "Also appeared in {\em Proc.~of the 27th FOCS}, pages 244--254, 1986",
+}
+
+@article{snoopy-caching-randomized,
+	author = "Anna R. Karlin and Mark S. Manasse and Lyle A. McGeoch and Susan Owicki",
+	title = "Competitive Randomized Algorithms for Non-Uniform Problems",
+	journal = algorithmica,
+	volume = 11,
+	number = 6,
+	pages = "542--571",
+	year = 1994,
+	note = "Also appeared in {\em Proc.~of the 1st SODA}, pages 301--309, 1990",
+}
+
+@inproceedings{bahncard,
+	author = "Rudolf Fleischer",
+	title = "On The {Bahncard} Problem",
+	booktitle = proc # "4th" # cocoon,
+    year = 1998,
+    pages = "12--14",
+}
+
+@inproceedings{srp-stochastic,
+	author = "Hiroshi Fujiwara and Kazuo Iwama",
+	title = "Average-Case Competitive Analyses for Ski-Rental Problems",
+	booktitle = proc # "13th" # isaac,
+	pages = "476--488",
+	year = 2002,
+}
+
+@inproceedings{srp-multislope-lotker,
+	author = "Zvi Lotker and Boaz Patt-Shamir and Dror Rawitz",
+	title =	"Rent, Lease or Buy: Randomized Algorithms for Multislope Ski Rental",
+	booktitle =	proc # "25th" # stacs,
+	pages =	"503--514",
+	year = 2008,
+}
+
+@article{srp-multislope-damaschke,
+	author = "Peter Damaschke",
+	title = "Nearly optimal strategies for special cases of on-line capital investment",
+	journal = tcs,
+	volume = 302,
+	number = "1--3",
+	year = 2003,
+	pages = "35--44",
+}
+
+@inproceedings{ski-rental-price-changes,
+	author = "Marcin Bienkowski",
+	title = "Price Fluctuations: To Buy or to Rent",
+	booktitle = proc # "7th" # waoa,
+	year = 2009,
+	pages = "25--36",
+	OPTpublisher = "Springer",
+	OPTseries = lncs,
+	OPTvolume = 5893,
+}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Online scheduling
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+@inproceedings{smoothed-competitive-analysis,
+	author = "Luca Becchetti and Stefano Leonardi and Alberto {Marchetti-Spaccamela} and Guido Sch{\"a}fer and Tjark Vredeveld",
+	title = "Average Case and Smoothed Competitive Analysis of the Multi-Level Feedback Algorithm",
+	booktitle = proc # "44th" # focs,
+	year = 2003,
+	pages = "462--471",
+}
+
+@article{speed-clairvoyance,
+	author = "Bala Kalyanasundaram and Kirk Pruhs",
+	title = "Speed is as powerful as clairvoyance",
+	journal = jacm,
+	volume = 47,
+	number = 4,
+	year = 2000,
+	pages = "617--643",
+	note = "Also appeared in {\em Proc.~of the 36nd FOCS}, pages 214--221, 1995",
+}
+
+@inproceedings{steger-competitive,
+	author = "Mark Scharbrodt and Thomas Schickinger and Angelika Steger",
+	title = "A new average case analysis for completion time scheduling",
+	booktitle = proc # "34th" # stoc,
+	year = 2002,
+	pages = "170--178",
+}
+
+@inproceedings{scheduling-adversarial-network,
+	author = "Stefano Leonardi and Alberto {Marchetti-Spaccamela} and Friedhelm {Meyer auf der Heide}",
+	title = "Scheduling against an adversarial network",
+	booktitle = proc # "16th" # spaa,
+	year = "2004",
+	pages = "151--159",
+}
+
+@article{graham,
+	author = "Ronald L.~Graham",
+	title = "Bounds for certain multiprocessing anomalies",
+	journal = "Bell System Technical Journal",
+	volume = 45,
+	year = 1966,
+	pages = "1563--1581"
+}
+
+@article{albers-scheduling-best,
+	author = "Susanne Albers",
+	title = "Better Bounds for Online Scheduling",
+	journal = jcomp,
+	volume = 29,
+	number = 2,
+	year = 1999,
+	pages = "459--473",
+	note = "Also appeared in {\em Proc.~of the 29th STOC}, pages 130--139, 1997",
+}
+
+@article{scheduling-restricted-machines,
+	author = "Yossi Azar and Joseph Naor and Raphael Rom",
+	title = "The Competitiveness of On-Line Assignments",
+	journal = jalgo,
+	volume = 18,
+	number = 2,
+	year = 1995,
+	pages = "221--237",
+	note = "Also appeared in {\em Proc.~of the 3rd SODA}, pages 203--210, 1992",
+}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Misc online algorithms
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+@article{buchbinder-naor-lp-journal,
+	author = "Niv Buchbinder and Joseph Naor",
+	title = "The Design of Competitive Online Algorithms via a Primal-Dual Approach",
+	journal = "Foundations and Trends in Theoretical Computer Science",
+	volume = 3,
+	number = "2--3",
+	year = 2009,
+	pages = "93--263",
+}
+
+@article{relating-adversaries,
+	author = "Shai {Ben-David} and Allan Borodin and Richard M. Karp and Gabor Tardos and Avi Wigderson",
+	title = "On the power of randomization in online algorithms",
+	journal = algorithmica,
+	volume = 11,
+	number = 1,
+	year = 1994,
+	pages = "2--14",
+	note = "Also appeared in {\em Proc.~of the 22nd STOC}, pages 379--386, 1990",
+}
+
+@article{cost-of-derandomization,
+	author = "Xiaotie Deng and Sanjeev Mahajan",
+	title = "The Cost of Derandomization: Computability or Competitiveness",
+	journal = jcomp,
+	volume = 26,
+	number = 3,
+	year = 1997,
+	pages = "786--802",
+}
+
+@article{competitive-analysis,
+	author = "Daniel D.~Sleator and Robert E.~Tarjan",
+	title = "Amortized efficiency of list update and paging rules",
+	journal = "Communications of the ACM",
+	volume = 28,
+	number = 2,
+	year = 1985,
+	pages = "202--208",
+}
+
+@article{beyond-competitive-analysis,
+	author = "Elias Koutsoupias and Christos H.~Papadimitriou",
+	title = "Beyond Competitive Analysis",
+	journal = jcomp,
+	volume = 30,
+	number = 1,
+	year = 2000, 
+	pages = "300--317",
+	note = "Also appeared in {\em Proc.~of the 35th FOCS}, pages 394--400, 1994",
+}
+
+@article{chrobak-yao-min-max,
+	author = "Marek Chrobak and Lawrence L. Larmore and Carsten Lund and Nick Reingold",
+	title = "A Better Lower Bound on the Competitive Ratio of the Randomized 2-Server Problem",
+	journal = ipl,
+	volume = 63,
+	number = 2,
+	year = 1997,
+	pages = "79--83",
+}
+
+@inproceedings{online-facility-location,
+	author = "Adam Meyerson",
+	title = "Online Facility Location",
+	booktitle = proc # "42nd" # focs,
+	year = 2001,
+	pages = "426--431"
+}
+
+@inproceedings{financial-games-focs,
+	author = "Ran {El-Yaniv} and Amos Fiat and Richard M.~Karp and G.~Turpin",
+	title = "Competitive Analysis of Financial Games",
+	booktitle = proc # "33rd" # focs,
+	pages = "327--333",
+	year = 1992,
+}
+
+@article{financial-survey,
+	author = "Ran {El-Yaniv}",
+	title = "Competitive Solutions for Online Financial Problems",
+	journal = "ACM Computing Surveys",
+	volume = 30,
+	number = 1,
+	pages = "28--69",
+	year = 1998,
+}
+
+@inproceedings{karp-online-algorithms,
+	author = "Richard M. Karp",
+	title = "On-line Algorithms Versus Off-line Algorithms: How Much is it Worth to Know the Future?",
+	booktitle = proc # "IFIP 12th World Computer Congress",
+	year = 1992,
+	pages = "416--429",
+}
+
+@inproceedings{online-matching,
+	author = "Richard M. Karp and Umesh V. Vazirani and Vijay V. Vazirani",
+	title = "An optimal algorithm for on-line bipartite matching",
+	booktitle = proc # "22nd" # stoc,
+	year = 1990,
+	pages = "352--358",
+}
+
+@article{online-matching-simple,
+	author = "Benjamin Birnbaum and Claire Mathieu",
+	title = "On-line bipartite matching made simple",
+	journal = "SIGACT News",
+	volume = 39,
+	number = 1,
+	year = 2008,
+	pages = "80--87",
+}
+
+@inproceedings{linear-programs-online,
+	author = "Carsten Lund and Nick Reingold",
+	title = "Linear programs for randomized on-line algorithms",
+	booktitle = proc # "5th" # soda,
+	year = 1994,
+	pages = "382--391",
+}
+
+@article{bin-packing-harmonic,
+	author = "Prakash V.~Ramanan and Donna J.~Brown and C.~C.~Lee and D.~T.~Lee",
+	title = "On-Line Bin Packing in Linear Time",
+	journal = jalgo,
+	volume = 10,
+	number = 3,
+	year = 1989,
+	pages = "305--326",
+}
+
+@article{bin-packing-best-seiden,
+	author = "Steven S.~Seiden",
+	title = "On the online bin packing problem",
+	journal = jacm,
+	volume = 49,
+	number = 5,
+	year = 2002,
+	pages = "640--671",
+}
+
+@article{bin-packing-lower,
+	author = "Andr{\'e} van Vliet",
+	title = "On the Asymptotic Worst Case Behavior of Harmonic Fit",
+	journal = jalgo,
+	volume = 20,
+	number = 1,
+	year = 1996,
+	pages = "113--136",
+}
+
+@inproceedings{load-balancing-survey,
+	author = "Yossi Azar",
+	title = "On-line Load Balancing",
+	booktitle = "Online Algorithms",
+	year = 1996,
+	pages = "178--195",
+}
+
+@article{aspnes-online-routing,
+	author = "James Aspnes and Yossi Azar and Amos Fiat and Serge Plotkin and Orli Waarts",
+	title = "On-line routing of virtual circuits with applications to load balancing and machine scheduling",
+	journal = jacm,
+	volume = 44,
+	number = 3,
+	pages = "486--504",
+	year = 1997,
+	note = "Also appeared in {\em Proc.~of the 25th STOC}, pages 623--631, 1993",
+}
+
+@inproceedings{bin-packing,
+	author = "Michael R.~Garey and Ronald L.~Graham and Jeffrey D.~Ullman",
+	title = "Worst case analysis of memory allocation algorithms",
+	booktitle = proc # "4th" # stoc,
+	year = 1972,
+	pages = "143--150",
+}
+
+@inproceedings{call-control-tree,
+	author = "Baruch Awerbuch and Yair Bartal and Amos Fiat and Adi Ros{\'e}n",
+	title = "Competitive Non-Preemptive Call Control",
+	booktitle = proc # "5th" # soda,
+    year = 1994,
+	pages = "312--320",
+}
+
+@inproceedings{call-control-tree-2,
+	author = "Baruch Awerbuch and Rainer Gawlick and Frank T.~Leighton and Yuval Rabani",
+	title = "On-line Admission Control and Circuit Routing for High Performance Computing and Communication",
+	booktitle = proc # "35th" # focs,
+	pages = "412--423",
+	year = 1994,
+}
+
+@inproceedings{call-control-brick-wall,
+	author = "Yair Bartal and Amos Fiat and Stefano Leonardi",
+	title = "Lower bounds for on-line graph problems with application to on-line circuit and optical routing",
+	booktitle = proc # "28th" # stoc,
+	pages = "531--540",
+	year = 1996,
+}
+
+@inproceedings{call-control-mesh,
+	author = "Jon M.~Kleinberg and Eva Tardos",
+	title = "Disjoint Paths in Densely Embedded Graphs",
+	booktitle = proc # "36th" # focs,
+	pages = "52--61",
+	year = 1995,
+}
+
+@inproceedings{online-set-cover,
+	author = "Noga Alon and Baruch Awerbuch and Yossi Azar",
+	title = "The online set cover problem",
+	booktitle = proc # "35th" # stoc,
+	year = 2003,
+	pages = "100--105",
+} 
+
+@article{lp-online-covering-and-packing,
+	author = "Niv Buchbinder and Joseph (Seffi) Naor",
+	title = "Online Primal-Dual Algorithms for Covering and Packing",
+	journal = "Math. Oper. Res.",
+	volume = 34,
+	issue = 2,
+	year = 2009,
+	pages = "270--286",
+	note = "Also appeared in {\em Proc.~of the 13th ESA}, pages 689--701, 2005",
+}
+
+@article{frequency-allocation-hex,
+	author = "Joseph Wun-Tat Chan and Francis Y. L. Chin and Deshi Ye and Yong Zhang",
+	title = "Absolute and Asymptotic Bounds for Online Frequency Allocation in Cellular Networks",
+	journal = algorithmica,
+	volume = 58,
+	number = 2,
+	year = 2010,
+	pages = "498--515",
+}
+
+@article{frequency-allocation-line,
+	author = "Marek Chrobak and Ji\v{r}\'i Sgall",
+	title = "Three results on frequency assignment in linear cellular networks",
+	journal = tcs,
+	volume = 411,
+	number = 1,
+	year = 2010,
+	pages = "131--137",
+}
+
+@article{online-knapsack-augmentation,
+	author = "Kazuo Iwama and Guochuan Zhang",
+	title = "Online knapsack with resource augmentation",
+	journal = ipl,
+	volume = 110,
+	number = 22,
+	year = 2010,
+	pages = "1016--1020",
+}
+
+@inproceedings{online-knapsack-removable,
+	author = "Kazuo Iwama and Shiro Taketomi",
+	title = "Removable Online Knapsack Problems",
+	booktitle = proc # "29th" # icalp,
+	year = 2002,
+	pages = "293--305",
+}
+
+@unpublished{interval-scheduling-unpublished,
+	author = "Stanley P. Y. Fung and Chung Keung Poon and Feifeng Zheng",
+	title = "Improved Randomized Online Scheduling of Intervals and Jobs",
+	note = "\url{http://arxiv.org/abs/1204.2933}",
+	year = 2012,
+}
+
+@article{interval-scheduling-woeginger,
+	author = "Gerhard J. Woeginger",
+	title = "On-Line Scheduling of Jobs with Fixed Start and End Times",
+	journal = tcs,
+	volume = 130,
+	number = 1,
+	year = 1994,
+	pages = "5--16",
+}
+
+@article{makespan-related-berman,
+	author = "Piotr Berman and Moses Charikar and Marek Karpinski",
+	title = "On-Line Load Balancing for Related Machines",
+	journal = jalgo,
+	volume = 35,
+	number = 1,
+	year = 2000,
+	pages = "108--121",
+}
+
+@article{power-management-irani,
+	author = "Sandy Irani and Kirk R.~Pruhs",
+	title = "Algorithmic Problems in Power Management",
+	journal = "SIGACT News",
+	volume = 36,
+	number = 2,
+	year = 2005,
+	pages = "63--76",
+	publisher = "ACM",
+} 
+
+@inproceedings{knapsack-cygan-jez,
+    author = "Marek Cygan and {\L}ukasz Je\.{z}",
+    title = "Online Knapsack Revisited",
+    booktitle = proc # "11th" # waoa,
+    note = "To appear",
+    year = 2013,
+}
+
+
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Online data structures
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+@inproceedings{self-organizing-survey,
+	author = "Susanne Albers and Jeffery Westbrook",
+	title = "Self-Organizing Data Structures",
+	booktitle = "Online Algorithms",
+	pages = "13--51",
+	year = 1996,
+}
+
+@article{bentley-self-organizing,
+	author = "Jon L.~Bentley and Catherine C.~McGeoch",
+	title = "Amortized analyses of self-organizing sequential search heuristics",
+	journal = cacm,
+	volume = 28,
+	pages = "404--411", 
+	year = 1985,
+}
+
+@article{irani-list-update, 
+	author = "Sandy Irani",
+	title = "Two results on the list update problem",
+	journal = ipl,
+	volume = 38,
+	number = 6,
+	pages = "301--306",
+	year = 1991,
+}
+
+@article{algorithm-bit,
+    author = "Nick Reingold and Jeffery Westbrook and Daniel Dominic Sleator",
+    title = "Randomized Competitive Algorithms for the List Update Problem",
+    journal = algorithmica,
+    volume = 11,
+    number = 1,
+    pages = "15--32",
+    year = 1994,
+}
+
+@article{list-update-randomized,
+	author = "Nick Reingold and Jeffery Westbrook and Daniel D.~Sleator",
+	title = "Randomized Competitive Algorithms for the List Update Problem",
+	journal = algorithmica,
+	volume = 11,
+	number = 1,
+	pages = "15--32",
+	year = 1994,
+}		
+
+@inproceedings{list-update-np-hard,
+	author = "Christoph Amb{\"u}hl",
+	title = "Offline list update is {NP}-hard",
+	booktitle = proc # "8th" # esa,
+	year = 2000,
+	pages = "42--51",
+}
+
+@article{revisiting-counter,
+	author = "Susanne Albers and Michael Mitzenmacher",
+	title = "Revisiting the {COUNTER} Algorithms for List Update",
+	journal = ipl,
+	volume = 64,
+	number = 3,
+	pages = "155--160",
+	year = 1997,
+}
+
+@article{algorithm-comb,
+	author = "Susanne Albers and Bernhard von Stengel and Ralph Werchner",
+	title = "A Combined {BIT} and {TIMESTAMP} Algorithm for the List Update Problem",
+	journal = ipl,
+    volume = 56,
+    number = 3,
+    pages = "135--139",
+    year = 1995,
+}
+
+@article{list-update-lower-bound,
+	author = "Boris Teia",
+	title = "Lower bound for randomized list update algorithms",
+	journal = ipl, 
+	volume = 47,
+	number = 1,
+	pages = "5--9",
+	year = 1993,
+}
+
+@article{list-update-lower-bound-better,
+	author = "Christoph Amb{\"u}hl and Bernd G{\"a}rtner and Bernhard von Stengel",
+	title = "A new lower bound for the list update problem in the partial cost model",
+	journal = tcs,
+	volume = 268,
+	number = 1,
+	year = 2001,
+	pages = "3--16",
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Packet scheduling
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+@article{packet-scheduling-goldwasser-survey,
+    author = "Michael Goldwasser",
+    title = "A Survey of Buffer Management Policies for Packet Switches",
+    journal = sigact_news,
+    year = 2010,
+    volume = 41,
+    number = 1, 
+	pages = "100--128"
+}
+
+@inproceedings{packet-scheduling-azar-survey,
+	author = "Yossi Azar",
+	title = "Online Packet Switching",
+	booktitle = proc # "2nd" # waoa,
+	year = 2004,
+	pages = "1--5",
+}
+
+@article{buffers-azar-litichevskey,
+	author = "Yossi Azar and Arik Litichevskey",
+	title = "Maximizing Throughput in Multi-Queue Switches",
+	journal = algorithmica,
+	volume = 45,
+	number = 1,
+	year = 2006,
+	pages = "69--90",
+	note = "Also appeared in {\em Proc.~of the 12th ESA}, pages 53--64, 2004",
+}
+
+@article{buffers-albers-schmidt,
+	author = "Susanne Albers and Markus Schmidt",
+	title = "On the Performance of Greedy Algorithms in Packet Buffering",	
+	journal = jcomp,
+	volume = 35,
+	number = 2,
+	year = 2005,
+	pages = "278--304",
+	note = "Also appeared in {\em Proc.~of the 36th STOC}, pages 35--44, 2004",
+}
+
+@article{buffers-albers-experimental,
+	author = "Susanne Albers and Tobias Jacobs",
+	title = "An Experimental Study of New and Known Online Packet Buffering Algorithms",
+	journal = algorithmica,
+	volume = 57,
+	number = 4,
+	year = 2010,
+	pages = "725--746",
+	note = "Also appeared in {\em Proc.~of the 15th ESA}, pages 754--765, 2007",  
+}
+
+@phdthesis{schmidt-phd,
+	author = "Markus Schmidt",
+	title = "Online Packet Buffering",
+	school = "Albert-Ludwigs-Universit{\"a}t Freiburg",
+	year = 2006,
+}
+
+@inproceedings{buffers-schmidt,
+	author = "Markus Schmidt",
+	title = "Packet Buffering: Randomization Beats Deterministic Algorithms",
+	booktitle = proc # "22nd" # stacs,
+	year = 2005,
+	pages = "293--304"
+}
+
+@article{buffers-azar-richter,
+	author = "Yossi Azar and Yossi Richter",
+	title = "Management of multi-queue switches in {QoS} networks",
+	journal = algorithmica,
+	volume = 43,
+	number = "1--2",
+	year = 2005,
+	pages = "81--96",
+	note = "Also appeared in {\em Proc.~of the 35th STOC}, pages 82--89, 2003",
+}
+
+@article{buffers-kobayashi,
+	author = "Koji Kobayashi and Shuichi Miyazaki and Yasuo Okabe",
+	title = "A Tight Upper Bound on Online Buffer Management for Multi-Queue Switches with Bicodal Buffers",
+	journal = "IEICE Transactions on Information and Systems",
+	volume = "91-D",
+	number = 12,
+	year = 2008,
+	pages = "2757--2769",
+}
+
+@article{buffers-length-bar-noy,
+	author = "Amotz {Bar-Noy} and Ari Freund and Shimon Landa and Joseph (Seffi) Naor",
+	title = "Competitive on-line switching policies",
+	journal = algorithmica,
+	volume = 36,
+	number = 3,
+	year = 2003,
+	pages = "225--247",
+	note = "Also appeared in {\em Proc.~of the 13th SODA}, pages 525--534, 2002"
+}
+
+@article{buffers-length-koga,
+	author = "Rudolf Fleischer and Hisashi Koga",
+	title = "Balanced scheduling toward loss-free packet queuing and delay fairness",
+	journal = algorithmica,
+	volume = 38,
+	pages = "363--376",
+	year = 2004,
+}
+
+@article{buffers-birman,
+	author = "Alexander Birman and H.~Richard Gail and Sidney L.~Hantler and Zvi Rosberg and Moshe Sidi",
+	title = "An Optimal Service Policy for Buffer Systems",
+	journal = jacm,
+	volume = 43,
+	number = 3,
+	pages = "641--657",
+	year = 1995,
+}
+
+@article{diffserv-kesselman,
+	author = "Alexander Kesselman and Zvi Lotker and Yishay Mansour and Boaz {Patt-Shamir} and Baruch Schieber and Maxim Sviridenko",
+	title = "Buffer Overflow Management in {QoS} Switches",
+	journal = jcomp,
+	volume = 33,
+	number = 3,
+	pages = "563--583",
+	year = 2004,
+	note = "Also appeared in {\em Proc.~of the 33rd STOC}, pages 520--529, 2001",
+}
+
+@article{diffserv-kesselman-improved,
+	author = "Alexander Kesselman and Yishay Mansour and Rob van Stee",
+	title = "Improved Competitive Guarantees for {QoS} Buffering",
+	journal = algorithmica,
+	volume = 43,
+	number = "1--2",
+	year = 2005,
+	pages = "63--80",
+	note = "Also appeared in {\em Proc.~of the 11th ESA}, pages 361--372, 2003",
+}
+
+@inproceedings{diffserv-bansal,
+	author = "Nikhil Bansal and Lisa Fleischer and Tracy Kimbrel and Mohammad Mahdian and Baruch Schieber and Maxim Sviridenko",
+	title = "Further Improvements in Competitive Guarantees for {QoS} Buffering",
+	booktitle = proc # "31st" # icalp,
+	pages = "196--207",
+	year = 2004,
+}
+
+@article{diffserv-westermann,
+	author = "Matthias Englert and Matthias Westermann",
+	title = "Lower and Upper Bounds on {FIFO} Buffer Management in {QoS} Switches",
+	journal = algorithmica,
+	volume = 53,
+	number = 4,
+	pages = "523--548",
+	year = 2009,
+	note = "Also appeared in {\em Proc.~of the 14th ESA}, pages 352--363, 2006",
+}
+
+@article{diffserv-two-values-lotker,
+	author = "Zvi Lotker and Boaz {Patt-Shamir}",
+	title = "Nearly optimal {FIFO} buffer management for two packet classes",
+	journal = "Computer Networks",
+	volume = 42,
+	number = 1,
+	pages = "481--492",
+	year = 2003,
+	note = "Also appeared as {\em Nearly optimal FIFO buffer management for DiffServ} in {\em Proc.~of the 21st PODC}, pages 202--214, 2002",
+}
+
+@inproceedings{diffserv-two-values-andelman,
+	author = "Nir Andelman",
+	title = "Randomized queue management for {DiffServ}",
+	booktitle = proc # "17th" # spaa,
+	pages = "1--10",
+	year = 2005,
+}
+
+@article{diffserv-np-aiello,
+	author = "William Aiello and Yishay Mansour and S. Rajagopolan and Adi Ros{\'e}n",
+	title = "Competitive Queue Policies for Differentiated Services",
+	journal = jalgo,
+	volume = 55,
+	number = 2,
+	year = 2005,
+	pages = "113--141",
+	note = "Also appeared in {\em Proc.~of the 19th INFOCOM}, pages 431--440, 2000",
+}
+
+@inproceedings{diffserv-np-multiple,
+	author = "Nir Andelman and Yishay Mansour",
+	title = "Competitive Management of Non-preemptive Queues with Multiple Values",
+	booktitle = proc # "17th" # disc,
+	pages = "166--180",
+	year = 2003,
+}
+
+@inproceedings{diffserv-np-single,
+	author = "Nir Andelman and Yishay Mansour and An Zhu",
+	title = "Competitive queueing policies for {QoS} switches",
+	booktitle = proc # "14th" # soda,
+	pages = "761--770",
+	year = 2003,
+}
+
+@article{diffserv-fifo-preemptive-mansour,
+	author = "Yishay Mansour and Boaz {Patt-Shamir} and Ofer Lapid",
+    title = "Optimal smoothing schedules for real-time streams",
+	journal = dc,
+	volume = 17,
+	number = 1,
+	year = 2004,
+	pages = "77--89",
+	note = "Also appeared in {\em Proc.~of the 19th PODC}, pages 21--29, 2000",
+}
+
+@article{diffserv-fifo-preemptive-kesselman,
+	author = "Alexander Kesselman and Yishay Mansour",
+	title = "Loss-bounded Analysis for Differentiated Services",
+	journal = jalgo,
+	volume = 46,
+	number = 1,
+	pages = "79--95",
+	year = 2003,
+	note = "Also appeared in {\em Proc.~of the 12th SODA}, pages 591--600, 2001",
+}
+
+@inproceedings{bounded-delay-bartal,
+	author = "Yair Bartal and Francis Y. L. Chin and Marek Chrobak and Stanley P. Y. Fung and Wojciech Jawor and Ron Lavi and Ji\v{r}i Sgall and Tom\'a\v{s} Tich\'y",
+	title = "Online Competitive Algorithms for Maximizing Weighted Throughput of Unit Jobs",
+	booktitle = proc # "21st" # stacs,
+	pages = "190--210",
+	year = 2004,
+}
+
+@article{bounded-delay-chin-journal,
+    author = "Francis Y. L. Chin and Marek Chrobak and Stanley P. Y. Fung and  Wojciech Jawor and Ji\v{r}i Sgall and Tom\'a\v{s} Tich\'y",
+    title = "Online Competitive Algorithms for Maximizing Weighted Throughput of Unit Jobs" ,
+    journal = jda, 
+    volume = 4,
+	number = 2, 
+    pages = "255--276",
+    year = 2006,
+}
+
+@article{bounded-delay-chrobak-improved,
+	author = "Marek Chrobak and Wojciech Jawor and Ji\v{r}i Sgall and Tom\'a\v{s} Tich\'y",
+	title = "Improved Online Algorithms for Buffer Management in {QoS} Switches",
+	journal = talg,
+	volume = 3,
+	issue = 4,
+	year = 2007,
+	note = "Also appeared in {\em Proc.~of the 12th ESA}, pages 204--215, 2004",
+}
+
+@article{bounded-delay-westermann,
+	author = "Matthias Englert and Matthias Westermann",
+	title = "Considering Suppressed Packets Improves Buffer Management in Quality of Service Switches",
+	journal = jcomp,
+	volume = 41,
+	number = 5,
+	year = 2012,
+	pages = "1166--1192",
+	note = "Also appeared in {\em Proc.~of the 18th SODA}, pages 209--218, 2007"
+}
+
+@inproceedings{bounded-delay-li,
+	author = "Fei Li and Jay Sethuraman and Clifford Stein",
+	title = "An optimal online algorithm for packet scheduling with agreeable deadlines",
+	booktitle = proc # "16th" # soda,
+	pages = "801--802",
+	year = 2005,
+}
+
+@article{bounded-delay-agreeable-journal,
+	author = "{\L}ukasz Je{\.z} and Fei Li and Jay Sethuraman and Clifford Stein",
+	title = "Online scheduling of packets with agreeable deadlines",
+	journal = talg,
+	volume = 9,
+	number = 1,
+	year = 2012,
+	pages = 5,
+}
+
+@inproceedings{bounded-delay-li2,
+	author = "Fei Li and Jay Sethuraman and Clifford Stein",
+	title = "Better online buffer management",
+	booktitle = proc # "18th" # soda,
+	pages = "199--208",
+	year = 2007,
+}
+
+@article{bounded-delay-anzhu,
+	author = "An Zhu",
+	title = "Analysis of queueing policies in {QoS} switches",
+	journal = jalgo,
+	volume = 53,
+	number = 2,
+	year = 2004,
+	pages = "137--168",
+}
+
+@inproceedings{hajek-scheduling,
+    author = "Bruce Hajek",
+    title = "On the competitiveness of online scheduling of unit-length packets with hard deadlines in slotted time",
+    booktitle = "Conference in Information Sciences and Systems",
+    year = 2001,
+    pages = "434--438",
+}
+
+@article{chin-timesharing,
+    author = "Francis Y. L. Chin and Stanley P. Y. Fung",
+    title = "Online scheduling for partial job values: {Does} timesharing or randomization help?",
+    journal = algorithmica,
+    volume = 37,
+    year = 2003,
+    pages = "149--164"
+}
+
+@article{bounded-delay-2-bounded,
+	author = "Marcin Bienkowski and Marek Chrobak and {\L}ukasz Je\.{z}",
+	title = "Randomized competitive algorithms for online buffer management in the adaptive adversary model",
+	journal = tcs,
+	volume = 412,
+	number = 39,
+	year = 2011,
+	pages = "5121--5131",
+	OPTpublisher = "Elsevier",
+	note = "Also appeared as {\em Randomized Algorithms for Buffer Management with 2-Bounded Delay} in {\em Proc. of the 6th WAOA}, pages 92--104, 2008",
+}
+
+@inproceedings{bounded-delay-jez,
+	author = "{\L}ukasz Je{\.z}",
+	title = "Randomized Algorithm for Agreeable Deadlines Packet Scheduling",
+	booktitle = proc # "27th" # stacs,
+	pages = "489--500",
+	year = 2010,
+}
+
+@inproceedings{bounded-delay-jez-mixr,
+	author = "{\L}ukasz Je{\.z}",
+	title = "One to Rule Them All: A General Randomized Algorithm for Buffer Management with Bounded Delay",
+	booktitle = proc # "19th" # esa,
+	year = 2011,
+	pages = "239--250",
+}
+
+@article{item-collecting-algorithmica,
+	author = "Marcin Bienkowski and Marek Chrobak and Christoph D{\"u}rr and Mathilde Hurand and Artur Je{\.z} and {\L}ukasz Je{\.z} and Grzegorz Stachowiak",
+	title = "Collecting Weighted Items from a Dynamic Queue",
+	journal = algorithmica,
+	volume = 65,
+	number = 1,
+	year = 2013,
+	pages = "60--94",
+  	note = "Also appeared in {\em Proc.~of the 20th SODA}, pages 1126--1135, 2009",
+}
+
+@article{item-collecting-tcs,
+	author = "Marcin Bienkowski and Marek Chrobak and Christoph D{\"u}rr and Mathilde Hurand and Artur Je{\.z} and {\L}ukasz Je{\.z} and Grzegorz Stachowiak",
+	title = "A $\phi$-competitive algorithm for collecting items with increasing weights from a dynamic queue",
+	journal = tcs,
+	volume = 475,
+	year = 2013,
+	pages = "92--102",
+}
+
+@techreport{whac-a-mole,
+	author = "Marcin Bienkowski and Marek Chrobak and Christoph D{\"u}rr and Mathilde Hurand and Artur Je{\.z} and {\L}ukasz Je{\.z} and Jakub {\L}opusza{\'n}ski and Grzegorz Stachowiak",
+	title = "Generalized Whac-a-Mole",
+	number = "arXiv:0802.1685v2",
+	year = 2008,
+}
+	
+@inproceedings{packet-buffering-two-optimal,
+	author = "Marcin Bienkowski and Aleksander Madry",
+	title = "Geometric Aspects of Online Packet Buffering: An Optimal Randomized Algorithm for Two Buffers",
+	booktitle = proc # "8th" # latin,
+	pages = "252--263",
+	year = 2008, 
+	OPTpublisher = "Springer",
+	OPTseries = lncs,
+	volume = 4957,
+}	
+
+@inproceedings{packet-buffering-optimal-lower,
+	author = "Marcin Bienkowski",
+	title = "An Optimal Lower Bound for Buffer Management in Multi-Queue Switches",
+	booktitle = proc # "22nd" # soda,
+	pages = "1295--1305",
+	year = 2011,
+	OPTpublisher = "Society for Industrial and Applied Mathematics (SIAM)"
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Online algorithms: Page migration, replication, allocation, data management 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+@article{fap-randomized,
+	author = "Yair Bartal and Amos Fiat and Yuval Rabani",
+	title = "Competitive algorithms for distributed data management",
+	journal = jcss,
+    volume = 51,
+	number = 3,
+	year = 1995,
+	pages = "341--358",
+	note = "Also appeared in {\em Proc.~of the 24th STOC}, pages 39--50, 1992",
+}
+
+@inproceedings{fap-deterministic,
+	author = "Baruch Awerbuch and Yair Bartal and Amos Fiat",
+	title = "Competitive Distributed File Allocation",
+	booktitle = proc # "25th" # stoc,
+	year = 1993,
+	pages = "164--173",
+}
+
+@techreport{black-sleator,
+	author = "David L. Black and Daniel D. Sleator",
+	title = "Competitive Algorithms for Replication and Migration Problems",
+	institution = "Department of Computer Science, Carnegie-Mellon University",
+	number = "CMU-CS-89-201",
+	year = 1989,
+}
+
+@article{best-deterministic,
+	author = "Yair Bartal and Moses Charikar and Piotr Indyk",
+	title = "On Page Migration and Other Relaxed Task Systems",
+	journal = tcs,
+	volume = 268,
+	number = 1,
+	year = 2001,
+	pages = "43--66",
+	note = "Also appeared in {\em Proc.~of the 8th SODA}, pages 43--52, 1997",
+}
+  		  
+@inproceedings{bartal-survey,
+	author = "Yair Bartal",
+	title = "Distributed Paging",
+	booktitle = "Dagstul Workshop on On-line Algorithms",
+	pages = "97-117",
+	year = 1996,
+}
+
+@article{chrobak-work-functions,
+	author = "Marek Chrobak and Lawrence L.~Larmore and Nick Reingold and Jeffery Westbrook",
+	title = "Page Migration Algorithms Using Work Functions",
+	journal = jalgo,
+	volume = 24,
+	number = 1,
+	year = 1997,
+	pages = "124--157",
+	note = "Also appeared in {\em Proc.~of the 4th ISAAC}, pages 406--415, 1993",
+}
+
+@article{page-migration-lower-bound,
+	author = "Akira Matsubayashi",
+	title = "Uniform Page Migration on General Networks",
+	journal = "International Journal of Pure and Applied Mathematics",
+	volume = 42,
+	number = 2,
+	year = 2008,
+	pages = "161--168",
+}
+
+@article{lund-data-management,
+	author = "Carsten Lund and Nick Reingold and Jeffery Westbrook and Dicky C. K. Yan",
+	title = "Competitive On-Line Algorithms for Distributed Data Management",
+	journal = jcomp,
+	volume = 28,
+	number = 3,
+	pages = "1086-1111",
+	year = 1999,
+	note = "Also appeared as {\em On-Line Distributed Data Management} in {\em Proc.~of the 2nd ESA}, pages 202--214, 1994",
+}
+
+@article{westbrook,
+	author = "Jeffery Westbrook",
+	title = "Randomized algorithms for the multiprocessor page migration",
+	journal = jcomp,
+	volume = 23,
+	pages = "951--965",
+	year = 1994,
+	note = "Also appeared in {\em Proc.~of the DIMACS Workshop on On-Line Algorithms}, pages 135--149, 1992"
+}
+
+@inproceedings{heat-and-dump,
+	author = "Baruch Awerbuch and Yair Bartal and Amos Fiat",
+	title = "{\sf Heat \& Dump}: Competitive Distributed Paging",
+	booktitle = proc # "34th" # focs,
+	pages = "22--31",
+	year = 1993,
+}
+
+@article{distributed-paging,
+	author = "Baruch Awerbuch and Yair Bartal and Amos Fiat",
+	title = "Distributed Paging for General Networks",
+	journal = jalgo,
+	volume = 28,
+	number = 1,
+	year = 1998,
+	pages = "67--104",
+	note = "Also appeared in {\em Proc.~of the 7th SODA}, pages 574--583, 1996"
+}
+
+@inproceedings{page-migration-memory-constraints,
+	author = "Susanne Albers and Hisashi Koga",
+	title = "Page Migration with Limited Local Memory Capacity",
+	booktitle = proc # "4th" # wads,
+	year = 1995,
+	pages = "147--158",
+}
+
+@phdthesis{bartal-phd,
+	author = "Yair Bartal",
+	title = "Competitive Analysis of Distributed On-line Problems --- Distributed Paging",
+	school = "Tel-Aviv University",
+	year = 1995,
+}
+
+@inproceedings{replication-koga,
+	author = "Hisashi Koga",
+	title = "Randomized on-line algorithms for the page replication problem",
+	booktitle = proc # "4th" # isaac,
+	year = 1993,
+	pages = "436--445"
+}
+
+@article{replication-albers,
+    author = "Susanne Albers and Hisashi Koga",
+    title = "New On-Line Algorithms for the Page Replication Problem",
+	journal = jalgo,
+	volume = 27,
+	number = 1,
+	year = 1998,
+	pages = "75--96",
+	note = "Also appeared in {\em Proc.~of the 4th SWAT}, pages 25--36, 1994"
+}			
+
+
+@article{online-steiner,
+	author = "Makoto Imase and Bernard M. Waxman",
+	title = "Dynamic {Steiner} Tree Problem",
+	journal = jdmath,
+	volume = 4,
+	number = 3,
+	pages = "369--384",
+	year = 1991
+}
+
+@inproceedings{steiner-euclidean,
+	author = "Noga Alon and Yossi Azar",
+	title = "On-Line {Steiner} Trees in the {Euclidean} Plane",
+	booktitle = proc # "8th" # socg,
+	pages = "337--343",
+	year = 1992,
+}
+
+@article{steiner-better,
+	author = "Jeffery Westbrook and Dicky C. K. Yan",
+	title = "The performance of greedy algorithms for the on-line {Steiner} tree and related problems",
+	journal = tocs,
+	volume = 28, 
+	number = 5,
+	year = 1995,
+	pages = "451--468",
+	note = "Also appeared in {\em Proc.~of the 3rd WADS}, pages 622--633, 1993",
+}
+
+@inproceedings{replication-glazek1,
+	author = "W{\l}odzimierz G{\l}azek",
+	title = "Lower and Upper Bounds for the Problem of Page Replication in Ring Networks",
+	booktitle = proc # "24th" # mfcs, 
+	pages = "273--283",
+	year = 1999,
+}
+	
+@article{replication-glazek2,
+	author = "W{\l}odzimierz G{\l}azek",
+	title = "Online algorithms for page replication in rings",
+	journal = tcs,
+	volume = 268,
+	number = 1,
+	year = 2001,
+	pages = "107--117",
+}
+
+@inproceedings{replication-fleischer,
+	author = "Rudolf Fleischer and Steven S. Seiden",
+	title = "New results for online page replication",
+	booktitle = proc # "3rd" # approx,
+	pages = "144--154",
+	year = 2000,
+}
+
+@article{replication-fleischer-journal,
+	author = "Rudolf Fleischer and W{\l}odzimierz G{\l}azek and Steve S. Seiden",
+	title = "New results for online page replication",
+	journal = tcs,
+	volume = 324,
+	number = "2--3",
+	year = 2004,
+	pages = "219--251",
+}
+		
+@article{migration-csrd-survey,
+	author = "Marcin Bienkowski",
+	title = "Migrating and replicating data in networks",
+	journal = "Computer Science --- Research and Development",
+	OPTpublisher = "Springer",
+	volume = 27, 
+	issue = 3, 
+	pages = "169--179", 
+	year = 2012
+}
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Dynamic page migration
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+@inproceedings{dynamic-page-migration,
+	author = "Marcin Bienkowski and Miroslaw Korzeniowski and Friedhelm {Meyer auf der Heide}",
+	title = "Fighting Against Two Adversaries: Page Migration in Dynamic Networks",
+	booktitle = proc # "16th" # spaa,
+	year = 2004,
+	pages = "64--73",
+	OPTpublisher = "Association for Computing Machinery (ACM)",
+}
+
+@inproceedings{dpm-deterministic,
+    author = "Marcin Bienkowski and Miroslaw Dynia and Miroslaw Korzeniowski",
+    title = "Improved Algorithms for Dynamic Page Migration",
+    booktitle = proc # "22nd" # stacs,
+    year = 2005, 
+    pages = "365--376",
+	OPTpublisher = "Springer",
+	OPTseries = lncs,
+	OPTvolume = 3404,
+}
+
+@inproceedings{dpm-brownian,
+	author = "Marcin Bienkowski and Miroslaw Korzeniowski",
+	title = "Dynamic Page Migration under Brownian Motion",
+	booktitle = proc # "11th" # europar,
+	year = 2005,
+	pages = "962--971",
+	OPTpublisher = "Springer",
+	OPTseries = lncs,
+	OPTvolume = 3648,
+}
+
+@inproceedings{dpm-stochastic,
+	author = "Marcin Bienkowski",
+	title = "Dynamic Page Migration with Stochastic Requests",
+	booktitle = proc # "17th" # spaa,
+	year = 2005,
+	pages = "270--278",
+	OPTpublisher = "Association for Computing Machinery (ACM)",
+}
+
+@inproceedings{dpm-survey,
+	author = "Marcin Bienkowski and Friedhelm {Meyer auf der Heide}",
+	title = "Page Migration in Dynamic Networks",
+	booktitle = proc # "30th" # mfcs,
+	year = 2005,
+	pages = "1--14",
+	note = "Invited paper",
+	OPTpublisher = "Springer",
+	OPTseries = lncs,
+	OPTvolume = 3618,
+}
+
+@inproceedings{dpm-bucket-game,
+	author = "Marcin Bienkowski and Jaros{\l}aw Byrka",
+	title = "Bucket Game with Applications to Set Multicover and Dynamic Page Migration",
+	booktitle = proc # "13th" # esa,
+	year = 2005,
+	pages = "815--826",
+	OPTpublisher = "Springer",
+	OPTseries = lncs,
+	OPTvolume = 3669,
+}
+
+@phdthesis{bienkowski-phd,
+	author = "Marcin Bienkowski",
+	title = "Page Migration in Dynamic Networks",
+	school = "Universit{\"a}t Paderborn",
+	year = 2005,
+}
+
+@article{dpm-journal,
+	author = "Marcin Bienkowski and Jaroslaw Byrka and Miroslaw Korzeniowski and Friedhelm {Meyer auf der Heide}",
+	title = "Optimal Algorithms for Page Migration in Dynamic Networks",
+	year = 2009,
+	journal = jda,
+	volume = 7,
+	number = 4,
+	pages = "545--569",
+	OPTpublisher = "Elsevier",
+}
+
+@article{server-migration-ton,
+	author = "Marcin Bienkowski and Anja Feldmann and Johannes Grassler and Gregor Schaffrath and Stefan Schmid",
+	title = "The Wide-Area Virtual Service Migration Problem: A Competitive Analysis Approach",
+	journal = ton,
+	year = 2013,
+	note = "Accepted for publication. \url{http://ieeexplore.ieee.org/xpl/login.jsp?tp=&arnumber=6471794}"
+}
+
+@inproceedings{server-migration-iptcomm,
+	author = "Dushyant Arora and Marcin Bienkowski and Anja Feldmann and Gregor Schaffrath and Stefan Schmid",
+	title = "Online strategies for intra and inter provider service migration in virtual networks",
+	booktitle = proc # "5th" # iptcomm,
+	year = 2011,
+	pages = "10:1--10:11",
+	OPTpublisher = "Association for Computing Machinery (ACM)",
+} 
+
+@inproceedings{server-migration-optimal,
+	author = "Johannes Schneider and Stefan Schmid",
+	title = "Optimal Bounds for Online Page Migration with Generalized Migration Costs",
+	booktitle = proc # "32nd" # infocom,
+	year = 2013,
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Paging, caching
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+@article{paging-mark,
+	author = "Amos Fiat and Richard M.~Karp and Michael Luby and Lyle A.~McGeoch and Daniel D.~Sleator and Neal E.~Young",
+	title = "Competitive paging algorithms",
+	journal = jalgo,
+	volume = 12,
+	number = 4,
+	year = 1991,
+	pages = "685--699",
+}
+
+@article{paging-optimal-difficult,
+	author = "Lyle A. McGeoch and Daniel D. Sleator",
+	title = "A Strongly Competitive Randomized Paging Algorithm",
+	journal = algorithmica,
+	volume = 6,
+	number = 6,
+	year = 1991,
+	pages = "816--825",
+}
+
+@article{paging-optimal-easy,
+	author = "Dimitris Achlioptas and Marek Chrobak and John Noga",
+	title = "Competitive analysis of randomized paging algorithms",
+	journal = tcs,
+	volume = 234,
+	number = "1--2",
+	year = 2000,
+	pages = "203--218",
+}
+
+@article{paging-access-graph,
+	author = "Allan Borodin and Sandy Irani and Prabhakar Raghavan and Baruch Schieber",
+	title = "Competitive paging with locality of reference",
+	journal = jcss,
+	volume = 50,
+	number = 2,
+	year = 1995,
+	pages = "244--258",
+	note = "Also appeared in {\em Proc.~of the 23rd STOC}, pages 249--259, 1991",
+}
+
+@inproceedings{young-paging-soda,
+	author = "Neal E. Young",
+	title = "On-line caching as cache size varies",
+	booktitle = proc # "2nd" # soda,
+	pages = "241--250",
+	year = 1991,
+}
+
+@article{young-paging-greedy-dual,
+	author = "Neal E. Young",
+	title = "The k-Server Dual and Loose Competitiveness for Paging",
+	journal = algorithmica,
+	volume = 11,
+	number = 6,
+	pages = "525--541",
+	year = 1994,
+}
+
+@article{young-paging-landlord,
+	author = "Neal E. Young",
+	title = "On-Line File Caching",
+	journal = algorithmica,
+	volume = 33,
+	number = 3,
+	year = 2002,
+	pages = "371--383",
+	note = "Also appeared in {\em Proc.~of the 9th SODA}, pages 82--86, 1998",
+}
+
+@incollection{young-paging-encyclopedia,
+	author = "Neal E. Young",
+	title = "Online Paging and Caching",
+	booktitle = "Encyclopedia of Algorithms",
+	year = 2008,
+	pages = "601--604",
+	OPTpublisher = "Springer",
+}
+
+@inproceedings{squid-policies,
+	author = "John Dilley and Martin Arlitt and St{\'e}phane Perret",
+	title = "Enhancement and Validation of Squid's Cache Replacement Policy",
+	booktitle = proc # "4th International Web Caching Workshop",
+	year = 1999,
+}
+
+@inproceedings{weighted-paging-optimal,
+	author = "Nikhil Bansal and Niv Buchbinder and Joseph Naor",
+	title = "A Primal-Dual Randomized Algorithm for Weighted Paging",
+	booktitle = proc # "48th" # focs,
+	year  = 2007,
+	pages = "507--517",
+}
+
+@inproceedings{paging-online-min,
+    author = "Gerth St{\o}lting Brodal and Gabriel Moruz and Andrei Negoescu",
+    title = "OnlineMin: A Fast Strongly Competitive Randomized Paging Algorithm",
+    booktitle = proc # "9th" # waoa,
+    year = 2011,
+    pages = "164--175",
+}
+
+@article{belady-lfd,
+	author = "Laszlo A. Belady",
+	title = "A study of replacement algorithms for virtual storage computers",
+	journal = "IBM Systems Journal",
+	volume = 5,
+	pages = "78--101",
+	year = 1966,
+}
+
+@article{torng-paging-caching,
+	author = "Eric Torng",
+	title = "A Unified Analysis of Paging and Caching",
+	journal = algorithmica,
+	volume = 20,
+	pages = "175--200",
+	year = 1998,
+	note = "Also appeared in {\em Proc.~of the 36th FOCS}, pages 194--203, 1995",
+}
+							
+@inproceedings{memory-vs-randomization,
+	author = "Prabhakar Raghavan and Marc Snir",
+	title = "Memory versus randomization in on-line algorithms",
+	booktitle = proc # "16th" # icalp,
+	year = 1989,
+	pages = "687--703",
+}
+
+@inproceedings{paging-separation,
+	author = "Spyros Angelopoulos and Reza Dorrigiv and Alejandro L{\'o}pez-Ortiz",
+	title = "On the separation and equivalence of paging strategies",
+	booktitle = proc # "18th" # soda,
+	year = 2007,
+	pages = "229--237",
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Routing, congestion minimization
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+@inproceedings{access-trees,
+	author = "Bruce M. Maggs and Friedhelm {Meyer auf der Heide} and Berthold V{\"o}cking and Matthias Westermann",
+	title = "Exploiting Locality for Data Management in Systems of Limited Bandwidth",
+	booktitle = proc # "38th" # focs,
+	pages = "284--293",
+	year = 1997,
+}
+
+@inproceedings{access-trees-non-uniform,
+	author = "Friedhelm {Meyer auf der Heide} and Berthold V{\"o}cking and Matthias Westermann",
+	title = "Provably Good and Practical Strategies for Non-Uniform Data Management in Networks",
+	booktitle = proc # "7th" # esa,
+	pages = "89--100",
+	year = 1999,
+}
+
+@inproceedings{caching-in-networks,
+	author = "Friedhelm {Meyer auf der Heide} and Berthold V{\"o}cking and Matthias Westermann",
+	title = "Caching in networks",
+	booktitle = proc # "11th" # soda,
+	year = 2000,
+	pages = "430--439",
+}
+
+@phdthesis{westermann-phd,
+	author = "Matthias Westermann",
+	title = "Caching in Networks: Non-Uniform Algorithms and Memory Capacity Constraints",
+	school = "Universit{\"a}t Paderborn",
+	year = 2000,
+}
+
+@inproceedings{harry-focs,
+	author = "Harald R{\"a}cke",
+	title = "Minimizing Congestion in General Networks",
+	booktitle = proc # "43rd" # focs,
+	pages = "43--52",
+	year = 2002,
+}
+
+@phdthesis{harry-phd,
+	author = "Harald R{\"a}cke",
+	title = "Data management and routing in general networks",
+	school = "Universit{\"a}t Paderborn",
+	year = 2003,
+}
+
+@inproceedings{harry-polynomial,
+	author = "Marcin Bienkowski and Miroslaw Korzeniowski and Harald R{\"a}cke",
+	title = "A Practical Algorithm for Constructing Oblivious Routing Schemes",
+	booktitle = proc # "15th" # spaa,
+	pages = "24--33",
+	year = 2003,
+	OPTpublisher = "Association for Computing Machinery (ACM)",
+}
+
+@inproceedings{hierarchical-best,
+	author = "Chris Harrelson and Kirsten Hildrum and Satish Rao",
+	title = "A Polynomial-time Tree Decomposition to Minimize Congestion",
+	booktitle = proc # "15th" # spaa,
+	year = 2003,
+	pages = "34--43"
+}
+
+@article{diva,
+	author = "Christof Krick and Friedhelm {Meyer auf der Heide} and Harald R{\"a}cke and Berthold V{\"o}cking and Matthias Westermann",
+	title = "Data Management in Networks: Experimental Evaluation of a Provably Good Strategy",
+	journal = tocs,
+	pages = "217--245",
+	volume = 2,
+	year = 2002,
+	note = "Also appeared in {\em Proc.~of the 11nd SPAA}, pages 165--174, 1999",
+}
+
+@article{borodin-hopcroft,
+	author = "Allan Borodin and John E.~Hopcroft",
+	title = "Routing, merging, and sorting on parallel models of computation",
+	journal = jcss,
+	volume = 30,
+	issue = 1,
+	year = 1985,
+	pages = "130--145",
+	note = "Also appeared in {\em Proc.~of the 14th STOC}, pages 338--344, 1982",
+}
+
+@article{valiants-trick,
+	author = "Leslie G. Valiant",
+	title = "A Scheme for Fast Parallel Communication",
+	journal = jcomp,
+	volume = 11,
+	number = 2,
+	year = 1982,
+	pages = "350--361",
+}
+
+@inproceedings{vocking-hypercube,
+	author = "Berthold V{\"o}cking",
+	title = "Almost optimal permutation routing on hypercubes",
+	booktitle = proc # "33rd" # stoc,
+	year = 2001,
+	pages = "530--539",
+} 
+
+@inproceedings{racke-oblivious-routing-survey,
+	author = "Harald R{\"a}cke",
+	title = "Survey on Oblivious Routing Strategies",
+	booktitle = proc # "5th Conference on Computability in Europe (CiE)",
+	year = 2009,
+	pages = "419--429",
+}
+
+@inproceedings{racke-congestion-optimal,
+	author = "Harald R{\"a}cke",
+	title = "Optimal hierarchical decompositions for congestion minimization in networks",
+	booktitle = proc # "40th" # stoc,
+	year = 2008,
+	pages = "255--264",
+}
+
+@article{offline-switching-optimal,
+	author = "Frank T.~Leighton and Bruce M.~Maggs and Satish Rao",
+	title = "Packet Routing and Job-Shop Scheduling in O(Congestion + Dilation) Steps",
+	journal = combinatorica,
+	volume = 14,
+	number = 2,
+	year = 1994,
+	pages = "167--186",
+}
+
+@inproceedings{online-switching-ostrovsky,
+	author = "Rafail Ostrovsky and Yuval Rabani",
+	title = "Universal O(Congestion + Dilation + $\log^{1+\epsilon} n$) Local Control Packet Switching Algorithms",
+	booktitle = proc # "29th" # stoc,
+	year = "1997",
+	pages = "644--653",
+}
+
+@article{online-switching-random-rank,
+	author = "Frank T.~Leighton and Bruce M.~Maggs and Abhiram G.~Ranade and Satish Rao",
+	title = "Randomized Routing and Sorting on Fixed-Connection Networks",
+	journal = jalgo,
+	volume = 17,
+	number = 1,
+	year = 1994,
+	pages = "157--205",
+}
+
+

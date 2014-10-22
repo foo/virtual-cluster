@@ -1,0 +1,105 @@
+Model:
+\begin{itemize}
+  \item We are given a tree $T$ with capacities $c_e$ on the edges
+    (physical network)easured in number of edges)
+  \item We are given $n$ chunks that are assigned to leaves of $T$ (at
+    most one chunk to one leaf)
+  \item Our task is to place $n$ virtual machines on leaves of $T$ (at
+    most one virtual machine to one leaf)
+  \item Virtual machines can be placed directly on empty leaves or on leaves with chunks
+  \item Each chunk has to be transferred to a virtual machine (matching), and the
+    cost inlined by that is equal to $b_1$ times distance between
+    chunk and virtual machine measured by number of edges
+  \item Each virtual machine has to communicate with each other
+    virtual machine, and the cost inclined by that is equal to $b_2$
+    times distance between each pair of virtual machines meas total cost
+\end{itemize}
+
+Let's start by transforming our tree to binary tree with arbitrary
+depth. We also introduce weights on edges (either $0$ or $1$). The
+strategy we use is to clone every vertex $|children(v)| - 2$ times,
+placing subsequent clones as right son of the previous one and placing
+subsequent children as left son of the clone. Last child is placed as
+right son of last clone.
+
+Let's begin designing our algorithm by writing recursive formula for
+minimal cost inclined by placing virtual machines in leaves of a given
+tree. Our approach is to evaluate this function using bottom-up
+technique using auxilary array, which yields a dynamic programming
+solution. To find actual placements of virtual machines in addition to
+the cost, we traverse the array backwards, following the path of
+minimas.
+
+Keep in mind that number of virtual machines is equal to number of
+chunks. However, our function $f$ will be defined by structural
+induction on the tree and we will invalidate the property of having
+the same number of chunks and virtual machines in a given subtree (which is true when
+we look at whole tree).
+
+Let's define $f$ in following way. First argument is a subtree (with
+available informations like number of chunks in its leaves), and the
+second argument is number of virtual machines that we decided to place
+in the subtree (given as first parameter). To calculate optimum
+placement of $x$ virtual machines in subtree $T$ ($f(T, x)$) we will
+consider every possible split of number $x$ into two positive integer
+values: $l$ and $r = x - l$. We will place $l$ virtual machines in
+left subtree of $T$ and $r$ virtual machines in right subtree of
+$T$. Having such information allow us to compute how much cost we
+incline through edge $e_1$ (which connects left subtree of $T$ to root
+of $T$) and edge $e_2$ (which connects right subtree of $T$ to root of
+$T$). In a given recursive call we charge only those two edges, rest
+of edges will be charged is subsequent calls.
+
+Our cost function consists of two factors. First one, communication cost
+between virtual machines is easy to compute. We know how many virtual
+machines are in left subtree, how many are in right subtree and how
+many are in whole tree outside of $T$. For each pair of virtual
+machines, first of which is in left subtree and second of which is in
+right subtree, we charge $b_2 \cdot (w(e_1) + w(e_2))$. For each pair
+of virtual machines, first of which is in left subtree and second of
+which is outside $T$, we charge $b_2 \cdot w(e_1)$. Right subtree case
+is symmetrical. Second factor of our cost function is the cost of
+transferring chunks to virtual machines. Let's call number of chunks
+in left subtree as $c_l$ and number of chunks in right subtree as
+$c_r$. To incline minimal cost we connect chunks in given subtree to
+virtual machines in the same subtree. If we can no longer do that,
+because $v_i < c_i (i \in \{l,r\})$, then we connect leftover chunks
+to virtual machines in second subtree of $T$. If we can no longer do
+that, we connect leftover chunks outside of $T$. This strategy is
+optimal, because connecting any other way can be amended (TODO: need
+better argument here), inclining lower cost. Connections inside either
+left or right subtrees inclines cost $0$ to edges $e_1$ and
+$e_2$. Connections between left and right subtree incline cost $b_1
+\cdot (w(e_1) + w(e_2))$. Connections from either subtree to outside
+of $T$ inclines either $b_1 \cdot w(e_1)$ or $b_2 \cdot
+w(e_2)$. Finally, we can write down our formula for $f$:
+
+$$ f(T, x) = min_{l \in \{0, \ldots, x\}} \{ f(T_l, l) + f(T_r, x - l)
++ TransferCost + ConnectionCost\} $$
+
+where $TransferCost$ and $ConnectionCost$ are constants independent of
+$l$, and are defined in paragraph above. One simplifying observation
+is that to calculate $ConnectionCost$ we can just use the absolute
+value of difference
+between number of chunks and number of virtual machines in a given
+subtree, without knowing which is bigger, because in our model if
+there are some virtual machines left, we know that some chunks from
+outside will use the same transfer as if we have excessive chunks in
+the subtree.
+
+Regarding base case we
+trivially define leaf case as having cost $0$ if $x = 0$, cost $b_2
+\cdot (n-1) + b_1\cdot n$ if there is no chunk in the leaf, cost $b_2 \cdot (n-1) +
+b_1 \cdot (n-1)$ if there is a chunk in the leaf and $\infty$ otherwise.
+
+Capacity constraints are preserved in such way that we put $f(T, x) =
+\infty$ if either $e_1$ or $e_2$ transfer cost added to communication
+cost exceedes its capacity. Doing so guarantees that this
+(impossible) case can never be chosen as a minimum on higher levels of
+recurrence calls (unless all other ways are impossible as well). 
+
+When it comes to time complexity of described algorithm, we spend
+certain amount of time in every of $2|T|$ vertices of binary
+tree (2 is there because of binary transformation). This time can be
+bound by iterating over splits of $n$ into two integers, times some
+constant and we do it for every possible number of VMs from $0$ to $n$. Therefore, resulting running time is $O(Nn^2)$.

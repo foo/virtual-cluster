@@ -1,0 +1,36 @@
+\begin{enumerate}
+\item fp - flexible placing
+\item r - redundant chunks
+\item ma - balanced multiple assignment
+\item bw - bandwidth constraints
+\item cv - virtual machines communication cost
+\end{enumerate}
+
+Positive results:
+
+\begin{enumerate}
+\item r = chunks of the same type grouped into supervertices + minimum weight perfect matching
+\item r + cv = the same as "r", we know where the virtual machines are, so cv = const
+\item fp + ma + bw + cv = dynamic programming approach
+\item r + bw = integer flow on tree
+\item r + bw + cv = first subtract communication cost which is fixed, then solve r + bw; also, it remains integral
+\item r + fp = put VMs in first instance of every chunk type
+\item r + ma = first, create supervertices out of chunks of the same type; then we clone each vm s times (s = \#slots per machine); then we clone each chunk supervertex s times; then minimum weight perfect matching
+\item r + bw + ma = the same as in r + bw, but we multiply every bandwith in the tree by s and edges from vm to sink have bw = s
+\item r + ma + cv = solve r + ma, cv = const
+\item r + bw + ma = flow solution
+\item r + fp + bw = flow solution with integers
+\end{enumerate}
+
+Unknown:
+
+\begin{enumerate}
+\item fp + r + ma
+\item fp + r + cv
+\end{enumerate}
+
+Negative results:
+
+\begin{enumerate}
+\item r + fp + cv + bw = NP-complete (reduction from 3SAT)
+\end{enumerate}
