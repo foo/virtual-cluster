@@ -5,7 +5,7 @@ transform $\Phi$ to equivalent formula $\Psi$ the following way:
 \begin{itemize}
 \item let's assign every clause its unique number from 1 to number of
   clauses
-\item for every occurence of variable $v$ we replace it to $v_{number
+\item for every occurence of variable $v$ we replace it with variable named $v_{number
     of clauses}$
 \item for every variable $v$ we add set of clauses in form $v_i \iff v_{i+1}$
 \end{itemize}
@@ -41,10 +41,12 @@ clauses$.
 We set chunk transfer cost to be any positive integer, let's say 1.
 We set VM communication transfer cost to be 1.
 
-Let's define $C$ as VM communication cost when all machines are in
+Let's define $C$ as VM communication cost when all machines are placed in leaves with labels of
 positive literals.
 
-This ends our construction. Now we need to decide $\Phi$. We do it the
+This ends our construction.
+
+To prove our reduction we need to decide $\Phi$ using solution to $VC$ instance described above. We do it the
 following way:
 
 \begin{itemize}
@@ -57,7 +59,7 @@ following way:
 
 Proof of correctness.
 
-First, we will proove that if $\Phi$ is satisfiable then our VC
+First, we will proove that if $\Phi$ is satisfiable then our $VC$
 instance has solution with cost equal to $C$. Let's take any valuation $F$
 that satisfies $\Phi$. For every variable $v$ that is set to true we
 place virtual machines in every vertex with label $v_i$. For every
@@ -79,7 +81,7 @@ in the following way:
 
 \begin{itemize}
 \item if $v_1$ has machine in it then $F(v) = true$
-\item if $\neg v_1$ has machine in it then $F(v) = false$
+\item otherwise $F(v) = false$
 \end{itemize}
 
 In order to prove that $F$ satisfies $\Phi$ we will need to proove
@@ -88,4 +90,29 @@ that $v_i$ has virtual machine and for all $i$ we have that $\neg v_i$
 does not have a virtual machine. Also, if $\neg v_1$ has virtual
 machine then for all $i$ we have that $\neg v_i$ has virtual machine
 in it and for all $i$ we have that $v_i$ does not have a virtual
-machine. To do: prove this claim.
+machine. 
+
+\begin{proof}
+By rules of bandwidth, we know that there is at most $\# leaves(G_i) / 2$ number of virtual
+machines in every gadget. We ordered placement of exactly
+$\# leaves(T) / 2$ VMs. So lower and upper bounds are equal. What is
+footprint-optimal way of placing $\# leaves(G_i) / 2$ VMs in the gadget?
+First, we notice that we can ommit chunk transfer cost, because by
+bandwidth constraints we disallow any incoming traffic other than
+communication cost with rest of VMs. We need to take under
+consideration two parts of communication cost:
+\begin{itemize}
+\item communication among VMs inside the gadget
+\item communication from VMs from the gadget to VMs outside of the gadget
+\end{itemize}
+
+We notice that (2) does not depend on placements of VMs within the
+gadget.
+
+Communication among VMs inside the gadget is lowest when all of them
+are placed either in ``positive'' or all of them are placed in
+``negative'' subtrees. There are several ways to prove this claim.
+Here we will consider, what happens if we move VM from less saturated
+subtree to more saturated subtree. We also need to compare the cost of
+balanced placement ($\# leaves(G_i)/4$ VMs in both branches. 
+\end{proof}
