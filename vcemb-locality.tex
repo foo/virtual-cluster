@@ -1,5 +1,8 @@
-\documentclass[11pt,a4paper]{scrartcl}
-\usepackage[margin=1in,bottom=1.2in]{geometry}
+\documentclass[9pt,twocolumn]{scrartcl}
+
+%\documentclass[9pt]{sigcomm-alternate}
+
+%\usepackage[margin=1in,bottom=1.2in]{geometry}
 \usepackage{amsfonts,amssymb,amsmath}
 \usepackage[thmmarks,hyperref,amsthm,amsmath]{ntheorem}
 \usepackage{graphicx}
@@ -52,7 +55,10 @@
 
 \title{A Note on Virtual Cluster Embedding with Data Locality}
 
-\title{Exploiting Embedding and Replica Selection Flexibilities for Optimal Virtual Cluster Allocation}
+\title{Embedding Algorithms for Virtual Clusters with Data Locality and Replica Selection}
+
+\title{Embedding Virtual Clusters with Data Locality and Replica Selection\\{\Large Real Algorithms for Virtual Environments}}
+
 
 \author{Maciek, Carlo, Stefan}
 
@@ -62,19 +68,32 @@
 
 \begin{abstract}
 By decoupling applications from the constraints of the underlying physical
-infrastructure, virtualization introduces interesting new opportunities 
-for an optimized resource allocation. In this paper, we distinguish between two
-fundamental dimensions of a more flexible resource allocation in virtualized
-environments: flexible virtual node placement ($\FP$) and replica selection ($\RS$). 
-We study the underlying individual and joint optimization problems, 
-also taking into account the impact of virtual network communication costs ($\CC$) as well as 
-bandwidth constraints $\BW$.
+infrastructure, virtualization introduces a very flexible resource allocation model.
+Accordingly, over the last years, many algorithms have been proposed to exploit
+these flexibilities in order to embed applications more efficiently. Especially the 
+virtual network embedding problem has been studied intensively.
 
-This paper shows that both the $\FP$ and the $\RS$ problem variants can be optimally solved in polynomial time,
-and we present a dynamic programming and a max-flow algorithms (for $\FP$) and a matching algorithm (for $\RS$) accordingly. 
-However, we also show that jointly optimizing the two dimensions is computationally hard, by presenting an NP-hardness proof. 
+However, theoretical studies on the virtual network embedding so far miss two important aspects,
+which we call the \emph{data locality constraint} and \emph{replica selection opportunity}: 
+data locality refers to the fact that the input to cloud applications such as MapReduce
+is typically already stored  in the datacenter and the corresponding constraints need to be taken into account when embedding
+the application; and replica selection refers to the fact that input is often stored redundantly, and
+hence introduces further optimization opportunities.
 
-We believe that our paper can provide the networking community with important insights into the 
+This paper studies the fundamental algorithmic challenges resulting from data locality
+and replica selection. 
+In particular, we decompose virtual network embedding problems with locality constraints
+into four
+main aspects: flexible virtual node placement ($\FP$), communication costs ($\CC$),
+replica selection ($\RS$), 
+and bandwidth constraints $\BW$.
+
+This paper shows that both $\FP$ and $\RS$ problems can often be solved optimally in polynomial time,
+using dynamic programming and max-flow (for $\FP$) algorithms, as well as matching algorithms (for $\RS$).
+However, we also show that jointly optimizing the $\FP$, $\CC$,
+and $\RS$ is NP-hard under bandwidth constraints $\BW$.
+
+We believe that our paper can provide the networking community with important insights into the
 design of algorithms to exploit resource allocation flexibilities in virtual environments, as well as the fundamental (computational)
 limitations of such optimizations.
 \end{abstract}
@@ -87,50 +106,50 @@ and has radically changed the way we think about resource allocation in the Inte
 Indeed, the success of cloud computing relies to a large extent on virtualization:
 the possibility to allocate virtual machines flexibly and on-demand.
 
-The virtualization trend now started to spill over to the network. Indeed, it is well-known
+The virtualization trend now started to spill over to the network. It is well-known
 that provisioning virtual machines is often not sufficient to guarantee a predictable performance
 to cloud applications, as the interference in the underlying network can significantly delay the
 execution.~\cite{talk-about} This is particularly the case in batch-processing jobs such as MapReduce, which consume
 a considerable amount of bandwidth resources during their execution.~\cite{amazonbw}
 
-A most prominent virtual network abstraction is the \emph{Virtual Cluster} $\VC(n,b)$:  
+A most prominent virtual network abstraction is the \emph{Virtual Cluster} $\VC(n,b)$:
 the virtual cluster provides the abstraction of $n$ virtual machines connected to a logical
-switch at (at least) bandwidth $b$ (essentially a Hose model).~\cite{oktopus} 
-In other words, the virtual cluster provides isolation guarantees over both resources, 
-the computation (the virtual machines) and bandwidth (the network). 
+switch at (at least) bandwidth $b$ (essentially a Hose model).~\cite{oktopus}
+In other words, the virtual cluster provides isolation guarantees over both resources,
+the computation (the virtual machines) and bandwidth (the network).
 
 The problem of how to efficiently and jointly map the nodes and links of a virtual cluster in a given datacenter is non-trivial,
 and has been studied for several years now.~\cite{oktopus,proteus,secondnet} The problem is complicated further when taking into account
-\emph{data locality issues}: usually the inputs to a cloud application (the so-called \emph{chunks}) 
-are stored in a 
-distributed database in the datacenter, \emph{in a redundant manner}. The virtual machine mapping algorithm should take into account 
+\emph{data locality issues}: usually the inputs to a cloud application (the so-called \emph{chunks})
+are stored in a
+distributed database in the datacenter, \emph{in a redundant manner}. The virtual machine mapping algorithm should take into account
 the locations
 of the problem inputs (the chunks and their replicas), in order to avoid unnecessary transmissions over the network.
 
 In this paper, we are interested in the fundamental algorithmic problems raised by virtualized datacenters,
-where virtual machines can be placed flexibly and input data is stored redundantly: 
+where virtual machines can be placed flexibly and input data is stored redundantly:
 How to exploit the flexibility of mapping virtual machines and their interconnecting
 network flexibly, in order to minimize the resource footprint of the application while providing
-the requested resources (and hence performance guarantees)? 
+the requested resources (and hence performance guarantees)?
 And how to take into account data locality and exploit
-redundancy in the distributedly stored problem input (replica selection)?  
+redundancy in the distributedly stored problem input (replica selection)?
 
 \subsection{Model}
 
-We distinguish between two fundamental new optimization problems introduced by virtualization: 
+We distinguish between two fundamental new optimization problems introduced by virtualization:
 The decoupling of applications from the underlying physical infrastructure introduces node placement flexibilities ($\FP$):
-virtual machines can be mapped to arbitrary nodes in the physical network. Moreover, 
-network virtualization technology and software-defined networking allows for a flexible selection of data replicas ($\RS$): 
+virtual machines can be mapped to arbitrary nodes in the physical network. Moreover,
+network virtualization technology and software-defined networking allows for a flexible selection of data replicas ($\RS$):
 the input to cloud applications, the chunks, are typically stored in a distributed database, in a redundant fashion.
-The $\FP$ and $\RS$ flexibilities introduce interesting new opportunities for optimization.   
- 
-Besides mapping virtual machines ($\FP$) and matching them to their replicas ($\RS$), there are typically two more 
+The $\FP$ and $\RS$ flexibilities introduce interesting new opportunities for optimization.
+
+Besides mapping virtual machines ($\FP$) and matching them to their replicas ($\RS$), there are typically two more
 aspects to be taken into account: (1) embedding a minimal virtual cluster network ($\VC$) to interconnect the virtual machines with certain
 bandwidth guarantees, (2) while taking into account bandwidth constraints ($\BW$).
 
 More formally, we consider the following problem. We are given a substrate network $H=(V,E)$ (the ``host graph'') consisting of servers $V$
 interconnected by links $E$; we assume that $H$ forms a typical fat-tree datacenter.~\cite{todo}
-For ease of presentation, we will assume that each server can host one virtual machines. (All our algorithms can easily be generalized to 
+For ease of presentation, we will assume that each server can host one virtual machines. (All our algorithms can easily be generalized to
 a scenario where servers can host multiple virtual machines.)
 The substrate stores the application input: we assume that a set of chunks $C$ are distributed over $V$, and that chunks may be redundant,
 allowing for replica selection $\RS$. Moreover, the links $E$ can come with bandwidth capacity constraints ($\BW$).
@@ -146,7 +165,7 @@ and we want to minimize:
 $$
 \Cost = \MatchCost + \CC
 $$
-\noindent where $\MatchCost = \sum_{v\in \VC(n,b)} b'\cdot \ell(v,\chunkOf(v))$ and 
+\noindent where $\MatchCost = \sum_{v\in \VC(n,b)} b'\cdot \ell(v,\chunkOf(v))$ and
 $\CC = \sum_{v_1,v_2\in \VC(n,b)} \ell(v_1,v_2)$, where $\chunkOf(v)$ denotes
 the chunk to which $v$ is mapped and $\ell$ is the distance
 between two locations in the datacenter.
@@ -155,13 +174,13 @@ Sometimes, we are only interested in the matching problem or virtual cluster emb
 and will ignore the other cost component.
 
 
- 
+
 
 \subsection{Our Contributions}
 
-This paper takes a closer look at the fundamental resource allocation problems 
+This paper takes a closer look at the fundamental resource allocation problems
 in virtual network environments, studying and distinguishing between flexibilities in virtual machine placements ($\FP$) and
-replica selection ($\RS$), taking into account communication costs ($\CC$) and bandwidth constraints ($\BW$).   
+replica selection ($\RS$), taking into account communication costs ($\CC$) and bandwidth constraints ($\BW$).
 
 We make the following contributions.
 \begin{enumerate}
@@ -197,6 +216,43 @@ We make the following contributions.
 \section{NP-completeness of r + fp + cv + bw}
 
 \input{np-completeness}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Related Work}\label{sec:relwork}
+
+It is well-known~\cite{talk-about} that the network
+can have a significant impact on cloud application
+performance, and several solutions have been proposed
+over the last years to provide more predictable
+network guarantees, such as avoiding multi-tenancy
+entirely (see e.g., Amazon's Compute Cluster), by providing relative max-min
+per-flow or per-tenant fairness
+guarantees~\cite{seawall,netshare,faircloud,elasticswitch}, or by
+explicit bandwidth
+reservations~\cite{gatekeeper,secondnet,oktopus, proteus, drl}.
+
+Our work focuses on systems with strict performance guarantees,
+and there exists a large body of literature
+on the general virtual network embedding problem, see~\cite{alloc-survey} for a good survey.
+We consider the virtual cluster abstraction proposed
+in the Oktopus~\cite{oktopus} paper, and later also studied in
+the Proteus~\cite{proteus} paper. However, both papers only present
+heuristic algorithms for the virtual cluster embedding problem.
+While on average and in our simulations Oktopus~\cite{oktopus} and
+Proteus~\cite{proteus} find good embeddings with small footprints,
+it is easy to see that the resulting resource footprint
+can be arbitrarily bad compared to the optimal solution.
+Oktopus can miss solutions where the virtual cluster
+is embeddable on a single server, and Proteus can miss efficient embeddings
+spanning more than one pod.
+
+FIXME: data locality, matching, etc.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Conclusion}\label{sec:conclusion}
+
+FIXME
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Appendix}
