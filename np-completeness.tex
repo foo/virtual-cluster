@@ -86,9 +86,36 @@ levels of edges in $T_{\Psi}$: top, middle and bottom. We set
 bandwidth to unlimited at levels bottom and middle. At every edge of
 top level, we set the same bandwidth to: $cl(\Psi) \cdot (var(\Psi) -
 cl(\Psi))$. Idea behind capacity of this amount is that in every gadget we can
-spawn at most $cl(\Psi)$ virtual machines. This is the case only if
-there are more machines outside of the gadget than inside it. TODO:
-needs a little bit more formalization.
+spawn at most $cl(\Psi)$ virtual machines. Let's prove it formally:
+
+\begin{lemma} (bandwidth lemma)
+Let $c$ and $v$ be positive natural numbers. Let $a_1, a_2, \ldots,
+a_v$ be natural number sequence that adds up to $c \cdot v$. Also, for
+each $i$ we have $a_i \leq 2 \cdot c$. Then, if we have this:
+
+$$ \forall_i a_i \cdot (c \cdot v - a_i) \leq c \cdot (c \cdot v -
+c) $$
+
+then each $a_i = c$.
+\end{lemma}
+\begin{proof}
+
+Let's assume the contrary, which means that there exists such $y$ that
+$a_y > c$. As we have $a_y <2c$, we can say that $a_y$ has form $c +
+k$ for $k \in [1, \ldots, c]$.
+
+Let's look at bandwidth inequality:
+
+$$ (c + k) \cdot (c \cdot v - c - k) \leq c \cdot (c \cdot v - c) $$
+
+After transforming it we have:
+
+$$ 0 \leq k(k - (c \cdot (v + 2))) $$
+
+Which is true for $k \leq 0$ or $k \geq c \cdot (v + 2)$, so no
+positive $k \leq c$ can satisfy this inequality, which gives a contradiction. 
+
+\end{proof}
 
 We set number of chunk types to be equal to number of clauses, $ch =
 c(\Psi)$. To finish construction of $T_{\Psi}$, we need to place data chunks in
