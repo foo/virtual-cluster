@@ -1,4 +1,4 @@
-FILE = paper
+FILE = vcemb-locality
 FILES = dynamic_embedding.tex dynamic_embedding2.tex models.tex np-completeness.tex
 PICT = 
 
