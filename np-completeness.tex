@@ -101,10 +101,13 @@ then each $a_i = c$.
 \begin{proof}
 
 Let's assume the contrary, which means that there exists such $y$ that
-$a_y > c$. As we have $a_y <2c$, we can say that $a_y$ has form $c +
-k$ for $k \in [1, \ldots, c]$.
+$a_y \neq c$. Then there are two cases: first, $a_y>c$ and second,
+$a_y<c$. Proof for the first case is presented below; second case
+with pidgeon hole principle results in existance of $a_z > c$, which
+is basically the same.
 
-Let's look at bandwidth inequality:
+As we have $a_y < 2c$, we can say that $a_y$ has form $c +
+k$ for $k \in [1, \ldots, c]$. Let's look at bandwidth inequality:
 
 $$ (c + k) \cdot (c \cdot v - c - k) \leq c \cdot (c \cdot v - c) $$
 
