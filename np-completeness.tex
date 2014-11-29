@@ -1,118 +1,156 @@
-In order to show NP-completeness of our problem we will perform
-reduction from 3-SAT. Let's take any formula $\Phi$ in 3-CNF. First,
-transform $\Phi$ to equivalent formula $\Psi$ the following way:
+\subsection{Introduction and plan of this chapter}
 
-\begin{itemize}
-\item let's assign every clause its unique number from 1 to number of
-  clauses
-\item for every occurence of variable $v$ we replace it with variable named $v_{number
-    of clauses}$
-\item for every variable $v$ we add set of clauses in form $v_i \iff v_{i+1}$
-\end{itemize}
+In this chapter we will present two NP-completeness results: for all
+model extensions combined: bw + cv + fp + r, and for last three model
+extensions: cv + fp + r. In the rest of this chapter we will name
+first problem as model with bandwidth and second problem as model
+without bandwidth. First observation that we do is that model with
+bandwidth is a generalization of the model without bandwidth and
+therefore we need to only prove NP-completeness of model without
+bandwidth. However, the approach we chose is to first show the proof
+for model with bandwidth, as it is simpler and shares its structure
+with proof for model without bandwidth, therefore being good
+introduction. Also, in this introduction we can write more about ideas
+of construction, leaving technical lemmas for the final proof.
 
-Let's construct our tree out of gadgets for every variable connected
-to tree root. The gadget is constructed as follows:
+\subsection{NP-completeness of model with bandwidth}
 
-\begin{itemize}
-\item i-th occurence of $v$ we create two leaves labeled $v_i$ and
-  $\neg v_i$
-\item we connect positive leaves in one subtree with root vertex called ``positive'' and negative leaves in
-  another subtree with root vertex called ``negative''
-\item we connect ``positive'' and ``negative'' into one subtree with
-  root vertex called $v$
-\item we set bandwidth constraints between $v_i$ and ``positive'' to
-  $vms - 1$
-\item we set bandwidth constraints between $\neg v_i$ and ``negative''
-  to $vms - 1$
-\item we set bandwidth constraints between ``negative'' and $v$ to
-  $vms - \binom{number of occurences of v}{2}$
-\item we set bandwidth constraints between ``positive'' and $v$ to
-  $vms - \binom{number of occurences of v}{2}$
-\item we set bandwidth constraints between $v$ and root to
-  $vms - \binom{number of occurences of v}{2}$
-\end{itemize}
+We decided to make reduction from Boolean Satisfiability problem (SAT)
+to our Virtual Cluster problem with bandwidth (VCB). SAT is decision
+problem, but VCB is optimization problem with NO answer
+possible. Therefore to make those problems compatible in terms of
+reduction, we consider decision VCB variant, in which instance we have
+additional constant $C$, and instance belongs to VCB if it has feasible
+solution of cost $leq C$.
 
-For each clause we place 3 chunks in 3 leaves labeled as literals in
-this clause.
+Let's remind what decision VCB variant instance consists of:
+\begin{enumerate}
+\item constant $C$
+\item balanced rooted tree $T$ with edge capacities $bw(e)$
+\item constants $b_1$, $b_2$, which are costs of chunk transfer and
+communication
+\item constant $v$, which is desired number of VMs to be spawned
+\item constant $ch$, which is number of types of chunks
+\item sequence of chunks placed in leaves of $T$, possibly replicated
+\end{enumerate}
 
-We set number of virtual machines to place to be $3 \cdot number of
-clauses$.
+Let's remind what SAT instance consists of:
+\begin{enumerate}
+\item clauses (let's name number of clauses as $cl(\Psi)$)
+\item literals
+\item variables (let's name number of variables as $var(\Psi)$
+\end{enumerate}
 
-We set chunk transfer cost to be any positive integer, let's say 1.
-We set VM communication transfer cost to be 1.
+Let's take any formula in Conjunctive Normal Form, name it $\Psi$ and produce
+VCB instance $VCB_{\Psi}$. First, construct the tree $T_{\Psi}$. It will consist of
+a root and separate gadget for each variable of $\Psi$, each of which
+is a child of the root.
 
-Let's define $C$ as VM communication cost when all machines are placed in leaves with labels of
-positive literals.
 
-This ends our construction.
+\begin{figure}[htbp]
+\includegraphics[width = \columnwidth]{figs/gadgets.eps}
+\caption{Example gadgets for formula that contains variables x, y and z.}
+\label{fig:gadgets}
+\end{figure}
 
-To prove our reduction we need to decide $\Phi$ using solution to $VC$ instance described above. We do it the
-following way:
+Gadget for variable $x$ has its root, $var(x)$, and two children:
+$positive(x)$ and $negative(x)$. Vertex $positive(x)$ has $cl(\Psi)$
+children: $x_1, x_2, \ldots, x_{cl(\Psi)}$. Vertex $negative(x)$ has
+$cl(\Psi)$ children: $\not x_1, \not x_2, \dots, x_{cl(\Psi)}$. Every
+gadget has the same structure: the same height, the same number of
+leaves, and the same height. In fact, we will set bandwidth to be the
+same everywhere in every gadget. Differences will be shown when we
+will place data chunks.
 
-\begin{itemize}
-\item if there is no solution that doesn't exceed bandwidth, we
-  answer: $\Phi$ is unsatisfiable
-\item if minimal solution has value larger than $C$, we answer: $\Phi$
-  is unsatisfiable
-\item if minimal solution has value $C$, we answer: $\Phi$ is satisfiable
-\end{itemize}
 
-Proof of correctness.
+\begin{figure}[htbp]
+\includegraphics[width = \columnwidth]{figs/gadget-no-bw.eps}
+\caption{Example gadget for variable $x$ in formula that has exactly
+three clauses.}
+\label{fig:gadgets}
+\end{figure}
 
-First, we will proove that if $\Phi$ is satisfiable then our $VC$
-instance has solution with cost equal to $C$. Let's take any valuation $F$
-that satisfies $\Phi$. For every variable $v$ that is set to true we
-place virtual machines in every vertex with label $v_i$. For every
-variable $v$ that is set to false we place virtual machines in every
-vertex with label $\neg v_i$. For every virtual machine we either have
-a chunk in the same vertex - then we match the VM with the chunk - or
-we do not have a chunk in the same vertex - then we do not match the
-VM with any chunk. We need to proove two claims:
-\begin{itemize}
-\item This placement of virtual machines does not exceed the bandwidth
-\item This placement of virtual machines matches every chunk
-\end{itemize}
+We set number of virtual machines to spawn to $v = cl(\Psi) \cdot var(\Psi)$.
 
-TODO: prove claims above.
+Now we will set cost of chunk transportation and cost of communication
+among virtual machines. We set communication cost to be $1$. We set
+trasportation cost to be $b_1 = W$, where $W$ is constant large enough
+to disallow transportation. It means that if virtual machine wants to
+process the chunk, it has to be spawned where the data chunk is
+placed. Technically, transportation is not completely disallowed, it
+just inclines cost so huge that every optimal solution has no
+trasportation.
 
-Second, we will proove that if our VC instance has solution with cost
-equal to $C$ than $\Phi$ is satisifiable. Let's create valuation $F$
-in the following way:
+Now we will set bandwidth constraints in $T_{\Psi}$. There are three
+levels of edges in $T_{\Psi}$: top, middle and bottom. We set
+bandwidth to unlimited at levels bottom and middle. At every edge of
+top level, we set the same bandwidth to: $v \cdot (v -
+cl(\Psi))$. Idea behind capacity of this amount is that in every gadget we can
+spawn at most $cl(\Psi)$ virtual machines. This is the case only if
+there are more machines outside of the gadget than inside it. TODO:
+needs a little bit more formalization.
+
+We set number of chunk types to be equal to number of clauses, $ch =
+c(\Psi)$. To finish construction of $T_{\Psi}$, we need to place data chunks in
+leaves. We do it the following way. For each clause of number $i$ we
+construct as many replicas of chunk $c_i$ as there are literals in
+clause $i$. For each literal $l$ (of form $v$ or $\not v$) that satisfies clause $i$ we place
+replica of chunk $c_i$ in leaf labeled $c_{l_i}$. TODO: draw example for
+some simple formula.
+
+To finish our construction, we need to set value of constant $C$. We
+do it by calculating communication cost among spawned virtual machines in
+certain solution to our instance. This soulution is constructed by placing
+virtual machines in all leaves of $positive(v)$ and none in leaves
+$negative(v)$ for every gadget for variable $v$. Please note that $C$
+computed such way do not contain transportation cost. TODO: calculate
+it precisely in model without bandwidth.
+
+With our construction completed, we need to prove that it indeed
+decides SAT.
+
+\begin{theorem}Formula $\Psi$ is satisfiable iff $VCB_{\Psi}$ has
+solution of cost $\leq C$.
+\end{theorem}
+
+\begin{proof}
+($=>$) Let's take any valuation $F$ that satisfies $\Psi$. We will construct
+solution to $VCB_{\Psi}$ using F in the following way. For each
+variable $v \in var(\Psi)$ we place $cl(\Psi)$ virtual machines in
+leaves of gadget $var(v)$. We need to choose $cl(\Psi)$ out of
+$2 \cdot cl(\Psi)$ leaves to spawn VMs. If $F(v) = 1$, we spawn all VMs in leaves
+of $positive(v)$, else we spawn all VMs in leaves of
+$negative(v)$. Solution constructed such way has cost exactly
+$C$, because VMs are evenly splitted among gadgets and VMs are not
+mixed between $positive(v)$ and $negative(v)$ subtrees. Todo: prove it
+more formally in model without bandwidth using better definition of $C$.
+
+($<=$) Let's take any solution to $VCB_{\Psi}$ of cost $\leq C$. We
+will construct valuation $F$ using placement of virtual machines in
+solution to $VCB_{\Psi}$.
+
+We need to take following observations. In every solution of cost
+$\leq C$ every gadget has exactly $ch(\Psi)$ VMs spawned in its
+leaves. It is true because we set bandwidth this way. Also, inside every gadget either all VMs are spawned in
+$positive(v)$ or all VMs are spawned in $negative(v)$. It is true
+because cost of solution where at least one gadget has VMs mixed
+between those branches is always greater than $C$.
+
+Now we can construct our valuation $F$. We do it the following way
+(for each $v \in var(\Psi)$:
 
 \begin{itemize}
 \item if $v_1$ has machine in it then $F(v) = true$
 \item otherwise $F(v) = false$
 \end{itemize}
 
-In order to prove that $F$ satisfies $\Phi$ we will need to proove
-following claim. If $v_1$ has virtual machine then for all $i$ we have
-that $v_i$ has virtual machine and for all $i$ we have that $\neg v_i$
-does not have a virtual machine. Also, if $\neg v_1$ has virtual
-machine then for all $i$ we have that $\neg v_i$ has virtual machine
-in it and for all $i$ we have that $v_i$ does not have a virtual
-machine. 
+Valuation $F$ satisfies $\Psi$ because it satisfies every clauses, as
+$VCB_{\Psi}$ solution processed all the chunks. Also, we have the
+property that if there is a VM in $positive(v)$ subtree of any gadget,
+then:
+\begin{enumerate}
+\item every other leaf in $positive(v)$ has VM spawned in it
+\item no leaf in $negative(v)$ has VM spawned in it
+\end{enumerate}
 
-\begin{proof}
-By rules of bandwidth, we know that there is at most $\# leaves(G_i) / 2$ number of virtual
-machines in every gadget. We ordered placement of exactly
-$\# leaves(T) / 2$ VMs. So lower and upper bounds are equal. What is
-footprint-optimal way of placing $\# leaves(G_i) / 2$ VMs in the gadget?
-First, we notice that we can ommit chunk transfer cost, because by
-bandwidth constraints we disallow any incoming traffic other than
-communication cost with rest of VMs. We need to take under
-consideration two parts of communication cost:
-\begin{itemize}
-\item communication among VMs inside the gadget
-\item communication from VMs from the gadget to VMs outside of the gadget
-\end{itemize}
-
-We notice that (2) does not depend on placements of VMs within the
-gadget.
-
-Communication among VMs inside the gadget is lowest when all of them
-are placed either in ``positive'' or all of them are placed in
-``negative'' subtrees. There are several ways to prove this claim.
-Here we will consider, what happens if we move VM from less saturated
-subtree to more saturated subtree. We also need to compare the cost of
-balanced placement ($\# leaves(G_i)/4$ VMs in both branches. 
 \end{proof}
