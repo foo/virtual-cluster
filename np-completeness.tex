@@ -148,8 +148,8 @@ do it by calculating communication cost among spawned virtual machines in
 certain solution to our instance. This soulution is constructed by placing
 virtual machines in all leaves of $positive(v)$ and none in leaves
 $negative(v)$ for every gadget for variable $v$. Please note that $C$
-computed such way do not contain transportation cost. TODO: calculate
-it precisely in model without bandwidth.
+computed such way do not contain transportation cost. We will prove it
+more formally in proof of model without bandwidth.
 
 With our construction completed, we need to prove that it indeed
 decides SAT.
@@ -176,10 +176,11 @@ solution to $VCB_{\Psi}$.
 
 We need to take following observations. In every solution of cost
 $\leq C$ every gadget has exactly $ch(\Psi)$ VMs spawned in its
-leaves. It is true because we set bandwidth this way. Also, inside every gadget either all VMs are spawned in
-$positive(v)$ or all VMs are spawned in $negative(v)$. It is true
-because cost of solution where at least one gadget has VMs mixed
-between those branches is always greater than $C$.
+leaves. It is true because we proved the bandwidth lemma. Also, inside
+every gadget either all VMs are spawned in $positive(v)$ or all VMs
+are spawned in $negative(v)$. It is true because cost of solution
+where at least one gadget has VMs mixed between those branches is
+always greater than $C$.
 
 Now we can construct our valuation $F$. We do it the following way
 (for each $v \in var(\Psi)$:
@@ -190,9 +191,10 @@ Now we can construct our valuation $F$. We do it the following way
 \end{itemize}
 
 Valuation $F$ satisfies $\Psi$ because it satisfies every clauses, as
-$VCB_{\Psi}$ solution processed all the chunks. Also, we have the
-property that if there is a VM in $positive(v)$ subtree of any gadget,
-then:
+$VCB_{\Psi}$ solution processed all the chunks. No transportation of
+chunks is allowed. Also, we have the property that if there is a VM in
+$positive(v)$ subtree of any gadget, then:
+
 \begin{enumerate}
 \item every other leaf in $positive(v)$ has VM spawned in it
 \item no leaf in $negative(v)$ has VM spawned in it
@@ -203,11 +205,11 @@ then:
 \subsection{NP-hardness of model without bandwidth}
 
 There were only one use of bandwidth in proof from previous
-chapter. It was to control number of VMs spawned in every gadgets. For
+chapter. It was to control number of VMs spawned in every gadget. For
 model without bandwidth we need some other mechanism to control
 it. Our high-level plan is like that:
 \begin{enumerate}
-\item Do touch structure of previous proof.
+\item Do not touch structure of previous proof.
 \item Show new gadget for a variable.
 \item Place new types of chunks in a tree.
 \item Adjust number of VMs to spawn to work with new gadget.
@@ -243,10 +245,9 @@ and variable x.}
 \end{figure}
 
 This modification of a gadget introduces
-$var(\Phi)$ new chunk types, so we need to double the number of VMs to
+$var(\Phi) \cdot cl(\Phi)$ new chunk types, so we need to double the number of VMs to
 spawn: $v = 2 \cdot cl(\Phi)\cdot var(\Phi)$.
 
-TODO: calculate constant W as sum of 8 hops communication among all VMs.
 
 We calculate $C$ almost the same way as in previous proof. Once again,
 we place VMs in $positive(v)$ and calculate communication cost
@@ -268,6 +269,14 @@ $$ CC_2 = \sum_{i=1}^{var(\Psi)} 8 \cdot cl(\Psi) \cdot (cl(\Psi) \cdot (var(\Ps
 $$ C = CC_1 + CC_2 = 2 \cdot var(\Psi) \cdot ({ cl(\Psi) \choose 2} +
 4 \cdot cl(\Psi) ^2 \cdot (var(\Psi) - 1)) $$
 
+
+We need to set transportation cost $b_1$. The idea is that cost of
+transportation over even single hop is more costly than any possible
+communication cost among $v$ VMs. Tree $T_{\Phi}$ has edge-height
+equal to $4$, so we set $W$ to be sum of 8 hops communication among
+all VMs:
+
+$$ W = 8 \cdot {v \choose 2} $$
 
 With our new construction completed, we need to prove that it indeed
 decides SAT.
