@@ -21,7 +21,7 @@ problem, but VCB is optimization problem with NO answer
 possible. Therefore to make those problems compatible in terms of
 reduction, we consider decision VCB variant, in which instance we have
 additional constant $C$, and instance belongs to VCB if it has feasible
-solution of cost $leq C$.
+solution of cost $\leq C$.
 
 Let's remind what decision VCB variant instance consists of:
 \begin{enumerate}
@@ -56,7 +56,7 @@ is a child of the root.
 Gadget for variable $x$ has its root, $var(x)$, and two children:
 $positive(x)$ and $negative(x)$. Vertex $positive(x)$ has $cl(\Psi)$
 children: $x_1, x_2, \ldots, x_{cl(\Psi)}$. Vertex $negative(x)$ has
-$cl(\Psi)$ children: $\not x_1, \not x_2, \dots, x_{cl(\Psi)}$. Every
+$cl(\Psi)$ children: $\neg x_1, \neg x_2, \dots, x_{cl(\Psi)}$. Every
 gadget has the same structure: the same height, the same number of
 leaves, and the same height. In fact, we will set bandwidth to be the
 same everywhere in every gadget. Differences will be shown when we
@@ -89,7 +89,7 @@ cl(\Psi))$. Idea behind capacity of this amount is that in every gadget we can
 spawn at most $cl(\Psi)$ virtual machines. Let's prove it formally:
 
 \begin{lemma} (bandwidth lemma)
-Let $c$ and $v$ be positive natural numbers. Let $a_1, a_2, \ldots,
+Let $c$ and $v > 4$ be positive natural numbers. Let $a_1, a_2, \ldots,
 a_v$ be natural number sequence that adds up to $c \cdot v$. Also, for
 each $i$ we have $a_i \leq 2 \cdot c$. Then, if we have this:
 
@@ -113,18 +113,33 @@ $$ (c + k) \cdot (c \cdot v - c - k) \leq c \cdot (c \cdot v - c) $$
 
 After transforming it we have:
 
-$$ 0 \leq k(k - (c \cdot (v + 2))) $$
+$$ 0 \leq k(k - (c \cdot (v - 2))) $$
 
-Which is true for $k \leq 0$ or $k \geq c \cdot (v + 2)$, so no
-positive $k \leq c$ can satisfy this inequality, which gives a contradiction. 
+Which is true for $k \leq 0$ or $k \geq c \cdot (v - 2)$, so no
+positive $k \leq c$ can satisfy this inequality for $v > 4$, which gives a contradiction. 
+
+\qed
 
 \end{proof}
+
+We will apply this lemma in following way. We interpret $a_i$ as
+number of VMs that are spawned in $i$-th gadget. We set $c$ as number
+of clauses and $v$ as number of variables. LHS of inequality from the
+lemma is formula for communication cost of machines inside $i$-th
+gadget to machines outside the gadget. RHS of the inequality is
+bandwidth constraint for the gadget. Corollary from the lemma is that
+any feasible solution must place exactly $c$ machines in every gadget.
+
+TODO: We need to consider case where $v \leq 4$. First of all, it is
+finite case, so we can do it by hand. Also, for such a small $v$ we
+can have only 1 clause with 3 or 4 literals, so it is easy. We need to
+produce an instance anyway though.
 
 We set number of chunk types to be equal to number of clauses, $ch =
 c(\Psi)$. To finish construction of $T_{\Psi}$, we need to place data chunks in
 leaves. We do it the following way. For each clause of number $i$ we
 construct as many replicas of chunk $c_i$ as there are literals in
-clause $i$. For each literal $l$ (of form $v$ or $\not v$) that satisfies clause $i$ we place
+clause $i$. For each literal $l$ (of form $v$ or $\neg v$) that satisfies clause $i$ we place
 replica of chunk $c_i$ in leaf labeled $c_{l_i}$. TODO: draw example for
 some simple formula.
 
@@ -211,8 +226,8 @@ construction though).
 Let's start by presenting new gadget. Compared to the one from
 previous proof, this one has one more level. Structure of the gadget
 remains the same (we have $var(v), positive(v), negative(v), x_1,
-x_2, \ldots, x_{cl(\Psi)}, \not x_1, \not x_2, \ldots,
-x_{cl(\Psi)}$). Each of leaves labeled $v_i$ or $\not v_i$ from previous gadget now is an inner
+x_2, \ldots, x_{cl(\Psi)}, \neg x_1, \neg x_2, \ldots,
+x_{cl(\Psi)}$). Each of leaves labeled $v_i$ or $\neg v_i$ from previous gadget now is an inner
 node and has two children; left of which is placeholder for variable chunk $c_{v_i}$ and
 right is placeholder for chunks that correspond to clauses (like in
 previous proof). We will label left child $l(v, i)$ and right child
@@ -230,6 +245,8 @@ and variable x.}
 This modification of a gadget introduces
 $var(\Phi)$ new chunk types, so we need to double the number of VMs to
 spawn: $v = 2 \cdot cl(\Phi)\cdot var(\Phi)$.
+
+TODO: calculate constant W as sum of 8 hops communication among all VMs.
 
 We calculate $C$ almost the same way as in previous proof. Once again,
 we place VMs in $positive(v)$ and calculate communication cost
