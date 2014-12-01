@@ -1,19 +1,7 @@
-Model:
-\begin{itemize}
-  \item We are given a tree $T$ with capacities $c_e$ on the edges
-    (physical network)easured in number of edges)
-  \item We are given $n$ chunks that are assigned to leaves of $T$ (at
-    most one chunk to one leaf)
-  \item Our task is to place $n$ virtual machines on leaves of $T$ (at
-    most one virtual machine to one leaf)
-  \item Virtual machines can be placed directly on empty leaves or on leaves with chunks
-  \item Each chunk has to be transferred to a virtual machine (matching), and the
-    cost inlined by that is equal to $b_1$ times distance between
-    chunk and virtual machine measured by number of edges
-  \item Each virtual machine has to communicate with each other
-    virtual machine, and the cost inclined by that is equal to $b_2$
-    times distance between each pair of virtual machines meas total cost
-\end{itemize}
+
+In this section we will present a dynamic programming solution to
+virtual cluster embedding with flexible placement (FP), communication
+among VMs (CC) and bandwidth constraints (BW).
 
 Let's start by transforming our tree to binary tree with arbitrary
 depth. We also introduce weights on edges (either $0$ or $1$). The
