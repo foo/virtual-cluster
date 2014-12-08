@@ -89,14 +89,14 @@ cl(\Psi))$. Idea behind capacity of this amount is that in every gadget we can
 spawn at most $cl(\Psi)$ virtual machines. Let's prove it formally:
 
 \begin{lemma} (bandwidth lemma)
-Let $c$ and $v > 4$ be positive natural numbers. Let $a_1, a_2, \ldots,
-a_v$ be natural number sequence that adds up to $c \cdot v$. Also, for
-each $i$ we have $a_i \leq 2 \cdot c$. Then, if we have this:
+  Let $c$ and $v > 4$ be positive natural numbers. Let $a_1, a_2, \ldots,
+  a_v$ be natural number sequence that adds up to $c \cdot v$. Also, for
+  each $i$ we have $a_i \leq 2 \cdot c$. Then, if we have this:
 
-$$ \forall_i a_i \cdot (c \cdot v - a_i) \leq c \cdot (c \cdot v -
-c) $$
+  $$ \forall_i a_i \cdot (c \cdot v - a_i) \leq c \cdot (c \cdot v -
+  c) $$
 
-then each $a_i = c$.
+  nthen each $a_i = c$.
 \end{lemma}
 \begin{proof}
 
@@ -212,7 +212,7 @@ it. Our high-level plan is like that:
 \item Show new gadget for a variable.
 \item Place new types of chunks in a tree.
 \item Adjust number of VMs to spawn to work with new gadget.
-\item Calculate new constant $C$.
+\item Calculate new constant $Thr$ (as threshold).
 \item Prove observations from previous proof. 
 \end{enumerate}
 
@@ -224,118 +224,5 @@ variable. Once again, we will have correspondence between clauses and
 chunk types $c_1, c_2, c_{cl(\Psi)}$ (there are more chunk types in
 construction though).
 
-Let's start by presenting new gadget. Compared to the one from
-previous proof, this one has one more level. Structure of the gadget
-remains the same (we have $var(v), positive(v), negative(v), x_1,
-x_2, \ldots, x_{cl(\Psi)}, \neg x_1, \neg x_2, \ldots,
-x_{cl(\Psi)}$). Each of leaves labeled $v_i$ or $\neg v_i$ from previous gadget now is an inner
-node and has two children; left of which is placeholder for variable chunk $c_{v_i}$ and
-right is placeholder for chunks that correspond to clauses (like in
-previous proof). We will label left child $l(v, i)$ and right child
-$r(v, i)$. Please notice the use of replication: each variable
-chunk appears exactly twice, once in $positive(v)$ and once in
-$negative(v)$ (see figure).
-
-\begin{figure}[htbp]
-\includegraphics[width = \columnwidth]{figs/gadget-new.eps}
-\caption{Example gadget for formula that contains exactly 3 clauses
-and variable x.}
-\label{fig:gadgets}
-\end{figure}
-
-This modification of a gadget introduces
-$var(\Phi) \cdot cl(\Phi)$ new chunk types, so we need to double the number of VMs to
-spawn: $v = 2 \cdot cl(\Phi)\cdot var(\Phi)$.
-
-
-We calculate $C$ almost the same way as in previous proof. Once again,
-we place VMs in $positive(v)$ and calculate communication cost
-inclined. Let's calculate $C$ precisely this time. We split
-communication cost into:
-\begin{enumerate}
-\item TODO: not every case was taken care of!
-
-  Communication among VMs placed in the same gadget. Number of VMs
-placed in every gadget in our solution is $2\cdot cl(\Phi)$ and the
-number of hops is $2$. Summing over every gadget gives:
-
-$$ CC_1 = \sum_{i=1}^{var(\Psi)}2\cdot {cl(\Psi) \choose 2} $$
-
-\item Communication among VMs placed in different gadgets. Number of
-hops is $8$. Summing over every gadget gives:
-
-$$ CC_2 = \sum_{i=1}^{var(\Psi)} 8 \cdot cl(\Psi) \cdot (cl(\Psi) \cdot (var(\Psi) - 1))$$
-\end{enumerate}
-
-$$ C = CC_1 + CC_2 = 2 \cdot var(\Psi) \cdot ({ cl(\Psi) \choose 2} +
-4 \cdot cl(\Psi) ^2 \cdot (var(\Psi) - 1)) $$
-
-
-We need to set transportation cost $b_1$. The idea is that cost of
-transportation over even single hop is more costly than any possible
-communication cost among $v$ VMs. Tree $T_{\Phi}$ has edge-height
-equal to $4$, so we set $W$ to be sum of 8 hops communication among
-all VMs:
-
-$$ W = 8 \cdot {v \choose 2} $$
-
-With our new construction completed, we need to prove that it indeed
-decides SAT.
-
-\begin{theorem}Formula $\Psi$ is satisfiable iff $VC_{\Psi}$ has
-solution of cost $\leq C$.
-\end{theorem}
-
-\begin{proof}
-($=>$)
-Let's take any valuation $F$ that satisfies $\Psi$. We will construct
-solution to $VC_{\Psi}$ using F in the following way. For each
-variable $v \in var(\Psi)$ we place $2 \cdot cl(\Psi)$ virtual machines in
-leaves of gadget $var(v)$. We need to choose $2\cdot cl(\Psi)$ out of
-$4 \cdot cl(\Psi)$ leaves to spawn VMs. If $F(v) = 1$, we spawn all VMs in leaves
-of $positive(v)$, else we spawn all VMs in leaves of
-$negative(v)$.
-
-Now we need to prove that our solution to $VC_{\Psi}$
-has cost $\leq C$. First, we notice that communication among gadgets
-(the $CC_2$) is the same as in calculation of $C$, because we put the
-same amount of VMs in the gadgets. Second, we see that $CC_1$ is
-exactly the same, because we put all the VMs on one side and therefore
-number of hops is always $2$. TODO: find some way to refer to dummy
-solution, name it, modify CC's to be parametrized by solution.
-
-($<=$) Let's take any solution to $VCB_{\Psi}$ of cost $\leq C$. We
-will construct valuation $F$ using placement of virtual machines in
-solution to $VCB_{\Psi}$.
-
-TODO:
-\begin{enumerate}
-\item Split further CC
-\item Prove that in order to have solution of cost $\leq C$ all VMs in
-r's have to be either on positive or in negative; do it by contradiction
-\item Proove that in order to have solution of cost $\leq C$ all VMs
-in l's have to be close to VMs in r's;
-Do it by contradiction
-\item Prove that there are exactly $2\cdot var(\Psi)$ VMs in every
-gadget
-\end{enumerate}
-
-Now we can construct our valuation $F$. We do it the following way
-(for each $v \in var(\Psi)$:
-
-\begin{itemize}
-\item if $v_1$ has machine in it then $F(v) = true$
-\item otherwise $F(v) = false$
-\end{itemize}
-
-Valuation $F$ satisfies $\Psi$ because it satisfies every clauses, as
-$VCB_{\Psi}$ solution processed all the chunks. Also, we have the
-property that if there is a VM in $positive(v)$ subtree of any gadget,
-then:
-\begin{enumerate}
-\item every other leaf in $positive(v)$ has VM spawned in it
-\item no leaf in $negative(v)$ has VM spawned in it
-\end{enumerate}
-
-
-\end{proof}
+\begin{definition}[uaoe]aoe
+\end{definition}
