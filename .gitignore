@@ -4,6 +4,6 @@
 *.log
 *.out
 *.dvi
-*.pdf
+vcemb-locality.pdf
 *.synctex.gz
 *.thm

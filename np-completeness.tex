@@ -47,12 +47,6 @@ a root and separate gadget for each variable of $\Psi$, each of which
 is a child of the root.
 
 
-\begin{figure}[htbp]
-\includegraphics[width = \columnwidth]{figs/gadgets.eps}
-\caption{Example gadgets for formula that contains variables x, y and z.}
-\label{fig:gadgets}
-\end{figure}
-
 Gadget for variable $x$ has its root, $var(x)$, and two children:
 $positive(x)$ and $negative(x)$. Vertex $positive(x)$ has $cl(\Psi)$
 children: $x_1, x_2, \ldots, x_{cl(\Psi)}$. Vertex $negative(x)$ has
@@ -62,13 +56,6 @@ leaves, and the same height. In fact, we will set bandwidth to be the
 same everywhere in every gadget. Differences will be shown when we
 will place data chunks.
 
-
-\begin{figure}[htbp]
-\includegraphics[width = \columnwidth]{figs/gadget-no-bw.eps}
-\caption{Example gadget for variable $x$ in formula that has exactly
-three clauses.}
-\label{fig:gadgets}
-\end{figure}
 
 We set number of virtual machines to spawn to $v = cl(\Psi) \cdot var(\Psi)$.
 
@@ -221,8 +208,33 @@ formula $\Psi$ and construct instance of model without bandwidth,
 $VC_{\Psi}$ that has solution of cost $\leq C$ iff $\Psi$ is
 satisfiable. Our tree once again consists of gadgets for each
 variable. Once again, we will have correspondence between clauses and
-chunk types $c_1, c_2, c_{cl(\Psi)}$ (there are more chunk types in
-construction though).
+chunk types $c_1, c_2, c_{cl(\Psi)}$ (so called clause chunks). 
 
-\begin{definition}[uaoe]aoe
-\end{definition}
+Definition 1. Solution $S$ is semi-feasible iff. 
+
+\begin{figure}[htbp]
+\includegraphics[width = \columnwidth]{figs/gadget-no-bw.pdf}
+\end{figure}
+
+
+\begin{figure}[htbp]
+\includegraphics[width = \columnwidth]{figs/vc-instance.pdf}
+\end{figure}
+
+
+\begin{figure}[htbp]
+\includegraphics[width = \columnwidth]{figs/vc-instance-r2.pdf}
+\end{figure}
+
+
+\begin{figure}[htbp]
+\includegraphics[width = \columnwidth]{figs/lemma-two-gadgets.pdf}
+\end{figure}
+
+
+\begin{figure}[htbp]
+\includegraphics[width = \columnwidth]{figs/formula-example.pdf}
+\end{figure}
+
+
+
