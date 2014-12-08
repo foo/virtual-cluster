@@ -238,3 +238,104 @@ Definition 1. Solution $S$ is semi-feasible iff.
 
 
 
+
+\subsection{NP-completeness of model with bandwidth and replication of
+  degree 2.
+}
+
+Plan:
+* modify cv+fp+bw+r proof
+* from 3SAT
+* each variable occurence is alone chunk
+* we construct the tree from two types of gadgets:
+** gadgets V for variables
+** gadgets C for clauses
+* all 3 chunks that correspond to the same clause are groupped in
+clause gadget  
+* in variable gadgets: x - not x is forced by bandwidth constraints
+and VMs being on one side in cheapest semi-feasible solution
+* let c=#cl(\Psi), v=#var(\Psi)
+* we plan on putting #vms = v * c + 2 * c
+* on #leaves = 2*v*c + 3*c
+
+The idea is to reduce from 3SAT using only replication of degree
+2. How can we simulate this behavior using only two replicas?
+
+First, we traverse literals of \Psi one by one and put 3*c chunks in
+variable gadgets. Depending on being positive or negative, we place
+chunk either in positive(v) or negative(v) subtree on v_i, where i is
+number of clause that currently traversed literal lies.
+
+Secondly, we place chunks that correspond to clauses in their clausule
+gadgets. We place 3*c chunks there.
+
+We set number of spawned VMs in following way that:
+- c VMs are forced to spawn in every of v variable gadgets;
+- 2 VMs are forced to spawn in every of c clause gadgets
+
+ we force
+it by setting bandwidth constraints to:
+
+1. communication to other variable gadgets 
+2. communication to clause gadgets
+
+bw(v) = 3 * 3 * (3 * (v - 1) + 2 * c)
+
+First factor is distance on tree which is 6 divided by 2 (which is a
+factor caused by counting every communication twice). Second factor is
+number of VMs that spawn in every variable gadget. First compound of a
+sum is 3 times number of outer variable gadgets. Second compound of a
+sum is number of VMs that spawn in each of c clause gadgets.
+
+bw(c) = 3 * 2 * (2 * (c - 1) + 3 * v)
+
+Extended bandwidth lemma here.
+
+Why it decides 3SAT?
+
+If we have a valuation, we fill variable gadgets with VMs like in
+proofs before. Then we fill 2 * c VMs in following way:
+- if first literal satisfied the clause, we put 2 VMs in second and
+third leaf of clause gadget
+- if first literal not satisified the clause, we put 2 VMs in first
+and second leaf of clause gadget
+
+We compute matching of chunks to VMs in the following way:
+- chunk c_i^1 is matched to VM that sits in variable gadget; there
+should be one like that, because the valuation satisfies
+- chunks c_i^2 and c_i^3 are matched to VMs that sit in clause
+gadgets; there exists minimal-cost solution where VMs sit there
+
+We produced feasible solution of cost Th, because there were no
+transport and VMs communicated in predicted way.
+
+ In order to finish the proof, we must prove the existance of
+ valuation that satisfies \Phi. 
+Let's take any solution SOL to VC_\Psi instance of cost \leq Th.
+
+We create valuation Val in following way:
+- Val(v) = T iff there lies VM on first leaf on positive side of v gadget in SOL
+- Val(v) = F otherwise
+
+Why this valuation satisfies \Psi?
+
+
+First, SOL is semi-feasible, bandwidth-feasible, and finally feasible,
+which means that every chunk type is processed without transport.
+
+Lemma. Existance of processing VM in variable gadget.
+Proof. Every of 3 chunks that correspond to every clause has machine sitting
+on top of it. At least one of those 3 is not idle in a variable gadget
+- otherwise those two VMs in clause gadgets would not suffice in
+satisfying all chunk types. It might happen that in SOL 2 VMs in
+clause variables are idle, and 3 VMs in variable gadgets are
+processing those 3 chunk types, then we can take arbitrary in the rest
+of the proof.
+
+Let's take matching M of SOL. Let's traverse it 3 chunk types at a
+time: c_i^1, c_i^2, c_i^3. Let's name machines corresponding to them
+to vm_i^1, vm_i^2, vm_i^3. Two of those lie in clause gadgets. Let's
+take the chunk type that was processed in variable
+gadgets and look at where it was processed. Look how was labeled the
+leaf the VM lies. In our valuation Val we set this literal to have
+value True. Therefore i-th clause is satisfied.
