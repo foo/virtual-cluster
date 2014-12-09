@@ -246,31 +246,31 @@ Plan:
 
 \begin{itemize}
 \item modify cv+fp+bw+r proof
-\item from 3SAT
+\item from $3SAT$
 \item each variable occurence is alone chunk
 \item we construct the tree from two types of gadgets:
-(a) gadgets V for variables
-(b) gadgets C for clauses
-\item all 3 chunks that correspond to the same clause are groupped in
+(a) gadgets $V$ for variables
+(b) gadgets $C$ for clauses
+\item all $3$ chunks that correspond to the same clause are groupped in
 clause gadget  
-\item in variable gadgets: x - not x is forced by bandwidth constraints
+\item in variable gadgets: $x \oplus \neg x$ is forced by bandwidth constraints
 and VMs being on one side in cheapest semi-feasible solution
 \item let $c=cl(\Psi)$, $v=var(\Psi)$
-\item we plan on putting $vms = v * c + 2 * c$
-\item on $leaves = 2*v*c + 3*c$
+\item we plan on putting $vms = v  \cdot  c + 2  \cdot  c$
+\item on number of leaves being $l = 2 \cdot v \cdot c + 3 \cdot c$
 
 \end{itemize}
 
 The idea is to reduce from 3SAT using only replication of degree
 2. How can we simulate this behavior using only two replicas?
 
-First, we traverse literals of $\Psi$ one by one and put $3*c$ chunks in
+First, we traverse literals of $\Psi$ one by one and put $3 \cdot c$ chunks in
 variable gadgets. Depending on being positive or negative, we place
 chunk either in positive(v) or negative(v) subtree on $v_i$, where $i$ is
 number of clause that currently traversed literal lies.
 
 Secondly, we place chunks that correspond to clauses in their clausule
-gadgets. We place $3*c$ chunks there.
+gadgets. We place $3 \cdot c$ chunks there.
 
 We set number of spawned VMs to $cv + 2c$ in following way that:
 
@@ -284,11 +284,11 @@ consideration following communication paths: (1) communication to other variable
 
 We set bandwidth for top edge of each variable gadget to:
 
-bw(v) = 3 * 3 * (3 * (v - 1) + 2 * c)
+$$ bw(v) = 3  \cdot  3  \cdot  (3  \cdot  (v - 1) + 2  \cdot  c) $$
 
 
 First factor is distance on tree which is 6 divided by 2 (which is a
-factor caused byhttp://tex.stackexchange.com/questions/87303/multi-line-block-comments-in-latex counting every communication twice). Second factor is
+factor caused by counting every communication twice). Second factor is
 number of VMs that spawn in every variable gadget. First compound of a
 sum is 3 times number of outer variable gadgets. Second compound of a
 sum is number of VMs that spawn in each of c clause gadgets.
@@ -296,15 +296,15 @@ sum is number of VMs that spawn in each of c clause gadgets.
 
 We set bandwidth for top edge of each clause gadget to:
 
-bw(c) = 3 * 2 * (2 * (c - 1) + 3 * v)
+$$ bw(c) = 3  \cdot  2  \cdot  (2  \cdot  (c - 1) + 3  \cdot  v) $$
 
 Extended bandwidth lemma. In every solution of cost $\leq Th$ we have
 exactly $c$ VMs in each variable gadget and $2$ VMs in each clause gadget.
 
-Why it decides 3SAT?
+Why it decides $3SAT$?
 
 If we have a valuation, we fill variable gadgets with VMs like in
-proofs before. Then we fill 2 * c VMs in following way:
+proofs before. Then we fill $2 \cdot c$ VMs in following way:
 
 \begin{itemize}
 \item if first literal satisfied the clause, we put $2$ VMs in second and
