@@ -20,12 +20,12 @@ to our Virtual Cluster problem with bandwidth (VCB). SAT is decision
 problem, but VCB is optimization problem with NO answer
 possible. Therefore to make those problems compatible in terms of
 reduction, we consider decision VCB variant, in which instance we have
-additional constant $C$, and instance belongs to VCB if it has feasible
-solution of cost $\leq C$.
+additional constant $Th$, and instance belongs to VCB if it has feasible
+solution of cost $\leq Th$.
 
 Let's remind what decision VCB variant instance consists of:
 \begin{enumerate}
-\item constant $C$
+\item constant $Th$
 \item balanced rooted tree $T$ with edge capacities $bw(e)$
 \item constants $b_1$, $b_2$, which are costs of chunk transfer and
 communication
@@ -66,7 +66,7 @@ to disallow transportation. It means that if virtual machine wants to
 process the chunk, it has to be spawned where the data chunk is
 placed. Technically, transportation is not completely disallowed, it
 just inclines cost so huge that every optimal solution has no
-trasportation.
+trasportation. TODO: We show how to compute $W$ in appendix.
 
 Now we will set bandwidth constraints in $T_{\Psi}$. There are three
 levels of edges in $T_{\Psi}$: top, middle and bottom. We set
@@ -83,7 +83,7 @@ spawn at most $cl(\Psi)$ virtual machines. Let's prove it formally:
   $$ \forall_i a_i \cdot (c \cdot v - a_i) \leq c \cdot (c \cdot v -
   c) $$
 
-  nthen each $a_i = c$.
+  then each $a_i = c$.
 \end{lemma}
 \begin{proof}
 
@@ -129,11 +129,11 @@ clause $i$. For each literal $l$ (of form $v$ or $\neg v$) that satisfies clause
 replica of chunk $c_i$ in leaf labeled $c_{l_i}$. TODO: draw example for
 some simple formula.
 
-To finish our construction, we need to set value of constant $C$. We
+To finish our construction, we need to set value of constant $Th$. We
 do it by calculating communication cost among spawned virtual machines in
 certain solution to our instance. This soulution is constructed by placing
 virtual machines in all leaves of $positive(v)$ and none in leaves
-$negative(v)$ for every gadget for variable $v$. Please note that $C$
+$negative(v)$ for every gadget for variable $v$. Please note that $Th$
 computed such way do not contain transportation cost. We will prove it
 more formally in proof of model without bandwidth.
 
@@ -141,7 +141,7 @@ With our construction completed, we need to prove that it indeed
 decides SAT.
 
 \begin{theorem}Formula $\Psi$ is satisfiable iff $VCB_{\Psi}$ has
-solution of cost $\leq C$.
+solution of cost $\leq Th$.
 \end{theorem}
 
 \begin{proof}
@@ -152,21 +152,21 @@ leaves of gadget $var(v)$. We need to choose $cl(\Psi)$ out of
 $2 \cdot cl(\Psi)$ leaves to spawn VMs. If $F(v) = 1$, we spawn all VMs in leaves
 of $positive(v)$, else we spawn all VMs in leaves of
 $negative(v)$. Solution constructed such way has cost exactly
-$C$, because VMs are evenly splitted among gadgets and VMs are not
+$Th$, because VMs are evenly splitted among gadgets and VMs are not
 mixed between $positive(v)$ and $negative(v)$ subtrees. We will prove
 this claim in more detail in next proof. 
 
-($<=$) Let's take any solution to $VCB_{\Psi}$ of cost $\leq C$. We
+($<=$) Let's take any solution to $VCB_{\Psi}$ of cost $\leq Th$. We
 will construct valuation $F$ using placement of virtual machines in
 solution to $VCB_{\Psi}$.
 
 We need to take following observations. In every solution of cost
-$\leq C$ every gadget has exactly $ch(\Psi)$ VMs spawned in its
+$\leq Th$ every gadget has exactly $ch(\Psi)$ VMs spawned in its
 leaves. It is true because we proved the bandwidth lemma. Also, inside
 every gadget either all VMs are spawned in $positive(v)$ or all VMs
 are spawned in $negative(v)$. It is true because cost of solution
 where at least one gadget has VMs mixed between those branches is
-always greater than $C$. TODO: prove it more formally.
+always greater than $Th$. TODO: prove it more formally.
 
 Now we can construct our valuation $F$. We do it the following way
 (for each $v \in var(\Psi)$:
@@ -205,7 +205,7 @@ it. Our high-level plan is like that:
 
 Structure of construction is essentially untouched. We take any
 formula $\Psi$ and construct instance of model without bandwidth,
-$VC_{\Psi}$ that has solution of cost $\leq C$ iff $\Psi$ is
+$VC_{\Psi}$ that has solution of cost $\leq Th$ iff $\Psi$ is
 satisfiable. Our tree once again consists of gadgets for each
 variable. Once again, we will have correspondence between clauses and
 chunk types $c_1, c_2, c_{cl(\Psi)}$ (so called clause chunks). 
