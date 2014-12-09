@@ -126,8 +126,7 @@ c(\Psi)$. To finish construction of $T_{\Psi}$, we need to place data chunks in
 leaves. We do it the following way. For each clause of number $i$ we
 construct as many replicas of chunk $c_i$ as there are literals in
 clause $i$. For each literal $l$ (of form $v$ or $\neg v$) that satisfies clause $i$ we place
-replica of chunk $c_i$ in leaf labeled $c_{l_i}$. TODO: draw example for
-some simple formula.
+replica of chunk $c_i$ in leaf labeled $c_{l_i}$.
 
 To finish our construction, we need to set value of constant $Th$. We
 do it by calculating communication cost among spawned virtual machines in
@@ -208,34 +207,35 @@ formula $\Psi$ and construct instance of model without bandwidth,
 $VC_{\Psi}$ that has solution of cost $\leq Th$ iff $\Psi$ is
 satisfiable. Our tree once again consists of gadgets for each
 variable. Once again, we will have correspondence between clauses and
-chunk types $c_1, c_2, c_{cl(\Psi)}$ (so called clause chunks). 
+chunk types $c_1, c_2, c_{cl(\Psi)}$ (so called clause chunks). We
+will also have variable chunks and will provide VMs to satisfy those
+as well. 
 
-Definition 1. Solution $S$ is semi-feasible iff. 
+Definition 1. Solution $S$ is semi-feasible iff. all $k \cdot v$ variable chunks
+are satisfied and there are $k \cdot v + c \cdot v$ VMs placed.
 
-\begin{figure}[htbp]
-\includegraphics[width = \columnwidth]{figs/gadget-no-bw.pdf}
-\end{figure}
+Let's set $k = 2cv$.
 
+\begin{lemma}
+In every minimal-cost semi-feasible solution at least one of variable
+leaves is full of VMs.
+\end{lemma}
 
-\begin{figure}[htbp]
-\includegraphics[width = \columnwidth]{figs/vc-instance.pdf}
-\end{figure}
+\begin{lemma}
+In every minimal-cost semi-feasible solution in every gadget clause
+leaves are full of VMs on the side where there are variable VMs (which
+is either in positive or in negative).
+\end{lemma}
 
+\begin{lemma}
+In every minimal-cost semi-feasible solution there are no VMs mixed
+between positive and negative branches.
+\end{lemma}
 
-\begin{figure}[htbp]
-\includegraphics[width = \columnwidth]{figs/vc-instance-r2.pdf}
-\end{figure}
-
-
-\begin{figure}[htbp]
-\includegraphics[width = \columnwidth]{figs/lemma-two-gadgets.pdf}
-\end{figure}
-
-
-\begin{figure}[htbp]
-\includegraphics[width = \columnwidth]{figs/formula-example.pdf}
-\end{figure}
-
+\begin{lemma}
+In every minimal-cost semi-feasible solution in every gadget there are
+exactly $c + k$ VMs spawned in it (plus they lie on the same side).
+\end{lemma}
 
 
 
@@ -358,3 +358,30 @@ gadgets and look at where it was processed. Look how was labeled the
 leaf the VM lies. In our valuation Val we set this literal to have
 value True. Therefore $i$-th clause is satisfied.
 \end{proof}
+
+\subsection{Images}
+
+\begin{figure}[htbp]
+\includegraphics[width = \columnwidth]{figs/gadget-no-bw.pdf}
+\end{figure}
+
+
+\begin{figure}[htbp]
+\includegraphics[width = \columnwidth]{figs/vc-instance.pdf}
+\end{figure}
+
+
+\begin{figure}[htbp]
+\includegraphics[width = \columnwidth]{figs/vc-instance-r2.pdf}
+\end{figure}
+
+
+\begin{figure}[htbp]
+\includegraphics[width = \columnwidth]{figs/lemma-two-gadgets.pdf}
+\end{figure}
+
+
+\begin{figure}[htbp]
+\includegraphics[width = \columnwidth]{figs/formula-example.pdf}
+\end{figure}
+
