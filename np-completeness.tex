@@ -200,53 +200,6 @@ look at label of this leaf. The label is a literal that is a whiteness
 to truthness of this clause.
 \end{proof}
 
-\subsection{NP-hardness of model without bandwidth}
-
-There were only one use of bandwidth in proof from previous
-chapter. It was to control number of VMs spawned in every gadget. For
-model without bandwidth we need some other mechanism to control
-it. Our high-level plan is like that:
-\begin{enumerate}
-\item Do not touch structure of previous proof.
-\item Show new gadget for a variable.
-\item Place new types of chunks in a tree.
-\item Adjust number of VMs to spawn to work with new gadget.
-\item Calculate new constant $Thr$ (as threshold).
-\item Prove observations from previous proof. 
-\end{enumerate}
-
-Structure of construction is essentially untouched. We take any
-formula $\Psi$ and construct instance of model without bandwidth,
-$VC_{\Psi}$ that has solution of cost $\leq Th$ iff $\Psi$ is
-satisfiable. Our tree once again consists of gadgets for each
-variable. Once again, we will have correspondence between clauses and
-chunk types $c_1, c_2, c_{cl(\Psi)}$ (so called clause chunks). We
-will also have variable chunks and will provide VMs to satisfy those
-as well. 
-
-Definition 1. Solution $S$ is semi-feasible iff. all $k \cdot v$ variable chunks
-are satisfied and there are $k \cdot v + c \cdot v$ VMs placed.
-
-Let's set $k = 2cv$.
-
-\begin{lemma}
-In every minimal-cost semi-feasible solution at least one of variable
-leaves is full of VMs.
-\end{lemma}
-
-\begin{lemma}
-In every minimal-cost semi-feasible solution in every gadget clause
-leaves are full of VMs on the side where there are variable VMs (which
-is either in positive or in negative).
-\end{lemma}
-
-\begin{lemma}
-In every minimal-cost semi-feasible solution in every gadget there are
-exactly $c + k$ VMs spawned in it (plus they lie on the same side).
-\end{lemma}
-
-
-
 \subsection{NP-completeness of model with bandwidth and replication of
   degree 2.
 }
@@ -396,3 +349,43 @@ This last lemma proves our theorem.
 \includegraphics[width = \columnwidth]{figs/formula-example.pdf}
 \end{figure}
 
+
+\subsection{NP-hardness of model without bandwidth}
+
+\url{http://lcbb4.epfl.ch/reading/hitting\%20set/2003-niedermeierFPT3HS.pdf}
+                                There they say that 3HS is NP
+                                complete.
+
+Let's reduce from k-3HS (hitting set of cardinality of each set equal
+3; question: do k sets cover all elements of universe?).
+
+\subsubsection{Construction}
+
+We will create VC instance in following way:
+\begin{itemize}
+\item set TC to infinity (1 also works I guess)
+\item set CC to 1
+\item set number of VMS to $3 \cdot k$
+\item set $\Thr =  3 \cdot k + 3 \cdot 3 \cdot 2 \cdot (k - 1)$
+\item chunks correspond to elements of universe
+\end{itemize}
+
+Now we will create a gadget for each set in following way. We place 3
+leaves and 1 vertex which is parent of those leaves. We put chunks
+that correspond to elements of this set in those 3 leaves.
+
+\subsubsection{Proof of correctness}
+\begin{theorem}
+3HS iff VC
+\end{theorem}
+\begin{proof}
+
+(=>) Let's take hitting set and place 3 VMs in each gadget that
+corresponds to every of chosen sets. We match VMs to chunks that they
+are sitting on top of. This solution has cost $\Thr$ by definition.
+
+(<=) Let's take VC solution. First, we notice that in $\Thr$-cost
+solution k gadgets are full of VMs. We construct our hitting set from
+sets that correspond to those full gadgets. Also, we know that every
+chunk type was processed. Therefore every element of universe was hit.
+\end{proof}
