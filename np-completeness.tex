@@ -21,69 +21,69 @@ to our Virtual Cluster problem with bandwidth (VCB). SAT is decision
 problem, but VCB is optimization problem with NO answer
 possible. Therefore to make those problems compatible in terms of
 reduction, we consider decision VCB variant, in which instance we have
-additional constant $Th$, and instance belongs to VCB if it has feasible
-solution of cost $\leq Th$.
+additional constant $\Thr$, and instance belongs to VCB if it has feasible
+solution of cost $\leq \Thr$.
 
 Let's remind what decision VCB variant instance consists of:
 \begin{enumerate}
-\item balanced rooted tree $T$ 
-\item edge capacities $bw(e)$
-\item constants $b_1$, $b_2$, which are costs of chunk transfer and
+\item balanced rooted tree $\Tree$ 
+\item edge capacities $\Bandwidth(e)$
+\item constants $\CostTrans$, $\CostCom$, which are costs of chunk transfer and
 communication
-\item constant $v$, which is desired number of VMs to be spawned
-\item constant $ch$, which is number of types of chunks
-\item sequence of chunks placed in leaves of $T$, possibly replicated
-\item constant $Th$
+\item constant $\Vms$, which is desired number of VMs to be spawned
+\item constant $\ChunkTypes$, which is number of types of chunks
+\item sequence of chunks placed in leaves of $\Tree$, possibly replicated
+\item constant $\Thr$
 \end{enumerate}
 
-Let's remind what SAT instance consists of:
+Let's remind what $\SAT$ instance consists of:
 \begin{enumerate}
-\item clauses (let's name number of clauses as $cl(\Psi)$)
+\item clauses (let's name number of clauses as $\Clauses$)
 \item literals
-\item variables (let's name number of variables as $var(\Psi)$
+\item variables (let's name number of variables as $\Vars$
 \end{enumerate}
 
 \subsubsection{Construction}
-Let's take any formula in Conjunctive Normal Form, name it $\Psi$ and produce
-VCB instance $VCB_{\Psi}$. First, construct the tree $T_{\Psi}$. It will consist of
-a root and separate gadget for each variable of $\Psi$, each of which
+Let's take any formula in Conjunctive Normal Form, name it $\Formula$ and produce
+VCB instance $\VCB_{\Formula}$. First, construct the tree $\Tree_{\Formula}$. It will consist of
+a root and separate gadget for each variable of $\Formula$, each of which
 is a child of the root.
 
 
 Gadget for variable $x$ has its root, $var(x)$, and two children:
-$positive(x)$ and $negative(x)$. Vertex $positive(x)$ has $cl(\Psi)$
-children: $x_1, x_2, \ldots, x_{cl(\Psi)}$. Vertex $negative(x)$ has
-$cl(\Psi)$ children: $\neg x_1, \neg x_2, \dots, x_{cl(\Psi)}$. Every
+$\positive(x)$ and $\negative(x)$. Vertex $\positive(x)$ has $\NClauses$
+children: $x_1, x_2, \ldots, x_{\NClauses}$. Vertex $\negative(x)$ has
+$\NClauses$ children: $\neg x_1, \neg x_2, \dots, x_{\NClauses}$. Every
 gadget has the same structure: the same height, the same number of
 leaves, and the same height. In fact, we will set bandwidth to be the
 same everywhere in every gadget. Differences will be shown when we
 will place data chunks.
 
-We set number of virtual machines to $v = cl(\Psi) \cdot var(\Psi)$.
+We set number of virtual machines to $v = \NClauses \cdot \NVars$.
 
 Now we will set cost of chunk transportation and cost of communication
 among virtual machines. We set communication cost to be $1$. We set
-trasportation cost to be $b_1 = W$, where $W$ is constant large enough
+trasportation cost to be $\CostTrans = W$, where $W$ is constant large enough
 to disallow transportation. It means that if virtual machine wants to
 process the chunk, it has to be spawned where the data chunk is
 placed. Technically, transportation is not completely disallowed, it
 just inclines cost so huge that every optimal solution has no
 trasportation. TODO: We show how to compute $W$ in appendix.
 
-Now we will set bandwidth constraints in $T_{\Psi}$. There are three
-levels of edges in $T_{\Psi}$: top, middle and bottom. We set
+Now we will set bandwidth constraints in $\Tree_{\Formula}$. There are three
+levels of edges in $\Tree_{\Formula}$: top, middle and bottom. We set
 bandwidth to unlimited at levels bottom and middle. At every edge of
-top level, we set the same bandwidth to: $cl(\Psi) \cdot (var(\Psi) -
-cl(\Psi))$.
+top level, we set the same bandwidth to: $\NClauses \cdot (\NVars -
+\NClauses)$.
 
-We set number of chunk types to be equal to number of clauses, $ch =
-c(\Psi)$. To finish construction of $T_{\Psi}$, we need to place data chunks in
+We set number of chunk types to be equal to number of clauses, $\ChunkTypes =
+\NClauses$. To finish construction of $\Tree_{\Formula}$, we need to place data chunks in
 leaves. We do it the following way. For each clause of number $i$ we
 construct as many replicas of chunk $c_i$ as there are literals in
-clause $i$. For each literal $l$ (of form $v$ or $\neg v$) that satisfies clause $i$ we place
+clause $i$. For each literal $l$ (of form $x$ or $\neg x$) that satisfies clause $i$ we place
 replica of chunk $c_i$ in leaf labeled $c_{l_i}$.
 
-To finish our construction, we need to set value of constant $Th$. 
+To finish our construction, we need to set value of constant $\Thr$. 
 
  We
 do it by calculating communication cost among spawned virtual machines in
