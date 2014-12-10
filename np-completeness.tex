@@ -1,3 +1,44 @@
+
+\subsection{NP-hardness of model without bandwidth}
+Let's reduce from k-3HS (hitting set of cardinality of each set equal
+3; question: do k sets cover all elements of universe?).
+
+There they say that 3HS in NP-complete:
+\url{http://lcbb4.epfl.ch/reading/hitting\%20set/2003-niedermeierFPT3HS.pdf}
+\url{http://www.sciencedirect.com/science/article/pii/S1570866703000091}
+
+
+\subsubsection{Construction}
+
+We will create VC instance in following way:
+\begin{itemize}
+\item set TC to infinity (1 also works I guess)
+\item set CC to 1
+\item set number of VMS to $3 \cdot k$
+\item set $\Thr =  3 \cdot k + 3 \cdot 3 \cdot 2 \cdot (k - 1)$
+\item chunks correspond to elements of universe
+\end{itemize}
+
+Now we will create a gadget for each set in following way. We place 3
+leaves and 1 vertex which is parent of those leaves. We put chunks
+that correspond to elements of this set in those 3 leaves.
+
+\subsubsection{Proof of correctness}
+\begin{theorem}
+3HS iff VC
+\end{theorem}
+\begin{proof}
+
+(=>) Let's take hitting set and place 3 VMs in each gadget that
+corresponds to every of chosen sets. We match VMs to chunks that they
+are sitting on top of. This solution has cost $\Thr$ by definition.
+
+(<=) Let's take VC solution. First, we notice that in $\Thr$-cost
+solution k gadgets are full of VMs. We construct our hitting set from
+sets that correspond to those full gadgets. Also, we know that every
+chunk type was processed. Therefore every element of universe was hit.
+\end{proof}
+
 \subsection{Introduction and plan of this chapter}
 
 In this chapter we will present three NP-completeness results: for all
@@ -14,7 +55,8 @@ for model with bandwidth, as it is simpler and shares its structure
 with proof for model without bandwidth, therefore being good
 introduction.
 
-\subsection{NP-completeness of model with bandwidth}
+\subsection{NP-completeness of model with bandwidth -
+ 3SAT introduction}
 
 We decided to make reduction from Boolean Satisfiability problem (SAT)
 to our Virtual Cluster problem with bandwidth (VCB). SAT is decision
@@ -204,6 +246,12 @@ to truthness of this clause.
   degree 2.
 }
 
+Intro: 2HS in Edge Cover, which is in P. Therefore, natural question
+arises: if we restrict replication factor to 2, would we still have
+NP-complete problem? We show that yes, it is still NP-complete but it
+requires bandwidth. Open question is whether the problem remains NP
+complete without bandwidth.
+
 The idea is to reduce from 3SAT using only replication of degree
 $2$. How can we simulate this behavior using only two replicas? First,
 let's reduce from $3SAT$ instead of $SAT$. Our tree $T_{\Psi}$
@@ -349,43 +397,3 @@ This last lemma proves our theorem.
 \includegraphics[width = \columnwidth]{figs/formula-example.pdf}
 \end{figure}
 
-
-\subsection{NP-hardness of model without bandwidth}
-Let's reduce from k-3HS (hitting set of cardinality of each set equal
-3; question: do k sets cover all elements of universe?).
-
-There they say that 3HS in NP-complete:
-\url{http://lcbb4.epfl.ch/reading/hitting\%20set/2003-niedermeierFPT3HS.pdf}
-\url{http://www.sciencedirect.com/science/article/pii/S1570866703000091}
-
-
-\subsubsection{Construction}
-
-We will create VC instance in following way:
-\begin{itemize}
-\item set TC to infinity (1 also works I guess)
-\item set CC to 1
-\item set number of VMS to $3 \cdot k$
-\item set $\Thr =  3 \cdot k + 3 \cdot 3 \cdot 2 \cdot (k - 1)$
-\item chunks correspond to elements of universe
-\end{itemize}
-
-Now we will create a gadget for each set in following way. We place 3
-leaves and 1 vertex which is parent of those leaves. We put chunks
-that correspond to elements of this set in those 3 leaves.
-
-\subsubsection{Proof of correctness}
-\begin{theorem}
-3HS iff VC
-\end{theorem}
-\begin{proof}
-
-(=>) Let's take hitting set and place 3 VMs in each gadget that
-corresponds to every of chosen sets. We match VMs to chunks that they
-are sitting on top of. This solution has cost $\Thr$ by definition.
-
-(<=) Let's take VC solution. First, we notice that in $\Thr$-cost
-solution k gadgets are full of VMs. We construct our hitting set from
-sets that correspond to those full gadgets. Also, we know that every
-chunk type was processed. Therefore every element of universe was hit.
-\end{proof}
