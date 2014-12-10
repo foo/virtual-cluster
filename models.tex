@@ -9,10 +9,17 @@ the full model.
 This is a dummy section to introduce the symbols used later...
 
 \begin{description}
+ \item [$S$] the substrate tree with $S = (\SubstrateNodes, \SubstrateEdges)$
+ \item [$\SubstrateNodes$]  a set of nodes: $\{\SubstrateNode_1, \dots , 
+\SubstrateNode_{|\SubstrateNodes|}\}$
+ \item [$\SubstrateNodes$] a set of edges : $\{\SubstrateNode_1, \dots , 
+ \SubstrateEdge_{|\SubstrateEdge|}\}$ with $\SubstrateEdge_1 = 
+(\SubstrateNode_i, \SubstrateNode_j)$
  \item [$c_i$] A chunk of type $i$
  \item [$v_i$] The i-th $\VM$ of the request
- \item [$v$] the number of $\VM s$
- \item [$c$] the number of $\Chunk s$
+ \item [$\VirtualNodes$] the set of virtual Edges = $\{1,2,\dots,\VCSwitch\}$
+ \item [$\VirtualEdges$] the set of virtual Edges, $e_{V1}$ connects $1 \in 
+\VirtualNodes$ with $\VCSwitch \in \VirtualNodes$.
  \item [$\hat f$] the maximal flow
  \item [$|\hat f|$] the value of the maximal flow
  
