@@ -39,7 +39,36 @@ sets that correspond to those full gadgets. Also, we know that every
 chunk type was processed. Therefore every element of universe was hit.
 \end{proof}
 
-\subsection{Introduction and plan of this chapter}
+\subsection{NP-completeness of MA+FP+R}
+
+3D exact matching introduction here.
+
+\subsubsection{Construction}
+
+\begin{itemize}
+\item tree consists of gadgets for each triple
+\item chunks correspond to elements of X,Y and Z
+\item $|X| = |Y| = |Z| = k$
+\item we set TC to 1
+\item we set m to 3
+\item we set number of VMs to $k$
+\item we set threshold to $2 \cdot 2 \cdot k$
+\item each gadget consists of 3 leaves and parent; in leaves there are
+  chunks that correspond to elements of a triple
+\end{itemize}
+
+\subsubsection{Proof} 
+
+($=>$) Let's take solution to 3D exact matching. We spawn VM in every
+gadget that corresponds to chosen triples. We match every chunk in a
+gadget to machine in this gadget (only for chosen ones). Solution has
+cost exactly $\Thr$.
+
+($<=$) Let's take solution to $VC$ instance of cost $\leq \Thr$. We
+chose triples that correspond to gadgets where were VMs. Everything
+was processed, therefore every element of X,Y and Z is matched.
+
+\subsection{Introduction and plan of this chapter (depracated)}
 
 In this chapter we will present three NP-completeness results: for all
 model extensions combined: bw + cv + fp + r with replication factor
