@@ -52,7 +52,7 @@ chosen in $3SC$ instance when it has $3$ VMs spawned in it. Processing
 each chunk will correspond to covering all the elements.
 
 
-We will create VC instance $\VCNB_{3SC instance}$ in following
+Let's take an instance $I$ of $3SC$. We will create VC instance $\VCNB_I$ in following
 way. Let's start by setting integer constants in our instance:
 \begin{itemize}
 \item set transportation cost to some huge constant $\CostTrans = W$
@@ -65,7 +65,7 @@ way. Let's start by setting integer constants in our instance:
 \end{itemize}
 
 
-Then we construct the tree. It will have height 2 counted in number of
+Then we construct the tree $\Tree_I$. It will have height 2 counted in number of
 edges. It will consist of gadgets for every set $S_i$. Every gadget
 consists of inner node and three leaves. We place three chunks in
 every gadget; those chunks correspond to elements of $S_i$. 
@@ -99,16 +99,29 @@ more than $k$ gadgets will ever have cost $\leq \Thr$.
 \end{proof}
 
 \begin{theorem}
-3HS iff VC has solution of cost $\leq \Thr$
+$I \in 3SC$ iff $\VCNB_I$ has solution of cost $\leq \Thr$.
 \end{theorem}
 \begin{proof}
 
-(=>) Let's take hitting set and place 3 VMs in each gadget that
-corresponds to every of chosen sets. We match VMs to chunks that they
-are sitting on top of. This solution has cost $\Thr$ by definition.
+($=>$) Let's take the covering set $S = \{S_1, S_2, \ldots, S_k\}$ and place $3$ VMs in each gadget that
+corresponds to every set of $S$. We match VMs to chunks that they
+are sitting on top of. Let's calculate the cost of the solution:
+\begin{itemize}
+\item communication cost inside gadget is $2 \cdot {3 \choose 2}$,
+  because we take every pair and add 2 hop communication cost
+\item communication cost from single gadget to all other gadgets is $4
+  \cdot 3 \cdot 3 \cdot (k - 1) / 2$, where $2$ is a factor inclined by
+  communication over $4$ hops, $3$ is the number of VMs in the gadget,
+  $3 \cdot (k-1)$ is the number of VMs that sit in other gadgets, and
+  $/2$ is inclined by counting every pair twice
+\end{itemize}
 
-(<=) Let's take VC solution. First, we notice that in $\Thr$-cost
-solution k gadgets are full of VMs. We construct our hitting set from
+By summing above costs over every of $k$ gadgets, we have cost equal
+to $\Thr$.
+
+($<=$) Let's take VC solution. First, we apply our lemma that in $\leq
+\Thr$-cost
+solution $k$ gadgets are full of VMs. We construct our hitting set from
 sets that correspond to those full gadgets. Also, we know that every
 chunk type was processed. Therefore every element of universe was hit.
 \end{proof}
