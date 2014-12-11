@@ -18,32 +18,88 @@ NP-complete, when it is paired with bandwidth. Our technique is to use
 $3SAT$ as a problem which we reduce from.
 
 \subsection{NP-hardness of model without bandwidth}
-Let's reduce from k-3HS (hitting set of cardinality of each set equal
-3; question: do k sets cover all elements of universe?).
 
-There they say that 3HS in NP-complete:
+Set cover problem is well-known NP-complete problem. Other names that
+we can find this problem in literature is Hitting set problem. Many variants of
+this problem remain NP-complete. One of those variants is Set cover
+with restriction that every set has cardinality exactly three. We will
+use this $3SC$ problem as the problem we will reduce from.
+
+Comment:There they say that 3HS in NP-complete:
 \url{http://lcbb4.epfl.ch/reading/hitting\%20set/2003-niedermeierFPT3HS.pdf}
 \url{http://www.sciencedirect.com/science/article/pii/S1570866703000091}
 
+We will exploit the fact that we can construct $\VCNB$ instance where
+we set number of VMs to spawn to be greater than number of chunk
+types. Those excessive VMs are not processing any chunks but they are
+still communicating with eachother as well as with processing
+VMs.
+
+First, we need to take decision variant of $3SC$. It is stated the
+following way. We are given the universe $U$, family of universe
+subsets $S = \{ S_1, S_2, \ldots, S_n \}$ with cardinality of each set
+being three, and integer $k$. The problem is to decide whether there
+exist a subfamily of sets $S' \subset S$ of cardinality $k$ that
+covers every element in universe.
 
 \subsubsection{Construction}
 
-We will create VC instance in following way:
+Idea of the construction is to create a chunk type for every element
+of universe, and encode each subset $S_i$ as a gadget that contains
+replicas of chunks that correspond to its elements. Here it is crucial
+to use replication, as sets share elements of universe. Set $S_i$ is
+chosen in $3SC$ instance when it has $3$ VMs spawned in it. Processing
+each chunk will correspond to covering all the elements.
+
+
+We will create VC instance $\VCNB_{3SC instance}$ in following
+way. Let's start by setting integer constants in our instance:
 \begin{itemize}
-\item set TC to infinity (1 also works I guess)
-\item set CC to 1
-\item set number of VMS to $3 \cdot k$
+\item set transportation cost to some huge constant $\CostTrans = W$
+  with idea of forbidding transportation. We will show how to
+  calculate $W$ in an appendix, right now we can think about it as $W
+  = \infty$.
+\item set communication cost to $\CostCom = 1$
+\item set number of VMS to $\Vms = 3 \cdot k$
 \item set $\Thr =  3 \cdot k + 3 \cdot 3 \cdot 2 \cdot (k - 1)$
-\item chunks correspond to elements of universe
 \end{itemize}
 
-Now we will create a gadget for each set in following way. We place 3
-leaves and 1 vertex which is parent of those leaves. We put chunks
-that correspond to elements of this set in those 3 leaves.
+
+Then we construct the tree. It will have height 2 counted in number of
+edges. It will consist of gadgets for every set $S_i$. Every gadget
+consists of inner node and three leaves. We place three chunks in
+every gadget; those chunks correspond to elements of $S_i$. 
 
 \subsubsection{Proof of correctness}
+
+Crucial property of communication cost is that VMs should stick
+closely to eachother to incline minimal cost. Therefore, before
+prooving correctness of our reduction we need following lemma:
+
+\begin{lemma}
+In every $\VCNB$ solution $\Sol$ of cost $\leq \Thr$ we have exactly
+$3$ VMs in $k$ gadgets and rest of the $n-k$ gadgets remain empty.
+\end{lemma}
+\begin{proof}
+First, we notice that it is never beneficial to
+transport chunks, as $W$ is already exceeding $\Thr$. Also we know that
+$\Sol$ is feasible, therefore $|U|$ VMs sit on top of the chunks they
+are processing.
+
+Let's look at every pair of VMs that communicate. We
+will count how many VMs communicate over 2 hop and how many
+communicate over 4 hops. We do it by starting with 4 hops
+communication and subtracting 2 hops for every pair of VMs that sit in
+the same gadget. We notice that with constant number of VMs to spawn,
+the more gadgets containing VMs the less 2 hop communications there
+are. Communication cost is optimal when every gadget contains exactly
+3 VMs, because then we subtract 3 pair. We chosen $\Thr$ to be exactly
+the cost of such solution. Therefore, no solution that spawns VMs in
+more than $k$ gadgets will ever have cost $\leq \Thr$.
+\end{proof}
+
 \begin{theorem}
-3HS iff VC
+3HS iff VC has solution of cost $\leq \Thr$
 \end{theorem}
 \begin{proof}
 
