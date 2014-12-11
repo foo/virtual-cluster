@@ -1,3 +1,21 @@
+\subsection{Introduction and plan of this chapter}
+
+In this chapter we will present three NP-completeness results. First
+one, hardness of fp+r+cv we will present as reduction from Set Cover
+variant, where every set has cardinality exactly 3. Second one,
+hardness of ma+r+fp we will present as reduction from Three
+Dimensional Perfect Matching. Hardness of those problems result in
+hardness of extended models: we can add bandwidth and multiple
+assignment to fp+r+cv; we can add bandwidth and communication to
+ma+r+fp.
+
+It seems that replication is the property of models which makes them
+hard. Therefore we decided to investigate how much we can constrain
+replication and still have NP-hard problems. As last section of this
+chapter we will investigate restricting replication to have at most 2
+replicas of each chunk type. It turns out that this variant remains
+NP-complete, when it is paired with bandwidth. Our technique is to use
+$3SAT$ as a problem which we reduce from.
 
 \subsection{NP-hardness of model without bandwidth}
 Let's reduce from k-3HS (hitting set of cardinality of each set equal
@@ -67,23 +85,6 @@ cost exactly $\Thr$.
 ($<=$) Let's take solution to $VC$ instance of cost $\leq \Thr$. We
 chose triples that correspond to gadgets where were VMs. Everything
 was processed, therefore every element of X,Y and Z is matched.
-
-\subsection{Introduction and plan of this chapter (depracated)}
-
-In this chapter we will present three NP-completeness results: for all
-model extensions combined: bw + cv + fp + r with replication factor
-$\geq 3$, for model extensions: cv + fp + r with replication factor
-$\geq 3$ and finally we will improve first result to work with
-replication factor of $2$. In the rest of this chapter we will name
-first problem as model with bandwidth and second problem as model
-without bandwidth. First observation that we do is that model with
-bandwidth is a generalization of the model without bandwidth and
-therefore we need to only prove NP-completeness of model without
-bandwidth. However, the approach we chose is to first show the proof
-for model with bandwidth, as it is simpler and shares its structure
-with proof for model without bandwidth, therefore being good
-introduction.
-
 \subsection{NP-completeness of model with bandwidth -
  3SAT introduction}
 
