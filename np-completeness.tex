@@ -400,7 +400,7 @@ $c$ VMs in each variable gadget and $2$ VMs in each clause gadget.
 \end{proof}
 
 \begin{theorem}Constructed $VCB$ instance has solution of cost $\leq
-  Th \iff \Phi \in 3SAT$.
+  Th \iff \Formula \in 3SAT$.
 \end{theorem}
 
 \begin{proof} 
@@ -422,17 +422,17 @@ should be one like that, because the valuation satisfies
 gadgets; there exists minimal-cost solution where VMs sit there
 \end{itemize}
 
-We produced feasible solution of cost $Th$, because there were no
+We produced feasible solution of cost $\Thr$, because there were no
 transport and VMs communicated in predicted way.
 
 ($<=$) In order to finish the proof, we must prove the existance of
-valuation that satisfies $\Phi$. 
-Let's take any solution $SOL$ to $VC_{\Psi}$ instance of cost $\leq Th$.
+valuation that satisfies $\Formula$. 
+Let's take any solution $\Sol$ to $\VCNB_{\Formula}$ instance of cost $\leq \Thr$.
 
 We create valuation Val in following way:
 \begin{itemize}
-\item $Val(v) = T$ iff there lies VM on first leaf on positive side of $v$ gadget in $SOL$
-\item $Val(v) = F$ otherwise
+\item $\Val(v) = T$ iff there lies VM on first leaf on positive side of $v$ gadget in $SOL$
+\item $\Val(v) = F$ otherwise
 \end{itemize}
 
 \begin{lemma}For every clause there exist a VM in variable gadget that processes one of
@@ -450,11 +450,11 @@ processing those $3$ chunk types, then we can take arbitrary in the rest
 of the proof.
 
 
-\begin{lemma}$Val$ satisfies $\Psi$.
+\begin{lemma}$\Val$ satisfies $\Formula$.
 \end{lemma}
 \begin{proof}
-Let's take matching $M$ of $SOL$. Let's take arbitrary clause of
-$\Phi$ and its $3$ chunk types 
+Let's take matching $M$ of $\Sol$. Let's take arbitrary clause of
+$\Formula$ and its $3$ chunk types 
 : $c_i^1, c_i^2, c_i^3$. Let's name machines corresponding to them
 to $vm_i^1, vm_i^2, vm_i^3$. Two of those lie in clause gadgets. Let's
 take the chunk type that was processed in variable
