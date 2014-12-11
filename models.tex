@@ -81,3 +81,44 @@ This model extension accounts for communication costs between the $\VM s$. So fa
 \subsection{Bandwidth Constraints - bw}
 
 So far we only focussed on computing minimal bandwidth costs. However, in reality the bandwidth which a single link can offer is limited. This model extension limits the available bandwidth on each physical link $l$ to a value, which is denoted as $TODO FIND SYMBOL$ .
+
+\subsection{Summary of our results}
+
+One day there will be a graph of all problems with arrows
+corresponding to reductions and with partitioning to solution
+approaches ((M)atching, (D)ynamic, (F)low, (N)p-hard).
+
+\begin{enumerate}
+\item basic problem - M
+\item ma - M
+\item r - M
+\item cv - reduces to basic problem
+\item bw - F
+\item fp - solution of 0 cost
+\item ma + r - M
+\item  ma + bw - F
+\item ma + cv - reduces to ma
+\item ma + fp - D
+\item r + bw - F
+\item r + cv - reduces to r
+\item r + fp - solution of 0 cost
+\item bw + cv - reduces to bw
+\item bw + fp - D
+\item fp + cv - D
+\item ma + r + bw - F
+\item ma + r + cv - reduces to ma + r
+\item ma + r + fp - N
+\item ma + bw + cv - reduces to ma + bw
+\item ma + bw + fp - D
+\item ma + fp + cv - D
+\item r + bw + cv - reduces to r + bw
+\item r + cv + fp - N
+\item r + bw + fp - solution of 0 cost
+\item bw + cv + fp - D
+\item ma + r + bw + cv - reduces to ma + r + bw
+\item ma + r + bw + fp - N
+\item ma + r + cv + fp - N
+\item ma + fp + cv + bw - D
+\item r + bw + cv + fp - N
+\item ma + r + bw + cv + fp - N
+\end{enumerate}
