@@ -104,8 +104,10 @@ $I \in 3SC$ iff $\VCNB_I$ has solution of cost $\leq \Thr$.
 \begin{proof}
 
 ($=>$) Let's take the covering set $S = \{S_1, S_2, \ldots, S_k\}$ and place $3$ VMs in each gadget that
-corresponds to every set of $S$. We match VMs to chunks that they
-are sitting on top of. Let's calculate the cost of the solution:
+corresponds to every set of $S$. We match VMs to chunks the following
+way: we traverse VMs one by one, and if the VM sit on top of the chunk
+type that was not yet processed, we match that them; otherwise we set
+the VM to be idle. Let's calculate the cost of the solution:
 \begin{itemize}
 \item communication cost inside gadget is $2 \cdot {3 \choose 2}$,
   because we take every pair and add 2 hop communication cost
