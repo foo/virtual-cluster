@@ -1,3 +1,201 @@
+In this section we will present a dynamic programming solution to
+virtual cluster embedding with flexible placement (FP), communication
+among VMs (CC) and bandwidth constraints (BW).
+
+\subsection{new}
+
+\newcommand{\Opt}{\ensuremath{Opt}}
+\newcommand{\Children}{\ensuremath{children}}
+%\newcommand{\Cost}{\ensuremath{\textsc{cost}}}
+\newcommand{\Capacity}{\ensuremath{\textsc{cap}}}
+\newcommand{\Uplink}{\ensuremath{\textsc{uplink}}}
+\newcommand{\ChunkCount}{\ensuremath{\textsc{ChunkCount}}}
+\newcommand{\MaFactor}{\ensuremath{\textsc{MA}}}
+
+To compute a solution $\Sol$ for an instance of $\Problem$, we compute an 
+integer $\ChunkCount_\SubstrateNode$ and an array 
+$\Opt_\SubstrateNode$ on each node $\SubstrateNode \in 
+\SubstrateNodes$. $\ChunkCount_\SubstrateNode$ contains the number of chunks at 
+or below 
+$\SubstrateNode$ and $\Opt_\SubstrateNode[i]~i\in \{0,\dots,\Vms\}$ contains the 
+total cost ($\CostCom$ + $\CostTrans$) for placing $i$ VMs at or beneath 
+$\SubstrateNode$. These costs account for bandwidth costs on 
+$\Uplink(\SubstrateNode)$. To denote that it is impossible to place $i$ VMs at 
+or beneath $\SubstrateNode$, we set $\Opt_\SubstrateNode[i] = \infty$.
+
+
+\newcommand{\NodesToProcess}{\ensuremath{\textsc{nodesToProcess}}}
+\begin{algorithm}[tbhp]
+\DontPrintSemicolon % Some LaTeX compilers require you to use
+%\dontprintsemicolon instead
+\SetAlgoNoEnd
+\KwIn{$\SubstrateNode \in \SubstrateNodes$}
+\vspace{6pt}
+\While{$|\Children(\SubstrateNode) > 2|$}{
+  \textbf{set} $\SubstrateNodes \gets \SubstrateNodes \cup 
+\{\SubstrateNode^*\}$\;
+  \textbf{~~with }$\Capacity(\SubstrateNode^*) \gets 0$
+  \textbf{ and }$\Cost(\SubstrateNode^*) \gets  1$\;
+  \textbf{choose any }$\SubstrateNode'$\textbf{ from 
+}$\Children(\SubstrateNode)$\; 
+  $cap \gets \Capacity((\SubstrateNode, \SubstrateNode'))$\;
+  $\SubstrateEdges \gets \SubstrateEdges \setminus \{(\SubstrateNode, 
+\SubstrateNode')\}$\;
+  \textbf{set} $\SubstrateEdges \gets \SubstrateEdges \cup \{(\SubstrateNode^*, 
+\SubstrateNode')\}$\;
+  \textbf{~~with }$\Capacity((\SubstrateNode^*, \SubstrateNode')) i\gets cap$
+  \textbf{ and }$\Cost((\SubstrateNode^*,\SubstrateNode')) \gets  1$\;
+  \textbf{set} $\SubstrateNodes \gets \SubstrateNodes \cup \{(\SubstrateNode^*, 
+\SubstrateNode)\}$\;
+  \textbf{~~with }$\Capacity((\SubstrateNode^*, \SubstrateNode)) i\gets \infty$
+  \textbf{ and }$\Cost((\SubstrateNode^*, \SubstrateNode)) \gets  0$\;
+  $binarize(\SubstrateNode')$\;
+}
+\For{\textbf{each } $\SubstrateNode' \in \Children(\SubstrateNode)$}{
+  $binarize(\SubstrateNode')$\;
+}
+
+\caption{$binarize(\SubstrateNode \in \SubstrateNodes)$}
+\label{algo:binarization}
+\end{algorithm}
+\vspace{-1.5em}
+
+Our dynamic program works on bianry trees. Algorithm~\ref{algo:binarization} 
+shows the algorithm to recursively binarize a (sub-)tree with the root $v$:
+%To binarize tree $\Tree$, we start by processing each vertex $v \in 
+%\SubstrateNodes$ in the following root to leaf manner: 
+While $v$ has more than 
+$2$ children, we choose an arbitrary node $v' \in \Children(v)$ 
+and create a new virtual node $v^*$. We remove the edge $e = (v, v')$ which 
+connected $v$ to it's child $v'$ from $\SubstrateEdges$. Subsequently we create 
+a new edge, which connects the 
+child to the new node $e^*_1 = (v', v^*)$, set it's 
+$\Cost(e^*_1) = 1$ and it's capacity to the value of the removed edge $e$ 
+($\Capacity(e^*_1) = \Capacity(e)$). Additionally we gerate an edge $e^*_2 = 
+(v^*, v)$. $\Capacity(e^*_2)$ is $\infty$ and $\Cost{e^*_2}$ is set to $0$.
+Subsequently we process the subtree with the root $v'$. If the current node has 
+two or less children $v$ does not violate the binary constraint, and hence the 
+binarization process of $v$ is finished. However, it is neccessary to 
+recursively binarize the subtrees with roots $v'_1, v'_2 \in \Children(v)$, if 
+they exists.
+%If $|\Children(v)| > 2$, we choose an arbitrary node $v' \in \Children(v)$ 
+%and create a new virtual node $v^*$. We create a new edge $e^*_1$, set it's 
+%cost to $1$ and it's capacity to $\Bandwidth(e)$.
+
+After the binarziation of $\Tree$ and the initialization of 
+$\OPT_\SubstrateNode \forall \SubstrateNode \in \SubstrateNodes$ 
+(Line~\carlo{todo}), we can compute $\OPT_\SubstrateNode$ in a bottom up 
+manner. Since only one VM can be mapped to a leaf, $\OPT_\SubstrateNode[i] = 
+\infty \forall i \in \{2,..,\Vms\}$. The values of 
+$\OPT_\SubstrateNode[i]$ for $i \in \{0,1\}$, depend on the presence of a Chunk 
+at $\SubstrateNode$. If there is a chunk at $\SubstrateNode$, and we decide to 
+place $0$ VMs at or beneath $\SubstrateNode$, we will have to process the chunks 
+data at a different location - which will inflict $\CostTrans$ bandwidth costs 
+on $\Uplink(\SubstrateNode)$. If we decide to place a VM at $\SubstrateNode$, 
+we can assign the VM to the chunk. This will require the VM to communicate with 
+the other $\Vms -1$ VMs, which will inflict communication costs of $(\Vms -1) 
+\cdot \CostCom$. If there is no chunk at $\SubstrateNode$ 
+$\OPT_\SubstrateNode[0] = 0$, since there will be no traffic to 
+$\SubstrateNode$ if we do not place a VM at $\SubstrateNode$. If we decide to 
+place a VM at $\SubstrateNode$, this VM will communicate with the other VMs 
+($(\Vms -1) \cdot \CostCom$) and it will have to fetch the data of a chunk from 
+a different location ($\CostTrans$), hence $\OPT_\SubstrateNode[1] = (\Vms -1 
+)\cdot \CostCom  + \CostTrans$. If the overall banwdith costs exceed 
+$\Capacity(\Uplink(\SubstrateNode))$, $\Opt_\SubstrateNode$ is set to $\infty$.
+$\ChunkCount_\SubstrateNode$ is obviously set to 
+$1$ if a 
+chunk is present at $\SubstrateNode$ and otherwise to $0$.
+
+\newcommand{\SumIndex}{\ensuremath{n}}
+\begin{algorithm}[tbhp]
+\DontPrintSemicolon % Some LaTeX compilers require you to use
+%%\dontprintsemicolon instead
+\SetAlgoNoEnd
+\KwIn{$\Opt_{\SubstrateNode_l} , 
+\Opt_{\SubstrateNode_r}, 
+\ChunkCount_{\SubstrateNode_l},\ChunkCount_{\SubstrateNode_r} $}
+$\ChunkCount_\SubstrateNode = \ChunkCount_{\SubstrateNode_l} + 
+\ChunkCount_{\SubstrateNode_r}$\;
+\For{$\SumIndex \in \{0,\dots,\Vms\}$}{
+  \For{$i \in \{0,\dots,\SumIndex\}$}{
+      \If{$\Opt_\SubstrateNode[\SumIndex] > \Opt_{\SubstrateNode_l}[i] + 
+\Opt_{\SubstrateNode_r}[\SumIndex - i]$}{
+	$\Opt_\SubstrateNode[\SumIndex] \gets \Opt_{\SubstrateNode_l}[i] + 
+\Opt_{\SubstrateNode_r}[\SumIndex - i]$\;
+    }
+  }
+  
+ $bw \gets (\Vms - 
+\SumIndex) \cdot \SumIndex \cdot \CostCom +   |i - 
+\ChunkCount_\SubstrateNode| \cdot \CostTrans$\; 
+  \eIf{$bw \leq \Capacity(\Uplink(v))$}{
+    $\Opt_\SubstrateNode[\SumIndex] \gets \Opt_\SubstrateNode[\SumIndex] + bw$\;
+  }{
+    $\Opt_\SubstrateNode[\SumIndex] \gets \infty$\;
+  }
+}
+%
+\caption{$aggregate(\SubstrateNode \in \SubstrateNodes)$}
+\label{algo:dynAggregation}
+\end{algorithm}
+
+Ongoing we can compute $\OPT_\SubstrateNode$ for any substrate node 
+$\SubstrateNode$, such that both children $\SubstrateNode_l$ and 
+$\SubstrateNode_r$ of $\SubstrateNode$ have allready been processed. 
+Algorithm~\ref{algo:dynAggregation} shows this process. At first we update the 
+compute the chunks at or below $\SubstrateNode$ - which is the sum of the 
+chunks below the children of $\SubstrateNode$, since chunks can only be placed 
+on leaves (Line~\carlo{TODO}). Keeping in mind, that $\Capacity(\SubstrateNode) 
+= 0$ for all non-leaf nodes $\SubstrateNode$, it becomes obvious, that for 
+placing $\SumIndex$ VMs at or below $\SubstrateNode$, $i\in\{0,\dots, 
+\SumIndex\}$ VMs have to be placed below one child of $\SubstrateNode$ and the 
+other $\SumIndex - i$ children have to be placed below the other child of 
+$\SubstrateNode$. The costs for placing $\SumIndex$ can be divided in two 
+parts: Costs of placing $i$ VMs beneath one and $\SumIndex - i$ VMs beneath the 
+other child of $\SubstrateNode$ and the banwdith costs on 
+$\Uplink(\SubstrateNode)$. The costs for placing VMs beneath the children, is 
+computed by checking all possible combinations (Lines~\carlo{TODO}). The 
+bandwidth costs consist of two components, which are both independent of below 
+which of the two children, the VMs are placed. The first component, is the 
+communication costs (Line~\carlo{TODO}). Since $\SumIndex$ VMs are placed below 
+$\SubstrateNode$ they will all communicate with the remaining $\Vms - \SumIndex$ 
+VMs, which are not hosted beneath $\SubstrateNode$, generating a total banwdith 
+consumption of $(\Vms - \SumIndex)\cdot \SumIndex \cdot \CostCom$. The 
+second component are the transport costs (Line~\carlo{TODO}) which occur, if 
+the number of chunks below $\SubstrateNode$ is not equal to the number of VMs 
+below $\SubstrateNode$. If there are less VMs than chunks, we will have to 
+transfer the data of the chunks to VMs which are not hosted below 
+$\SubstrateNode$. If there are more VMs than chunks, we will have to transfer 
+data from chunks which are not located below $\SubstrateNode$ to VMs which are 
+hosted below $\SubstrateNode$. If the bandwidth costs for a specific number of 
+VMs $\SumIndex$ exceed $\Capacity(\Uplink(\SubstrateNode))$, we set 
+$\Opt_\SubstrateNode[\SumIndex] = \infty$, otherwise we add the bandwidth costs 
+on the uplink to the costs for placing $i$ and $\Vms - i$ in the children of 
+$\SubstrateNode$.
+
+After computing $\Opt_\SubstrateNode~\forall 
+\SubstrateNode \in \SubstrateNodes$ in the described bottom-up manner, the 
+state in the root of the tree indicates, whether a solution for this instance 
+of $\Problem$ exists. In case $\Opt_{root(\Tree)}[\Vms] = \infty$, no solutions 
+exists. This will occur if the uplinks of the subtrees do not have sufficient 
+spare capacity to satisfy the request, or the number of requested VMs is higher, 
+than the available slots in the substrate. An actual embedding of cost 
+$\Opt_{root(\Tree)}[\Vms]$ can be obtained by keeping track of the intermediate 
+solutions for each array $\Opt_\SubstrateNode$ by indicating the number of 
+nodes mapped in the subtree of the children.
+
+The above described procedure can easily be extended to solve problem 
+instances, which have the $MA$ property. Line~\carlo{TODO} of 
+Algorithm~\ref{algo:dynAggregation} has to be modifed to
+$$bw \gets (\Vms - \SumIndex) \cdot \SumIndex \cdot \CostCom +   
+|\textbf{\MaFactor}\cdot i - \ChunkCount_\SubstrateNode| \cdot \CostTrans$$ 
+in order to account for the fact, that each VM processes $\MaFactor$ many 
+chunks. The same modification has to be added to the computation on the leaf 
+nodes.
+
+
+\subsection{old}
+
 TODO:
 \begin{enumerate}
   \item unify variable names $n$, $N$, etc
@@ -5,10 +203,6 @@ TODO:
   \item rewrite
 \end{enumerate}
 
-
-In this section we will present a dynamic programming solution to
-virtual cluster embedding with flexible placement (FP), communication
-among VMs (CC) and bandwidth constraints (BW).
 
 Let's start by transforming our tree to binary tree with arbitrary
 depth. We also introduce weights on edges (either $0$ or $1$). The
