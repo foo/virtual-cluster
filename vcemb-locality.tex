@@ -111,22 +111,22 @@
 By decoupling applications from the constraints of the underlying physical
 infrastructure, virtualization introduces a very flexible resource allocation model.
 Accordingly, over the last years, many algorithms have been proposed to exploit
-these flexibilities in order to embed applications more efficiently. Especially the 
+these flexibilities in order to embed applications more efficiently. Especially the
 virtual network embedding problem has been studied intensively.
 
 However, theoretical studies on the virtual network embedding so far miss two important aspects,
-which we call the \emph{data locality constraint} and \emph{replica selection opportunity}: 
+which we call the \emph{data locality constraint} and \emph{replica selection opportunity}:
 data locality refers to the fact that the input to cloud applications such as MapReduce
 is typically already stored  in the datacenter and the corresponding constraints need to be taken into account when embedding
 the application; and replica selection refers to the fact that input is often stored redundantly, and
 hence introduces further optimization opportunities.
 
 This paper studies the fundamental algorithmic challenges resulting from data locality
-and replica selection. 
+and replica selection.
 In particular, we decompose virtual network embedding problems with locality constraints
 into four
 main aspects: flexible virtual node placement ($\FP$), communication costs ($\CC$),
-replica selection ($\RS$), 
+replica selection ($\RS$),
 and bandwidth constraints $\BW$.
 
 This paper shows that both $\FP$ and $\RS$ problems can often be solved optimally in polynomial time,
