@@ -1,0 +1,23 @@
+\section{Matching}
+
+In the simplest version of $\Problem$, where all properties are absent, each VM 
+is allready placed, the loactions of all chunks are known, and we have to 
+compute an assignment of VMs to chunks, such that each VM is assigned to 
+exactly one chunk, and each chunk is assigned to exactly one chunk. Hence we 
+can transform each instance of $\Problem$ to a minimum weight perfect bipartite 
+matching problem. One of the sets is formed by $\VirtualNodes$, the other by the 
+set of chunks. A VM has an edge to each chunk. The costs of these edges are 
+defined by the hop count between the VM and the chunk in the host graph. Each 
+edge which is chosen for the solution of the matching problem
+
+\carlo{TODO: Fiugre $\dots$ shows an example of this}
+
+This approach can also be used to solve instance of $\Problem$, which have the 
+$ma$ or $r$ property - or even both. 
+To Account for the $ma$ property, a single VM has to process exactly 
+$\MaFactor$ VMs. Hence we can clone a VM to be represented by $\MaFactor$ Nodes.
+In order to incorporate the different 
+replicas of the chunks, we depict all copies of a given $\ChunkTypes$ in a 
+single %$\ChunkType$ 
+node. We connect each VM to all $\ChunkTypes$ using the 
+lowest hop count to one of the copies as the weight.

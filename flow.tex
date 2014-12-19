@@ -1,0 +1,124 @@
+\subsection{FLOW FOOBAR Solution for $cv$ + $bw$ + $r$ + $ma$}
+
+We can solve instances of $\Problem$ where the properties $cv$, $bw$, $r$ and 
+$ma$
+are present, by reducing it to a series of flow problems on an extended 
+host graph. We utilize the following observations:
+
+\newcommand{\Source}{\ensuremath{s}}
+\newcommand{\Sink}{\ensuremath{t}}
+
+\begin{enumerate}
+\item $cv$ + $bw$ + $r$ + $ma$ degenerates to  $bw$ + $r$ + $ma$. 
+The placement of the VMs is given. The bandwdith function $\Capacity$ assigns 
+each edge in the host graph $\SubstrateEdge_i$ a capacity 
+$\Capacity(\SubstrateEdge_i)$. Since the 
+host graph is a tree, there exists only one path between two nodes, and hence 
+it is known how much bandwidth has to be allocated on which links, in oder to 
+satisfy the communication between the VMs. We can therefore construct a 
+problem with $bw$ + $r$ + $ma$ which has the same solutions, by defining 
+$\Capacity'(\SubstrateEdge_i)$ as 
+$\Capacity(\SubstrateEdge_i) - \textsc{CV}(\SubstrateEdge_i)$, where 
+$\textsc{CV}(\SubstrateEdge_i)$ denotes the amount which 
+had to be allocated on the link $\SubstrateEdge_i$ for the communication 
+between the $\VM s$. If any of the resulting edge capacities is negative, the 
+instance of $\Problem$ is infeasible.
+\item The required bandwidth $\CostTrans$ between each chosen chunk and the 
+assigned VM of a given $\VC$ is 
+the same and the pathes to the VMs have to be embedded as unsplittable 
+pathes. Hence, all edge capacities in can be normalized to $\CostTrans = 1$.
+\begin{comment}
+\item For a (by model) fixed node mapping $\NodeMapping$ and a given chunks to 
+vm assignment $\VmChunkAssignment$, the computation of a cost 
+optimal link mapping can be reduced to an integral minimal cost multi-commodity 
+flow problem, where each VM $\VirtualNode_i$ has a flow demand of $1$ to each 
+of its assigned chunks $\VmChunkAssignment(\VirtualNode_i)$. 
+%To 
+%transform this problem into a single commodity flow problem, we introduce a 
+%super source $\Source$ and edges $\SubstrateEdge_i^+ = (\Source, 
+%\NodeMapping(\VM_i))$ for 
+%$i \in \{1,\dots,\Vms}$ with $\Capacity(\SubstrateEdge_i^+) = \MaFactor$, 
+%which connects $\Source$ 
+%to the nodes in the host graph, to which the VMs are mapped. In addition we 
+%create a super sink $\Sink$ and edges $\SubstrateEdge_\ChunkType^-$ with 
+%$\Capacity(\SubstrateEdge_\ChunkType^-) = 1$
+\item For a given chunk \textit{type} to VM assignment, the replica selection 
+problem 
+can be integrated into this problem, by introducing nodes 
+$\SubstrateNode_\ChunkType$ for each 
+chunk type $\ChunkType$ and connect these nodes via edges 
+$\SubstrateEdge_\ChunkType = (\SubstrateNode_\ChunkTypes, \SubstrateNode_i)$ 
+for all $i$ such that \carlo{Check macieks part for assigned = true}. The 
+capacity of all of these edges is set to 
+$\Capacity(\SubstrateEdge_\ChunkTypes) = 1$. In this problem 
+%
+This problem can be converted into 
+a integral minimum cost single commodity flow problem, 
+%
+In addition we create a super sink 
+$\Sink$ and edges 
+$\SubstrateEdge_\ChunkType^-$ with $\Capacity(\SubstrateEdge_\ChunkType^-) = 1$
+%
+\item The chunk to vm assignment decision, can be 
+integrated into the above described flow problem, by transforming it into a 
+integral minimum cost single commodity flow problem.
+We introduce a super source $\Source$ and edges $\SubstrateEdge_i^+ = (\Source, 
+\NodeMapping(\VM_i))$ for $i \in \{1,\dots,\Vms}$ with 
+$\Capacity(\SubstrateEdge_i^+) = \MaFactor$, which 
+connects $\Source$ to the nodes in the host graph, to which the VMs are mapped. 
+In addition we create a super sink $\Sink$ and edges 
+$\SubstrateEdge_\ChunkType^-$ with $\Capacity(\SubstrateEdge_\ChunkType^-) = 1$
+%
+We extend the flow graph with a nodes $\SubstrateNode_\ChunkType$ for each 
+chunk type $\ChunkType$ and connect these nodes via edges 
+$\SubstrateEdge_\ChunkType = (\SubstrateNode_\ChunkTypes, \SubstrateNode_i)$ 
+for all $i$ such that \carlo{Check macieks part for assigned = true}. The 
+capacity of all of these edges is set to 
+$\Capacity(\SubstrateEdge_\ChunkTypes) = 1$.
+In addition we create a super sink $\Sink$ and edges 
+$\SubstrateEdge_\ChunkType^-$ with $\Capacity(\SubstrateEdge_\ChunkType^-) = 
+1$, to connect the meta nodes for each chunk type to the super sink.
+%Instead of connecting 
+%$\Source$ to the nodes, to which the VMs are mapped, we connect $\Source$ to 
+%\textit{all leaves} in the host graph via edges $e_\Leaf^+ = (\Source, 
+%\SubstrateNode)$. $\Capacity(e_\SubstrateNode^+)$ is set to one, since by 
+%the definition of our model, only one VM may be mapped to one server. If a 
+%feasible flow $f : \SubstrateEdges \rightarrow \mathbb{N}$ of value $\Vms$ 
+%exists, then $\Sum_{\Leaf \in \Leaves}$
+\end{comment}
+\end{enumerate}
+
+
+
+\paragraph{FLOW Construction}
+
+This section presents a flow based solution for the variant of the model which 
+has bandwidth limitations, communicatin between the $\VM s$ and redundant 
+$\Chunk s$.
+
+We start by showing that $cv$ + $bw$ + $r$ is the same problem as $bw$ + $r$. 
+The placement of the $\VM s$ is given. The bandwdith function $b$ assigns 
+each link in the physical substrate $l_i$ a capacity $c_i$. Since the phyiscal 
+stubstrate is a tree there exists only one path between two nodes, and hence it 
+is known how much bandwidth has to be allocated on which links, in oder to 
+satisfy the communication between the $\VM s$. We can therefore construct a 
+problem with $bw$ + $r$ which has the same solutions, by defining $b'(l)$ as 
+$b(l) - cv_l$, where $cv_l$ denotes the amount which had to be allocated on the 
+link $l$ for the communication between the $\VM s$.
+
+To construct the flow graph, we start from the physical 
+substrate. Each edge has a associated costs of $1$ and bandwidth according the 
+available bandwidth due to the distribution provided by the $b$ function of the 
+$bw$ property of the model. In addition we create and a node for each 
+$\ChunkType$. Each of these nodes is connected to every node in the physical 
+topology, which has a $\Chunk$ of the corresponding type. The capacity of these 
+edges is $1$ and the costs are $0$. In addition we create the source, and 
+connect it to all nodes, which represent $\ChunkType s$. The capacity of the 
+edges from the sink is $1$ and it's costs are $0$.
+On this flow graph, we now solve the (integer) Max-Flow-Min-Cost Problem.
+
+If the resulting maximal flow $\hat f$ has a value $|\hat f|< |C| = |V_V|$, the 
+$\Problem$ is infeasible - otherwise we can construct a solution from $\hat f$. 
+To construct the solution we choose an arbitrary path $p = \{e_1,\dots, 
+e_n\}$ \carlo{TODO check n}, such that $f(e_i) > 1 ~ \forall i \in 
+\{1,\dots,n\}$.
