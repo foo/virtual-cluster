@@ -27,13 +27,20 @@
 
 %Header Extensions Seperation
 %Carlo
+\newcommand{\Capacity}{\ensuremath{\textsc{cap}}}
 \newcommand{\VM}{\textsc{VM}}
-\newcommand{\Chunk}{\textsc{chunk}}
+\newcommand{\Chunk}{\ensuremath{c}}
 \newcommand{\Problem}{\textsc{DummyName Problem}}
 \newcommand{\carlo}[1]{\textcolor{red}{#1}}
 \newcommand{\MaFactor}{\ensuremath{\textsc{MA}}} 
+\newcommand{\Path}{\ensuremath{p}}
+\newcommand{\RedundancyFactor}{\ensuremath{r}}
 
+\newcommand{\VmChunkAssignment}{\ensuremath{ASS_v}}
+\newcommand{\NodeMapping}{\ensuremath{MAP_v}}
+\newcommand{\ChunkLocation}{\ensuremath{Location}}
 
+\newcommand{\ChunkType}{\ensuremath{textsc{ct}}}
 \newcommand{\VirtualNodes}{\ensuremath{V_V}}
 \newcommand{\VirtualEdges}{\ensuremath{E_V}}
 \newcommand{\VirtualNode}{\ensuremath{v}}
@@ -45,6 +52,7 @@
 \newcommand{\SubstrateEdge}{\ensuremath{e}}
 \newcommand{\Leaf}{\ensuremath{l}}
 \newcommand{\Leaves}{\ensuremath{L}}
+\newcommand{\Chunks}{\ensuremath{\textsc{chunks}}}
 
 
 \newcommand{\VC}{\textsc{VC}}
@@ -247,6 +255,7 @@ We make the following contributions.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \input{matching}
+\input{flow}
 
 %\subsection{Dynamic programming solution}
 \input{dynamic_embedding}
