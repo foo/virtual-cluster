@@ -133,6 +133,20 @@ $\SubstrateEdge_\ChunkType^-$ with $\Capacity(\SubstrateEdge_\ChunkType^-) =
 \end{comment}
 \end{enumerate}
 
+\begin{figure}
+\includegraphics[angle=90,origin=c, height=7cm]{figs/model_fig_skteches/flow}
+\end{figure}
+
+
+Many algorithm can compute a solution for the integral minimum cost maximum 
+flow problem. One example is the \textit{successive shortest path algorithm}, 
+which can compute a solution in $\mathcal{O}(n \cdot U((n+m)\log n)
+)$ time \cite{successive_shortest_path_complexity}, where $n$ is the number of 
+nodes in the flow graph ($|\SubstrateNodes| + \ChunkTypes$), $m$ is the number 
+of edges in the substrate graph ($|\SubstrateEdges| + \Vms + \RedundancyFactor 
+\cdot \ChunkTypes$) and $U$ is the highest capacity in the substrate 
+($\max(\Capacity(\SubstrateEdge))~\SubstrateEdge\in\SubstrateEdges$).
+
 
 
 
