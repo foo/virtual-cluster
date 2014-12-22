@@ -68,7 +68,7 @@ way. Let's start by setting integer constants in our instance:
 Then we construct the tree $\Tree_I$. It will have height 2 counted in number of
 edges. It will consist of gadgets for every set $S_i$. Every gadget
 consists of inner node and three leaves. We place three chunks in
-every gadget; those chunks correspond to elements of $S_i$. 
+every gadget; those chunks correspond to elements of $S_i$.
 
 \subsubsection{Proof of correctness}
 
@@ -146,7 +146,7 @@ chunk type was processed. Therefore every element of universe was hit.
   chunks that correspond to elements of a triple
 \end{itemize}
 
-\subsubsection{Proof} 
+\subsubsection{Proof}
 
 ($=>$) Let's take solution to 3D exact matching. We spawn VM in every
 gadget that corresponds to chosen triples. We match every chunk in a
@@ -169,7 +169,7 @@ solution of cost $\leq \Thr$.
 
 Let's remind what decision VCB variant instance consists of:
 \begin{enumerate}
-\item balanced rooted tree $\Tree$ 
+\item balanced rooted tree $\Tree$
 \item edge capacities $\Bandwidth(e)$
 \item constants $\CostTrans$, $\CostCom$, which are costs of chunk transfer and
 communication
@@ -226,7 +226,7 @@ construct as many replicas of chunk $c_i$ as there are literals in
 clause $i$. For each literal $l$ (of form $x$ or $\neg x$) that satisfies clause $i$ we place
 replica of chunk $c_i$ in leaf labeled $c_{l_i}$.
 
-To finish our construction, we need to set value of constant $\Thr$. 
+To finish our construction, we need to set value of constant $\Thr$.
 
  We
 do it by calculating communication cost among spawned virtual machines in
@@ -272,7 +272,7 @@ After transforming it we have:
 $$ 0 \leq k(k - (c \cdot (v - 2))) $$
 
 Which is true for $k \leq 0$ or $k \geq c \cdot (v - 2)$, so no
-positive $k \leq c$ can satisfy this inequality for $v > 4$, which gives a contradiction. 
+positive $k \leq c$ can satisfy this inequality for $v > 4$, which gives a contradiction.
 
 \qed
 
@@ -322,7 +322,7 @@ leaves. It is true because we proved the bandwidth lemma. Also, inside
 every gadget either all VMs are spawned in $positive(v)$ or all VMs
 are spawned in $negative(v)$. It is true because cost of solution
 where at least one gadget has VMs mixed between those branches is
-always greater than $Th$. 
+always greater than $Th$.
 
 TODO: prove it more formally. First, define semi-feasible solution. Let's take any $p,q$ being number of VMs
 spawned in left and right subtree. Then we say that we can improve the
@@ -354,7 +354,7 @@ let's reduce from $3SAT$ instead of $SAT$. Our tree $T_{\Psi}$
 will consist of two types of gadgets: gadgets for variables and
 gadgets for clauses. Most fundamental conceptual difference is that
 for every clause we create three chunk types instead of just one (like
-in previous proof). 
+in previous proof).
 
 \subsubsection{Construction.}
 
@@ -405,7 +405,7 @@ $c$ VMs in each variable gadget and $2$ VMs in each clause gadget.
   Th \iff \Formula \in 3SAT$.
 \end{theorem}
 
-\begin{proof} 
+\begin{proof}
 ($=>$) If we have a valuation, we fill variable gadgets with VMs like in
 proofs before. Then we fill $2 \cdot c$ VMs in following way:
 
@@ -428,7 +428,7 @@ We produced feasible solution of cost $\Thr$, because there were no
 transport and VMs communicated in predicted way.
 
 ($<=$) In order to finish the proof, we must prove the existance of
-valuation that satisfies $\Formula$. 
+valuation that satisfies $\Formula$.
 Let's take any solution $\Sol$ to $\VCNB_{\Formula}$ instance of cost $\leq \Thr$.
 
 We create valuation Val in following way:
@@ -456,7 +456,7 @@ of the proof.
 \end{lemma}
 \begin{proof}
 Let's take matching $M$ of $\Sol$. Let's take arbitrary clause of
-$\Formula$ and its $3$ chunk types 
+$\Formula$ and its $3$ chunk types
 : $c_i^1, c_i^2, c_i^3$. Let's name machines corresponding to them
 to $vm_i^1, vm_i^2, vm_i^3$. Two of those lie in clause gadgets. Let's
 take the chunk type that was processed in variable
@@ -470,26 +470,26 @@ This last lemma proves our theorem.
 \subsection{Images}
 
 \begin{figure}[htbp]
-\includegraphics[width = \columnwidth]{figs/gadget-no-bw.eps}
+\includegraphics[width = \columnwidth]{figs/gadget-no-bw}
 \end{figure}
 
 
 \begin{figure}[htbp]
-\includegraphics[width = \columnwidth]{figs/vc-instance.eps}
+\includegraphics[width = \columnwidth]{figs/vc-instance}
 \end{figure}
 
 
 \begin{figure}[htbp]
-\includegraphics[width = \columnwidth]{figs/vc-instance-r2.eps}
+\includegraphics[width = \columnwidth]{figs/vc-instance-r2}
 \end{figure}
 
 
 \begin{figure}[htbp]
-\includegraphics[width = \columnwidth]{figs/lemma-two-gadgets.eps}
+\includegraphics[width = \columnwidth]{figs/lemma-two-gadgets}
 \end{figure}
 
 
 \begin{figure}[htbp]
-\includegraphics[width = \columnwidth]{figs/formula-example.eps}
+\includegraphics[width = \columnwidth]{figs/formula-example}
 \end{figure}
 
