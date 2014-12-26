@@ -111,7 +111,7 @@
 
 \title{Embedding Virtual Clusters with Data Locality and Replica Selection\\{\Large Real Algorithms for Virtual Environments}}
 
-\title{Data Locality and Replica Aware Virtual Cluster Embeddings in Fat-Trees\\{\Large Real Algorithms for Virtual Environments}}
+\title{Data Locality and Replica Aware Virtual Cluster Embeddings for Fat-Trees\\{\Large Real Algorithms for Virtual Environments}}
 
 
 \author{Carlo Fuerst$^1$, Maciek Pacut$^2$, Stefan Schmid$^3$\\
@@ -186,7 +186,8 @@ and draw an almost complete picture of the problem space. Concretely, we show th
 can be solved optimally in polynomial time, despite the large degrees of freedom, and also highlight
 computational hardness limitations. Interestingly, while it is well-known that (unsplittable) multi-commodity flow
 problems are NP-hard in capacitated networks, our results highlight the hardness of several uncapacitated 
-optimization problems.
+optimization problems. In particular, we show that NP-hard problems already arise in fat-trees of height two,
+and even if the number of replicas is bounded by two.
 
 
 \subsection{Organization}
@@ -251,47 +252,44 @@ to nodes is already interesting if the location of nodes is \emph{given} and can
 we distinguish between a scenario where the node placement is flexible (called $\FP$) and one where
 it is not.
 
-\textbf{Remark on Practical Relevance.}
+\textbf{Remark on Practical Motivation.}
+Our model is inspired by batch-processing applications such as MapReduce.
+The standard datacenter topology today are fat-trees~\cite{fattree},
+and the most popular virtual network abstraction is the virtual cluster~\cite{oktopus}.
+MapReduce applications cycle through three main phases: during the first phase,
+the input data is mapped in a distributed fashion, by the mappers.
+The resulting output is then transmitted to the so-called reducers; this phase is
+called the shuffling phase. In the third phase, the data is processed by the reducers.
+Moreover, in the beginning resp.~in the end, data needs to be loaded from resp.~written  
+back to the distributed file system.
+Typically, a node serves both as a mapper and a reducer. 
 
-
-fatrees are , the standard datacenter topology today. CITE
-
-reduction ratio
-
-nodes could be compute units only
-
-virtual clusters
-
-The servers of the datacenters provide a distributed file system or database
-
-%\subsection{Our Contributions}
-%
-%This paper takes a closer look at the fundamental resource allocation problems
-%in virtual network environments, studying and distinguishing between flexibilities in virtual machine placements ($\FP$) and
-%replica selection ($\RS$), taking into account communication costs ($\CC$) and bandwidth constraints ($\BW$).
-%
-%We make the following contributions.
-%\begin{enumerate}
-%\item We show that the virtual cluster embedding dyn prog and flow
-%\item We show that the other is matching
-%\item NP-hardness
-%\end{enumerate}
+In our formal model, we distinguish between the bandwidth $b_1$ needed to
+transmit the input data to its assigned node, and the bandwidth $b_2$
+needed during the shuffling phase between the virtual nodes.
+The ratio $b_1/b_2$ can be seen as the so-called mapping ratio: 
+how much smaller is the input after the mapping phase.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\section{Algorithms}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\subsection{Model variants}
+\subsection{Carlo Model (to be merged by STefan later)}
 \input{models}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Polynomial-Time Algorithms}\label{sec:poly}
 
-This section gives an overview over model variants which can be solved, and
-explains the corresponding algorithms. Figure~\ref{fig:summary} contains an
-overview which problems can be solved, and with which algorithms.
+Our data locality and replica aware virtual cluster embeddings 
+problem exhibits interesting connections to classic matching and
+flow problems. In this section, we point out these connections and
+exploit them to devise polynomial-time algorithms for a wide range
+of problem variants. We also show that a large number of problems
+can be solved optimally using dynamic programming. 
+
 \input{matching}
+
 \input{flow}
 
 %\subsection{Dynamic programming solution}
@@ -307,6 +305,8 @@ overview which problems can be solved, and with which algorithms.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Related Work}\label{sec:relwork}
+
+FIXME:
 
 It is well-known~\cite{talk-about} that the network
 can have a significant impact on cloud application
@@ -368,15 +368,234 @@ Finally, we refer the reader to Duffield et al.~\cite{hose-vpn} for an early wor
  virtual cluster embeddings \cite{gupta2001provisioning,Goyal2008}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Conclusion}\label{sec:conclusion}
+\section{Summary and Conclusion}\label{sec:conclusion}
 
-FIXME
+This paper investigated two fundamental new dimensions of virtual cluster 
+embedding problems: data locality and replica selection. We pursued
+an algorithmic approach and decomposed the problem into fundamental aspects,
+namely $\BW$, $\CC$, $\RS$, $\MA$ and $\FP$. Our results are summarized in 
+Figure~\ref{fig:summary}. In particular, we have shown that 
+at the heart of our problem lie interesting new variants of classic
+optimization problems related to matchings and flows. Interestingly, despite the 
+numerous
+flexibilities, many problem instances can actually be solved in polynomial time.
+On the negative side, we have also shown that there exist computationally hard
+problems even in uncapacitated networks. In particular, 
+already embeddings in two-level fat-trees are NP-hard (practically speaking:
+problems inside a single \emph{pod}), and even if the the number of replicas is bounded by two.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Appendix}
+
+\begin{figure}[t]
+\includegraphics[width = \columnwidth]{figs/summary}
+\caption{Summary of results presented in this paper}
+\label{fig:summary}
+\end{figure}
+
+
+Our paper provides an almost complete overview of what can and cannot be 
+computed optimally in our setting, and may of interest both to the algorithm
+and the networking community. However, our work also opens several interesting
+questions for future research, for instance, regarding randomized algorithms
+or approximation algorithms.
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \bibliographystyle{alpha}
 \bibliography{references}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{appendix}
+
+\section{NP-completeness of model with bandwidth -
+ 3SAT introduction}
+
+We decided to make reduction from Boolean Satisfiability problem (SAT)
+to our Virtual Cluster problem with bandwidth (VCB). SAT is decision
+problem, but VCB is optimization problem with NO answer
+possible. Therefore to make those problems compatible in terms of
+reduction, we consider decision VCB variant, in which instance we have
+additional constant $\Thr$, and instance belongs to VCB if it has feasible
+solution of cost $\leq \Thr$.
+
+Let's remind what decision VCB variant instance consists of:
+\begin{enumerate}
+\item balanced rooted tree $\Tree$
+\item edge capacities $\Bandwidth(e)$
+\item constants $\CostTrans$, $\CostCom$, which are costs of chunk transfer and
+communication
+\item constant $\Vms$, which is desired number of VMs to be spawned
+\item constant $\ChunkTypes$, which is number of types of chunks
+\item sequence of chunks placed in leaves of $\Tree$, possibly replicated
+\item constant $\Thr$
+\end{enumerate}
+
+Let's remind what $\SAT$ instance consists of:
+\begin{enumerate}
+\item clauses (let's name number of clauses as $\Clauses$)
+\item literals
+\item variables (let's name number of variables as $\Vars$
+\end{enumerate}
+
+\subsubsection{Construction}
+Let's take any formula in Conjunctive Normal Form, name it $\Formula$ and produce
+VCB instance $\VCB_{\Formula}$. First, construct the tree $\Tree_{\Formula}$. It will consist of
+a root and separate gadget for each variable of $\Formula$, each of which
+is a child of the root.
+
+
+Gadget for variable $x$ has its root, $var(x)$, and two children:
+$\positive(x)$ and $\negative(x)$. Vertex $\positive(x)$ has $\NClauses$
+children: $x_1, x_2, \ldots, x_{\NClauses}$. Vertex $\negative(x)$ has
+$\NClauses$ children: $\neg x_1, \neg x_2, \dots, x_{\NClauses}$. Every
+gadget has the same structure: the same height, the same number of
+leaves, and the same height. In fact, we will set bandwidth to be the
+same everywhere in every gadget. Differences will be shown when we
+will place data chunks.
+
+We set number of virtual machines to $v = \NClauses \cdot \NVars$.
+
+Now we will set cost of chunk transportation and cost of communication
+among virtual machines. We set communication cost to be $1$. We set
+trasportation cost to be $\CostTrans = W$, where $W$ is constant large enough
+to disallow transportation. It means that if virtual machine wants to
+process the chunk, it has to be spawned where the data chunk is
+placed. Technically, transportation is not completely disallowed, it
+just inclines cost so huge that every optimal solution has no
+trasportation. TODO: We show how to compute $W$ in appendix.
+
+Now we will set bandwidth constraints in $\Tree_{\Formula}$. There are three
+levels of edges in $\Tree_{\Formula}$: top, middle and bottom. We set
+bandwidth to unlimited at levels bottom and middle. At every edge of
+top level, we set the same bandwidth to: $\NClauses \cdot (\NVars -
+\NClauses)$.
+
+We set number of chunk types to be equal to number of clauses, $\ChunkTypes =
+\NClauses$. To finish construction of $\Tree_{\Formula}$, we need to place data chunks in
+leaves. We do it the following way. For each clause of number $i$ we
+construct as many replicas of chunk $c_i$ as there are literals in
+clause $i$. For each literal $l$ (of form $x$ or $\neg x$) that satisfies clause $i$ we place
+replica of chunk $c_i$ in leaf labeled $c_{l_i}$.
+
+To finish our construction, we need to set value of constant $\Thr$.
+
+ We
+do it by calculating communication cost among spawned virtual machines in
+certain solution to our instance. This soulution is constructed by placing
+virtual machines in all leaves of $positive(v)$ and none in leaves
+$negative(v)$ for every gadget for variable $v$. Please note that $Th$
+computed such way do not contain transportation cost. TODO: calculate
+$Th$ in appendix.
+
+\subsubsection{Proof of correctness of construction}
+
+With our construction completed, we need to prove that it indeed
+decides SAT.
+
+Idea behind capacity of set amount is that in every gadget we can
+spawn at most $cl(\Psi)$ virtual machines. Let's prove it formally:
+
+\begin{lemma} (bandwidth lemma)
+  Let $c$ and $v > 4$ be positive natural numbers. Let $a_1, a_2, \ldots,
+  a_v$ be natural number sequence that adds up to $c \cdot v$. Also, for
+  each $i$ we have $a_i \leq 2 \cdot c$. Then, if we have this:
+
+  $$ \forall_i a_i \cdot (c \cdot v - a_i) \leq c \cdot (c \cdot v -
+  c) $$
+
+  then each $a_i = c$.
+\end{lemma}
+\begin{proof}
+
+Let's assume the contrary, which means that there exists such $y$ that
+$a_y \neq c$. Then there are two cases: first, $a_y>c$ and second,
+$a_y<c$. Proof for the first case is presented below; second case
+with pidgeon hole principle results in existance of $a_z > c$, which
+is basically the same (just substitute $a_y := a_z$ in proof below).
+
+As we have $a_y < 2c$, we can say that $a_y$ has form $c +
+k$ for $k \in [1, \ldots, c]$. Let's look at bandwidth inequality:
+
+$$ (c + k) \cdot (c \cdot v - c - k) \leq c \cdot (c \cdot v - c) $$
+
+After transforming it we have:
+
+$$ 0 \leq k(k - (c \cdot (v - 2))) $$
+
+Which is true for $k \leq 0$ or $k \geq c \cdot (v - 2)$, so no
+positive $k \leq c$ can satisfy this inequality for $v > 4$, which gives a contradiction.
+
+\qed
+
+\end{proof}
+
+We will apply this lemma in following way. We interpret $a_i$ as
+number of VMs that are spawned in $i$-th gadget. We set $c$ as number
+of clauses and $v$ as number of variables. LHS of inequality from the
+lemma is formula for communication cost of machines inside $i$-th
+gadget to machines outside the gadget. RHS of the inequality is
+bandwidth constraint for the gadget. Corollary from the lemma is that
+any feasible solution must place exactly $c$ machines in every gadget.
+
+TODO: We need to consider case where $v \leq 4$. We can say that we
+restrict formulas to have 4 or more variables. This subset of $SAT$ remains NP-complete.
+
+\begin{theorem}Formula $\Psi$ is satisfiable iff $VCB_{\Psi}$ has
+solution of cost $\leq Th$.
+\end{theorem}
+
+\begin{proof}
+($=>$) Let's take any valuation $F$ that satisfies $\Psi$. We will construct
+solution to $VCB_{\Psi}$ using F in the following way. For each
+variable $v \in var(\Psi)$ we place $cl(\Psi)$ virtual machines in
+leaves of gadget $var(v)$. We need to choose $cl(\Psi)$ out of
+$2 \cdot cl(\Psi)$ leaves to spawn VMs. If $F(v) = 1$, we spawn all VMs in leaves
+of $positive(v)$, else we spawn all VMs in leaves of
+$negative(v)$. Solution constructed such way has cost exactly
+$Th$, because VMs are evenly splitted among gadgets and VMs are not
+mixed between $positive(v)$ and $negative(v)$ subtrees.
+
+We calculate the matching of chunks to VMs by matching every chunk to
+VM that sits on top of first chunk replica. This solution is feasible
+(every chunk type is processed) basically
+because given valuation satisfied the $\Phi$.
+
+Now we will show that this solution has indeed cost exactly $Th$. We have to
+take only communication cost. This holds because of the bandwidth lemma.
+
+($<=$) Let's take any solution to $VCB_{\Psi}$ of cost $\leq Th$. We
+will construct valuation $F$ using placement of virtual machines in
+solution to $VCB_{\Psi}$.
+
+We need to take following observations. In every solution of cost
+$\leq Th$ every gadget has exactly $ch(\Psi)$ VMs spawned in its
+leaves. It is true because we proved the bandwidth lemma. Also, inside
+every gadget either all VMs are spawned in $positive(v)$ or all VMs
+are spawned in $negative(v)$. It is true because cost of solution
+where at least one gadget has VMs mixed between those branches is
+always greater than $Th$.
+
+TODO: prove it more formally. First, define semi-feasible solution. Let's take any $p,q$ being number of VMs
+spawned in left and right subtree. Then we say that we can improve the
+solution by moving all $q$ to where $p$s lie and we have cheaper solution.
+
+Now we can construct our valuation $F$. We do it the following way
+(for each $v \in var(\Psi)$:
+
+\begin{itemize}
+\item if $v_1$ has machine in it then $F(v) = true$
+\item otherwise $F(v) = false$
+\end{itemize}
+
+Valuation $F$ satisfies $\Psi$ because it satisfies every clauses, as
+$VCB_{\Psi}$ solution processed all the chunks. To see it, let's take
+any clause chunk and see in which leaf it was processed. We take a
+look at label of this leaf. The label is a literal that is a whiteness
+to truthness of this clause.
+\end{proof}
+
+
+\end{appendix}
+
 
 \end{document}

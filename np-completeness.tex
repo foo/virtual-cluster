@@ -1,23 +1,21 @@
-\subsection{Introduction and plan of this chapter}
+We have seen that even problems with multiple dimensions of
+flexibility, e.g., in terms of flexible node placement 
+and replica selection, and even with capacity constraints (our problem
+($\FP+\RS+\BW$) can be solved in polynomial time.
+This section now points out fundamental
+limitations in terms of computational tractability. In particular,
+we will show that problems become NP-hard if
+inter-connects have to be established ($\FP+\RS+\CC$ is proved
+NP-hard in Section~\ref{ssec:fprscc}) or if multiple replicas
+have to be assigned to a node ($\FP+\RS+\MA$ is proved
+NP-hard in Section~\ref{ssec:fprsma}); both results hold
+even in uncapacitated networks, and even in fat-trees consisting
+of two levels only (e.g., in a datacenter \emph{pod}). Finally, we show that
+some problems are NP-hard even if the number of replicas is only two
+(Section~\ref{ssec:two}).
 
-In this chapter we will present three NP-completeness results. First
-one, hardness of fp+r+cv we will present as reduction from Set Cover
-variant, where every set has cardinality exactly 3. Second one,
-hardness of ma+r+fp we will present as reduction from Three
-Dimensional Perfect Matching. Hardness of those problems result in
-hardness of extended models: we can add bandwidth and multiple
-assignment to fp+r+cv; we can add bandwidth and communication to
-ma+r+fp.
 
-It seems that replication is the property of models which makes them
-hard. Therefore we decided to investigate how much we can constrain
-replication and still have NP-hard problems. As last section of this
-chapter we will investigate restricting replication to have at most 2
-replicas of each chunk type. It turns out that this variant remains
-NP-complete, when it is paired with bandwidth. Our technique is to use
-$3SAT$ as a problem which we reduce from.
-
-\subsection{NP-hardness of model without bandwidth}
+\subsection{Inter-connects are hard}\label{ssec:fprscc}
 
 Set cover problem is well-known NP-complete problem. Other names that
 we can find this problem in literature is Hitting set problem. Many variants of
@@ -42,8 +40,7 @@ being three, and integer $k$. The problem is to decide whether there
 exist a subfamily of sets $S' \subset S$ of cardinality $k$ that
 covers every element in universe.
 
-\subsubsection{Construction}
-
+\textbf{Construction.}
 Idea of the construction is to create a chunk type for every element
 of universe, and encode each subset $S_i$ as a gadget that contains
 replicas of chunks that correspond to its elements. Here it is crucial
@@ -70,8 +67,7 @@ edges. It will consist of gadgets for every set $S_i$. Every gadget
 consists of inner node and three leaves. We place three chunks in
 every gadget; those chunks correspond to elements of $S_i$.
 
-\subsubsection{Proof of correctness}
-
+\textbf{Proof of correctness.}
 Crucial property of communication cost is that VMs should stick
 closely to eachother to incline minimal cost. Therefore, before
 prooving correctness of our reduction we need following lemma:
@@ -128,11 +124,11 @@ sets that correspond to those full gadgets. Also, we know that every
 chunk type was processed. Therefore every element of universe was hit.
 \end{proof}
 
-\subsection{NP-completeness of MA+FP+R}
+\subsection{Multi-Assignments are hard}\label{ssec:fprsma}
 
 3D exact matching introduction here.
 
-\subsubsection{Construction}
+\textbf{Construction.}
 
 \begin{itemize}
 \item tree consists of gadgets for each triple
@@ -146,7 +142,7 @@ chunk type was processed. Therefore every element of universe was hit.
   chunks that correspond to elements of a triple
 \end{itemize}
 
-\subsubsection{Proof}
+\textbf{Proof}
 
 ($=>$) Let's take solution to 3D exact matching. We spawn VM in every
 gadget that corresponds to chosen triples. We match every chunk in a
@@ -156,196 +152,17 @@ cost exactly $\Thr$.
 ($<=$) Let's take solution to $VC$ instance of cost $\leq \Thr$. We
 chose triples that correspond to gadgets where were VMs. Everything
 was processed, therefore every element of X,Y and Z is matched.
-\subsection{NP-completeness of model with bandwidth -
- 3SAT introduction}
-
-We decided to make reduction from Boolean Satisfiability problem (SAT)
-to our Virtual Cluster problem with bandwidth (VCB). SAT is decision
-problem, but VCB is optimization problem with NO answer
-possible. Therefore to make those problems compatible in terms of
-reduction, we consider decision VCB variant, in which instance we have
-additional constant $\Thr$, and instance belongs to VCB if it has feasible
-solution of cost $\leq \Thr$.
-
-Let's remind what decision VCB variant instance consists of:
-\begin{enumerate}
-\item balanced rooted tree $\Tree$
-\item edge capacities $\Bandwidth(e)$
-\item constants $\CostTrans$, $\CostCom$, which are costs of chunk transfer and
-communication
-\item constant $\Vms$, which is desired number of VMs to be spawned
-\item constant $\ChunkTypes$, which is number of types of chunks
-\item sequence of chunks placed in leaves of $\Tree$, possibly replicated
-\item constant $\Thr$
-\end{enumerate}
-
-Let's remind what $\SAT$ instance consists of:
-\begin{enumerate}
-\item clauses (let's name number of clauses as $\Clauses$)
-\item literals
-\item variables (let's name number of variables as $\Vars$
-\end{enumerate}
-
-\subsubsection{Construction}
-Let's take any formula in Conjunctive Normal Form, name it $\Formula$ and produce
-VCB instance $\VCB_{\Formula}$. First, construct the tree $\Tree_{\Formula}$. It will consist of
-a root and separate gadget for each variable of $\Formula$, each of which
-is a child of the root.
 
 
-Gadget for variable $x$ has its root, $var(x)$, and two children:
-$\positive(x)$ and $\negative(x)$. Vertex $\positive(x)$ has $\NClauses$
-children: $x_1, x_2, \ldots, x_{\NClauses}$. Vertex $\negative(x)$ has
-$\NClauses$ children: $\neg x_1, \neg x_2, \dots, x_{\NClauses}$. Every
-gadget has the same structure: the same height, the same number of
-leaves, and the same height. In fact, we will set bandwidth to be the
-same everywhere in every gadget. Differences will be shown when we
-will place data chunks.
+\subsection{Two replicas are hard}\label{ssec:two}
 
-We set number of virtual machines to $v = \NClauses \cdot \NVars$.
-
-Now we will set cost of chunk transportation and cost of communication
-among virtual machines. We set communication cost to be $1$. We set
-trasportation cost to be $\CostTrans = W$, where $W$ is constant large enough
-to disallow transportation. It means that if virtual machine wants to
-process the chunk, it has to be spawned where the data chunk is
-placed. Technically, transportation is not completely disallowed, it
-just inclines cost so huge that every optimal solution has no
-trasportation. TODO: We show how to compute $W$ in appendix.
-
-Now we will set bandwidth constraints in $\Tree_{\Formula}$. There are three
-levels of edges in $\Tree_{\Formula}$: top, middle and bottom. We set
-bandwidth to unlimited at levels bottom and middle. At every edge of
-top level, we set the same bandwidth to: $\NClauses \cdot (\NVars -
-\NClauses)$.
-
-We set number of chunk types to be equal to number of clauses, $\ChunkTypes =
-\NClauses$. To finish construction of $\Tree_{\Formula}$, we need to place data chunks in
-leaves. We do it the following way. For each clause of number $i$ we
-construct as many replicas of chunk $c_i$ as there are literals in
-clause $i$. For each literal $l$ (of form $x$ or $\neg x$) that satisfies clause $i$ we place
-replica of chunk $c_i$ in leaf labeled $c_{l_i}$.
-
-To finish our construction, we need to set value of constant $\Thr$.
-
- We
-do it by calculating communication cost among spawned virtual machines in
-certain solution to our instance. This soulution is constructed by placing
-virtual machines in all leaves of $positive(v)$ and none in leaves
-$negative(v)$ for every gadget for variable $v$. Please note that $Th$
-computed such way do not contain transportation cost. TODO: calculate
-$Th$ in appendix.
-
-\subsubsection{Proof of correctness of construction}
-
-With our construction completed, we need to prove that it indeed
-decides SAT.
-
-Idea behind capacity of set amount is that in every gadget we can
-spawn at most $cl(\Psi)$ virtual machines. Let's prove it formally:
-
-\begin{lemma} (bandwidth lemma)
-  Let $c$ and $v > 4$ be positive natural numbers. Let $a_1, a_2, \ldots,
-  a_v$ be natural number sequence that adds up to $c \cdot v$. Also, for
-  each $i$ we have $a_i \leq 2 \cdot c$. Then, if we have this:
-
-  $$ \forall_i a_i \cdot (c \cdot v - a_i) \leq c \cdot (c \cdot v -
-  c) $$
-
-  then each $a_i = c$.
-\end{lemma}
-\begin{proof}
-
-Let's assume the contrary, which means that there exists such $y$ that
-$a_y \neq c$. Then there are two cases: first, $a_y>c$ and second,
-$a_y<c$. Proof for the first case is presented below; second case
-with pidgeon hole principle results in existance of $a_z > c$, which
-is basically the same (just substitute $a_y := a_z$ in proof below).
-
-As we have $a_y < 2c$, we can say that $a_y$ has form $c +
-k$ for $k \in [1, \ldots, c]$. Let's look at bandwidth inequality:
-
-$$ (c + k) \cdot (c \cdot v - c - k) \leq c \cdot (c \cdot v - c) $$
-
-After transforming it we have:
-
-$$ 0 \leq k(k - (c \cdot (v - 2))) $$
-
-Which is true for $k \leq 0$ or $k \geq c \cdot (v - 2)$, so no
-positive $k \leq c$ can satisfy this inequality for $v > 4$, which gives a contradiction.
-
-\qed
-
-\end{proof}
-
-We will apply this lemma in following way. We interpret $a_i$ as
-number of VMs that are spawned in $i$-th gadget. We set $c$ as number
-of clauses and $v$ as number of variables. LHS of inequality from the
-lemma is formula for communication cost of machines inside $i$-th
-gadget to machines outside the gadget. RHS of the inequality is
-bandwidth constraint for the gadget. Corollary from the lemma is that
-any feasible solution must place exactly $c$ machines in every gadget.
-
-TODO: We need to consider case where $v \leq 4$. We can say that we
-restrict formulas to have 4 or more variables. This subset of $SAT$ remains NP-complete.
-
-\begin{theorem}Formula $\Psi$ is satisfiable iff $VCB_{\Psi}$ has
-solution of cost $\leq Th$.
-\end{theorem}
-
-\begin{proof}
-($=>$) Let's take any valuation $F$ that satisfies $\Psi$. We will construct
-solution to $VCB_{\Psi}$ using F in the following way. For each
-variable $v \in var(\Psi)$ we place $cl(\Psi)$ virtual machines in
-leaves of gadget $var(v)$. We need to choose $cl(\Psi)$ out of
-$2 \cdot cl(\Psi)$ leaves to spawn VMs. If $F(v) = 1$, we spawn all VMs in leaves
-of $positive(v)$, else we spawn all VMs in leaves of
-$negative(v)$. Solution constructed such way has cost exactly
-$Th$, because VMs are evenly splitted among gadgets and VMs are not
-mixed between $positive(v)$ and $negative(v)$ subtrees.
-
-We calculate the matching of chunks to VMs by matching every chunk to
-VM that sits on top of first chunk replica. This solution is feasible
-(every chunk type is processed) basically
-because given valuation satisfied the $\Phi$.
-
-Now we will show that this solution has indeed cost exactly $Th$. We have to
-take only communication cost. This holds because of the bandwidth lemma.
-
-($<=$) Let's take any solution to $VCB_{\Psi}$ of cost $\leq Th$. We
-will construct valuation $F$ using placement of virtual machines in
-solution to $VCB_{\Psi}$.
-
-We need to take following observations. In every solution of cost
-$\leq Th$ every gadget has exactly $ch(\Psi)$ VMs spawned in its
-leaves. It is true because we proved the bandwidth lemma. Also, inside
-every gadget either all VMs are spawned in $positive(v)$ or all VMs
-are spawned in $negative(v)$. It is true because cost of solution
-where at least one gadget has VMs mixed between those branches is
-always greater than $Th$.
-
-TODO: prove it more formally. First, define semi-feasible solution. Let's take any $p,q$ being number of VMs
-spawned in left and right subtree. Then we say that we can improve the
-solution by moving all $q$ to where $p$s lie and we have cheaper solution.
-
-Now we can construct our valuation $F$. We do it the following way
-(for each $v \in var(\Psi)$:
-
-\begin{itemize}
-\item if $v_1$ has machine in it then $F(v) = true$
-\item otherwise $F(v) = false$
-\end{itemize}
-
-Valuation $F$ satisfies $\Psi$ because it satisfies every clauses, as
-$VCB_{\Psi}$ solution processed all the chunks. To see it, let's take
-any clause chunk and see in which leaf it was processed. We take a
-look at label of this leaf. The label is a literal that is a whiteness
-to truthness of this clause.
-\end{proof}
-
-\subsection{NP-completeness of model with bandwidth and replication of
-  degree 2.
-}
+It seems that replication is the property of models which makes them
+hard. Therefore we decided to investigate how much we can constrain
+replication and still have NP-hard problems. As last section of this
+chapter we will investigate restricting replication to have at most 2
+replicas of each chunk type. It turns out that this variant remains
+NP-complete, when it is paired with bandwidth. Our technique is to use
+$3SAT$ as a problem which we reduce from.
 
 
 The idea is to reduce from 3SAT using only replication of degree
@@ -356,7 +173,7 @@ gadgets for clauses. Most fundamental conceptual difference is that
 for every clause we create three chunk types instead of just one (like
 in previous proof).
 
-\subsubsection{Construction.}
+\textbf{Construction.}
 
 We put chunks in following way. First, we put clause chunks in
 variable gadgets like we did in proof of NP-completeness of 3 replica
@@ -384,7 +201,7 @@ We set bandwidth for top edge of each clause gadget to:
 
 $$ bw(c) = 3  \cdot  2  \cdot  (2  \cdot  (c - 1) + 3  \cdot  v) $$
 
-\subsubsection{Proof of correctness of the construction.}
+\textbf{Proof of correctness of the construction.}
 
 \begin{lemma}
 Exactly $c$ VMs are forced to spawn in every of $v$ variable gadgets
