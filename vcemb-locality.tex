@@ -75,7 +75,13 @@
 \newcommand{\Tree}{\ensuremath{T}}
 \newcommand{\CostCom}{\ensuremath{b_1}}
 \newcommand{\CostTrans}{\ensuremath{b_2}}
-\newcommand{\Vms}{\ensuremath{VM}}
+\newcommand{\Vms}{\ensuremath{n}}
+\newcommand{\TSC}{\textsc{3-SC}}
+\newcommand{\TDM}{\textsc{3-DM}}
+\newcommand{\TSAT}{\textsc{3-Sat}}
+\newcommand{\NSAT}{\textsc{Sat}}
+\newcommand{\SAT}{\textsc{Sat}}
+\newcommand{\ZSAT}{\textsc{2-Sat}}
 
 
 \newcommand{\Formula}{\ensuremath{\Psi}}
@@ -90,8 +96,6 @@
 \newcommand{\varx}{\ensuremath{x}}
 \newcommand{\positive}{\ensuremath{positive}}
 \newcommand{\negative}{\ensuremath{negative}}
-\newcommand{\SAT}{\ensuremath{SAT}}
-\newcommand{\TSAT}{\ensuremath{3SAT}}
 \newcommand{\Val}{\ensuremath{Val}}
 \newcommand{\Sol}{\ensuremath{SOL}}
 
@@ -222,7 +226,7 @@ chunks; each virtual machine should be assigned the same number of chunks (up to
 the number of chunks is not a perfect multiple of the number of virtual machines). Moreover, virtual machines need to be connected among each other.
 In order to provide performance guarantees, both the connection to the chunks
 as well as the interconnection between the virtual machines must provide a certain
-minimal bandwidth guarantee; we will refer to the first type of network as the \emph{input 
+minimal bandwidth guarantee; we will refer to the first type of network as the \emph{access 
 network}, and to the second type of network as the \emph{inter-connect}. The inter-connect will
 is modelled as a complete network (a virtual cluster).
 

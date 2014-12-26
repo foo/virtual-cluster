@@ -1,7 +1,8 @@
 We have seen that even problems with multiple dimensions of
-flexibility, e.g., in terms of flexible node placement 
-and replica selection, and even with capacity constraints (our problem
-($\FP+\RS+\BW$) can be solved in polynomial time.
+flexibility, e.g., for the joint optimization of 
+flexible node placement 
+and replica selection, and even under capacity constraints (our problem
+($\FP+\RS+\BW$), can be solved in polynomial time.
 This section now points out fundamental
 limitations in terms of computational tractability. In particular,
 we will show that problems become NP-hard if
@@ -14,253 +15,286 @@ of two levels only (e.g., in a datacenter \emph{pod}). Finally, we show that
 some problems are NP-hard even if the number of replicas is only two
 (Section~\ref{ssec:two}).
 
+\subsection{Inter-connects are hard ($\FP+\RS+\CC$)}\label{ssec:fprscc}
 
-\subsection{Inter-connects are hard}\label{ssec:fprscc}
+We first prove that the joint optimization of node placement and replica selection
+is NP-hard if an inter-connect has to be established between virtual machines.
+In our terminology, this is the  $\FP+\RS+\CC$ problem.
 
-Set cover problem is well-known NP-complete problem. Other names that
-we can find this problem in literature is Hitting set problem. Many variants of
-this problem remain NP-complete. One of those variants is Set cover
-with restriction that every set has cardinality exactly three. We will
-use this $3SC$ problem as the problem we will reduce from.
+The NP-hardness proof is by reduction from the \emph{set cover problem},
+and in particular, from the set cover variant where all 
+sets have cardinality exactly three. We will
+refer to this problem by \emph{3-Set-Cover} or simply $\TSC$;
+it is also NP-hard.
 
-Comment:There they say that 3HS in NP-complete:
+FIXME:There they say that 3HS in NP-complete:
 \url{http://lcbb4.epfl.ch/reading/hitting\%20set/2003-niedermeierFPT3HS.pdf}
 \url{http://www.sciencedirect.com/science/article/pii/S1570866703000091}
 
-We will exploit the fact that we can construct $\VCNB$ instance where
-we set number of VMs to spawn to be greater than number of chunk
-types. Those excessive VMs are not processing any chunks but they are
-still communicating with eachother as well as with processing
-VMs.
-
-First, we need to take decision variant of $3SC$. It is stated the
-following way. We are given the universe $U$, family of universe
-subsets $S = \{ S_1, S_2, \ldots, S_n \}$ with cardinality of each set
-being three, and integer $k$. The problem is to decide whether there
-exist a subfamily of sets $S' \subset S$ of cardinality $k$ that
-covers every element in universe.
+Formally, the input to $\TSC$ is a universe $U$, an integer $k$,
+and a set of subsets
+$S = \{ S_1, S_2, \ldots, S_n \}$ over $U$, where each subset is of 
+cardinality three. The problem is to decide whether there
+exists a set of subsets $S' \subset S$ of cardinality $k$, such that
+every element in $U$ is covered.
 
 \textbf{Construction.}
-Idea of the construction is to create a chunk type for every element
-of universe, and encode each subset $S_i$ as a gadget that contains
-replicas of chunks that correspond to its elements. Here it is crucial
-to use replication, as sets share elements of universe. Set $S_i$ is
-chosen in $3SC$ instance when it has $3$ VMs spawned in it. Processing
-each chunk will correspond to covering all the elements.
+Given an instance of $\TSC$, we construct an instance of a
+$\FP+\RS+\CC$ problem as follows. For each element
+in the universe $U$, we construct a chunk; and for each 
+subset $S_i$, we construct a gadget that contains
+three replicas of chunks corresponding to the elements in the subset. 
+We connect the gadgets in such a way that it is ensured
+that subset $S_i$ is
+chosen in $\TSC$ instance if and only if it contains three nodes. 
+If each chunk is matched to a node, the entire universe
+is covered. 
 
 
-Let's take an instance $I$ of $3SC$. We will create VC instance $\VCNB_I$ in following
-way. Let's start by setting integer constants in our instance:
+Concretely, let $I$ be an instance of $\TSC$. We will create an instance $I'$
+for $\FP+\RS+\CC$ as follows: 
 \begin{itemize}
-\item set transportation cost to some huge constant $\CostTrans = W$
-  with idea of forbidding transportation. We will show how to
-  calculate $W$ in an appendix, right now we can think about it as $W
-  = \infty$.
-\item set communication cost to $\CostCom = 1$
-\item set number of VMS to $\Vms = 3 \cdot k$
-\item set $\Thr =  3 \cdot k + 3 \cdot 3 \cdot 2 \cdot (k - 1)$
+\item We set the access cost $\CostTrans$ to a replica to a high value $W$. This will force
+nodes to be collocated with the replica.
+(For now, we can assume that $W=\infty$; a lower and sufficient bound will be given
+in the appendix.)
+\item The communication cost in the inter-connect is set to $\CostCom = 1$.
+\item The number of nodes (virtual machines) is $\Vms = 3 \cdot k$.
+\item We use a threshold $\Thr =  3 \cdot k + 3 \cdot 3 \cdot 2 \cdot (k - 1)$.
 \end{itemize}
 
+We construct a height-2 substrate tree 
+as follows. For each $S_i$ we construct a gadget
+consisting of an inner node (a router) and three leaves. Every gadget
+contains three chunks, corresponding to the elements of $S_i$.
 
-Then we construct the tree $\Tree_I$. It will have height 2 counted in number of
-edges. It will consist of gadgets for every set $S_i$. Every gadget
-consists of inner node and three leaves. We place three chunks in
-every gadget; those chunks correspond to elements of $S_i$.
+FIXME: The construction is illustrated in Figure~\ref{fig:fprscc}.
 
 \textbf{Proof of correctness.}
-Crucial property of communication cost is that VMs should stick
-closely to eachother to incline minimal cost. Therefore, before
-prooving correctness of our reduction we need following lemma:
-
-\begin{lemma}
-In every $\VCNB$ solution $\Sol$ of cost $\leq \Thr$ we have exactly
-$3$ VMs in $k$ gadgets and rest of the $n-k$ gadgets remain empty.
+Intuitively, in order to minimize embedding costs,
+nodes should be placed on near-by replicas. We use the following
+helper lemma. 
+\begin{lemma}\label{lemma:helper}
+In every valid solution $\Sol$ of $I'$ of cost $\leq \Thr$, each gadget
+falls in one of two categories: 
+$k$ gadgets have exactly
+$3$ nodes, and $n-k$ gadgets remain empty.
 \end{lemma}
 \begin{proof}
-First, we notice that it is never beneficial to
-transport chunks, as $W$ is already exceeding $\Thr$. Also we know that
-$\Sol$ is feasible, therefore $|U|$ VMs sit on top of the chunks they
-are processing.
-
-Let's look at every pair of VMs that communicate. We
-will count how many VMs communicate over 2 hop and how many
-communicate over 4 hops. We do it by starting with 4 hops
-communication and subtracting 2 hops for every pair of VMs that sit in
-the same gadget. We notice that with constant number of VMs to spawn,
-the more gadgets containing VMs the less 2 hop communications there
-are. Communication cost is optimal when every gadget contains exactly
-3 VMs, because then we subtract 3 pair. We chosen $\Thr$ to be exactly
-the cost of such solution. Therefore, no solution that spawns VMs in
-more than $k$ gadgets will ever have cost $\leq \Thr$.
+Since $W=\infty$, nodes will always be placed
+directly on chunks (the access network cost is zero). 
+Moreover, since
+$\Sol$ is valid, $|U|$ nodes are mapped
+directly to the different chunk locations. 
+Now, consider any pair of nodes communicating over the
+inter-connect; due to our construction, the communication cost 
+for each such pair is either 
+2 hops (if they belong to the same gadget) or 4 hops (if they belong
+to different gadgets). 
+The lemma then follows from the observation that $\Thr$
+is chosen such that it is never possible to distribute nodes
+among more than $k$ gadgets, and that it is always strictly better to
+have exactly 0 or 3 nodes per gadget, than any alternative distribution.
 \end{proof}
 
 \begin{theorem}
-$I \in 3SC$ iff $\VCNB_I$ has solution of cost $\leq \Thr$.
+$\FP+\RS+\CC$ is NP-hard.
 \end{theorem}
 \begin{proof}
+Let $I$ be an instance of $\TSC$ and let $I'$ be an instance of
+$\FP+\RS+\CC$ constructed as described above.
+We prove that $I'$ has solution of cost $\leq \Thr$ if ($\Rightarrow$) and only if
+($\Leftarrow$)
+$I$ has a solution of $k$.
 
-($=>$) Let's take the covering set $S = \{S_1, S_2, \ldots, S_k\}$ and place $3$ VMs in each gadget that
-corresponds to every set of $S$. We match VMs to chunks the following
-way: we traverse VMs one by one, and if the VM sit on top of the chunk
-type that was not yet processed, we match that them; otherwise we set
-the VM to be idle. Let's calculate the cost of the solution:
-\begin{itemize}
-\item communication cost inside gadget is $2 \cdot {3 \choose 2}$,
-  because we take every pair and add 2 hop communication cost
-\item communication cost from single gadget to all other gadgets is $4
-  \cdot 3 \cdot 3 \cdot (k - 1) / 2$, where $2$ is a factor inclined by
-  communication over $4$ hops, $3$ is the number of VMs in the gadget,
-  $3 \cdot (k-1)$ is the number of VMs that sit in other gadgets, and
-  $/2$ is inclined by counting every pair twice
-\end{itemize}
+($\Rightarrow$) In order to compute a solution
+for $I'$ given a solution for $I$, we proceed as follows.
+Given a covering set $S = \{S_1, S_2, \ldots, S_k\}$, we place three nodes in each gadget that
+corresponds to every subset. Nodes are matched to chunks 
+as follows: we traverse nodes one by one, and if the node is
+located at a chunk which has not been taken into account yet,
+the chunk is assigned to this node; otherwise 
+the node is set to idle. 
+The solution has the following cost: 
+(1) the communication cost inside a gadget is $2 \cdot {3 \choose 2}$,
+  as every pair contributes two hops;
+  (2) the communication cost from each gadget to all other gadgets is $4
+  \cdot 3 \cdot 3 \cdot (k - 1) / 2$, where the factor $2$ is 
+  for the 
+  communication over $4$ hops, the factor $3$
+  corresponds to the number of nodes per gadget, and 
+  $3 \cdot (k-1)$ is the number of nodes in remote gadgets; 
+  as we count each pair twice, we need to divide by two in the end.
+Summing up over all $k$ gadgets, we get exactly $\Thr$.
 
-By summing above costs over every of $k$ gadgets, we have cost equal
-to $\Thr$.
-
-($<=$) Let's take VC solution. First, we apply our lemma that in $\leq
-\Thr$-cost
-solution $k$ gadgets are full of VMs. We construct our hitting set from
-sets that correspond to those full gadgets. Also, we know that every
-chunk type was processed. Therefore every element of universe was hit.
+($\Leftarrow$) Given a solution for $I'$,
+we can exploit Lemma~\ref{lemma:helper} to construct a solution for $I$.
+We know that in any solution of cost at most $\Thr$,
+$k$ gadgets contain exactly 3 nodes. These gadgets correspond to a valid
+set cover of size $k$: every
+chunk and hence element in the universe, is covered. 
 \end{proof}
 
-\subsection{Multi-Assignments are hard}\label{ssec:fprsma}
+\subsection{Multi-Assignments are hard ($\FP+\RS+\MA$)}\label{ssec:fprsma}
 
-3D exact matching introduction here.
+Next, we show the hardness of a problem variant without inter-connect,
+but where nodes are assigned multiple chunks, namely the $\FP+\RS+\MA$
+problem.
+The reduction is from three-dimensional matchings, a generalization of bipartite matchings
+to 3-uniform hypergraphs, henceforth called
+$\TDM$.~\cite{3dmatch} 
+
+$\TDM$ is defined as follows. We are given three finite and disjoint sets $X$, $Y$, and $Z$, 
+as well as a subset of triples $T\subset X \times Y \times Z$.
+Set $M \subseteq T$ is a 3-dimensional matching if and only if, 
+for any two distinct triples $(x_1, y_1, z_1) \in M$ and $(x_2, y_2, z_2) \in M$,
+it holds that $x_1\neq x_2$, $y_1\neq y_2$, and $z_1\neq z_2$. Our goal is to 
+maximize the cardinality of $M$. 
 
 \textbf{Construction.}
-
+Given an instance $I$ of $\TDM$, we construct an instance $I'$ of
+$\FP+\RS+\MA$ as follows:
 \begin{itemize}
-\item tree consists of gadgets for each triple
-\item chunks correspond to elements of X,Y and Z
+\item We construct a tree consisting of gadgets, where each gadget corresponds to a triple.
+\item Chunks correspond to elements in $X$, $Y$ and $Z$
 \item $|X| = |Y| = |Z| = k$
-\item we set TC to 1
+\item we set $\CostTrans=1$
 \item we set m to 3
 \item we set number of VMs to $k$
-\item we set threshold to $2 \cdot 2 \cdot k$
+\item we set $\Thr=2 \cdot 2 \cdot k$
 \item each gadget consists of 3 leaves and parent; in leaves there are
   chunks that correspond to elements of a triple
 \end{itemize}
 
-\textbf{Proof}
+\textbf{Correctness.}
 
-($=>$) Let's take solution to 3D exact matching. We spawn VM in every
+\begin{theorem}
+$\FP+\RS+\MA$ is NP-hard.
+\end{theorem}
+\begin{proof}
+Let $I$ be an instance of $\TDM$ and let $I'$ be an instance of
+$\FP+\RS+\MA$ constructed as described above.
+We prove that $I'$ has solution of cost $\leq \Thr$ if ($\Rightarrow$) and only if
+($\Leftarrow$)
+$I$ has a matching of size $k$.
+
+($\Rightarrow$) Let us take a solution to $\TDM$. We spawn VM in every
 gadget that corresponds to chosen triples. We match every chunk in a
 gadget to machine in this gadget (only for chosen ones). Solution has
 cost exactly $\Thr$.
 
-($<=$) Let's take solution to $VC$ instance of cost $\leq \Thr$. We
+($\Leftarrow$) Let's take solution to $VC$ instance of cost $\leq \Thr$. We
 chose triples that correspond to gadgets where were VMs. Everything
 was processed, therefore every element of X,Y and Z is matched.
-
-
-\subsection{Two replicas are hard}\label{ssec:two}
-
-It seems that replication is the property of models which makes them
-hard. Therefore we decided to investigate how much we can constrain
-replication and still have NP-hard problems. As last section of this
-chapter we will investigate restricting replication to have at most 2
-replicas of each chunk type. It turns out that this variant remains
-NP-complete, when it is paired with bandwidth. Our technique is to use
-$3SAT$ as a problem which we reduce from.
-
-
-The idea is to reduce from 3SAT using only replication of degree
-$2$. How can we simulate this behavior using only two replicas? First,
-let's reduce from $3SAT$ instead of $SAT$. Our tree $T_{\Psi}$
-will consist of two types of gadgets: gadgets for variables and
-gadgets for clauses. Most fundamental conceptual difference is that
-for every clause we create three chunk types instead of just one (like
-in previous proof).
-
-\textbf{Construction.}
-
-We put chunks in following way. First, we put clause chunks in
-variable gadgets like we did in proof of NP-completeness of 3 replica
-model with the difference that now we place distinct chunks instead of
-three copies of the same chunk.  Secondly, we place three chunks that
-correspond to clause in all three leaves of their clausule gadgets. We
-place in total $6 \cdot c$ variable chunks chunks this way.
-
-We set number of spawned VMs to $cv + 2c$. Our intention is that in
-every variable gadget there will lie $c$ VMs and in every of clause
-gadgets there will lie $2$ VMs.
-
-We set bandwidth for top edge of each variable gadget to:
-
-$$ bw(v) = 3  \cdot  3  \cdot  (3  \cdot  (v - 1) + 2  \cdot  c) $$
-
-
-First factor is distance on tree which is 6 divided by 2 (which is a
-factor caused by counting every communication twice). Second factor is
-number of VMs that spawn in every variable gadget. First compound of a
-sum is 3 times number of outer variable gadgets. Second compound of a
-sum is number of VMs that spawn in each of c clause gadgets.
-
-We set bandwidth for top edge of each clause gadget to:
-
-$$ bw(c) = 3  \cdot  2  \cdot  (2  \cdot  (c - 1) + 3  \cdot  v) $$
-
-\textbf{Proof of correctness of the construction.}
-
-\begin{lemma}
-Exactly $c$ VMs are forced to spawn in every of $v$ variable gadgets
-and exactly $2$ VMs are forced to spawn in every of $c$ clause gadgets
-in every solution of cost $\leq Th$.
-\end{lemma}
-
-\begin{proof}
-We show it by using bandwidth constraints. We have to take into
-consideration following communication paths: (1) communication to
-other variable gadgets; (2) communication to clause gadgets Extended
-bandwidth lemma. In every solution of cost $\leq Th$ we have exactly
-$c$ VMs in each variable gadget and $2$ VMs in each clause gadget.
-
 \end{proof}
 
-\begin{theorem}Constructed $VCB$ instance has solution of cost $\leq
-  Th \iff \Formula \in 3SAT$.
-\end{theorem}
 
+\subsection{Two replicas are hard ($\FP+\RS(2)+\BW$)}\label{ssec:two}
+
+Our results so far indicate that dealing with replication can be challenging.
+However, all our hardness proofs concerned scenarios with three replicas,
+which raises the question whether the problems can be solved in polynomial time
+with a replication factor of two only. (Similarly, say, to the $ZSAT$ problem
+which is tractable in contrast to $\TSAT$.)
+
+In the following, we show that this is not the case: the problem remains
+NP-hard, at least in the capacitated network. 
+
+The proof is by reduction from $\TSAT$. Given a formula $\Psi$ in
+conjunctive normal form, we construct a problem instance and substrate tree 
+$T_{\Psi}$ using two types of gadgets: gadgets for variables and
+gadgets for clauses. Nota bene: 
+unlike in the previous proofs, for every clause we will create three chunk types instead of just one.
+
+\textbf{Construction.}
+We distribute chunks among servers as follows. First, 
+similarly to the previous proofs with three replicas, we put clause chunks in
+variable gadgets; however, now we place distinct chunks instead of
+three copies of the same chunk. Second, we place three chunks that
+correspond to clauses in all three leaves of their clause gadgets. 
+Thus, in total, $6 \cdot c$ variable chunks are mapped.
+We will consider a setting where $cv + 2c$ nodes need to be mapped. Our intention is that in
+every variable gadget, there will be $c$ nodes,
+ and in every of clause
+gadgets there will be two nodes.
+
+The available bandwidth of the top edge of each variable gadget is set to
+$ bw(v) = 3  \cdot  3  \cdot  (3  \cdot  (v - 1) + 2  \cdot  c) $.
+The first factor is the tree distance which is 6 divided by 2 (as
+we count each pair twice). The second factor is
+the number of nodes to be placed in every variable gadget. 
+So the first term of the 
+sum is three times the number of outer variable gadgets,
+and the second term is the
+number of nodes in each of the $c$ clause gadgets.
+
+The available bandwidth for the top edge of each clause gadget is set to
+$ bw(c) = 3  \cdot  2  \cdot  (2  \cdot  (c - 1) + 3  \cdot  v) $.
+
+\textbf{Proof of correctness.}
+We first prove the following helper lemma.
+\begin{lemma}
+Every valid solution to $\FP+\RS(2)+\BW$
+with cost at most $\Thr$ has the property that
+there are exactly $c$ nodes in each of the $v$ variable gadgets
+and exactly two nodes in each of the $c$ clause gadgets.
+\end{lemma}
 \begin{proof}
-($=>$) If we have a valuation, we fill variable gadgets with VMs like in
-proofs before. Then we fill $2 \cdot c$ VMs in following way:
+The claim is due to the bandwidth constraints. We have to take into
+consideration the following communication paths: 
+communication to clause gadgets and 
+communication to
+other variable gadgets. 
+In every valid solution of cost at most $\Thr$ we have exactly
+$c$ VMs in each variable gadget and $2$ VMs in each clause gadget.
+\end{proof}
 
+\begin{theorem}
+$\FP+\RS(2)+\BW$ is NP-hard.
+\end{theorem}
+\begin{proof}
+We show that $\FP+\RS(2)+\BW$ has a solution of cost $\leq
+  \Thr$ if and only if $\Formula \in \TSAT$.
+  
+($\Rightarrow$) If we have a positive valuation of $\Formula$, we fill variable gadgets with nodes like in
+the proofs before. Then we fill $2 \cdot c$ nodes as follows:
 \begin{itemize}
-\item if first literal satisfied the clause, we put $2$ VMs in second and
-third leaf of clause gadget
-\item if first literal not satisified the clause, we put $2$ VMs in first
+\item If the first literal satisfied the clause, we put two nodes in the second and
+third leaf of the corresponding clause gadget.
+\item If the first literal does not satisfy the clause, we put two VMs in first
 and second leaf of clause gadget
 \end{itemize}
 
-We compute matching of chunks to VMs in the following way:
+We assign chunks to nodes as follows:
 \begin{itemize}
-\item chunk $c_i^1$ is matched to VM that sits in variable gadget; there
-should be one like that, because the valuation satisfies
-\item chunks $c_i^2$ and $c_i^3$ are matched to VMs that sit in clause
-gadgets; there exists minimal-cost solution where VMs sit there
+\item Chunk $c_i^1$ is matched to the node which is located in a variable gadget; there
+must be one, as the valuation satisfies the formula.
+\item Chunks $c_i^2$ and $c_i^3$ are matched to nodes which are
+located in clause
+gadgets; there exist minimal-cost solutions where VMs sit there
 \end{itemize}
 
-We produced feasible solution of cost $\Thr$, because there were no
-transport and VMs communicated in predicted way.
+Thus, we have produced a feasible solution of cost $\Thr$, as there are no
+access and inter-connect costs. 
 
-($<=$) In order to finish the proof, we must prove the existance of
-valuation that satisfies $\Formula$.
-Let's take any solution $\Sol$ to $\VCNB_{\Formula}$ instance of cost $\leq \Thr$.
-
-We create valuation Val in following way:
+($\Leftarrow$) 
+Let's take any solution $\Sol$ to $\FP+\RS(2)+\BW$ of cost $\leq \Thr$.
+Then we can compute a positive valuation as follows:
 \begin{itemize}
-\item $\Val(v) = T$ iff there lies VM on first leaf on positive side of $v$ gadget in $SOL$
-\item $\Val(v) = F$ otherwise
+\item We set $\Val(v) = \top$ iff there lies VM on first leaf on positive side of $v$ gadget in $\Sol$
+\item Otherwise, we set $\Val(v) = \bot$.
 \end{itemize}
 
-\begin{lemma}For every clause there exist a VM in variable gadget that processes one of
-  3 chunks that correspond to that clause.
+The theorem now follows from the following two additional lemmas.
+\begin{lemma}
+For every clause there exists a node in a variable gadget that processes one of
+  three chunks that correspond to that clause.
 \end{lemma}
 \begin{proof}
- Every of $3$ chunks that correspond to every clause has machine sitting
-on top of it. At least one of those $3$ is not idle in a variable gadget
-- otherwise those two VMs in clause gadgets would not suffice in
+ Each of the three chunks that correspond to every clause,
+ is assigned a collocated node. 
+ At least one of those three nodes is not idle in a variable gadget;
+otherwise, those two VMs in clause gadgets would not suffice in
 satisfying all chunk types.\end{proof}
 
 Observation. It might happen that in $SOL$ $2$ VMs in
@@ -268,22 +302,20 @@ clause variables are idle, and $3$ VMs in variable gadgets are
 processing those $3$ chunk types, then we can take arbitrary in the rest
 of the proof.
 
-
-\begin{lemma}$\Val$ satisfies $\Formula$.
+\begin{lemma}
+$\Val$ satisfies $\Formula$.
 \end{lemma}
 \begin{proof}
-Let's take matching $M$ of $\Sol$. Let's take arbitrary clause of
-$\Formula$ and its $3$ chunk types
-: $c_i^1, c_i^2, c_i^3$. Let's name machines corresponding to them
+Let's take the matching $M$ of $\Sol$, and let's take an arbitrary clause of
+$\Formula$ and its $3$ chunk types: $c_i^1, c_i^2, c_i^3$. Let's name machines corresponding to them
 to $vm_i^1, vm_i^2, vm_i^3$. Two of those lie in clause gadgets. Let's
 take the chunk type that was processed in variable
 gadgets and look at where it was processed. Look how was labeled the
 leaf the VM lies. In our valuation Val we set this literal to have
 value True. Therefore the clause is satisfied.
 \end{proof}
-
-This last lemma proves our theorem.
 \end{proof}
+
 \subsection{Images}
 
 \begin{figure}[htbp]
