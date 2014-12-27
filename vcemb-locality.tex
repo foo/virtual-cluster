@@ -53,6 +53,7 @@
 \newcommand{\Leaf}{\ensuremath{l}}
 \newcommand{\Leaves}{\ensuremath{L}}
 \newcommand{\Chunks}{\ensuremath{\textsc{chunks}}}
+\newcommand{\aroot}{\emph{root}}
 
 \newcommand{\clauses}{\alpha}
 \newcommand{\vars}{\beta}
@@ -417,36 +418,43 @@ or approximation algorithms.
 \begin{appendix}
 
 
-\section{The Bandwidth Lemma}
+\section{Bandwidth Lemma}
+
+The following lemma is useful in our NP-hardness proofs.
 
 \begin{lemma}[Bandwidth Lemma]\label{lem:bandwidth-lemma}
-  Let $c$ and $v > 4$ be positive natural numbers. Let $a_1, a_2, \ldots,
-  a_v$ be natural number sequence that adds up to $c \cdot v$. Also, for
-  each $i$ we have $a_i \leq 2 \cdot c$. Then, if we have this:
-
+  Let $c$ and $v > 4$ be two arbitrary positive integers. Let $a_1, a_2, \ldots,
+  a_v$ be a sequence of $v$ integers which adds up to $c \cdot v$. Also, for
+  each $i$ we have $a_i \leq 2 \cdot c$. Then it holds that if 
   $$ \forall_i a_i \cdot (c \cdot v - a_i) \leq c \cdot (c \cdot v -
-  c) $$
-
-  then each $a_i = c$.
+  c), $$
+\noindent  then for each $i$, $a_i = c$.
 \end{lemma}
 \begin{proof}
-Let's assume the contrary, which means that there exists such $y$ that
-$a_y \neq c$. Then there are two cases: first, $a_y>c$ and second,
-$a_y<c$. Proof for the first case is presented below; second case
-with pidgeon hole principle results in existance of $a_z > c$, which
-is basically the same (just substitute $a_y := a_z$ in proof below).
+For the sake of contradiction, let us assume that there exists an index $k$ such that
+$a_k \neq c$. Then we can distinguish between two cases: 
+either $a_k<c$ or
+$a_k>c$. 
 
-As we have $a_y < 2c$, we can say that $a_y$ has form $c +
-k$ for $k \in [1, \ldots, c]$. Let's look at bandwidth inequality:
+\textbf{Case $a_k<c$:} If there exists a $k$ with $a_k<c$,
+due to the fact that the sequence sum adds up to $c \cdot v$,
+there must also exist a $k'$ such that $a_{k'}<c$ (by a simple
+pigeon hole principle). Thus, this case can
+also be reduced to the second case (\textbf{Case $a_k>c$}) proved
+next
 
-$$ (c + k) \cdot (c \cdot v - c - k) \leq c \cdot (c \cdot v - c) $$
+\textbf{Case $a_k>c$:} Since it also holds that $a_k < 2c$, 
+$a_k$ must be of the form $c + x$ for $x \in [1, \ldots, c]$. 
+Let us consider the (bandwidth) inequality:
+$$ (c + x) \cdot (c \cdot v - c - x) \leq c \cdot (c \cdot v - x) $$
 
-After transforming it we have:
+This can be transformed to:
 
-$$ 0 \leq k(k - (c \cdot (v - 2))) $$
+$$ 0 \leq x(x - (c \cdot (v - 2))) $$
 
-Which is true for $k \leq 0$ or $k \geq c \cdot (v - 2)$, so no
-positive $k \leq c$ can satisfy this inequality for $v > 4$, which gives a contradiction.
+The equation holds for $x \leq 0$ or $x \geq c \cdot (v - 2)$, 
+and no 
+positive $x \leq c$ can satisfy this inequality for $v > 4$. Contradiction.
 \end{proof}
 
 
@@ -455,125 +463,126 @@ positive $k \leq c$ can satisfy this inequality for $v > 4$, which gives a contr
 We prove that $\RS+\FP+\BW$ is NP-hard by reduction from the Boolean Satisfiability Problem ($\SAT$).
 Since $\SAT$ is a decision
 problem, we transform $\RS+\FP+\BW$ into a decision problem too, by
-introducing a cost threshold $\Thr$. 
+introducing a cost threshold $\Thr$.
 
 Let's first recall that the $\SAT$ problem asks whether a positive valuation exists
-for a formula $\Formula$ with $\clauses$ clauses and $\variables$ variables. 
+for a formula $\Formula$ with $\clauses$ clauses and $\variables$ variables.
+In the following, we will only focus on $\SAT$ instances of at least four variables;
+this problem remains NP-hard.
 
 \textbf{Construction.}
-\begin{comment}
-Given any formula $\Formula$ in Conjunctive Normal Form, we produce
-a $\RS+\FP+\BW$ instance as follows. First, we construct a substrate tree, consisting of
+Given any formula $\Formula$ in Conjunctive Normal Form (CNF) with at least four variables, we produce
+a $\RS+\FP+\BW$ instance as follows. First, we construct a substrate tree $\Tree_{\Formula}$, consisting of
 a root and separate gadgets for each variable of $\Formula$, each of which
 is a child of the root.
-The gadget of variable $v$ has a root, $\root(v)$, and two children:
+The gadget of variable $v$ has a root, $\aroot(v)$, and two children:
 $\positive(v)$ and $\negative(v)$. Vertex $\positive(v)$ has $\clauses$
-children: $v_1, v_2, \ldots, v_{\clauses}$. Vertex $\negative(x)$ has
-$\clauses$ children: $\neg v_1, \neg v_2, \dots, v_{\clauses}$. Every
+many children $v_1, v_2, \ldots, v_{\clauses}$, and vertex $\negative(v)$ has
+$\clauses$ many children $\neg v_1, \neg v_2, \dots, v_{\clauses}$. Every
 gadget has the same structure: the same height and the same number of
-leaves. In fact, we will set the available bandwidth to be the
-same everywhere, in every gadget. Differences will be shown when we
+leaves. By default, we will set the available bandwidth to be the
+same everywhere, in every gadget; differences will be shown when we
 will place chunks.
-\end{comment}
 
 We set the number of virtual machines to $n = \clauses \cdot \variables$.
 Moreover, we define the inter-connect communication cost to be $1$,
 and the access cost to be a sufficiently large constant $W$,
-such that nodes must always be collocated with chunks. 
+such that nodes must always be collocated with chunks.
 (For a concrete value, use $W=$TODO).
 
 
 We set the following bandwidth capacities in the substrate. There are three
-levels of edges in $\Tree_{\Formula}$: \emph{top}, \emph{middle} and \emph{bottom}. 
-We do not consider any capacities at the \emph{bottom} and \emph{middle} levels. 
+levels of edges in the substrate tree $\Tree_{\Formula}$ given by formula
+$\Formula$: \emph{top}, \emph{middle} and \emph{bottom}.
+We do not consider any capacities at the \emph{bottom} and \emph{middle} levels.
 At a top-level edge, we set the bandwidth to $\clauses \cdot (\variables -
 \clauses)$.
 
-We set number of chunks to be equal to number of clauses, $\ChunkTypes =
+We set the number of chunks to be equal to the number of clauses, $\ChunkTypes =
 \clauses$. To finish our construction, we place data chunks at
 leaves, as follows: for the $i$-th clause we
 construct as many replicas of chunk $\achunk_i$ as there are literals in the
 clause. For each literal $\ell$ (of the form $v$ or $\neg v$) that satisfies clause $i$ we place
-replica of chunk $c_i$ in leaf labeled $c_{l_i}$.
+replica of chunk $\achunk_i$ in leaf labeled $\achunk_{\ell_i}$.
 
-The threshold $\Thr$ is calculated by the 
+The threshold $\Thr$ is given by the
 communication cost among nodes in
-a certain solution to our instance. This solution is constructed by placing
-virtual machines in all leaves of $positive(v)$ and none in leaves
-$negative(v)$ for every gadget for variable $v$. Please note that $Th$
+a certain solution to our instance. This solution is constructed by embedding
+nodes at all leaves of $\positive(v)$ and none at leaves
+$\negative(v)$, for every gadget for variable $v$. Please note that $\Thr$
 computed such way do not contain transportation cost. TODO: calculate
 $\Thr$.
 
 \textbf{Proof of correctness of construction.}
 With our construction completed, we need to prove that it indeed
-decides $\SAT$.
+decides $\SAT$. We set the capacities such that in every gadget,
+at most $\clauses$ nodes can be spawned, where $\clauses$
+is the number of clauses of $\Formula$.
+We can apply the Bandwidth Lemma (Lemma~\ref{lem:bandwidth-lemma}) as follows:
+We interpret $a_i$ as the
+number of nodes that are embedded in the $i$-th gadget; we set $c=\clauses$ 
+to be the number
+of clauses and $v=\variables$ to be the number of variables. 
+The LHS of the inequality of Lemma~\ref{lem:bandwidth-lemma}
+is a formula for the communication cost of nodes inside the $i$-th
+gadget to nodes outside the gadget. The RHS of the inequality is the
+bandwidth constraint for the gadget. This implies that
+any feasible solution must embed exactly $c$ nodes in every gadget.
 
-Idea behind capacity of set amount is that in every gadget we can
-spawn at most $cl(\Psi)$ virtual machines, according to the
-Bandwidth Lemma. FIXME. 
-We will apply this lemma in following way. We interpret $a_i$ as
-number of VMs that are spawned in $i$-th gadget. We set $c$ as number
-of clauses and $v$ as number of variables. LHS of inequality from the
-lemma is formula for communication cost of machines inside $i$-th
-gadget to machines outside the gadget. RHS of the inequality is
-bandwidth constraint for the gadget. Corollary from the lemma is that
-any feasible solution must place exactly $c$ machines in every gadget.
 
-TODO: We need to consider case where $v \leq 4$. We can say that we
-restrict formulas to have 4 or more variables. This subset of $SAT$ remains NP-complete.
-
-\begin{theorem}Formula $\Psi$ is satisfiable iff $VCB_{\Psi}$ has
-solution of cost $\leq Th$.
+\begin{theorem}
+The problem $\RS+\FP+\BW$ is NP-hard.
 \end{theorem}
-
 \begin{proof}
-($=>$) Let's take any valuation $F$ that satisfies $\Psi$. We will construct
-solution to $VCB_{\Psi}$ using F in the following way. For each
-variable $v \in var(\Psi)$ we place $cl(\Psi)$ virtual machines in
-leaves of gadget $var(v)$. We need to choose $cl(\Psi)$ out of
-$2 \cdot cl(\Psi)$ leaves to spawn VMs. If $F(v) = 1$, we spawn all VMs in leaves
-of $positive(v)$, else we spawn all VMs in leaves of
-$negative(v)$. Solution constructed such way has cost exactly
-$Th$, because VMs are evenly splitted among gadgets and VMs are not
-mixed between $positive(v)$ and $negative(v)$ subtrees.
+We will prove that formula $\Formula$ is satisfiable iff $\RS+\FP+\BW$ has
+solution of cost $\leq \Thr$.
+
+($\Rightarrow$) Let's take any valuation $\Val$ that satisfies $\Formula$. 
+We will construct a solution to $\RS+\FP+\BW$ using $\Val$ in the following way. 
+For each variable $v$ in $\Formula$, we embed $\clauses$ many virtual machines 
+at the  leaves of the gadget of $v$. We need to choose $\clauses$ out of
+$2 \cdot \clauses$ leaves to embed nodes. If $\Val(v) = 1$, we embed
+nodes at the leaves
+of $\positive(v)$, else we embed all nodes at leaves $\negative(v)$. 
+The solution constructed this way has cost exactly
+$\Thr$, because the nodes are evenly split among gadgets, and nodes are not
+distributed across $\positive(v)$ and $\negative(v)$ subtrees.
 
 We calculate the matching of chunks to VMs by matching every chunk to
 VM that sits on top of first chunk replica. This solution is feasible
 (every chunk type is processed) basically
 because given valuation satisfied the $\Phi$.
 
-Now we will show that this solution has indeed cost exactly $Th$. We have to
-take only communication cost. This holds because of the bandwidth lemma.
+Now we will show that this solution has cost $\Thr$. 
+Due to the Bandwidth Lemma (Lemma~\ref{lem:bandwidth-lemma}),
+we only have to consider the communication cost. 
 
-($<=$) Let's take any solution to $VCB_{\Psi}$ of cost $\leq Th$. We
-will construct valuation $F$ using placement of virtual machines in
-solution to $VCB_{\Psi}$.
+($\Leftarrow$) Let's take any solution to $\RS+\FP+\BW$ constructed based on $\Formula$ of cost $\leq \Thr$. 
+We will construct a positive valuation $\Val$ by considering the nodes in
+the solution to $\RS+\FP+\BW$.
 
-We need to take following observations. In every solution of cost
-$\leq Th$ every gadget has exactly $ch(\Psi)$ VMs spawned in its
-leaves. It is true because we proved the bandwidth lemma. Also, inside
-every gadget either all VMs are spawned in $positive(v)$ or all VMs
-are spawned in $negative(v)$. It is true because cost of solution
-where at least one gadget has VMs mixed between those branches is
-always greater than $Th$.
+We make the following observations. In every solution of cost
+$\leq \Thr$, every gadget has exactly $\clauses$ many nodes 
+at its leaves. This is due to the Bandwidth Lemma. Also, inside
+every gadget either all nodes are in the $\positive(v)$ subtree
+of variable $v$, or in the $\negative(v)$ subtree. This is true 
+because the cost of a solution where at least one gadget has nodes
+distributed across subtrees is
+always greater than $\Thr$.
 
-TODO: prove it more formally. First, define semi-feasible solution. Let's take any $p,q$ being number of VMs
+TODO Maciek: prove it more formally. First, define semi-feasible solution. Let's take any $p,q$ being the number of nodes
 spawned in left and right subtree. Then we say that we can improve the
 solution by moving all $q$ to where $p$s lie and we have cheaper solution.
 
-Now we can construct our valuation $F$. We do it the following way
-(for each $v \in var(\Psi)$:
+Now we can construct our valuation $\Val$, as follows 
+(for each variable $v$ in $\Formula$):
+If $v_1$ hosts a node then $\Val(v) = \top$, 
+otherwise $\Val(v) = \bot$.
 
-\begin{itemize}
-\item if $v_1$ has machine in it then $F(v) = true$
-\item otherwise $F(v) = false$
-\end{itemize}
-
-Valuation $F$ satisfies $\Psi$ because it satisfies every clauses, as
-$VCB_{\Psi}$ solution processed all the chunks. To see it, let's take
-any clause chunk and see in which leaf it was processed. We take a
-look at label of this leaf. The label is a literal that is a whiteness
-to truthness of this clause.
+The valuation $\Val$ satisfies all clauses, and hence $\Formula$,
+as the solution to $\RS+\FP+\BW$ covers all chunks. To see this,
+consider the leaf handling any given clause chunk;
+it is a witness that the corresponding clause is true.
 \end{proof}
 
 
