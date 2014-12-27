@@ -1,5 +1,5 @@
 FILE = vcemb-locality
-FILES = dynamic_embedding.tex models.tex np-completeness.tex
+FILES = dynamic_embedding.tex models.tex np-completeness.tex flow.tex matching.tex
 PICT = 
 
 all: $(FILE).pdf
