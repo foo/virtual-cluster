@@ -236,6 +236,8 @@ minimal bandwidth guarantee; we will refer to the first type of network as the \
 network}, and to the second type of network as the \emph{inter-connect}. The inter-connect will
 is modelled as a complete network (a virtual cluster).
 
+TODO: if we ever want to put 2 replica NP-completeness proof, we need to introduce idle machines 
+
 FIXME: introduce formal concepts
 
 \textbf{Optimization Objective.} Our goal is to develop algorithms which minimize
@@ -511,10 +513,10 @@ any feasible solution must embed exactly $c$ nodes in every gadget.
 
 
 \begin{theorem}
-The problem $\RS+\FP+\BW$ is NP-hard.
+The problem $\RS+\FP+\BW+\CC$ is NP-hard.
 \end{theorem}
 \begin{proof}
-We will prove that formula $\Formula$ is satisfiable iff $\RS+\FP+\BW$ has
+We will prove that formula $\Formula$ is satisfiable iff $\RS+\FP+\BW+\CC$ has
 solution of cost $\leq \Thr$.
 
 ($\Rightarrow$) Let's take any valuation $\Val$ that satisfies $\Formula$. 
