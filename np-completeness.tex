@@ -2,7 +2,7 @@ We have seen that even problems with multiple dimensions of
 flexibility, e.g., for the joint optimization of
 flexible node placement
 and replica selection, and even under capacity constraints (our problem
-($\FP+\RS+\BW$), can be solved in polynomial time.
+($\FP+\CC+\MA+\BW$), can be solved in polynomial time.
 This section now points out fundamental
 limitations in terms of computational tractability. In particular,
 we will show that problems become NP-hard if
@@ -16,6 +16,8 @@ some problems are NP-hard even if the number of replicas is only two
 (Section~\ref{ssec:two}).
 
 \subsection{Inter-connects are hard ($\FP+\RS+\CC$)}\label{ssec:fprscc}
+
+TODO: in order to forget about idle machines, we need to reduce this problem from 3 dimensional perfect matching
 
 We first prove that the joint optimization of node placement and replica selection
 is NP-hard if an inter-connect has to be established between virtual machines.
@@ -191,7 +193,7 @@ was processed, therefore every element of X,Y and Z is matched.
 \end{proof}
 
 
-\subsection{Two replicas are hard ($\FP+\RS(2)+\BW$)}\label{ssec:two}
+\subsection{Two replicas are hard ($\FP+\RS(2)+\BW+\CC$)}\label{ssec:two}
 
 Our results so far indicate that dealing with replication can be challenging.
 However, all our hardness proofs concerned scenarios with three replicas,
@@ -239,7 +241,7 @@ FIXME: The construction is illustrated in Figure~\ref{fig:two}.
 \textbf{Proof of correctness.}
 We first prove the following helper lemma.
 \begin{lemma}
-Every valid solution to $\FP+\RS(2)+\BW$
+Every valid solution to $\FP+\RS(2)+\BW+\CC$
 with cost at most $\Thr$ has the property that
 there are exactly $\clauses$ nodes in each of the $\vars$ variable gadgets
 and exactly two nodes in each of the $\clauses$ clause gadgets.
@@ -255,10 +257,10 @@ $\clauses$ nodes in each variable gadget and two nodes in each clause gadget.
 \end{proof}
 
 \begin{theorem}
-$\FP+\RS(2)+\BW$ is NP-hard.
+$\FP+\RS(2)+\BW+\CC$ is NP-hard.
 \end{theorem}
 \begin{proof}
-We show that $\FP+\RS(2)+\BW$ has a solution of cost $\leq
+We show that $\FP+\RS(2)+\BW+\CC$ has a solution of cost $\leq
   \Thr$ if and only if $\Formula\in \TSAT$ is satisfiable.
 
 ($\Rightarrow$) If we have a positive valuation of $\Formula$, we fill variable gadgets with nodes like in
@@ -269,6 +271,9 @@ third leaf of the corresponding clause gadget.
 \item If the first literal does not satisfy the clause, we map two nodes to the first
 and second leaf of the clause gadget.
 \end{itemize}
+
+TODO: chunk assignment should be based on valuation!
+
 We then assign chunks to nodes as follows:
 \begin{itemize}
 \item Chunk $\achunk_i^1$ is matched to the node which is located in a variable gadget; there
