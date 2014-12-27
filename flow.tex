@@ -26,7 +26,11 @@ instance of $\Problem$ is infeasible.
 \item The required bandwidth $\CostTrans$ between each chosen chunk and the 
 assigned VM of a given $\VC$ is 
 the same and the pathes to the VMs have to be embedded as unsplittable 
-pathes. Hence, all edge capacities in can be normalized to $\CostTrans = 1$.
+pathes.
+
+TODO: rethink if normalization allows solving the problem by integer min-cost-max flow
+
+Hence, all edge capacities in can be normalized to $\CostTrans = 1$.
 \item For a (by model) fixed node mapping $\NodeMapping$ and a given chunks to 
 vm assignment $\VmChunkAssignment$, the computation of a cost 
 optimal link mapping can be transformed to an integral minimal cost multi-commodity 
