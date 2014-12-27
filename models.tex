@@ -84,6 +84,7 @@ assignment of VMs to chunks $\VmChunkAssignment : \Chunks \rightarrow
 
 \includegraphics[angle=90,origin=c, height=7cm]{figs/model_fig_skteches/basic_problem}
 \caption{basic problem}
+\label{fig:basic_problem}
 \end{figure}
 \begin{figure}
 
@@ -215,13 +216,45 @@ rather chosen by the described strategy. Concretely, $\NodeMapping$ is no
 longer given, but part of the optimization within $\Problem$. We assume that
 each leaf can only host one VM.
 
+\subsection{Combined models} In this paper we analyse combinations of the 
+different properties listed above. 
 
-\subsection{Summary of our results}
+\begin{figure}[htbp]
+\includegraphics[width =\columnwidth]{figs/model_ma_r_cv}
+\caption{An example instance of $\Problem$ with $ma$ + $cv$ + $r$. An
+optimal solution is indicated by the dashed (transport costs) and dotted 
+(communication costs) lines. }
+\label{fig:model_combined}
+\end{figure}
 
-One day there will be a graph of all problems with arrows
-corresponding to reductions and with partitioning to solution
-approaches ((M)atching, (D)ynamic, (F)low, (N)p-hard).
+An example of this can be seen in Figure~\ref{fig:model_combined}, which shows 
+an instance of $\Problem$, with the additional properties $ma$, $cv$ and $r$. 
+The host graph consists of 14 nodes. 9 nodes are leaves; 2 VMs are allready 
+embedded on leaves; with $\RedundancyFactor = 2$ and $\MaFactor = 2$ we have 4 
+chunk types, and two VMs of each type. The solution to this instance is also 
+depicted: The data from $\Chunk_{1_1}$ and $\Chunk_{2_1}$ is read by 
+$\VirtualNode_1$, $\Chunk_{3_2}$ and $\Chunk_{4_2}$ are read by 
+$\VirtualNode_2$. The dashed light gray lines indicate transport 
+costs $\CostTrans$. Note that no bandwidth is neccessary to transport data from 
+$\Chunk_{2_1}$ to $\VirtualNode_1$, since these are collocated. The link 
+connecting the node, which hosts $\VirtualNode_2$ with it's parent, the 
+transport costs ammount to $2 \CostTrans$ - indicated by two dashed lines. In 
+addition to this, the figure illustrates the communication costs $\CostCom$, 
+which are indicated by the dotted dark gray line.
 
+%\subsection{Summary of our results}
+
+\begin{figure}[htbp]
+\includegraphics[width = \columnwidth]{figs/summary}
+\caption{foo}
+\label{fig:summary}
+\end{figure}
+
+This paper presents polynomial time algorithms or NP-hardness prooves for 
+\textit{all} possible comibnations of properties. An overview, of which problem 
+can be solved by which algorihms can be found in Figure~\ref{fig:summary}.
+
+\begin{comment}
 \begin{enumerate}
 \item basic problem - M
 \item ma - M
@@ -256,11 +289,8 @@ approaches ((M)atching, (D)ynamic, (F)low, (N)p-hard).
 \item r + bw + cv + fp - N
 \item ma + r + bw + cv + fp - N
 \end{enumerate}
+\end{comment}
 
 
-\begin{figure}[htbp]
-\includegraphics[width = \columnwidth]{figs/summary}
-\caption{foo}
-\label{fig:summary}
-\end{figure}
+
 

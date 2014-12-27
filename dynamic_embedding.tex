@@ -1,8 +1,10 @@
 \subsection{Dynamic programming based solutions}
 
-In this section we will present a dynamic programming solution to
-virtual cluster embedding with flexible placement (FP), communication
-among VMs (CC) and bandwidth constraints (BW).
+Dynamic programming is an algorithmic paradigm, which can be exploited in 
+order to solve instances of $\Problem$, which contain the properties $fp$ + 
+$cv$ + $ma$ and $bw$. This section will describes an dynamic programming based 
+algorithm which solves $fp$ + $cv$ + $bw$, and points out how to extend or 
+reduce it to other combinations of properties.
 
 %\subsection{new}
 
@@ -27,6 +29,7 @@ or beneath $\SubstrateNode$, we set $\Opt_\SubstrateNode[i] = \infty$.
 
 
 \newcommand{\NodesToProcess}{\ensuremath{\textsc{nodesToProcess}}}
+
 \begin{algorithm}[tbhp]
 \DontPrintSemicolon % Some LaTeX compilers require you to use
 %\dontprintsemicolon instead
