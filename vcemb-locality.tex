@@ -32,13 +32,14 @@
 \newcommand{\Chunk}{\ensuremath{c}}
 \newcommand{\Problem}{\textsc{DummyName Problem}}
 \newcommand{\carlo}[1]{\textcolor{red}{#1}}
+\newcommand{\maciek}[1]{\textcolor{green}{#1}}
 \newcommand{\MaFactor}{\ensuremath{\textsc{MA}}}
 \newcommand{\Path}{\ensuremath{p}}
 \newcommand{\RedundancyFactor}{\ensuremath{r}}
 
 \newcommand{\VmChunkAssignment}{\ensuremath{ASS_v}}
 \newcommand{\NodeMapping}{\ensuremath{MAP_v}}
-\newcommand{\ChunkLocation}{\ensuremath{Location}}
+\newcommand{\ChunkLocation}{\ensuremath{\textsc{loc}}}
 
 \newcommand{\ChunkType}{\ensuremath{textsc{ct}}}
 \newcommand{\VirtualNodes}{\ensuremath{V_V}}
@@ -298,7 +299,10 @@ problem exhibits interesting connections to classic matching and
 flow problems. In this section, we point out these connections and
 exploit them to devise polynomial-time algorithms for a wide range
 of problem variants. We also show that a large number of problems
-can be solved optimally using dynamic programming.
+can be solved optimally using dynamic programming. Note that all proposed 
+algorithms solve the problem optimally w.r.t. to the overall bandwidth costs 
+independently of $\CostTrans$ and (if present in the properties) $\CostCom$ and 
+$\Capacity$
 
 \input{matching}
 

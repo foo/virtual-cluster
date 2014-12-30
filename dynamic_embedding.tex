@@ -6,10 +6,12 @@ $cv$ + $ma$ and $bw$. This section will describes an dynamic programming based
 algorithm which solves $fp$ + $cv$ + $bw$, and points out how to extend or 
 reduce it to other combinations of properties.
 
-TODO: if we ever want to put 2 replica NP-completeness proof, we need to 
-introduce idle machines
+\maciek{TODO: if we ever want to put 2 replica NP-completeness proof, we need 
+to introduce idle machines}
 
-TODO: here we need to explicitly say what we mean by mixing MA and idle machines; just as a reminder, we decided to force the machines to be full or empty
+\maciek{TODO: here we need to explicitly say what we mean by mixing MA and idle 
+machines; just as a reminder, we decided to force the machines to be full or 
+empty}
 
 %\subsection{new}
 
@@ -19,20 +21,155 @@ TODO: here we need to explicitly say what we mean by mixing MA and idle machines
 
 \newcommand{\Uplink}{\ensuremath{\textsc{uplink}}}
 \newcommand{\ChunkCount}{\ensuremath{\textsc{ChunkCount}}}
+\newcommand{\VmCount}{\ensuremath{\textsc{VMCount}}}
+\newcommand{\Right}{\ensuremath{r}}
+\newcommand{\InverseAssignment}{\ensuremath{\VmChunkAssignment^{-1}}}
 
 
-To compute a solution $\Sol$ for an instance of $\Problem$, we compute an 
-integer $\ChunkCount_\SubstrateNode$ and an array 
-$\Opt_\SubstrateNode$ on each node $\SubstrateNode \in 
-\SubstrateNodes$. $\ChunkCount_\SubstrateNode$ contains the number of chunks at 
-or below 
-$\SubstrateNode$ and $\Opt_\SubstrateNode[i]~i\in \{0,\dots,\Vms\}$ contains the 
-total cost ($\CostCom$ + $\CostTrans$) for placing $i$ VMs at or beneath 
-$\SubstrateNode$. These costs account for bandwidth costs on 
-$\Uplink(\SubstrateNode)$. To denote that it is impossible to place $i$ VMs at 
-or beneath $\SubstrateNode$, we set $\Opt_\SubstrateNode[i] = \infty$.
+We start with some observations on optimal solutions for $\Problem$. For these 
+we introduce two aditional functions: $\ChunkCount : \SubstrateNodes 
+\rightarrow 
+2^\Chunks$ yields which chunks are located beneath a specific node in 
+the host graph. The evaluation of $\ChunkCount$ can be done in a simple bottom 
+up manner: All leaf nodes $\Leaf_i$ are initialized with $\ChunkCount(\Leaf_i) 
+= \{\Chunk_j\}$ if a chunk is present at $\Leaf_i$ ($\exists ~ \Chunk_j \in 
+\Chunks : \ChunkLocation(\Chunk_j) = \Leaf_i \Leftrightarrow 
+\ChunkCount(\Leaf_i) = \{\Chunk_j\}$.), and with $\ChunkCount(\Leaf_i) = 
+\emptyset$ otherwise ($\ChunkLocation(\Chunk_j) \neq \Leaf_i \forall \Chunk_j 
+\in 
+\Chunks \Leftrightarrow \ChunkCount(\Leaf_i) = \emptyset$). On every non-leaf 
+node $\SubstrateNode_i \in \SubstrateNodes / \Leaves$, the count count is equal 
+to the union of the childrens chunk count values 
+($\ChunkCount(\SubstrateNode_i) 
+= \bigcup_{\SubstrateNode_k \in \Children{\SubstrateNode_i}} 
+\ChunkCount(\SubstrateNode_k)$). In addition we introduce a second function 
+$\VmCount : \SubstrateNodes \rightarrow 2^{\VirtualNodes}$, which represents 
+the same information about VMs instead of chunks, and can be evaluted in the 
+same bottom-up fashion.
 
+\begin{lemma}
+\label{lemma:matching1}
+For a given VM mapping $\NodeMapping$ and any subtree $\Tree' \subseteq 
+\Tree$ with the root $\SubstrateNode'$, which contains at least one VM per 
+chunk $|\ChunkCount(\SubstrateNode')| \geq |\VmCount(\SubstrateNode')$, an 
+optimal chunk to VM assignment $\VmChunkAssignment$, cannot assign a chunk 
+to a VM outside of $\Tree'$ ($\VmChunkAssignment(\Chunk_j) \in 
+\VmCount(\SubstrateNode')~ \forall \Chunk_j \in \ChunkCount(\SubstrateNode')$).
+\end{lemma}
 
+\begin{proof}
+ By Contradiction. Assume $\VmChunkAssignment$ is an optimal chunk to vm 
+assignment $\VmChunkAssignment$ with $\VmChunkAssignment(\Chunk_j) 
+=\VirtualNode_l \notin \VmCount(\SubstrateNode')$. $\VmChunkAssignment$ assigns 
+the property for any subtree $\Tree'$. From $|\ChunkCount(\SubstrateNode')| 
+\geq 
+|\VmCount(\SubstrateNode')$ follows that there is at least one combiantion of 
+VM 
+$\VirtualNode_m \in \VmCount(\SubstrateNode')$ and chunk $\Chunk_k \notin 
+\ChunkCount(\SubstrateNode')$ with $\VmChunkAssignment(\Chunk_k) = 
+\VirtualNode_m$. Let $\Tree''$ with the root $\SubstrateNode''$ denote the 
+smallest subtree of $\Tree$ with $\Tree' \subset \Tree'' \subseteq \Tree$ and 
+$\VirtualNode_l \in \VmCount(\SubstrateNode'')$. We will now show, that an 
+alternate assignment $\VmChunkAssignment'$ with 
+$\VmChunkAssignment'(\Chunk_j) = \VirtualNode_m$ and 
+$\VmChunkAssignment'(\Chunk_k) = \VirtualNode_l$, as lower costs, to generate 
+the contradiction. We do this, with the following case diffentiation: 
+\\
+\textbf{Case 1:} $\Chunk_k \in \ChunkCount(\SubstrateNode'')$\\
+$\Distance(\NodeMapping(\VirtualNode_l), \ChunkLocation(\Chunk_k)) \leq 
+\Distance(\NodeMapping(\VirtualNode_l), \ChunkLocation(\Chunk_j)$ and 
+$\Distance(\NodeMapping(\VirtualNode_m), \ChunkLocation(\Chunk_j)) < 
+\Distance(\NodeMapping(\VirtualNode_m), \ChunkLocation(\Chunk_k)$. Due to the 
+direct correlation of $\CostPerChunk$ and $\Distance$, exchanging the 
+assignment of $\Chunk_j$ and $\Chunk_k$ will reduce the overall costs, since 
+$\CostPerChunk(\VirtualNode_m)$ will be reduced, 
+$\CostPerChunk(\VirtualNode_l)$ cannot be increased, and the other components 
+of the costs remain unchanged. As a result $\VmChunkAssignment'$ has lower 
+costs than $\VmChunkAssignment$, which is in contraction, to the optimality of
+$\VmChunkAssignment$.\\
+\textbf{Case 2:} $\Chunk_k \notin \ChunkCount(\SubstrateNode'')$\\
+Since $\Tree$ is balanced we get $\Distance(\NodeMapping(\VirtualNode_m), 
+\ChunkLocation(\Chunk_k)  = \Distance(\NodeMapping(\VirtualNode_l), 
+\ChunkLocation(\Chunk_k)$. In addition $\Distance(\NodeMapping(\VirtualNode_l, 
+\Chunk_j)) > \Distance(\NodeMapping(\VirtualNode_m, 
+\Chunk_j)) $ holds, since $\VirtualNode_m \in \VmCount(\SubstrateNode')$ and 
+$\VirtualNode_l \notin 
+\VmCount(\SubstrateNode')$. Hence swapping the assignment of $\Chunk_j$ and 
+$\Chunk_k$ will reduce $\CostPerChunk(\Chunk_j)$, and keep all other costs 
+stable. This however is in contraction to the cost optimality of 
+$\VmChunkAssignment$, since $\VmChunkAssignment'$ would be cheaper.
+\end{proof}
+
+\begin{lemma}
+\label{lemma:matching2}
+For a given VM mapping $\NodeMapping$ and any subtree $\Tree' \subseteq 
+\Tree$ with the root $\SubstrateNode'$, which contains at least one Chunk per 
+VM $|\ChunkCount(\SubstrateNode')| \leq |\VmCount(\SubstrateNode')$, an 
+optimal chunk to VM assignment $\VmChunkAssignment$, cannot assign a chunk 
+which is not in $\ChunkCount(\SubstrateNode')$ to a VM in 
+$\VmCount(\SubstrateNode')$ ($\VmChunkAssignment(\Chunk_j) \in 
+\VmCount(\SubstrateNode')~ \rightarrow \Chunk_j \in 
+\ChunkCount(\SubstrateNode')$).
+\end{lemma}
+
+\begin{proof}
+ Analog to Lemma~\ref{lemma:matching1}
+\end{proof}
+
+\begin{corollary}
+For a given VM mapping $\NodeMapping$ and any subtree $\Tree' \subseteq 
+\Tree$ with the root $\SubstrateNode'$, which contains $n = 
+|\ChunkCount(\SubstrateNode')|$ chunks and $m = |\VmCount(\SubstrateNode')|$ 
+VMs, the bandwidth costs of an optimal assignment $\VmChunkAssignment$ for 
+transferring the chunks to the VMs ($\Cost_T$ 
+component) on $\Uplink(\SubstrateNode')$ are $|n 
+- m| \cdot \CostTrans$.
+\end{corollary}
+
+\begin{proof}
+ Follows from Lemma~\ref{lemma:matching1} and 
+Lemma~\ref{lemma:matching2}. \carlo{TODO: Is this to fast? Do we need more 
+expalantion here?}
+\end{proof}
+
+\begin{lemma}
+ For a given VM mapping $\NodeMapping$ and any subtree $\Tree' \subseteq 
+\Tree$ with the root $\SubstrateNode'$, which contains $n 
+= |\VmCount(\SubstrateNode')|$ VMs, the communication costs on 
+$\Uplink(\SubstrateNode')$ are $n \cdot (\Vms - n) 
+\cdot 
+\CostCom$.
+\end{lemma}
+
+\begin{proof}
+Due to the fact the nodemapping is given, the enpoints of the communication 
+pathes are known. Since $\Tree$ is a tree, there exists only one path between 
+two nodes in the substrate. These pathes do not contain the 
+$\Uplink(\SubstrateNode')$ if, both VMs are mapped to nodes in $\Tree'$. 
+However, each of the $n$ VMs inside $\Tree'$ has to communicate with each VM 
+outside of $\Tree'$. The number of VMs outside of $\Tree$ is the total number 
+of VMs, minus the amount of VMs inside $\Tree'$, resulting in $n \cdot (\Vms - 
+n)$ communications - which each inflict $\CostCom$ bandwidth costs.
+\end{proof}
+To compute a solution $\Sol$ for an instance of $\Problem$ we leverage a
+function $\Opt : \SubstrateNodes \times \mathbb{N} \rightarrow \mathbb{R}$ 
+which respresents the minimal bandwidth costs of placing a specific amount of 
+VMs at or beneath a node in the host graph. This function can be evaluated 
+efficiently in a bottom up manner. After $\Opt$ is evaluated for the entire 
+tree, $\Sol$ can be constructed from the values of $\Opt$.
+
+%$\ChunkCount_\SubstrateNode$ contains the 
+%number of chunks at 
+%or below 
+%$\SubstrateNode$ and $\Opt_\SubstrateNode[i]~i\in \{0,\dots,\Vms\}$ contains 
+%the 
+%total cost ($\CostCom$ + $\CostTrans$) for placing $i$ VMs at or beneath 
+%$\SubstrateNode$. These costs account for bandwidth costs on 
+%$\Uplink(\SubstrateNode)$. To denote that it is impossible to place $i$ VMs at 
+%or beneath $\SubstrateNode$, we set $\Opt_\SubstrateNode[i] = \infty$.
+%
+%, we generate a 
+%function $\ChunkCount : \SubstrateNode \rightarrow \mathbb{N}$ and second 
 \newcommand{\NodesToProcess}{\ensuremath{\textsc{nodesToProcess}}}
 
 \begin{algorithm}[tbhp]
@@ -68,7 +205,13 @@ or beneath $\SubstrateNode$, we set $\Opt_\SubstrateNode[i] = \infty$.
 \caption{$binarize(\SubstrateNode \in \SubstrateNodes)$}
 \label{algo:binarization}
 \end{algorithm}
-\vspace{-1.5em}
+
+
+
+
+
+
+
 
 Our dynamic program works on bianry trees. Algorithm~\ref{algo:binarization} 
 shows the algorithm to recursively binarize a (sub-)tree with the root $v$:
@@ -92,10 +235,66 @@ they exists.
 %and create a new virtual node $v^*$. We create a new edge $e^*_1$, set it's 
 %cost to $1$ and it's capacity to $\Bandwidth(e)$.
 
+%In addition we evaluate a function $\ChunkCount : \SubstrateNodes \rightarrow 
+%2^\Chunks$, which yields which chunks are located beneath a specific node in 
+%the host graph. The evaluation of $\ChunkCount$ can be done in a simple 
+%bottom 
+%up manner: All leaf nodes $\Leaf_i$ are initialized with 
+%\ChunkCount(\Leaf_i) 
+%= \{\Chunk_j\}$ if a chunk is present at $\Leaf_i$ ($\exists ~ \Chunk_j \in 
+%\Chunks : \ChunkLocation(\Chunk_j) = \Leaf_i \Leftrightarrow 
+%\ChunkCount(\Leaf_i) = \{\Chunk_j\}$.), and with $\ChunkCount(\Leaf_i) = 
+%\emptyset$ otherwise ($\ChunkLocation(\Chunk_j) \neq \Leaf_i \forall \Chunk 
+%\in 
+%\Chunks \Leftrightarrow \ChunkCount(\Leaf_i) = \emptyset$). On every non-leaf 
+%node $\SubstrateNode_i \in \SubstrateNodes / \Leaves$, the count count is 
+%equal 
+%to the union of the childrens chunk count values 
+%($\ChunkCount(\SubstrateNode_i) 
+%= \bigcup_{\SubstrateNode_k \in \Children{\SubstrateNode_i}} 
+%\ChunkCount(\SubstrateNode_k)$).
+
+\subsection{under construction - will partially be copied to the previous 
+section}
+
 After the binarziation of $\Tree$ and the initialization of 
 $\OPT_\SubstrateNode \forall \SubstrateNode \in \SubstrateNodes$ 
 (Line~\carlo{todo}), we can compute $\OPT_\SubstrateNode$ in a bottom up 
-manner. Since only one VM can be mapped to a leaf, $\OPT_\SubstrateNode[i] = 
+manner. 
+
+On the leaves the initialization of $\Opt$ works in the following way: For 0 or 
+1 VMs which are placed at the Leaf $\Leaf_i$, we set $\Opt(\Leaf_i, n \in 
+\{0,1\}) = 0$; for all other amounts of VMs we set $\Opt(\Leaf_i, n \in 
+\{2,\dots,\Vms\}) = \infty$, to represent that these amount of VMs are 
+infeasible at or below the leaves.
+
+To recursively compute $\Opt(\SubstrateNode_i, n \in \{0,\dots\Vms\})$ for a 
+non-leaf node $\SubstrateNode_i \in \SubstrateNodes / \Leaves$, we leverage the 
+following observations: 
+
+\begin{enumerate}
+ \item Since our model does not allow to place VMs at non-leaf nodes, 
+the problem of placing $n$ VMs beneath $\SubstrateNode_i$, will always result in
+placing $\Right$ VMs in the subtree 
+beneath one child of $\SubstrateNode_i$ and $n - \Right$ in the subtree below 
+the other child of $\SubstrateNode_i$. 
+\item Let $\VmCount : \SubstrateNodes \rightarrow 2^{\VirtualNodes}$, be a 
+function, which indicates which VMs are located in the subtree with a given 
+root. The computation can be handled in the same way as the computation of 
+$\ChunkCount$. For a given VM mapping $\NodeMapping$, an optimal chunk to VM 
+assignment $\VmChunkAssignment$ will never violate the following properties for 
+any subtree $\Tree' \subseteq \Tree$ where $\SubstrateNode'$ denotes the root of 
+$\Tree'$.
+
+$$ |\ChunkCount(\SubstrateNode')| \leq |\VmCount(\SubstrateNode')| \rightarrow 
+\VmChunkAssignment(\Chunk_j) \in \VmCount \forall \Chunk_j \in \ChunkCount$$
+
+$$ |\ChunkCount(\SubstrateNode')| \geq |\VmCount(\SubstrateNode')| \rightarrow 
+\InverseAssignment(\VirtualNode_j) \in \ChunkCount \forall \VirtualNode_j \in 
+\VirtualNodes$$
+\end{enumerate}
+
+Since only one VM can be mapped to a leaf, $\OPT_\SubstrateNode[i] = 
 \infty \forall i \in \{2,..,\Vms\}$. The values of 
 $\OPT_\SubstrateNode[i]$ for $i \in \{0,1\}$, depend on the presence of a Chunk 
 at $\SubstrateNode$. If there is a chunk at $\SubstrateNode$, and we decide to 
@@ -203,7 +402,6 @@ in order to account for the fact, that each VM processes $\MaFactor$ many
 chunks. The same modification has to be added to the computation on the leaf 
 nodes.
 
-\begin{comment}
 \subsection{old}
 
 TODO:
@@ -303,4 +501,3 @@ certain amount of time in every of $2|T|$ vertices of binary
 tree (2 is there because of binary transformation). This time can be
 bound by iterating over splits of $n$ into two integers, times some
 constant and we do it for every possible number of VMs from $0$ to $n$. Therefore, resulting running time is $O(Nn^2)$.
-\end{comment}

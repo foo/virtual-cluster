@@ -4,6 +4,9 @@ This section describes our model. We will start by describing a simplistic
 version of our model, and continue to introduce new properties until we reach
 the full model.
 
+\newcommand{\CostPerChunk}{\ensuremath{\textsc{cost}}}
+\newcommand{\Distance}{\ensuremath{\textsc{dist}}}
+
 \subsection{Symbols}
 
 This is a dummy section to introduce the symbols used later...
@@ -75,7 +78,15 @@ transferred along a (potentially empty) path $\Path_j =
 \SubstrateNode_z)$, and $\SubstrateEdge_n = (\SubstrateNode_y,
 \NodeMapping(\VirtualNode_i))$.  For the sake of simplicity we assume that
 transferring a chunk over a link in the host graph inflicts bandwidth cost of
-$\CostTrans$ on this link. The overall objective of $\Problem$ is to find an
+$\CostTrans$ on this link. \carlo{NEW: We refer to the sum of all bandwidth 
+costs for the transport of specific chunks to vms by the function 
+$\CostPerChunk : \Chunks \cup \VirtualNodes \rightarrow \mathbb{R}$. Note, that 
+$\CostPerChunk(\Chunk_j) = \CostPerChunk(\VmChunkAssignment(\Chunk_j))$ and
+$\CostPerChunk(\Chunk_j) = \Distance(\ChunkLocation(\Chunk_j), 
+\NodeMapping(\VmChunkAssignment(\Chunk_j))) \cdot \CostTrans$, where $\Distance 
+: \SubstrateNodes \times \SubstrateNodes \rightarrow \mathbb{N}$ denotes the 
+distance in number of hops of two nodes in the host graph.} The overall 
+objective of $\Problem$ is to find an
 assignment of VMs to chunks $\VmChunkAssignment : \Chunks \rightarrow
 \SubstrateNodes$, so that the overall costs $\sum_{j \in
 \{1,\dots,\ChunkTypes\}} |\Path_j|$ are minimized.
@@ -144,6 +155,12 @@ to a path in the host graph, which connects the locations to which the two VMs
 are mapped. For the sake of simplicity we assume, that two VMs which communicate
 inflict bandwidth cost of $\CostCom$ on each link of the path, which they use
 for their communication.
+
+\carlo{NEW: With this model extension the total costs $\Cost = \Cost_T + 
+\Cost_C$ are composed of the costs for the transport $\Cost_T$ and the costs 
+for communication among the VMs $\Cost_C$. $\Cost_C$ depends only on 
+$\NodeMapping$, while $\Cost_T$ depends on $\NodeMapping$ and 
+$\VmChunkAssignment$.}
 
 \begin{figure}
 
