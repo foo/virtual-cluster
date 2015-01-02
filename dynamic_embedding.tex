@@ -20,32 +20,66 @@ empty}
 %\newcommand{\Cost}{\ensuremath{\textsc{cost}}}
 
 \newcommand{\Uplink}{\ensuremath{\textsc{uplink}}}
-\newcommand{\ChunkCount}{\ensuremath{\textsc{ChunkCount}}}
-\newcommand{\VmCount}{\ensuremath{\textsc{VMCount}}}
+\newcommand{\ChunkCount}{\ensuremath{\textsc{cis}}}
+\newcommand{\VmCount}{\ensuremath{\textsc{vis}}}
 \newcommand{\Right}{\ensuremath{r}}
 \newcommand{\InverseAssignment}{\ensuremath{\VmChunkAssignment^{-1}}}
 
-
-We start with some observations on optimal solutions for $\Problem$. For these 
-we introduce two aditional functions: $\ChunkCount : \SubstrateNodes 
+Our dynamic programming approach depends heavyly on the fact that, given the 
+amounts of VMs and Chunks in a given subtree $\Tree' \subset \Tree$, the 
+bandwidth costs of an optimal assignment $\VmChunkAssignment$ on 
+$\Uplink(\SubstrateNode')$, where $\SubstrateNode'$ is the root of $\Tree'$, 
+can be computed efficiently. To show this, we have to introduce two aditional 
+functions: $\ChunkCount : \SubstrateNodes 
 \rightarrow 
-2^\Chunks$ yields which chunks are located beneath a specific node in 
-the host graph. The evaluation of $\ChunkCount$ can be done in a simple bottom 
+2^\Chunks$ yields which chunks are located in the subtree where the root node 
+is the argument. The evaluation of $\ChunkCount$ can be done in a 
+simple bottom 
 up manner: All leaf nodes $\Leaf_i$ are initialized with $\ChunkCount(\Leaf_i) 
 = \{\Chunk_j\}$ if a chunk is present at $\Leaf_i$ ($\exists ~ \Chunk_j \in 
 \Chunks : \ChunkLocation(\Chunk_j) = \Leaf_i \Leftrightarrow 
-\ChunkCount(\Leaf_i) = \{\Chunk_j\}$.), and with $\ChunkCount(\Leaf_i) = 
+\ChunkCount(\Leaf_i) = \{\Chunk_j\}$), and with $\ChunkCount(\Leaf_i) = 
 \emptyset$ otherwise ($\ChunkLocation(\Chunk_j) \neq \Leaf_i \forall \Chunk_j 
 \in 
 \Chunks \Leftrightarrow \ChunkCount(\Leaf_i) = \emptyset$). On every non-leaf 
-node $\SubstrateNode_i \in \SubstrateNodes / \Leaves$, the count count is equal 
-to the union of the childrens chunk count values 
+node $\SubstrateNode_i \in \SubstrateNodes / \Leaves$, $\ChunkCount$ is equal 
+to the union of the childrens' $\ChunkCount$s
 ($\ChunkCount(\SubstrateNode_i) 
 = \bigcup_{\SubstrateNode_k \in \Children{\SubstrateNode_i}} 
 \ChunkCount(\SubstrateNode_k)$). In addition we introduce a second function 
-$\VmCount : \SubstrateNodes \rightarrow 2^{\VirtualNodes}$, which represents 
-the same information about VMs instead of chunks, and can be evaluted in the 
-same bottom-up fashion.
+$\VmCount : \SubstrateNodes \rightarrow 2^{\VirtualNodes}$, which stores for 
+every node $\SubstrateNode'$, which VMs are present in the subtree $\Tree'$ 
+with the root $\SubstrateNode'$. $\VmCount$ can be evaluted in the 
+same bottom-up fashion as $\ChunkCount$.
+
+For the efficient computation it is 
+important to show, that an optimal assignment will always assign chunks to VMs 
+in the same subtree - if possible. More formally we proove that the following 
+corollary holds for the transport costs $\Cost_T$:  
+
+\begin{corollary}
+\label{corollary:local_matching}
+For a given VM mapping $\NodeMapping$ and any subtree $\Tree' \subseteq 
+\Tree$ with the root $\SubstrateNode'$, which contains $n = 
+|\ChunkCount(\SubstrateNode')|$ chunks and $m = |\VmCount(\SubstrateNode')|$ 
+VMs, the bandwidth costs of an optimal assignment $\VmChunkAssignment$ for 
+transferring the chunks to the VMs ($\Cost_T$ 
+component) on $\Uplink(\SubstrateNode')$ are $|n 
+- m| \cdot \CostTrans$.
+\end{corollary}
+
+To show Corollary~\ref{corollary:local_matching}, we will use two lemmas, which 
+cover the cases $|\ChunkCount(\SubstrateNode')| \geq 
+|\VmCount(\SubstrateNode')|$ and $|\ChunkCount(\SubstrateNode')| \leq 
+|\VmCount(\SubstrateNode')|$ - showing that an optimal assignment 
+$\VmChunkAssignment$, will assign chunks locally (i.e. to VMs in the 
+same subtree). All chunks which cannot be served locally will be served in 
+other subtrees, resulting in the transport costs on $\Uplink(\SubstrateNode')$ 
+described in Corollary~\ref{corollary:local_matching}. When the amount of VM 
+exceeds the amount of chunks in $\Tree'$, the transport costs will still occur, 
+since some chunks $\Chunk_j \notin \ChunkCount(\SubstrateNode')$ will have to 
+be transported to the VMs in $\VmCount(\SubstrateNode')$, which cannot be 
+assigned to chunks in $\ChunkCount(\SubstrateNode')$.
 
 \begin{lemma}
 \label{lemma:matching1}
@@ -58,7 +92,7 @@ to a VM outside of $\Tree'$ ($\VmChunkAssignment(\Chunk_j) \in
 \end{lemma}
 
 \begin{proof}
- By Contradiction. Assume $\VmChunkAssignment$ is an optimal chunk to vm 
+ By contradiction. Assume $\VmChunkAssignment$ is an optimal chunk to vm 
 assignment $\VmChunkAssignment$ with $\VmChunkAssignment(\Chunk_j) 
 =\VirtualNode_l \notin \VmCount(\SubstrateNode')$. $\VmChunkAssignment$ assigns 
 the property for any subtree $\Tree'$. From $|\ChunkCount(\SubstrateNode')| 
@@ -116,30 +150,20 @@ $\VmCount(\SubstrateNode')$ ($\VmChunkAssignment(\Chunk_j) \in
  Analog to Lemma~\ref{lemma:matching1}
 \end{proof}
 
+If the $cv$ property is present in our model, transportation costs might not be 
+the only costs, which occur on $\Uplink(\SubstrateNode')$. The second cause of 
+bandwidth costs, are the inter VM communication cost $\Cost_C$.
+
 \begin{corollary}
-For a given VM mapping $\NodeMapping$ and any subtree $\Tree' \subseteq 
-\Tree$ with the root $\SubstrateNode'$, which contains $n = 
-|\ChunkCount(\SubstrateNode')|$ chunks and $m = |\VmCount(\SubstrateNode')|$ 
-VMs, the bandwidth costs of an optimal assignment $\VmChunkAssignment$ for 
-transferring the chunks to the VMs ($\Cost_T$ 
-component) on $\Uplink(\SubstrateNode')$ are $|n 
-- m| \cdot \CostTrans$.
-\end{corollary}
-
-\begin{proof}
- Follows from Lemma~\ref{lemma:matching1} and 
-Lemma~\ref{lemma:matching2}. \carlo{TODO: Is this to fast? Do we need more 
-expalantion here?}
-\end{proof}
-
-\begin{lemma}
+\label{corollary:comCost}
  For a given VM mapping $\NodeMapping$ and any subtree $\Tree' \subseteq 
 \Tree$ with the root $\SubstrateNode'$, which contains $n 
-= |\VmCount(\SubstrateNode')|$ VMs, the communication costs on 
+= |\VmCount(\SubstrateNode')|$ VMs, the communication costs ($\Cost_C$ 
+component) on 
 $\Uplink(\SubstrateNode')$ are $n \cdot (\Vms - n) 
 \cdot 
 \CostCom$.
-\end{lemma}
+\end{corollary}
 
 \begin{proof}
 Due to the fact the nodemapping is given, the enpoints of the communication 
@@ -151,12 +175,8 @@ outside of $\Tree'$. The number of VMs outside of $\Tree$ is the total number
 of VMs, minus the amount of VMs inside $\Tree'$, resulting in $n \cdot (\Vms - 
 n)$ communications - which each inflict $\CostCom$ bandwidth costs.
 \end{proof}
-To compute a solution $\Sol$ for an instance of $\Problem$ we leverage a
-function $\Opt : \SubstrateNodes \times \mathbb{N} \rightarrow \mathbb{R}$ 
-which respresents the minimal bandwidth costs of placing a specific amount of 
-VMs at or beneath a node in the host graph. This function can be evaluated 
-efficiently in a bottom up manner. After $\Opt$ is evaluated for the entire 
-tree, $\Sol$ can be constructed from the values of $\Opt$.
+
+
 
 %$\ChunkCount_\SubstrateNode$ contains the 
 %number of chunks at 
@@ -231,6 +251,16 @@ two or less children $v$ does not violate the binary constraint, and hence the
 binarization process of $v$ is finished. However, it is neccessary to 
 recursively binarize the subtrees with roots $v'_1, v'_2 \in \Children(v)$, if 
 they exists.
+
+To compute a solution $\Sol$ for an instance of $\Problem$ we leverage a
+function $\Opt : \SubstrateNodes \times \mathbb{N} \rightarrow \mathbb{R}$. 
+$\Opt$ represents the inflicted bandwidth costs in a subtree $\Tree' \subset 
+\Tree$ with the root $\SubstrateNode'$, which will occur if $n$ (argument 2) 
+nodes, will be placed in $\Tree'$.
+This 
+function can be evaluated 
+efficiently in a bottom up manner. After $\Opt$ is evaluated for the entire 
+tree, $\Sol$ can be constructed from the values of $\Opt$.
 %If $|\Children(v)| > 2$, we choose an arbitrary node $v' \in \Children(v)$ 
 %and create a new virtual node $v^*$. We create a new edge $e^*_1$, set it's 
 %cost to $1$ and it's capacity to $\Bandwidth(e)$.
@@ -253,6 +283,52 @@ they exists.
 %($\ChunkCount(\SubstrateNode_i) 
 %= \bigcup_{\SubstrateNode_k \in \Children{\SubstrateNode_i}} 
 %\ChunkCount(\SubstrateNode_k)$).
+On the leaves the initialization of $\Opt$ 
+works in the following way: For $0$ or 
+$1$ VMs which are placed at the Leaf $\Leaf_i$, we set $\Opt(\Leaf_i, n \in 
+\{0,1\}) = 0$; for all other amounts of VMs we set $\Opt(\Leaf_i, n \in 
+\{2,\dots,\Vms\}) = \infty$, to represent that these amount of VMs are 
+infeasible at or below the leaves.
+
+To recursively compute $\Opt(\SubstrateNode_i, n \in \{0,\dots\Vms\})$ for a 
+non-leaf node $\SubstrateNode_i \in \SubstrateNodes / \Leaves$, we leverage 
+Corollaries~\ref{corollary:local_matching} and \ref{corollary:comCost}. Since 
+we do it in a bottom up manner, $\Opt(\SubstrateNode_c, n)$ 
+is allready evaluated for all $n \in \{0,\dots,\Vms\}$ and all 
+$\SubstrateNode_c \in \Children(\SubstrateNode_i)$.
+
+Since VMs may only be embded in leaves, the bandwidth costs of placing $n$ VMs 
+in the subtree $\SubstrateNode_i$ with the childen $\SubstrateNode_l$ and 
+$\SubstrateNode_r$ can be divided into the costs of placing $l$ VMs in the 
+subtree with root $\SubstrateNode_l$ , the costs of placing 
+$r$ VMs in the subtree with $\SubstrateNode_r$, and the costs on the 
+$\Uplink(\SubstrateNode_l)$ and $\Uplink(\SubstrateNode_r)$. The costs of 
+placing the VMs beneath the $\SubstrateNode_l$ are allready known from $\Opt$. 
+The on $\Uplink(\SubstrateNode_l)$ can again be divided: From 
+Corollary~\ref{corollary:local_matching}, we know that the transport costs are 
+ $|\ChunkCount(\SubstrateNode_l) - l| \cdot \CostTrans$ and from 
+Corollary\ref{corollary:comCost}, we know that the communication costs are 
+$l\cdot (\Vms - l) \cdot \CostCom$. The same is valid for $\SubstrateNode_r$. 
+We now iterate over all possible amounts of VMs $n \in \{0,\dots,\Vms\}$ and 
+try to find the cheapest split of $n$ into $\hat l$ and $\hat r$ with 
+$\hat l + \hat r = n$ for each $n$. We define $\Opt(\SubstrateNode_i, n) = 
+\Opt(\SubstrateNode_{l}, \hat l) + \Opt(\SubstrateNode_{r}, \hat r) + 
+(|\ChunkCount(\SubstrateNode_{l}) - \hat 
+l|+|\ChunkCount(\SubstrateNode_{r}) - \hat r|) \cdot \CostTrans + (\hat 
+l\cdot (\Vms - \hat l) + \hat r\cdot (\Vms - \hat r)) \cdot \CostCom$. If the 
+bandwidth sum on one of the uplinks exceeds the capacity defined by 
+$\Capacity$, we treat the solution as infeasible, by treating the costs as
+$\infty$. Algorithm~\ref{algo:dynAggregation} illustrates this... \carlo{Do you 
+want to keep this?}
+
+Since the total costs $\sum_{\Chunk_j \in 
+\Chunks}\Cost(\Chunk_j)$ of an optimal assignment $\VmChunkAssignment$ 
+consists only of $\Cost_T$ and $\Cost_C$, for which $\Opt$ accounts accurately 
+(Corollaries~\ref{corollary:local_matching} and \ref{corollary:comCost}), 
+$\Opt(\SubstrateNode, \Vms)$ will be equal to $\sum_{\Chunk_j \in 
+\Chunks}\Cost(\Chunk_j)$ - or $\infty$ if the instance is infeasible.
+
+\carlo{TODO Construction from $\Opt$ or described how to store? Or say trivial?}
 
 \subsection{under construction - will partially be copied to the previous 
 section}
