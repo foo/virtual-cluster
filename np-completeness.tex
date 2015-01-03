@@ -8,10 +8,8 @@ become NP-hard if multiple replicas have to be assigned to a node
 ($\FP+\RS+\MA$ is proved NP-hard in Section~\ref{ssec:fprsma}) or if
 inter-connects have to be established ($\FP+\RS+\CC$ is proved NP-hard
 in Section~\ref{ssec:fprscc}); both results hold even in uncapacitated
-networks, and even in fat-trees consisting of two levels only (e.g.,
-in a datacenter \emph{pod}). Finally, we show that some problems are
-NP-hard even if the number of replicas is only two
-(Section~\ref{ssec:two}).
+networks, and even in trees consisting of two levels only (e.g.,
+in a datacenter \emph{pod}).
 
 \subsection{Introduction to 3D Perfect Matching}
 
@@ -42,6 +40,7 @@ maximize the cardinality of $M$.
 First, we show the hardness of a problem variant without inter-connect,
 but where nodes are assigned multiple chunks, namely the $\FP+\RS+\MA$
 problem.
+
 \textbf{Construction.}
 Given an instance $I$ of $\TDM$, we construct an instance $I'$ of
 $\FP+\RS+\MA$ as follows:
@@ -95,13 +94,13 @@ Given an instance of $\TDM$, we construct an instance of a
 $\FP+\RS+\CC$ problem as follows. For each element
 in the universe $X \cup Y \cup Z$, we construct a chunk; and for each
 tripple $T_i$, we construct a gadget that contains
-three replicas of chunks corresponding to the elements in the subset.
+three replicas of chunks corresponding to the elements in the subset (those have 2 hops distance to eachother).
 We connect the gadgets to the root, separating nodes from different tripples by 4 hops.
 
-Concretely, let $I$ be an instance of $\TSC$. We will create an instance $I'$
+Concretely, let $I$ be an instance of $\TDM$. We will create an instance $I'$
 for $\FP+\RS+\CC$ as follows:
 \begin{itemize}
-\item We set the access cost $\CostTrans$ to a replica to a high value $W$. This will force
+\item We set the access cost $\CostTrans$ to a chunk replica to a high value $W$. This will force
 nodes to be collocated with the replica.
 (For now, we can assume that $W=\infty$; a lower and sufficient bound will be given
 in the appendix.)
@@ -175,7 +174,7 @@ Summing up over all $k$ gadgets, we get exactly $\Thr$.
 we can exploit Lemma~\ref{lemma:helper} to construct a solution for $I$.
 We know that in any solution of cost at most $\Thr$,
 $k$ gadgets contain exactly 3 nodes. These gadgets correspond to a valid
-set cover of size $k$: every
-chunk and hence element in the universe, is covered.
+3D Perfect Matching of size $k$: every
+chunk and hence element in the $X \cup Y \cup Z$, is matched.
 \end{proof}
 
