@@ -199,8 +199,9 @@ locations, requiering only $\CostTrans / 2$  bandwidth.
 \subsection{Multiple Chunks per VM - $ma$}
 
 This extension increases the processing capacities of the VMs. Instead of the
-basic 1:1 ratio of VMs and chunks, this extension allows a VM to process
-$\MaFactor \in \mathbb{N}^+$ many chunks. We assume, that the data which has to
+basic 1:1 ratio of VMs and chunks, this extension allows a VM to have $\MaFactor 
+\in \mathbb{N}^+$ many $\VmSlots$, which can all process chunks. We assume, 
+that the data which has to
 be transferred to the VM from the chunks cannot be aggregated, and $\Vms =
 \ChunkTypes / \MaFactor$.
 

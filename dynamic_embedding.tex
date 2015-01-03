@@ -57,6 +57,8 @@ important to show, that an optimal assignment will always assign chunks to VMs
 in the same subtree - if possible. More formally we proove that the following 
 corollary holds for the transport costs $\Cost_T$:  
 
+\subsubsection{Without MA}
+
 \begin{corollary}
 \label{corollary:local_matching}
 For a given VM mapping $\NodeMapping$ and any subtree $\Tree' \subseteq 
@@ -85,7 +87,7 @@ assigned to chunks in $\ChunkCount(\SubstrateNode')$.
 \label{lemma:matching1}
 For a given VM mapping $\NodeMapping$ and any subtree $\Tree' \subseteq 
 \Tree$ with the root $\SubstrateNode'$, which contains at least one VM per 
-chunk $|\ChunkCount(\SubstrateNode')| \geq |\VmCount(\SubstrateNode')$, an 
+chunk $|\ChunkCount(\SubstrateNode')| \leq |\VmCount(\SubstrateNode')$, an 
 optimal chunk to VM assignment $\VmChunkAssignment$, cannot assign a chunk 
 to a VM outside of $\Tree'$ ($\VmChunkAssignment(\Chunk_j) \in 
 \VmCount(\SubstrateNode')~ \forall \Chunk_j \in \ChunkCount(\SubstrateNode')$).
@@ -97,7 +99,8 @@ assignment $\VmChunkAssignment$ with $\VmChunkAssignment(\Chunk_j)
 =\VirtualNode_l \notin \VmCount(\SubstrateNode')$. $\VmChunkAssignment$ assigns 
 the property for any subtree $\Tree'$. From $|\ChunkCount(\SubstrateNode')| 
 \geq 
-|\VmCount(\SubstrateNode')$ follows that there is at least one combiantion of 
+|\VmCount(\SubstrateNode')|$ follows that there is at least one 
+combiantion of 
 VM 
 $\VirtualNode_m \in \VmCount(\SubstrateNode')$ and chunk $\Chunk_k \notin 
 \ChunkCount(\SubstrateNode')$ with $\VmChunkAssignment(\Chunk_k) = 
@@ -138,7 +141,7 @@ $\VmChunkAssignment$, since $\VmChunkAssignment'$ would be cheaper.
 \label{lemma:matching2}
 For a given VM mapping $\NodeMapping$ and any subtree $\Tree' \subseteq 
 \Tree$ with the root $\SubstrateNode'$, which contains at least one Chunk per 
-VM $|\ChunkCount(\SubstrateNode')| \leq |\VmCount(\SubstrateNode')$, an 
+VM $|\ChunkCount(\SubstrateNode')| \geq |\VmCount(\SubstrateNode')$, an 
 optimal chunk to VM assignment $\VmChunkAssignment$, cannot assign a chunk 
 which is not in $\ChunkCount(\SubstrateNode')$ to a VM in 
 $\VmCount(\SubstrateNode')$ ($\VmChunkAssignment(\Chunk_j) \in 
@@ -176,7 +179,134 @@ of VMs, minus the amount of VMs inside $\Tree'$, resulting in $n \cdot (\Vms -
 n)$ communications - which each inflict $\CostCom$ bandwidth costs.
 \end{proof}
 
+\subsubsection{With MA}
 
+\begin{corollary}
+\label{corollary:local_matching}
+For a given VM mapping $\NodeMapping$ and any subtree $\Tree' \subseteq 
+\Tree$ with the root $\SubstrateNode'$, which contains $n = 
+|\ChunkCount(\SubstrateNode')|$ chunks and $m = |\VmCount(\SubstrateNode')|$ 
+VMs, the bandwidth costs of an optimal assignment $\VmChunkAssignment$ for 
+transferring the chunks to the VMs ($\Cost_T$ 
+component) on $\Uplink(\SubstrateNode')$ are $|n\cdot\MaFactor 
+- m| \cdot \CostTrans$.
+\end{corollary}
+
+To show Corollary~\ref{corollary:local_matching}, we will use two lemmas, which 
+cover the cases $|\ChunkCount(\SubstrateNode')| \geq 
+|\VmCount(\SubstrateNode')| \cdot \MaFactor$ and 
+$|\ChunkCount(\SubstrateNode')| \leq 
+|\VmCount(\SubstrateNode')| \cdot \MaFactor$ - showing that an optimal 
+assignment 
+$\VmChunkAssignment$, will assign chunks locally (i.e. to VMs in the 
+same subtree). All chunks which cannot be served locally will be served in 
+other subtrees, resulting in the transport costs on $\Uplink(\SubstrateNode')$ 
+described in Corollary~\ref{corollary:local_matching}. When the amount of 
+available $\VmSlots$ 
+exceeds the amount of chunks in $\Tree'$, the transport costs will still occur, 
+since some chunks $\Chunk_j \notin \ChunkCount(\SubstrateNode')$ will have to 
+be transported to the VMs in $\VmCount(\SubstrateNode')$, which have $\VmSlots$ 
+which cannot be 
+assigned to chunks in $\ChunkCount(\SubstrateNode')$.
+
+\begin{lemma}
+\label{lemma:matching1}
+For a given VM mapping $\NodeMapping$ and any subtree $\Tree' \subseteq 
+\Tree$ with the root $\SubstrateNode'$, which contains at least one $\VmSlot$ 
+per 
+chunk $|\ChunkCount(\SubstrateNode')| \leq |\VmCount(\SubstrateNode')| \cdot 
+\MaFactor$, an 
+optimal chunk to VM assignment $\VmChunkAssignment$, cannot assign a chunk 
+to a VM outside of $\Tree'$ ($\VmChunkAssignment(\Chunk_j) \in 
+\VmCount(\SubstrateNode')~ \forall \Chunk_j \in \ChunkCount(\SubstrateNode')$).
+\end{lemma}
+
+\begin{proof}
+ By contradiction. Assume $\VmChunkAssignment$ is an optimal chunk to vm 
+assignment $\VmChunkAssignment$ with $\VmChunkAssignment(\Chunk_j) 
+=\VirtualNode_l \notin \VmCount(\SubstrateNode')$. $\VmChunkAssignment$ assigns 
+the property for any subtree $\Tree'$. From $|\ChunkCount(\SubstrateNode')| 
+\geq 
+|\VmCount(\SubstrateNode')| \cdot \MaFactor$ follows that there is at least one 
+combiantion of 
+VM 
+$\VirtualNode_m \in \VmCount(\SubstrateNode')$ and chunk $\Chunk_k \notin 
+\ChunkCount(\SubstrateNode')$ with $\VmChunkAssignment(\Chunk_k) = 
+\VirtualNode_m$. Let $\Tree''$ with the root $\SubstrateNode''$ denote the 
+smallest subtree of $\Tree$ with $\Tree' \subset \Tree'' \subseteq \Tree$ and 
+$\VirtualNode_l \in \VmCount(\SubstrateNode'')$. We will now show, that an 
+alternate assignment $\VmChunkAssignment'$ with 
+$\VmChunkAssignment'(\Chunk_j) = \VirtualNode_m$ and 
+$\VmChunkAssignment'(\Chunk_k) = \VirtualNode_l$, as lower costs, to generate 
+the contradiction. We do this, with the following case diffentiation: 
+\\
+\textbf{Case 1:} $\Chunk_k \in \ChunkCount(\SubstrateNode'')$\\
+$\Distance(\NodeMapping(\VirtualNode_l), \ChunkLocation(\Chunk_k)) \leq 
+\Distance(\NodeMapping(\VirtualNode_l), \ChunkLocation(\Chunk_j)$ and 
+$\Distance(\NodeMapping(\VirtualNode_m), \ChunkLocation(\Chunk_j)) < 
+\Distance(\NodeMapping(\VirtualNode_m), \ChunkLocation(\Chunk_k)$. Due to the 
+direct correlation of $\CostPerChunk$ and $\Distance$, exchanging the 
+assignment of $\Chunk_j$ and $\Chunk_k$ will reduce the overall costs, since 
+$\CostPerChunk(\VirtualNode_m)$ will be reduced, 
+$\CostPerChunk(\VirtualNode_l)$ cannot be increased, and the other components 
+of the costs remain unchanged. As a result $\VmChunkAssignment'$ has lower 
+costs than $\VmChunkAssignment$, which is in contraction, to the optimality of
+$\VmChunkAssignment$.\\
+\textbf{Case 2:} $\Chunk_k \notin \ChunkCount(\SubstrateNode'')$\\
+Since $\Tree$ is balanced we get $\Distance(\NodeMapping(\VirtualNode_m), 
+\ChunkLocation(\Chunk_k)  = \Distance(\NodeMapping(\VirtualNode_l), 
+\ChunkLocation(\Chunk_k)$. In addition $\Distance(\NodeMapping(\VirtualNode_l, 
+\Chunk_j)) > \Distance(\NodeMapping(\VirtualNode_m, 
+\Chunk_j)) $ holds, since $\VirtualNode_m \in \VmCount(\SubstrateNode')$ and 
+$\VirtualNode_l \notin 
+\VmCount(\SubstrateNode')$. Hence swapping the assignment of $\Chunk_j$ and 
+$\Chunk_k$ will reduce $\CostPerChunk(\Chunk_j)$, and keep all other costs 
+stable. This however is in contraction to the cost optimality of 
+$\VmChunkAssignment$, since $\VmChunkAssignment'$ would be cheaper.
+\end{proof}
+
+\begin{lemma}
+\label{lemma:matching2}
+For a given VM mapping $\NodeMapping$ and any subtree $\Tree' \subseteq 
+\Tree$ with the root $\SubstrateNode'$, which contains at least one Chunk per 
+$\VmSlot$ $|\ChunkCount(\SubstrateNode')| \geq |\VmCount(\SubstrateNode')| 
+\cdot \MaFactor$, an 
+optimal chunk to VM assignment $\VmChunkAssignment$, cannot assign a chunk 
+which is not in $\ChunkCount(\SubstrateNode')$ to a VM in 
+$\VmCount(\SubstrateNode')$ ($\VmChunkAssignment(\Chunk_j) \in 
+\VmCount(\SubstrateNode')~ \rightarrow \Chunk_j \in 
+\ChunkCount(\SubstrateNode')$).
+\end{lemma}
+
+\begin{proof}
+ Analog to Lemma~\ref{lemma:matching1}
+\end{proof}
+
+If the $cv$ property is present in our model, transportation costs might not be 
+the only costs, which occur on $\Uplink(\SubstrateNode')$. The second cause of 
+bandwidth costs, are the inter VM communication cost $\Cost_C$.
+
+\begin{corollary}
+\label{corollary:comCost}
+ For a given VM mapping $\NodeMapping$ and any subtree $\Tree' \subseteq 
+\Tree$ with the root $\SubstrateNode'$, which contains $n 
+= |\VmCount(\SubstrateNode')|$ VMs, the communication costs ($\Cost_C$ 
+component) on 
+$\Uplink(\SubstrateNode')$ are $n \cdot (\Vms - n) 
+\cdot 
+\CostCom$.
+\end{corollary}
+
+\begin{proof}
+Due to the fact the nodemapping is given, the enpoints of the communication 
+pathes are known. Since $\Tree$ is a tree, there exists only one path between 
+two nodes in the substrate. These pathes do not contain the 
+$\Uplink(\SubstrateNode')$ if, both VMs are mapped to nodes in $\Tree'$. 
+However, each of the $n$ VMs inside $\Tree'$ has to communicate with each VM 
+outside of $\Tree'$. The number of VMs outside of $\Tree$ is the total number 
+of VMs, minus the amount of VMs inside $\Tree'$, resulting in $n \cdot (\Vms - 
+n)$ communications - which each inflict $\CostCom$ bandwidth costs.
+\end{proof}
 
 %$\ChunkCount_\SubstrateNode$ contains the 
 %number of chunks at 
@@ -303,8 +433,11 @@ $\SubstrateNode_r$ can be divided into the costs of placing $l$ VMs in the
 subtree with root $\SubstrateNode_l$ , the costs of placing 
 $r$ VMs in the subtree with $\SubstrateNode_r$, and the costs on the 
 $\Uplink(\SubstrateNode_l)$ and $\Uplink(\SubstrateNode_r)$. The costs of 
-placing the VMs beneath the $\SubstrateNode_l$ are allready known from $\Opt$. 
-The on $\Uplink(\SubstrateNode_l)$ can again be divided: From 
+placing the VMs beneath the $\SubstrateNode_l$ are allready known from 
+$\Opt$. \carlo{(New to put an emphasis on charging only two edges...:) The only 
+additional bandwidth costs on this level of recursion occur on  
+$\Uplink(\SubstrateNode_l)$ (and $\Uplink(\SubstrateNode_r)$ respectively).} 
+The costs on $\Uplink(\SubstrateNode_l)$ can again be divided: From 
 Corollary~\ref{corollary:local_matching}, we know that the transport costs are 
  $|\ChunkCount(\SubstrateNode_l) - l| \cdot \CostTrans$ and from 
 Corollary\ref{corollary:comCost}, we know that the communication costs are 
@@ -329,6 +462,71 @@ $\Opt(\SubstrateNode, \Vms)$ will be equal to $\sum_{\Chunk_j \in
 \Chunks}\Cost(\Chunk_j)$ - or $\infty$ if the instance is infeasible.
 
 \carlo{TODO Construction from $\Opt$ or described how to store? Or say trivial?}
+
+\subsubsection{Algorithm part}
+
+\carlo{I didn't know where you wanted to put this. Feel free to modify / move 
+it.}
+
+An implementation of our DP based solution can be implemented efficiently, 
+using the following data structures: $\ChunkCount$ can be 
+represented by single values on the respective nodes in the host graph. The 
+node to which it is attached, will replace the argument of $\ChunkCount$: the 
+values will represent the amount of chunks, which are located in the subtree 
+with respective node, as root.
+
+$\Opt$ can be realized by an array, which is attached to a node in the host 
+graph. The node again replaces the first argument. The index of the array, will 
+replace the second argument of $\Opt$. If a value in the array of node 
+$\SubstrateNode_i$ at index $i$ is set to a value $x$, this represents, that 
+placing $i$ VMs in the subtree beneath $\SubstrateNode_i$, will inflict 
+bandwidth costs of $x$ on the links in the subtree beneath $\SubstrateNode_i$.
+
+Note that $\VmCount$ will not be implemented at all - it is only neccessary for 
+the former proofs.
+
+\subsubsection{$\Opt = \infty \rightarrow $infeasible}
+
+\carlo{TODO: Move root to model section}
+
+\begin{lemma}
+An instance of $\Problem$ is infeasible if $\Opt(\SubstrateNode,\Vms) = \infty$, 
+where $\SubstrateNode$ is the root of $\Tree$.
+\end{lemma}
+
+\begin{proof}
+By contraction: Assume the instance of $\Problem$ is feasible and 
+$\Opt(\SubstrateNode,\Vms) = \infty$. This menas a node mapping $\NodeMapping$ 
+and an assignment $\VmChunkAssignment$ exists, which do not violate the 
+bandwidth capacities on all edges in $\SubstrateEdges$. Since VMs may only be 
+located at leaves, $\NodeMapping$ will place $r$ VMs in the subtree beneath the 
+right child of $\SubstrateNode$ and the remaining $\Vms - r$ VMs in the subtree 
+beneath the other child of $\SubstrateNode$. 
+$\Opt(\SubstrateNode,\Vms)$ can be $\infty$ due to two reasons, which can occur 
+at or beneath one of the children of $\SubstrateNode$. Let us without loss of 
+generality assume that the reason occured beneath the right child. The first 
+reason, is that there is not sufficient bandwidth  
+$\Capacity(\Uplink(\SubstrateNode_r)) < |\ChunkCount(\SubstrateNode_{r}) - r|) 
+\cdot \CostTrans + r \cdot (\Vms - r)) \cdot \CostCom$. From 
+Corollaries~\ref{corollary:local_matching} and~\ref{corollary:comCost} we know 
+that this contradicts the assumption that $\NodeMapping$ 
+and $\VmChunkAssignment$ do not violate the bandwidth capacities 
+$\Uplink(\SubstrateNode_r)$. Hence the only reason why 
+$\Opt(\SubstrateNode,\Vms)$ can be $\infty$ is the second reason: 
+$\Opt(\SubstrateNode_r, r) = \infty$. 
+
+We can now repeat the same argumentation, showing that $\NodeMapping$ splits 
+the $r$ VMs which are located in the subtree beneath $\SubstrateNode_r$ in $r'$ 
+and $l'$ VMs, which are located in the subtrees beneath the 
+children $\SubstrateNode_r$. The bandwidth argument is still valid on lower 
+layers, which will result in one of the children of $\SubstrateNode_r$ will 
+have a value of infinity for it's assigned amount of VMs. After some 
+recursive steps, this will result in $\Opt(\Leaf_j, \{0,1\}) = \infty$ 
+for a leaf node - which have been initialized with $0$ and 
+are never modified.
+\end{proof}
+
+
 
 \subsection{under construction - will partially be copied to the previous 
 section}
