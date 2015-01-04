@@ -28,49 +28,60 @@ in hardness of 4 other variants -- see generalization graph below.
 
 \subsection{Introduction to 3D Perfect Matching}
 
-We start by introducing the NP-complete problem
+We start by introducing the NP-complete problem of 3D Perfect Matching
+that will serve as problem we reduce from in both proofs. This problem
+can be seen as a generalization of bipartite matchings to 3-uniform
+hypergraphs, henceforth called $\TDM$.~\cite{3dmatch}
 
-Common introduction for both proofs.
+$\TDM$ is defined as follows. We are given three finite and disjoint
+sets $X$, $Y$, and $Z$ of cardinality $k$, as well as a subset of triples $T\subset
+X \times Y \times Z$.  Set $M \subseteq T$ is a 3-dimensional matching
+if and only if, for any two distinct triples $(x_1, y_1, z_1) \in M$
+and $(x_2, y_2, z_2) \in M$, it holds that $x_1\neq x_2$, $y_1\neq
+y_2$, and $z_1\neq z_2$. Our goal is to decide if we can construct
+such $M \subseteq T$ that is perfect, which means that it covers all
+elements of $X \times Y \times Z$.
 
-\begin{enumerate}
-\item links: \url{http://www.nada.kth.se/~viggo/wwwcompendium/node143.html}
-\item links: \url{https://en.wikipedia.org/wiki/3-dimensional_matching}
-\item describe the Karp's variant of the problem, where each of X, Y, Z have the same size
-\item intersection of bounded size set cover and exact cover
-\item describe what an instance consists of
-\end{enumerate}
-
-The reduction is from three-dimensional matchings, a generalization of bipartite matchings
-to 3-uniform hypergraphs, henceforth called
-$\TDM$.~\cite{3dmatch}
-
-$\TDM$ is defined as follows. We are given three finite and disjoint sets $X$, $Y$, and $Z$,
-as well as a subset of triples $T\subset X \times Y \times Z$.
-Set $M \subseteq T$ is a 3-dimensional matching if and only if,
-for any two distinct triples $(x_1, y_1, z_1) \in M$ and $(x_2, y_2, z_2) \in M$,
-it holds that $x_1\neq x_2$, $y_1\neq y_2$, and $z_1\neq z_2$. Our goal is to
-decide if we can construct such $M \subseteq T$ that is perfect, which means that it covers all elements of $X \times Y \times Z$.
-
+TODO: cite Karp on result of NP-completeness
+TODO: image like this: \url{https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/3-dimensional-matching.svg/240px-3-dimensional-matching.svg.png}
 
 \subsection{Multi-Assignments are hard ($\FP+\RS+\MA$)}\label{ssec:fprsma}
 
-First, we show the hardness of a problem variant without inter-connect,
-but where nodes are assigned multiple chunks, namely the $\FP+\RS+\MA$
-problem.
+Here we will present high-level ideas about encoding $\TDM$ as
+ $\FP+\RS+\MA$ instance:
+
+ \begin{itemize} \item For every element of universe $X\cup Y\cup
+ Z$, we create chunk type. Processing every chunk corresponds to
+ covering whole universe.
+
+ \item We will encode each tripple as $3$ leaves that are close to
+ eachother. We place chunk replicas that correspond to elements of the
+ tripple.
+
+ \item Placement of VMs will correspond to choice of tripples. No
+ matter in which leaf of the gadget the VM will spawn, we will take
+ that tripple to solution. VM will process the chunk that it sits on
+ top of, as well as chunks in other two leaves of the same gadget.
+ 
+\item We will set threshold cost in such way that no VM process
+any chunk outside of the gadget that VM sits in.
+\end{itemize}
 
 \textbf{Construction.}
 Given an instance $I$ of $\TDM$, we construct an instance $I'$ of
 $\FP+\RS+\MA$ as follows:
 \begin{itemize}
-\item We construct a tree consisting of gadgets, where each gadget corresponds to a triple.
-\item Chunks correspond to elements in $X$, $Y$ and $Z$
-\item $|X| = |Y| = |Z| = k$
-\item we set $\CostTrans=1$
-\item we set m to 3
-\item we set number of VMs to $k$
-\item we set $\Thr=2 \cdot 2 \cdot k$
-\item each gadget consists of 3 leaves and parent; in leaves there are
-  chunks that correspond to elements of a triple
+\item (tree construction) We create a tree consisting of root vertex, and for each tripple
+we create a gadget that we attach as direct child of the root. Each
+gadget consists of four vertices, one being inner node and three
+leaves (see figure below).
+\item (chunks and chunk replicas) For each element in $X$, $Y$ and $Z$ we create chunk type
+($3 \cdot k$ in total). For each tripple we create $3$ replicas of
+chunks that correspond to elements of universe and we place those
+replicas in leaves of corresponding gadget
+\item (other properties) We set number of VMs to spawn to $k$; we set
+$\CostTrans=1$; we set number of slots in each VM to $m=3$; we set
+$\Thr=2 \cdot 2 \cdot k$
 \end{itemize}
 
 FIXME: The construction is illustrated in Figure~\ref{fig:fprsma}.
