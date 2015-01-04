@@ -56,7 +56,7 @@ Here we will present high-level ideas about encoding $\TDM$ as
 
  \item We will encode each tripple as $3$ leaves that are close to
  eachother. We place chunk replicas that correspond to elements of the
- tripple.
+ tripple in those leaves.
 
  \item Placement of VMs will correspond to choice of tripples. No
  matter in which leaf of the gadget the VM will spawn, we will take
@@ -136,7 +136,6 @@ in the appendix.)
 (k - 1) \cdot k$.
 \end{itemize}
 
-FIXME: The construction is illustrated in Figure~\ref{fig:fprscc}.
 
 \textbf{Proof of correctness.}
 Intuitively, in order to minimize embedding costs,
@@ -183,7 +182,7 @@ The solution has the following cost:
 (1) the communication cost inside a gadget is $2 \cdot {3 \choose 2}$,
   as every pair contributes two hops;
   (2) the communication cost from each gadget to all other gadgets is $4
-  \cdot 3 \cdot 3 \cdot (k - 1) / 2$, where the factor $2$ is
+  \cdot 3 \cdot 3 \cdot (k - 1) / 2$, where the factor $4$ is
   for the
   communication over $4$ hops, the factor $3$
   corresponds to the number of nodes per gadget, and
@@ -195,7 +194,7 @@ Summing up over all $k$ gadgets, we get exactly $\Thr$.
 we can exploit Lemma~\ref{lemma:helper} to construct a solution for $I$.
 We know that in any solution of cost at most $\Thr$,
 $k$ gadgets contain exactly 3 nodes. These gadgets correspond to a valid
-3D Perfect Matching of size $k$: every
-chunk and hence element in the $X \cup Y \cup Z$, is matched.
+3D Perfect Matching: every
+chunk was processed and hence every element in the $X \cup Y \cup Z$ is covered.
 \end{proof}
 
