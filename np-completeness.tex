@@ -1,15 +1,21 @@
 We have seen that even problems with multiple dimensions of
-flexibility, e.g., for the joint optimization of flexible node
-placement and replica selection, and even under capacity constraints
-(our problem ($\FP+\CC+\MA+\BW$), can be solved in polynomial time.
-This section now points out fundamental limitations in terms of
-computational tractability. In particular, we will show that problems
-become NP-hard if multiple replicas have to be assigned to a node
-($\FP+\RS+\MA$ is proved NP-hard in Section~\ref{ssec:fprsma}) or if
-inter-connects have to be established ($\FP+\RS+\CC$ is proved NP-hard
-in Section~\ref{ssec:fprscc}); both results hold even in uncapacitated
-networks, and even in trees consisting of two levels only (e.g.,
-in a datacenter \emph{pod}).
+flexibility can be solved in polynomial time. We presented dynamic programming-based solution for
+jointly optimization of flexible node placement, assigning multiple
+chunks to the same VM, communication among VMs, even under capacity
+constraints ($\FP+\MA+\CC+\BW$). We were able to produce solution for optimizing replica selection,
+multiple assignment, VM communication, under capacity constraints in
+scenario where VMs are already spawned in certain nodes ($\RS+\MA+\CC+\BW$).
+
+
+
+This section now points out fundamental
+limitations in terms of computational tractability. In particular, we
+will show that problems become NP-hard if multiple replicas have to be
+assigned to a node ($\FP+\RS+\MA$ is proved NP-hard in
+Section~\ref{ssec:fprsma}) or if inter-connects have to be established
+($\FP+\RS+\CC$ is proved NP-hard in Section~\ref{ssec:fprscc}); both
+results hold even in uncapacitated networks, and even in trees
+consisting of two levels only (e.g., in a datacenter \emph{pod}).
 
 \subsection{Introduction to 3D Perfect Matching}
 
@@ -32,7 +38,7 @@ as well as a subset of triples $T\subset X \times Y \times Z$.
 Set $M \subseteq T$ is a 3-dimensional matching if and only if,
 for any two distinct triples $(x_1, y_1, z_1) \in M$ and $(x_2, y_2, z_2) \in M$,
 it holds that $x_1\neq x_2$, $y_1\neq y_2$, and $z_1\neq z_2$. Our goal is to
-maximize the cardinality of $M$.
+decide if we can construct such $M \subseteq T$ that is perfect, which means that it covers all elements of $X \times Y \times Z$.
 
 
 \subsection{Multi-Assignments are hard ($\FP+\RS+\MA$)}\label{ssec:fprsma}
@@ -127,6 +133,8 @@ $k$ gadgets have exactly
 $3$ nodes, and $n-k$ gadgets remain empty.
 \end{lemma}
 \begin{proof}
+TODO: use exact cover property here to reason about feasibility
+
 Since $W=\infty$, nodes will always be placed
 directly on chunks (the access network cost is zero).
 Moreover, since
