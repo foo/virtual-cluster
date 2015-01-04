@@ -149,8 +149,6 @@ $k$ gadgets have exactly
 $3$ nodes, and $n-k$ gadgets remain empty.
 \end{lemma}
 \begin{proof}
-TODO: use exact cover property here to reason about feasibility
-
 Since $W=\infty$, nodes will always be placed
 directly on chunks (the access network cost is zero).
 Moreover, since
@@ -163,8 +161,7 @@ for each such pair is either
 to different gadgets).
 The lemma then follows from the observation that $\Thr$
 is chosen such that it is never possible to distribute nodes
-among more than $k$ gadgets, and that it is always strictly better to
-have exactly 0 or 3 nodes per gadget, than any alternative distribution.
+among more than $k$ gadgets.
 \end{proof}
 
 \begin{theorem}
