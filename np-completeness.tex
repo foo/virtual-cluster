@@ -71,14 +71,14 @@ any chunk outside of the gadget that VM sits in.
 Given an instance $I$ of $\TDM$, we construct an instance $I'$ of
 $\FP+\RS+\MA$ as follows:
 \begin{itemize}
-\item (tree construction) We create a tree consisting of root vertex, and for each tripple
-we create a gadget that we attach as direct child of the root. Each
-gadget consists of four vertices, one being inner node and three
-leaves (see figure below).
+\item (tree construction) We create a tree consisiting of root vertex,
+and for each tripple we create a gadget that we attach as direct child
+of the root. We construct a height-2 gadget
+as follows. For each tripple $T_i$ we construct a gadget
+consisting of an inner node (a router) and three leaves.
 \item (chunks and chunk replicas) For each element in $X$, $Y$ and $Z$ we create chunk type
-($3 \cdot k$ in total). For each tripple we create $3$ replicas of
-chunks that correspond to elements of universe and we place those
-replicas in leaves of corresponding gadget
+($3 \cdot k$ in total). Every gadget
+contains three chunk replicas, corresponding to the elements of $T_i$.
 \item (other properties) We set number of VMs to spawn to $k$; we set
 $\CostTrans=1$; we set number of slots in each VM to $m=3$; we set
 $\Thr=2 \cdot 2 \cdot k$
@@ -101,46 +101,39 @@ $I$ has a matching of size $k$.
 ($\Rightarrow$) Let us take a solution to $\TDM$. We spawn VM in every
 gadget that corresponds to chosen triples. We match every chunk in a
 gadget to machine in this gadget (only for chosen ones). Solution has
-cost exactly $\Thr$.
+cost exactly $\Thr$. As every element of universe was covered, every
+chunk type is processed.
 
 ($\Leftarrow$) Let's take solution to $VC$ instance of cost $\leq \Thr$. We
-chose triples that correspond to gadgets where were VMs. Everything
-was processed, therefore every element of X,Y and Z is matched.
+chose triples that correspond to gadgets where there were VMs. Everything
+was processed, therefore every element of X,Y and Z is matched. Each
+VM processed chunks that correspond to the tripple, otherwise the
+solution would have cost larger than $\Thr$, because of 
+transportation cost over longer distance.
 \end{proof}
 
 
-\subsection{Inter-connects are hard ($\FP+\RS+\CC$) (reduction from 3D Perfect Matching)}\label{ssec:fprscc}
+\subsection{Inter-connects are hard ($\FP+\RS+\CC$)}\label{ssec:fprscc}
 
 
 Next, we prove that the joint optimization of node placement and replica selection
 is NP-hard if an inter-connect has to be established between virtual machines.
 In our terminology, this is the $\FP+\RS+\CC$ problem.
 
-
 \textbf{Construction.}
-Given an instance of $\TDM$, we construct an instance of a
-$\FP+\RS+\CC$ problem as follows. For each element
-in the universe $X \cup Y \cup Z$, we construct a chunk; and for each
-tripple $T_i$, we construct a gadget that contains
-three replicas of chunks corresponding to the elements in the subset (those have 2 hops distance to eachother).
-We connect the gadgets to the root, separating nodes from different tripples by 4 hops.
-
 Concretely, let $I$ be an instance of $\TDM$. We will create an instance $I'$
 for $\FP+\RS+\CC$ as follows:
 \begin{itemize}
+\item We will construct the same tree as in previous reduction with
+chunk replicas placed in the same way.
 \item We set the access cost $\CostTrans$ to a chunk replica to a high value $W$. This will force
 nodes to be collocated with the replica.
 (For now, we can assume that $W=\infty$; a lower and sufficient bound will be given
 in the appendix.)
 \item The communication cost in the inter-connect is set to $\CostCom = 1$.
-\item The number of nodes (virtual machines) is $\Vms = 3 \cdot k$. TODO: check again
+\item The number of nodes (virtual machines) is $\Vms = 3 \cdot k$.
 \item We use a threshold $\Thr =  3 \cdot k + 3 \cdot 3 \cdot 2 \cdot (k - 1)$. TODO: check again
 \end{itemize}
-
-We construct a height-2 substrate tree
-as follows. For each $T_i$ we construct a gadget
-consisting of an inner node (a router) and three leaves. Every gadget
-contains three chunks, corresponding to the elements of $T_i$.
 
 FIXME: The construction is illustrated in Figure~\ref{fig:fprscc}.
 
