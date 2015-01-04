@@ -124,7 +124,8 @@
 
 \title{Embedding Virtual Clusters with Data Locality and Replica Selection\\{\Large Real Algorithms for Virtual Environments}}
 
-\title{Data Locality and Replica Aware Virtual Cluster Embeddings for Fat-Trees\\{\Large Real Algorithms for Virtual Environments}}
+\title{Data Locality and Replica Aware Virtual Cluster Embeddings for Fat-Trees}
+%\\{\Large Real Algorithms for Virtual Environments}}
 
 
 \author{Carlo Fuerst$^1$, Maciek Pacut$^2$, Stefan Schmid$^3$\\
@@ -221,27 +222,34 @@ to batch-processing applications.
 \textbf{Fundamental Parts.} Our model consists of three fundamental parts: (1) the substrate network,
 (2) the input data, and
 (3) the virtual network.
-The substrate network (also known as the \emph{host graph}) describes the physical resources: the servers
-and the inter-connecting datacenter topology.
-We assume that servers have a certain capacity, in terms of the number of virtual machines or compute units they
-can host. The servers are interconnected by a tree network. Concretely, we assume a tree network
-$G=(V,E)$ where $V=S \cup R$ describes the set $S$ of servers (located at the leaves) which are inter-connected
-via routers (or switches) $R$ by links $E$.
-The problem input is stored in the form of \emph{chunks} which are distributed across the servers;
-chunks may be redundant.
-The virtual network consists of virtual machines (henceforth often simply called \emph{nodes}) which need to be mapped to substrate servers.
+
+The substrate network (also known as the \emph{host graph}) describes the physical resources: 
+a set $S$ of $n_S=|S|$ servers interconnected by a network. Concretely, we assume 
+that the servers are interconnected by a tree network, using a set $R$ of routers and a set $E$ of links,
+where the servers are located at the tree leaves. Each server $s\in S$ has a certain number
+$w(s)$ of available slots for hosting virtual machines, and each link $e\in E$ has a certain bandwidth
+capacity $w(e)$. 
+
+The problem input is stored in the form of \emph{chunk types} $\{c_1, \ldots, c_k\}$.  For each chunk type $c_i$,
+there exist $r$ replicas $\{c_{i,1},\ldots, c_{i,r}\}$, where each replica is stored at a certain server. 
+Concretely, for each of the $r\cdot k$ replicas $c_{i,j}$, we will denote by $\pi(c_{i,j})$ at
+which server it is stored. Only one replica is chosen for processing, and we will refer to this
+replica as the \emph{active} (or selected) replica.
+
+The virtual network consists of a set $V$ of $n_v=|V|$ virtual machines (henceforth often simply called \emph{nodes}).
+Each node $v$ can be placed (or, synonymously, \emph{embedded}) on a server; if the capacity $w(s)$ of server $s$ is sufficiently high, multiple nodes can be hosted on $s$. We will denote the server of node $v$ by $\pi(v)$. 
 Since these virtual machines process the input data, they need to be assigned and connected to the
-chunks; each virtual machine should be assigned the same number of chunks (up to rounding issues if
-the number of chunks is not a perfect multiple of the number of virtual machines). Moreover, virtual machines need to be connected among each other.
+chunks. Concretely, for each chunk type $c_i$, one replica $c_{i,j}$ must be processed by exactly one virtual machine $v$;
+which replica $c_{i,k}$ is chosen is subject to optimization. 
+We will denote by $\mu$ the matching of virtual machines to chunks; a virtual machine
+may have to process multiple chunks, but the number of chunks per node must be constant.
 In order to provide performance guarantees, both the connection to the chunks
 as well as the interconnection between the virtual machines must provide a certain
 minimal bandwidth guarantee; we will refer to the first type of network as the \emph{access
 network}, and to the second type of network as the \emph{inter-connect}. The inter-connect will
-is modelled as a complete network (a virtual cluster).
-
-TODO: if we ever want to put 2 replica NP-completeness proof, we need to introduce idle machines 
-
-FIXME: introduce formal concepts
+is modelled as a complete network (a virtual cluster). Concretely, we assume that an  active chunk
+is connected to its node at a minimal bandwidth $b_1$, and a node is connected to any other node
+at minimal bandwidth $b_2$.
 
 \textbf{Optimization Objective.} Our goal is to develop algorithms which minimize
 the resource footprint: the overall bandwidth allocation in the datacenter. That is,
@@ -267,6 +275,9 @@ to nodes is already interesting if the location of nodes is \emph{given} and can
 we distinguish between a scenario where the node placement is flexible (called $\FP$) and one where
 it is not.
 
+
+TODO OVERVIEW FIGURE
+
 \textbf{Remark on Practical Motivation.}
 Our model is inspired by batch-processing applications such as MapReduce.
 The standard datacenter topology today are fat-trees~\cite{fattree},
@@ -286,6 +297,7 @@ The ratio $b_1/b_2$ can be seen as the so-called mapping ratio:
 how much smaller is the input after the mapping phase.
 
 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\section{Algorithms}
 
@@ -301,9 +313,9 @@ problem exhibits interesting connections to classic matching and
 flow problems. In this section, we point out these connections and
 exploit them to devise polynomial-time algorithms for a wide range
 of problem variants. We also show that a large number of problems
-can be solved optimally using dynamic programming. Note that all proposed 
-algorithms solve the problem optimally w.r.t. to the overall bandwidth costs 
-independently of $\CostTrans$ and (if present in the properties) $\CostCom$ and 
+can be solved optimally using dynamic programming. Note that all proposed
+algorithms solve the problem optimally w.r.t. to the overall bandwidth costs
+independently of $\CostTrans$ and (if present in the properties) $\CostCom$ and
 $\Capacity$
 
 \input{matching}
@@ -325,14 +337,14 @@ $\Capacity$
 \section{Related Work}\label{sec:relwork}
 
 Our work is motivated by the resource allocation and computational model of
-batch-processing cloud applications, such as MapReduce. 
-These applications 
+batch-processing cloud applications, such as MapReduce.
+These applications
 generate large amounts of network traffic, and a considerable
 fraction of the runtime is due to network acti\-vi\-ty.~\cite{talk-about,amazonbw,orchestra}.
 Accordingly, systems have been proposed which provide
 a provable network performance by making explicit bandwidth reservations
-between the virtual machines or compute units, either relative~\cite{seawall,faircloud,elasticswitch} 
-or absolute~\cite{secondnet,oktopus, proteus, drl, gatekeeper}. 
+between the virtual machines or compute units, either relative~\cite{seawall,faircloud,elasticswitch}
+or absolute~\cite{secondnet,oktopus, proteus, drl, gatekeeper}.
 
 The need to take into account both node as well as link resources motivates
 the design of virtual networks, and the question of how to efficiently embed virtual networks
@@ -341,14 +353,14 @@ For a good survey on network virtualization and in particular virtual network em
 we refer the reader to~\cite{boutaba-survey} and~\cite{fischer-survey}.
 
 The most popular abstraction for batch-processing applications is the virtual cluster,
-introduced in the Oktopus paper~\cite{oktopus}, and later studied by many other researchers~\cite{proteus}. 
+introduced in the Oktopus paper~\cite{oktopus}, and later studied by many other researchers~\cite{proteus}.
 Many heuristics have been developed to compute ``good'' embeddings of virtual clusters, in the sense that
-they result in small footprints (minimal bandwidth reservation costs). 
+they result in small footprints (minimal bandwidth reservation costs).
 
 However, the virtual network embedding problem has not only been studied for virtual clusters,
-but also for more general graphs (motivated by wide-area networks). In contrast to the classic VPN 
+but also for more general graphs (motivated by wide-area networks). In contrast to the classic VPN
 graph embedding problems~\cite{gupta2001provisioning,Goyal2008},
-in these models, also the embedding endpoints are flexible and subject to optimization. 
+in these models, also the embedding endpoints are flexible and subject to optimization.
 In this respect, the problem can also be seen as a generalization of the classic NP-hard Minimum Linear Arrangement problem which asks for the
 embedding of guest graphs on a simple line topology.~\cite{mla,mla-survey,mla-feige}
 Indeed, many problem variants are NP-hard and much research so far has focused on heuristics~\cite{ammar,zhu06,simannealing,turner}
@@ -368,7 +380,7 @@ This paper investigated two fundamental new dimensions of virtual cluster
 embedding problems: data locality and replica selection. We pursued
 an algorithmic approach and decomposed the problem into fundamental aspects,
 namely $\BW$, $\CC$, $\RS$, $\MA$ and $\FP$. Our results are summarized in
-Figure~\ref{fig:summary}. 
+Figure~\ref{fig:summary}.
 In particular, we have shown that
 at the heart of our problem lie interesting new variants of classic
 optimization problems related to matchings and flows. Interestingly, despite the
@@ -399,7 +411,8 @@ question is whether FIXME.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\bibliographystyle{alpha}
+%\bibliographystyle{alpha}
+\bibliographystyle{abbrv}
 \bibliography{references}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -413,16 +426,16 @@ The following lemma is useful in our NP-hardness proofs.
 \begin{lemma}[Bandwidth Lemma]\label{lem:bandwidth-lemma}
   Let $c$ and $v > 4$ be two arbitrary positive integers. Let $a_1, a_2, \ldots,
   a_v$ be a sequence of $v$ integers which adds up to $c \cdot v$. Also, for
-  each $i$ we have $a_i \leq 2 \cdot c$. Then it holds that if 
+  each $i$ we have $a_i \leq 2 \cdot c$. Then it holds that if
   $$ \forall_i a_i \cdot (c \cdot v - a_i) \leq c \cdot (c \cdot v -
   c), $$
 \noindent  then for each $i$, $a_i = c$.
 \end{lemma}
 \begin{proof}
 For the sake of contradiction, let us assume that there exists an index $k$ such that
-$a_k \neq c$. Then we can distinguish between two cases: 
+$a_k \neq c$. Then we can distinguish between two cases:
 either $a_k<c$ or
-$a_k>c$. 
+$a_k>c$.
 
 \textbf{Case $a_k<c$:} If there exists a $k$ with $a_k<c$,
 due to the fact that the sequence sum adds up to $c \cdot v$,
@@ -431,8 +444,8 @@ pigeon hole principle). Thus, this case can
 also be reduced to the second case (\textbf{Case $a_k>c$}) proved
 next
 
-\textbf{Case $a_k>c$:} Since it also holds that $a_k < 2c$, 
-$a_k$ must be of the form $c + x$ for $x \in [1, \ldots, c]$. 
+\textbf{Case $a_k>c$:} Since it also holds that $a_k < 2c$,
+$a_k$ must be of the form $c + x$ for $x \in [1, \ldots, c]$.
 Let us consider the (bandwidth) inequality:
 $$ (c + x) \cdot (c \cdot v - c - x) \leq c \cdot (c \cdot v - x) $$
 
@@ -440,8 +453,8 @@ This can be transformed to:
 
 $$ 0 \leq x(x - (c \cdot (v - 2))) $$
 
-The equation holds for $x \leq 0$ or $x \geq c \cdot (v - 2)$, 
-and no 
+The equation holds for $x \leq 0$ or $x \geq c \cdot (v - 2)$,
+and no
 positive $x \leq c$ can satisfy this inequality for $v > 4$. Contradiction.
 \end{proof}
 
@@ -508,9 +521,9 @@ at most $\clauses$ nodes can be spawned, where $\clauses$
 is the number of clauses of $\Formula$.
 We can apply the Bandwidth Lemma (Lemma~\ref{lem:bandwidth-lemma}) as follows:
 We interpret $a_i$ as the
-number of nodes that are embedded in the $i$-th gadget; we set $c=\clauses$ 
+number of nodes that are embedded in the $i$-th gadget; we set $c=\clauses$
 to be the number
-of clauses and $v=\variables$ to be the number of variables. 
+of clauses and $v=\variables$ to be the number of variables.
 The LHS of the inequality of Lemma~\ref{lem:bandwidth-lemma}
 is a formula for the communication cost of nodes inside the $i$-th
 gadget to nodes outside the gadget. The RHS of the inequality is the
@@ -525,13 +538,13 @@ The problem $\RS+\FP+\BW+\CC$ is NP-hard.
 We will prove that formula $\Formula$ is satisfiable iff $\RS+\FP+\BW+\CC$ has
 solution of cost $\leq \Thr$.
 
-($\Rightarrow$) Let's take any valuation $\Val$ that satisfies $\Formula$. 
-We will construct a solution to $\RS+\FP+\BW$ using $\Val$ in the following way. 
-For each variable $v$ in $\Formula$, we embed $\clauses$ many virtual machines 
+($\Rightarrow$) Let's take any valuation $\Val$ that satisfies $\Formula$.
+We will construct a solution to $\RS+\FP+\BW$ using $\Val$ in the following way.
+For each variable $v$ in $\Formula$, we embed $\clauses$ many virtual machines
 at the  leaves of the gadget of $v$. We need to choose $\clauses$ out of
 $2 \cdot \clauses$ leaves to embed nodes. If $\Val(v) = 1$, we embed
 nodes at the leaves
-of $\positive(v)$, else we embed all nodes at leaves $\negative(v)$. 
+of $\positive(v)$, else we embed all nodes at leaves $\negative(v)$.
 The solution constructed this way has cost exactly
 $\Thr$, because the nodes are evenly split among gadgets, and nodes are not
 distributed across $\positive(v)$ and $\negative(v)$ subtrees.
@@ -541,19 +554,19 @@ VM that sits on top of first chunk replica. This solution is feasible
 (every chunk type is processed) basically
 because given valuation satisfied the $\Phi$.
 
-Now we will show that this solution has cost $\Thr$. 
+Now we will show that this solution has cost $\Thr$.
 Due to the Bandwidth Lemma (Lemma~\ref{lem:bandwidth-lemma}),
-we only have to consider the communication cost. 
+we only have to consider the communication cost.
 
-($\Leftarrow$) Let's take any solution to $\RS+\FP+\BW$ constructed based on $\Formula$ of cost $\leq \Thr$. 
+($\Leftarrow$) Let's take any solution to $\RS+\FP+\BW$ constructed based on $\Formula$ of cost $\leq \Thr$.
 We will construct a positive valuation $\Val$ by considering the nodes in
 the solution to $\RS+\FP+\BW$.
 
 We make the following observations. In every solution of cost
-$\leq \Thr$, every gadget has exactly $\clauses$ many nodes 
+$\leq \Thr$, every gadget has exactly $\clauses$ many nodes
 at its leaves. This is due to the Bandwidth Lemma. Also, inside
 every gadget either all nodes are in the $\positive(v)$ subtree
-of variable $v$, or in the $\negative(v)$ subtree. This is true 
+of variable $v$, or in the $\negative(v)$ subtree. This is true
 because the cost of a solution where at least one gadget has nodes
 distributed across subtrees is
 always greater than $\Thr$.
@@ -562,9 +575,9 @@ TODO Maciek: prove it more formally. First, define semi-feasible solution. Let's
 spawned in left and right subtree. Then we say that we can improve the
 solution by moving all $q$ to where $p$s lie and we have cheaper solution.
 
-Now we can construct our valuation $\Val$, as follows 
+Now we can construct our valuation $\Val$, as follows
 (for each variable $v$ in $\Formula$):
-If $v_1$ hosts a node then $\Val(v) = \top$, 
+If $v_1$ hosts a node then $\Val(v) = \top$,
 otherwise $\Val(v) = \bot$.
 
 The valuation $\Val$ satisfies all clauses, and hence $\Formula$,
@@ -671,7 +684,7 @@ Let's take any solution $\Sol$ to $\FP+\RS(2)+\BW$ of cost $\leq \Thr$.
 Then we can compute a positive valuation by setting each variable $v$
 as follows:
 $\Val(v)= \top$ iff there lies VM on first leaf on positive side of $v$ gadget in $\Sol$,
-and $\Val(v)=\bot$ otherwise. 
+and $\Val(v)=\bot$ otherwise.
 
 %$\Val(v)$ =
 %\begin{cases}
@@ -694,7 +707,7 @@ satisfying all chunk types.
 
 Observation. It might happen that in $\Sol$, two nodes in
 clause variables are idle, and three nodes in variable gadgets are
-processing those $3$ chunk types. In this case, we 
+processing those $3$ chunk types. In this case, we
 arbitrary nodes can be taken in the rest
 of the proof.
 
@@ -703,11 +716,11 @@ $\Val$ satisfies $\Formula$.
 \end{lemma}
 \begin{proof}
 Let us consider the matching $M$ of $\Sol$, and let us consider an arbitrary clause of
-$\Formula$ as well as its $3$ chunk types: $\achunk_i^1, \achunk_i^2, \achunk_i^3$. 
+$\Formula$ as well as its $3$ chunk types: $\achunk_i^1, \achunk_i^2, \achunk_i^3$.
 We will refer to the nodes corresponding to them
-by $v_i^1, v_i^2, v_i^3$; two of them lie in clause gadgets. 
+by $v_i^1, v_i^2, v_i^3$; two of them lie in clause gadgets.
 Take the chunk type that was processed in variable
-gadgets and look at where it was processed. 
+gadgets and look at where it was processed.
 In our valuation $\Val$, we set the literal of the node leaf to
 $\top$; therefore the clause is satisfied.
 \end{proof}
