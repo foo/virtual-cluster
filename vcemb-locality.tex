@@ -439,11 +439,10 @@ Gabow et al.~\cite{gabow_scaling_algorithm}; it has a runtime of $\mathcal{O}(n^
 \ChunkTypes)^{3/4} \cdot  \MaFactor \cdot \Vms \cdot \ChunkTypes \cdot \log
 (2 \cdot h(\Tree)))$, where $h(\Tree)$ denotes the height of the tree $\Tree$.
 
-\subsection{Flow Algorithms ($\RS+\MA+\CC+\BW$ and $\RS+\MA+\FP+\BW$)}
+\subsection{Flow Algorithm ($\RS+\MA+\CC+\BW$)}
 
 A large class of resource allocation problems can also be solved by a reduction to flow 
-problems on extended (logical) host graphs. We will first explain $\RS+\MA+\CC+\BW$,
-and subsequently discuss $\RS+\MA+\FP+\BW$.
+problems on extended (logical) host graphs.
 
 \subsubsection{Problem $\RS+\MA+\CC+\BW$}
 
@@ -746,15 +745,6 @@ To construct the solution we choose an arbitrary path $p = \{e_1,\dots,
 e_n\}$ \carlo{TODO check n}, such that $f(e_i) > 1 ~ \forall i \in
 \{1,\dots,n\}$.
 \end{comment}
-
-%\subsection{Dynamic programming solution}
-
-\subsubsection{Problem $\RS+\MA+\FP+\BW$}
-
-Interestingly, the flow approach can also be used to solve problem variants with flexible 
-virtual machine mappings, as long as no inter-connecting network between virtual machines is needed.
-
-TODO CARLO: \stefan{we need to explain a variant where $\FP$ is included?}
 
 \subsection{Dynamic Programs ($\MA+\CC+\FP+\BW$)}
 
