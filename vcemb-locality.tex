@@ -444,8 +444,6 @@ Gabow et al.~\cite{gabow_scaling_algorithm}; it has a runtime of $\mathcal{O}(n^
 A large class of resource allocation problems can also be solved by a reduction to flow 
 problems on extended (logical) host graphs.
 
-\subsubsection{Problem $\RS+\MA+\CC+\BW$}
-
 First, let us observe that the problem $\RS+\MA+\CC+\BW$ 
 can be trivially reduced to $\RS+\MA+\BW$, as without a flexible
 placement ($\FP$) and due to the unique paths in $\Tree$, we can simply subtract the bandwidth needed
@@ -461,7 +459,7 @@ Second, we observe that we can constrain ourselves to scenarios with  normalized
 requirements $\CostTrans = 1$, as the $\CostTrans$ costs are
 the same between each pair of virtual machines and as paths are unsplittable. 
 
-Given these observations, we show how to solve the $\RS+\CC$ problem
+Given these observations, we show how to reduce the $\RS+\CC$ problem
 to an \emph{Integral Minimal Cost Multi-Commodity Flow Problem}: 
 We extend the substrate network $\Tree$ as follows: we introduce an
 artificial \emph{super-source} $\Source$ and edges $\SubstrateEdge_i^+ = (\Source,
@@ -475,7 +473,9 @@ $\Capacity(\SubstrateEdge_j^-) = 1$, which connect the servers on which the
 chunks are located to the sink. We now assume that each node $\VirtualNode_i$ has a demand of $1$ to each
 of its assigned chunks $\VmChunkAssignment(\VirtualNode_i)$,
 and we want to compute a flow $f$
-of value $\ChunkTypes$ from $\Source$ to $\Sink$. \carlo{TODO: The
+of value $\ChunkTypes$ from $\Source$ to $\Sink$. \maciek{Above construction does not solve replication. We need a vertex for each chunk type.}
+
+\carlo{TODO: The
 equivalency...}
 
 Since the assignment $\VmChunkAssignment$ of chunks to nodes 
@@ -502,9 +502,7 @@ $\Source$ resulting in $\sum_{i \in \{1,\dots,\Vms\}}\hat f(\SubstrateEdge_i^+)
 = \ChunkTypes = \Vms \cdot \MaFactor$. Due to the capacity limitations this is
 equivalent to $\hat f(\SubstrateEdge_i^+) = \MaFactor ~ \forall i \in
 \{1,\dots, \Vms\}$, which represents $\MaFactor$ outgoing flows for each node
-in the host graph, to which a VM is assigned.
-
-To compute $\VmChunkAssignment$ from $\hat f$, we process $\hat f$ in the
+in the host graph, to which a VM is assigned.To compute $\VmChunkAssignment$ from $\hat f$, we process $\hat f$ in the
 following way: We chose an aribtrary path $\Path =
 \{\SubstrateEdge_{1}, \dots, \SubstrateEdge_{n}\}$, with $\SubstrateEdge_{1} =
 (\Source, \NodeMapping(\VirtualNode_i))$, $\SubstrateEdge_{n} =
@@ -517,6 +515,8 @@ flow associated on every edge. We set $\VmChunkAssignment(\achunk_j) =
 one. This is repeated, until $|\hat f| = 0$. Due to the tree properties of
 $\Tree$, that there is only one path between two nodes, all VM chunk
 assignments generated in this value will have the same overall costs.
+ \maciek{I have no idea what this paragraph is about. We have mix of construction for replica with construction of the matching? Rewrite or remove.}
+
 
 \begin{comment}
 \item For a given chunk \textit{type} to VM assignment, the replica selection
