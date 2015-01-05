@@ -515,7 +515,7 @@ flow associated on every edge. We set $\VmChunkAssignment(\achunk_j) =
 one. This is repeated, until $|\hat f| = 0$. Due to the tree properties of
 $\Tree$, that there is only one path between two nodes, all VM chunk
 assignments generated in this value will have the same overall costs.
- \maciek{I have no idea what this paragraph is about. We have mix of construction for replica with construction of the matching. Rewrite or remove.}
+ \maciek{I have no idea what this paragraph (above) is about. We have mix of construction for replica with construction of the matching. Rewrite or remove.}
 
  \maciek{What we have left to do is to prove or at least say that it is trivial: (1) if our algorithm says NO, then there should not be any feasible solution (2) argue about optimality of constructed flow (it follows from optimality of flow and our awesome construction)}
 
@@ -760,17 +760,8 @@ the property that optimal solutions for smaller subproblems (which can be comput
 can be efficiently combined into solutions for larger subproblems.
 
 For ease of presentation, we will first present an algorithm to solve
-the problem $\FP+\CC+\BW$. Based on this algorithm, we will show how to extend
-the approach to the $\MA+\CC+\FP+\BW$ problem.
-
-\maciek{TODO: if we ever want to put 2 replica NP-completeness proof, we need
-to introduce idle machines}
-
-\stefan{I would do this only in the appendix}
-
-\maciek{TODO: here we need to explicitly say what we mean by mixing MA and idle
-machines; just as a reminder, we decided to force the machines to be full or
-empty}
+the problem $\FP+\CC$. Based on this algorithm, we will show how to extend
+the approach to the $\MA+\CC+\FP+\BW$ problem, introducing $\MA$ and $\BW$ separatly.
 
 %\subsection{new}
 
@@ -789,7 +780,7 @@ and $\VmCount : \SubstrateNodes \rightarrow 2^{\VirtualNodes}$,
 to compute the number of nodes and chunks in a given subtree $\Tree'$
 of a given root. The functions can 
 easily be computed in a
-bottom-up manner.
+bottom-up manner. \maciek{Function VMCount makes no sense as ``static'' function, as we do not know where VMs will be placed. Reader does not have enough insight into the algorithm to distinguish between those two functions. IMHO it is much better to remove VMCount from here and just use k, the function argument name as number of VMs in given subtree.}
 
 % Stefan: I dont think we need this:
 %: All leaf nodes $\Leaf_i$ are initialized with $\ChunkCount(\Leaf_i)
@@ -805,12 +796,14 @@ bottom-up manner.
 %= \bigcup_{\SubstrateNode_k \in \Children{\SubstrateNode_i}}
 %\ChunkCount(\SubstrateNode_k)$). 
 
-\subsubsection{$\FP+\CC+\BW$}
+\subsubsection{Optimality of greedy local matching (version without MA)}
 
 Let us first consider the simpler problem.
 We first observe that an optimal solution will always
 match chunks to nodes in small subtrees. Concretely,
 we have the following cost property.
+
+\maciek{This lemma is not what we meant by local matching lemma. Why we care only about uplink? We should care about cost of whole local matching.}
 
 \begin{lemma}
 \label{lemma:local_matching}
@@ -895,6 +888,8 @@ the allocation of $\Uplink(\SubstrateNode')$ must be updated.
 \stefan{I think we should include the following lemma also in the lemma above, 
 and make it one large (or hopefully not so large) theorem.}
 
+\maciek{I do not understand at all what this lemma is about.}
+
 \begin{lemma}
 \label{lemma:comCost}
  For a given node mapping $\NodeMapping$ and any subtree $\Tree'$
@@ -915,7 +910,9 @@ of nodes, minus the amount of VMs inside $\Tree'$, resulting in $n \cdot (\Vms -
 n)$ communications - which each inflict $\CostCom$ bandwidth costs.
 \end{proof}
 
-\subsubsection{Adding $\MA$}
+\subsubsection{Optimality of greedy local matching (version with MA)}
+
+\begin{comment}
 
 \stefan{I think we should maybe just discuss the differences here, not the entire thing again. Is this possible?
 If not, we may even want to merge with the part above and nevertheless do it directly?}
@@ -1052,70 +1049,21 @@ n)$ communications - which each inflict $\CostCom$ bandwidth costs.
 %
 %, we generate a
 %function $\ChunkCount : \SubstrateNode \rightarrow \mathbb{N}$ and second
-\newcommand{\NodesToProcess}{\ensuremath{\textsc{nodesToProcess}}}
+\maciek{I commented out everything in this section as it is generalization of section above which is wrong.}
+\end{comment}
+\subsubsection{The $\MA+\FP+\CC$ Algorithm}
 
-\begin{algorithm}[tbhp]
-\DontPrintSemicolon % Some LaTeX compilers require you to use
-%\dontprintsemicolon instead
-\SetAlgoNoEnd
-\KwIn{$\SubstrateNode \in \SubstrateNodes$}
-\vspace{6pt}
-\While{$|\Children(\SubstrateNode) > 2|$}{
-  \textbf{set} $\SubstrateNodes \gets \SubstrateNodes \cup
-\{\SubstrateNode^*\}$\;
-  \textbf{~~with }$\Capacity(\SubstrateNode^*) \gets 0$
-  \textbf{ and }$\Cost(\SubstrateNode^*) \gets  1$\;
-  \textbf{choose any }$\SubstrateNode'$\textbf{ from
-}$\Children(\SubstrateNode)$\;
-  $cap \gets \Capacity((\SubstrateNode, \SubstrateNode'))$\;
-  $\SubstrateEdges \gets \SubstrateEdges \setminus \{(\SubstrateNode,
-\SubstrateNode')\}$\;
-  \textbf{set} $\SubstrateEdges \gets \SubstrateEdges \cup \{(\SubstrateNode^*,
-\SubstrateNode')\}$\;
-  \textbf{~~with }$\Capacity((\SubstrateNode^*, \SubstrateNode')) i\gets cap$
-  \textbf{ and }$\Cost((\SubstrateNode^*,\SubstrateNode')) \gets  1$\;
-  \textbf{set} $\SubstrateNodes \gets \SubstrateNodes \cup \{(\SubstrateNode^*,
-\SubstrateNode)\}$\;
-  \textbf{~~with }$\Capacity((\SubstrateNode^*, \SubstrateNode)) i\gets \infty$
-  \textbf{ and }$\Cost((\SubstrateNode^*, \SubstrateNode)) \gets  0$\;
-  $binarize(\SubstrateNode')$\;
-}
-\For{\textbf{each } $\SubstrateNode' \in \Children(\SubstrateNode)$}{
-  $binarize(\SubstrateNode')$\;
-}
-
-\caption{$binarize(\SubstrateNode \in \SubstrateNodes)$}
-\label{algo:binarization}
-\end{algorithm}
-
-\subsubsection{The $\FP+\MA+\CC+\BW$ Algorithm}
+\maciek{I removed BW}
+\maciek{Just one sentence about binarization is enough. Rest should belong to appendix}
 
 Having characterizes the locality of optimal solutions as well as the resulting
 bandwidth allocations, we can now present our dynamic program.
-For the simplified computation, we first represent the substrate network
-$\Tree$ in a different way: concretely, we \emph{binarize} $\Tree$.
-
-Algorithm~\ref{algo:binarization}
-shows the algorithm to recursively binarize a (sub-)tree with the root $v$:
-%To binarize tree $\Tree$, we start by processing each vertex $v \in
-%\SubstrateNodes$ in the following root to leaf manner:
-While $v$ has more than
-$2$ children, we choose an arbitrary node $v' \in \Children(v)$
-and create a new virtual node $v^*$. We remove the edge $e = (v, v')$ which
-connected $v$ to it's child $v'$ from $\SubstrateEdges$. Subsequently we create
-a new edge, which connects the
-child to the new node $e^*_1 = (v', v^*)$, set it's
-$\Cost(e^*_1) = 1$ and it's capacity to the value of the removed edge $e$
-($\Capacity(e^*_1) = \Capacity(e)$). Additionally we generate an edge $e^*_2 =
-(v^*, v)$. $\Capacity(e^*_2)$ is $\infty$ and $\Cost{e^*_2}$ is set to $0$.
-Subsequently we process the subtree with the root $v'$. If the current node has
-two or less children $v$ does not violate the binary constraint, and hence the
-binarization process of $v$ is finished. However, it is necessary to
-recursively binarize the subtrees with roots $v'_1, v'_2 \in \Children(v)$, if
-they exists.
-
 As already mentioned, our dynamic program leverages optimal solutions to
-subproblems. 
+subproblems.
+
+\maciek{Here we should start by: (1) we will consider all possible number of VMs in every subtree and all possible placements of VMs
+  (2) introduce cost charging model - additional cost of two edges on each level (3) symmetrical cost of difference of slots and chunks - it allows for creating incomplete transfer out of subtree (3) we can use optimal value for subtrees for constructing optimal value for tree (4) present the recursive formula (for FP+NI only) (5) present the complete algorithm, with base cases and aggregate function (6) say just one sentence about effective implementation (arrays) (7) reconstruction of solution from cost array (8) analyze the runtime}
+
 To compute a solution $\Sol$ use a
 function $\Opt : \SubstrateNodes \times \mathbb{N} \rightarrow \mathbb{R}$.
 $\Opt$ represents the inflicted bandwidth costs in a subtree $\Tree'$ of $\Tree$ 
@@ -1198,6 +1146,7 @@ $\Opt(\SubstrateNode, \Vms)$ will be equal to $\sum_{\achunk_j \in
 
 \subsubsection{Implementation}
 
+\begin{comment}
 \carlo{I didn't know where you wanted to put this. Feel free to modify / move
 it.}
 
@@ -1218,9 +1167,15 @@ bandwidth costs of $x$ on the links in the subtree beneath $\SubstrateNode_i$.
 Note that $\VmCount$ will not be implemented at all - it is only neccessary for
 the former proofs.
 
-\stefan{I dont think we really need this section:}
 
-\subsubsection{$\Opt = \infty \rightarrow $infeasible}
+\end{comment}
+
+\stefan{I dont think we really need this section:}
+\maciek{I commented it out}
+
+\subsubsection{Adding bandwidth constraints}
+
+\maciek{I think that it is good to defer presenting bandwidth to this point and introduce it separatly. Also, lemma in this chapter is well-defined.}
 
 \carlo{TODO: Move root to model section}
 
@@ -1912,7 +1867,42 @@ this extension introduces infeasible instances.
 \includegraphics[angle=90,origin=c, height=7cm]{figs/model_fig_skteches/bw_ma_r_cv}
 \caption{The bandwidth exceeds the capacity - independent of the chosen assignment}
 \end{figure}
-\subsection{Free VM Placement - $fp$}
+\subsection{Free VM Placement}
+
+\begin{algorithm}[tbhp]
+\DontPrintSemicolon % Some LaTeX compilers require you to use
+%\dontprintsemicolon instead
+\SetAlgoNoEnd
+\KwIn{$\SubstrateNode \in \SubstrateNodes$}
+\vspace{6pt}
+\While{$|\Children(\SubstrateNode) > 2|$}{
+  \textbf{set} $\SubstrateNodes \gets \SubstrateNodes \cup
+\{\SubstrateNode^*\}$\;
+  \textbf{~~with }$\Capacity(\SubstrateNode^*) \gets 0$
+  \textbf{ and }$\Cost(\SubstrateNode^*) \gets  1$\;
+  \textbf{choose any }$\SubstrateNode'$\textbf{ from
+}$\Children(\SubstrateNode)$\;
+  $cap \gets \Capacity((\SubstrateNode, \SubstrateNode'))$\;
+  $\SubstrateEdges \gets \SubstrateEdges \setminus \{(\SubstrateNode,
+\SubstrateNode')\}$\;
+  \textbf{set} $\SubstrateEdges \gets \SubstrateEdges \cup \{(\SubstrateNode^*,
+\SubstrateNode')\}$\;
+  \textbf{~~with }$\Capacity((\SubstrateNode^*, \SubstrateNode')) i\gets cap$
+  \textbf{ and }$\Cost((\SubstrateNode^*,\SubstrateNode')) \gets  1$\;
+  \textbf{set} $\SubstrateNodes \gets \SubstrateNodes \cup \{(\SubstrateNode^*,
+\SubstrateNode)\}$\;
+  \textbf{~~with }$\Capacity((\SubstrateNode^*, \SubstrateNode)) i\gets \infty$
+  \textbf{ and }$\Cost((\SubstrateNode^*, \SubstrateNode)) \gets  0$\;
+  $binarize(\SubstrateNode')$\;
+}
+\For{\textbf{each } $\SubstrateNode' \in \Children(\SubstrateNode)$}{
+  $binarize(\SubstrateNode')$\;
+}
+
+\caption{$binarize(\SubstrateNode \in \SubstrateNodes)$}
+\label{algo:binarization}
+\end{algorithm}
+
 
 The Free VM Placement property describes a variant of our simple model, where
 the positions of the VMs are not given in the problem statement but are
@@ -1994,6 +1984,66 @@ can be solved by which algorihms can be found in Figure~\ref{fig:summary}.
 \item ma + r + bw + cv + fp - N
 \end{enumerate}
 \end{comment}
+
+\subsection{Leftovers from dynamic program}
+For the simplified computation, we first represent the substrate network
+$\Tree$ in a different way: concretely, we \emph{binarize} $\Tree$.
+
+Algorithm~\ref{algo:binarization}
+shows the algorithm to recursively binarize a (sub-)tree with the root $v$:
+%To binarize tree $\Tree$, we start by processing each vertex $v \in
+%\SubstrateNodes$ in the following root to leaf manner:
+While $v$ has more than
+$2$ children, we choose an arbitrary node $v' \in \Children(v)$
+and create a new virtual node $v^*$. We remove the edge $e = (v, v')$ which
+connected $v$ to it's child $v'$ from $\SubstrateEdges$. Subsequently we create
+a new edge, which connects the
+child to the new node $e^*_1 = (v', v^*)$, set it's
+$\Cost(e^*_1) = 1$ and it's capacity to the value of the removed edge $e$
+($\Capacity(e^*_1) = \Capacity(e)$). Additionally we generate an edge $e^*_2 =
+(v^*, v)$. $\Capacity(e^*_2)$ is $\infty$ and $\Cost{e^*_2}$ is set to $0$.
+Subsequently we process the subtree with the root $v'$. If the current node has
+two or less children $v$ does not violate the binary constraint, and hence the
+binarization process of $v$ is finished. However, it is necessary to
+recursively binarize the subtrees with roots $v'_1, v'_2 \in \Children(v)$, if
+they exists.
+\newcommand{\NodesToProcess}{\ensuremath{\textsc{nodesToProcess}}}
+
+\begin{algorithm}[tbhp]
+\DontPrintSemicolon % Some LaTeX compilers require you to use
+%\dontprintsemicolon instead
+\SetAlgoNoEnd
+\KwIn{$\SubstrateNode \in \SubstrateNodes$}
+\vspace{6pt}
+\While{$|\Children(\SubstrateNode) > 2|$}{
+  \textbf{set} $\SubstrateNodes \gets \SubstrateNodes \cup
+\{\SubstrateNode^*\}$\;
+  \textbf{~~with }$\Capacity(\SubstrateNode^*) \gets 0$
+  \textbf{ and }$\Cost(\SubstrateNode^*) \gets  1$\;
+  \textbf{choose any }$\SubstrateNode'$\textbf{ from
+}$\Children(\SubstrateNode)$\;
+  $cap \gets \Capacity((\SubstrateNode, \SubstrateNode'))$\;
+  $\SubstrateEdges \gets \SubstrateEdges \setminus \{(\SubstrateNode,
+\SubstrateNode')\}$\;
+  \textbf{set} $\SubstrateEdges \gets \SubstrateEdges \cup \{(\SubstrateNode^*,
+\SubstrateNode')\}$\;
+  \textbf{~~with }$\Capacity((\SubstrateNode^*, \SubstrateNode')) i\gets cap$
+  \textbf{ and }$\Cost((\SubstrateNode^*,\SubstrateNode')) \gets  1$\;
+  \textbf{set} $\SubstrateNodes \gets \SubstrateNodes \cup \{(\SubstrateNode^*,
+\SubstrateNode)\}$\;
+  \textbf{~~with }$\Capacity((\SubstrateNode^*, \SubstrateNode)) i\gets \infty$
+  \textbf{ and }$\Cost((\SubstrateNode^*, \SubstrateNode)) \gets  0$\;
+  $binarize(\SubstrateNode')$\;
+}
+\For{\textbf{each } $\SubstrateNode' \in \Children(\SubstrateNode)$}{
+  $binarize(\SubstrateNode')$\;
+}
+
+\caption{$binarize(\SubstrateNode \in \SubstrateNodes)$}
+\label{algo:binarization}
+\end{algorithm}
+
+
 
 \end{appendix}
 
