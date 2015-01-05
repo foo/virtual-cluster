@@ -1,37 +1,36 @@
 We have seen that even problems with multiple dimensions of
-flexibility can be solved in polynomial time. We presented dynamic programming-based solution for
-jointly optimization of flexible node placement, assigning multiple
-chunks to the same VM, communication among VMs, even under capacity
-constraints ($\FP+\MA+\CC+\BW$). We were able to produce solution for optimizing replica selection,
-multiple assignment, VM communication, under capacity constraints in
-scenario where VMs are already spawned in certain nodes ($\RS+\MA+\CC+\BW$).
-
-
+flexibility can be solved optimally in polynomial time. 
+In particular, we presented a dynamic program to 
+jointly optimize the node placement and (multiple)
+chunk assignment, even under capacity
+constraints ($\FP+\MA+\CC+\BW$), and an algorithm 
+to optimize the replica selection and assignment of multiple chunk types ($\RS+\MA+\CC+\BW$).
 
 This section now points out fundamental
 limitations in terms of computational tractability. In particular, we
 will show that problems become NP-hard if multiple replicas have to be
-assigned to a node ($\FP+\RS+\MA$ is proved NP-hard in
-Section~\ref{ssec:fprsma}) or if inter-connects have to be established
-($\FP+\RS+\CC$ is proved NP-hard in Section~\ref{ssec:fprscc}); both
-results hold even in uncapacitated networks, and even in trees
-consisting of two levels only (e.g., in a
-datacenter \emph{pod}). Hardness of those problem variants will result
-in hardness of 4 other variants -- see generalization graph below.
-
+assigned to a flexibly placeable node ($\FP+\RS+\MA$ is proved NP-hard in
+Section~\ref{ssec:fprsma}), and if inter-connects have to be established
+between flexible nodes ($\FP+\RS+\CC$ is proved NP-hard in Section~\ref{ssec:fprscc}); both
+results hold even in uncapacitated networks, and even in small-diameter
+substrate networks (namely two-level trees, 
+or datacenter \emph{pods}~\cite{fattree}). 
+The hardness of $\FP+\RS+\MA$ and $\FP+\RS+\CC$ imply
+the hardness of four additional, more general models, as
+summarized in the following figure: 
 
 \begin{figure}[htbp]
 \includegraphics[width = \columnwidth]{figs/np-hierarchy}
 \end{figure}
 
 
-
 \subsection{Introduction to 3D Perfect Matching}
 
-We start by introducing the NP-complete problem of 3D Perfect Matching
-that will serve as problem we reduce from in both proofs. This problem
+Both the hardness of $\FP+\RS+\MA$ and $\FP+\RS+\CC$ is shown by a reduction
+from the NP-complete problem of \emph{3D Perfect Matching}~\cite{3dmatch},
+which 
 can be seen as a generalization of bipartite matchings to 3-uniform
-hypergraphs, henceforth called $\TDM$.~\cite{3dmatch}
+hypergraphs. We will refer to this problem by $\TDM$, and review it in the following.
 
 $\TDM$ is defined as follows. We are given three finite and disjoint
 sets $X$, $Y$, and $Z$ of cardinality $k$, as well as a subset of triples $T\subset
@@ -39,7 +38,7 @@ X \times Y \times Z$.  Set $M \subseteq T$ is a 3-dimensional matching
 if and only if, for any two distinct triples $(x_1, y_1, z_1) \in M$
 and $(x_2, y_2, z_2) \in M$, it holds that $x_1\neq x_2$, $y_1\neq
 y_2$, and $z_1\neq z_2$. Our goal is to decide if we can construct
-such $M \subseteq T$ that is perfect, which means that it covers all
+a $M \subseteq T$ which is \emph{perfect}, that is, a subset which covers all
 elements of $X \times Y \times Z$.
 
 TODO: cite Karp on result of NP-completeness
@@ -47,54 +46,59 @@ TODO: image like this: \url{https://upload.wikimedia.org/wikipedia/commons/thumb
 
 \subsection{Multi-Assignments are hard ($\FP+\RS+\MA$)}\label{ssec:fprsma}
 
-Here we will present high-level ideas about encoding $\TDM$ as
- $\FP+\RS+\MA$ instance:
+Our proof that $\FP+\RS+\MA$ is NP-hard is based on the following main ideas.
+We encode an $\TDM$ instance as an $\FP+\RS+\MA$ instance as follows:
 
- \begin{itemize} \item For every element of universe $X\cup Y\cup
- Z$, we create chunk type. Processing every chunk corresponds to
- covering whole universe.
+ \begin{itemize} 
+ \item For every element in the universe $X\cup Y\cup
+ Z$, we create a chunk type. Intuitively, in $\TDM$,
+ each element must be covered, which corresponds to the requirement
+ of $\FP+\RS+\MA$,
+ that each chunk type is processed.
 
- \item We will encode each tripple as $3$ leaves that are close to
- eachother. We place chunk replicas that correspond to elements of the
- tripple in those leaves.
+ \item We will encode each triple as three leaves in 
+ a substrate tree $\Tree$. The three leaves are close to each 
+ other in $\Tree$, and the placement of chunk replicas in $\FP+\RS+\MA$
+ corresponds to the elements of the
+ triples in these leaves.
 
- \item Placement of VMs will correspond to choice of tripples. No
- matter in which leaf of the gadget the VM will spawn, we will take
- that tripple to solution. VM will process the chunk that it sits on
- top of, as well as chunks in other two leaves of the same gadget.
- 
-\item We will set threshold cost in such way that no VM process
-any chunk outside of the gadget that VM sits in.
+ \item The node placement will correspond to choice of triples,
+ independently in which leaf the node is mapped. 
+ A node will process the chunk which is located on the same server,
+ as well as the chunks in other two leaves of the same gadget.
+
+\item We will use threshold cost to ensure that no node
+will process
+any chunk outside its gadget.
 \end{itemize}
 
 \textbf{Construction.}
 Given an instance $I$ of $\TDM$, we construct an instance $I'$ of
 $\FP+\RS+\MA$ as follows:
 \begin{itemize}
-\item (tree construction) We create a tree consisiting of root vertex,
-and for each tripple we create a gadget that we attach as direct child
-of the root. We construct a height-2 gadget
-as follows. For each tripple $T_i$ we construct a gadget
-consisting of an inner node (a router) and three leaves.
-\item (chunks and chunk replicas) For each element in $X$, $Y$ and $Z$ we create chunk type
+\item \emph{Tree Construction:} We create a tree consisting of a root,
+and for each triple, we create a gadget which we directly attach as 
+child of the root. The gadget is of height 2,
+and has the following form: 
+The gadget of each triple $T_i$ consists of an inner node (a router) and three leaves.
+\item \emph{Chunks and chunk replicas:} For each element in $X$, $Y$ and $Z$,
+ we create a chunk type
 ($3 \cdot k$ in total). Every gadget
 contains three chunk replicas, corresponding to the elements of $T_i$.
-\item (other properties) We set number of VMs to spawn to $k$; we set
-$\CostTrans=1$; we set number of slots in each VM to $m=3$; we set
-$\Thr=2 \cdot 2 \cdot k$
+\item \emph{Other properties:} We set the number of to-be-embedded nodes to $k$,
+$\CostTrans$ to $1$, and the number of slots in each node to $m=3$ \stefan{what
+is the number of slots here?}. We use a threshold $\Thr=2 \cdot 2 \cdot k$.
 \end{itemize}
 
 The construction is illustrated in Figure~\ref{fig:fprsma}.
-
-
 \begin{figure}[htbp]
 \includegraphics[width = \columnwidth]{figs/example-matching}
 \end{figure}
-
+\stefan{TODO: finish picture and add a caption explaining its elements}
 
 
 \textbf{Correctness.}
-We can now show the computational hardness.
+Given these concepts, we can now show the computational hardness.
 \begin{theorem}
 $\FP+\RS+\MA$ is NP-hard.
 \end{theorem}
@@ -105,23 +109,22 @@ We prove that $I'$ has solution of cost $\leq \Thr$ if ($\Rightarrow$) and only 
 ($\Leftarrow$)
 $I$ has a matching of size $k$.
 
-($\Rightarrow$) Let us take a solution to $\TDM$. We spawn VM in every
-gadget that corresponds to chosen triples. We match every chunk in a
-gadget to machine in this gadget (only for chosen ones). Solution has
-cost exactly $\Thr$. As every element of universe was covered, every
+($\Rightarrow$) Let us take a solution to $\TDM$. We place a node in every
+gadget that corresponds to the chosen triples. We match every chunk in a
+gadget to a node in this gadget (only the chosen ones). This solution has
+cost exactly $\Thr$. As every element of the universe is covered, every
 chunk type is processed.
 
-($\Leftarrow$) Let's take solution to $VC$ instance of cost $\leq \Thr$. We
-chose triples that correspond to gadgets where there were VMs. Everything
-was processed, therefore every element of X,Y and Z is matched. Each
-VM processed chunks that correspond to the tripple, otherwise the
-solution would have cost larger than $\Thr$, because of 
-transportation cost over longer distance.
+($\Leftarrow$) Let us take a solution to $\FP+\RS+\MA$ of cost $\leq \Thr$. We
+choose triples that correspond to gadgets where there are nodes. Since
+all chunks are processed, very element of $X$, $Y$ and $Z$ is matched. Each
+node must processes chunks that correspond to the triple, otherwise the
+cost must be larger than $\Thr$ (high costs for the connection between
+nodes and chunks).
 \end{proof}
 
 
 \subsection{Inter-connects are hard ($\FP+\RS+\CC$)}\label{ssec:fprscc}
-
 
 Next, we prove that the joint optimization of node placement and replica selection
 is NP-hard if an inter-connect has to be established between virtual machines.
@@ -136,7 +139,7 @@ chunk replicas placed in the same way.
 \item We set the access cost $\CostTrans$ to a chunk replica to a high value $W$. This will force
 nodes to be collocated with the replica.
 (For now, we can assume that $W=\infty$; a lower and sufficient bound will be given
-in the appendix.)
+in the Appendix.)
 \item The communication cost in the inter-connect is set to $\CostCom = 1$.
 \item The number of nodes (virtual machines) is $\Vms = 3 \cdot k$.
 \item We use a threshold $\Thr =  6 \cdot k + 3 \cdot 3 \cdot 2 \cdot
@@ -182,8 +185,9 @@ $I$ has a solution.
 
 ($\Rightarrow$) In order to compute a solution
 for $I'$ given a solution for $I$, we proceed as follows.
-Given a covering set of tripples $S = \{T_1, T_2, \ldots, T_k\}$, we place three nodes in each gadget that
-corresponds to every tripple of $S$. Chunks are matched to VMs that sit on top of them.
+Given a covering set of triples $S = \{T_1, T_2, \ldots, T_k\}$, we place three nodes in each gadget that
+corresponds to every triple of $S$. Chunks are matched to nodes that are located
+on the same server.
 
 The solution has the following cost:
 (1) the communication cost inside a gadget is $2 \cdot {3 \choose 2}$,

@@ -32,9 +32,9 @@
 \newcommand{\Capacity}{\ensuremath{\textsc{cap}}}
 \newcommand{\VM}{\textsc{VM}}
 \newcommand{\Problem}{\textsc{DummyName Problem}}
-\newcommand{\carlo}[1]{\textcolor{red}{#1}}
-\newcommand{\maciek}[1]{\textcolor{brown}{#1}}
-\newcommand{\stefan}[1]{\textcolor{blue}{#1}}
+\newcommand{\carlo}[1]{\textcolor{red}{carlo: #1}}
+\newcommand{\maciek}[1]{\textcolor{brown}{maciek: #1}}
+\newcommand{\stefan}[1]{\textcolor{blue}{stefan: #1}}
 \newcommand{\MaFactor}{\ensuremath{\textsc{MA}}}
 \newcommand{\Path}{\ensuremath{p}}
 \newcommand{\RedundancyFactor}{\ensuremath{r}}
@@ -159,7 +159,7 @@
 \textbf{Abstract.} Virtualized datacenters offer great flexibilities in terms of resource allocation. In particular, by
 decoupling applications from the constraints of the underlying physical infrastructure, virtualization
 supports an optimized mapping of virtual machines as well as their interconnecting network
-% (the so-called \emph{virtual cluster}) 
+% (the so-called \emph{virtual cluster})
 to their
 physical counterparts: essentially a graph embedding problem.
 
@@ -169,11 +169,11 @@ the input to a cloud application such as MapReduce is typically stored in a dist
 and sometimes redundant, file system or database. Since moving this data is costly, an embedding algorithm should be data locality aware,
 and allocate computation close to the data; in case of redundant storage, the algorithm should also optimize the \emph{replica selection}.
 
-This paper initiates the algorithmic study of data locality aware virtual cluster embeddings for 
+This paper initiates the algorithmic study of data locality aware virtual cluster embeddings for
 the widely used (fat-)tree like datacenter topologies.
 In particular, we
 show that
-despite the multiple degrees of freedom in terms of embedding and replica selection, 
+despite the multiple degrees of freedom in terms of embedding and replica selection,
 many problems can be
 solved efficiently, and we highlight interesting connections
 to classic optimization problems, such as matching and
@@ -201,20 +201,20 @@ we should maybe give the main algorithms a name; we should talk about the case w
 
 Server and link virtualization introduces interesting resource allocation flexibilities,
 in the sense that virtual machines and their interconnecting network,
-can in principle be embedded \emph{anywhere} in the datacenter. 
+can in principle be embedded \emph{anywhere} in the datacenter.
 While these flexibilities
-can in principle be exploited to improve resource sharing, 
+can in principle be exploited to improve resource sharing,
 the underlying embedding problems are non-trivial,
-and have been studied intensively over the last years. 
+and have been studied intensively over the last years.
 
 A very popular abstraction for for batch-processing applications is the \emph{virtual cluster}.~\cite{oktopus}
 As batch-processing applications such as often generate significant
 network traffic (namely during the so-called shuffle phase)~\cite{amazonbw},
 in order to avoid interference in the underlying physical network and in order to provide a predictable
-application performance, 
+application performance,
 it is important to provide performance isolation and bandwidth guarantees between virtual machines.~\cite{talk-about}
 Accordingly, the virtual cluster not only defines a set of virtual machines with resource guarantees,
-but also an interconnect with (symmetric and pair-wise) bandwidth guarantees, the \emph{virtual network}. 
+but also an interconnect with (symmetric and pair-wise) bandwidth guarantees, the \emph{virtual network}.
 In order to provide resource-efficiency, several algorithms have been proposed to map virtual machines as close as possible
 to each other in the datacenter, which minimizes communication costs.~\cite{oktopus,proteus}
 
@@ -228,7 +228,7 @@ the \emph{replica selection}.
 \subsection{Our Contributions}
 
 This paper initiates the study of data-locality and replica aware embedding problems in virtualized datacenters.
-In particular, we decompose the optimization problem into different fundamental models, in terms of 
+In particular, we decompose the optimization problem into different fundamental models, in terms of
 replica selection, flexible virtual machine embedding, or capacity constraints, and ask questions such as:
 \begin{enumerate}
 \item Can replicas selected and assigned optimally in polynomial time?
@@ -239,11 +239,11 @@ replica selection, flexible virtual machine embedding, or capacity constraints, 
 \end{enumerate}
 
 We draw an almost complete picture of the problem space, show that indeed many problems
-can be solved optimally in polynomial time, even in the presence of multiple degrees of freedom (in terms of 
+can be solved optimally in polynomial time, even in the presence of multiple degrees of freedom (in terms of
 replica selection and embedding), and also highlight
 computational hardness limitations. We highlight interesting connections to classic algorithmic
-problems such as matching and flow problems. In terms of hardness results, 
-we provide reductions from 3-D matching, SAT and coverage problems; interestingly, 
+problems such as matching and flow problems. In terms of hardness results,
+we provide reductions from 3-D matching, SAT and coverage problems; interestingly,
 while it is well-known that (unsplittable) multi-commodity flow
 problems are NP-hard in capacitated networks, our hardness results also hold for uncapacitated
 networks. We also show that NP-hard problems already arise in small-diameter networks (as they are
@@ -268,14 +268,14 @@ We will first present our model formally, and subsequently discuss its motivatio
 to batch-processing applications. Figure~\ref{fic:overview} gives on overview of the model. TODO CARLO
 
 
-%\textbf{Fundamental Parts.} 
+%\textbf{Fundamental Parts.}
 
 \subsection{Fundamental Parts}
 
 Our model consists of three fundamental parts: (1) the substrate network (the servers
 and the connecting network),
 (2) the to be processed input (the data), and
-(3) the virtual network (the virtual machines and the logical networking connecting the machines to each other 
+(3) the virtual network (the virtual machines and the logical networking connecting the machines to each other
 as well as to the data).
 
 \emph{The Substrate Network.} The substrate network (also known as the \emph{host graph}) represents the physical resources:
@@ -287,7 +287,7 @@ of virtual machines (available server capacity $\capacity(s)$), and each link $e
 capacity $\capacity(e)$.
 
 \emph{The Input Data.} The to be processed data constitutes the input to the batch-processing application.
-The data is stored in a distributed manner; this distribution is given and not subject to optimization. 
+The data is stored in a distributed manner; this distribution is given and not subject to optimization.
 The input data consists of different \emph{chunk types} $\{\achunk_1, \ldots, \achunk_k\}$,
 where for each chunk type $\achunk_i$,
 there exist $r$ replicas $\{\achunk_{i}^{(1)},\ldots, \achunk_{i}^{(r)}\}$, where each replica is stored at a certain server.
@@ -298,8 +298,8 @@ replica as the \emph{active} (or selected) replica.
 \emph{The Virtual Network.} The virtual network consists of a set $\VirtualNodes$ of $n_V=|\VirtualNodes|$ virtual machines or compute
  units, henceforth often simply called \emph{nodes}.
 Each node $v$ can be placed (or, synonymously, \emph{embedded}) on a server; this placement can be subject
-to optimization. 
-Depending on the available capacity $\capacity(s)$ of server $s$, multiple nodes maybe be hosted on $s$. 
+to optimization.
+Depending on the available capacity $\capacity(s)$ of server $s$, multiple nodes maybe be hosted on $s$.
 We will denote the server hosting node $v$ by $\pi(v)$.
 Since these virtual machines process the input data, they need to be assigned and connected to the
 chunks. Concretely, for each chunk type $\achunk_i$, one replica $\achunk_{i,j}$ must be processed by exactly one virtual machine $v$;
@@ -317,10 +317,10 @@ is modeled as a complete network. Concretely, we assume that an  active chunk
 is connected to its node at a minimal bandwidth $\CostTrans$, and a node is connected to any other node
 at minimal bandwidth $\CostCom$.
 
-%\textbf{Optimization Objective.} 
+%\textbf{Optimization Objective.}
 
 \subsection{Optimization Objective}
- 
+
 Our goal is to develop algorithms which minimize
 the \emph{resource footprint}: the overall bandwidth allocation in the datacenter. (Note that
 the resource allocation at the servers does not depend on the replica selection or embedding.) That is,
@@ -356,13 +356,13 @@ each node needs to be assigned multiple chunks. We will refer to such a scenario
 (Note that in a scenario with only $\MA$ but without $\RS$, chunk types are not redundant.)
 
 \emph{Flexible Placement ($\FP$).} The second fundamental degree of freedom, besides replica selection and assignment,
-regards the flexibility in the placement (or synonymously: \emph{embedding}) of virtual machines to physical servers. 
+regards the flexibility in the placement (or synonymously: \emph{embedding}) of virtual machines to physical servers.
 We will refer to this aspect by $\FP$.
 
 \emph{Node Interconnect ($\CC$).} We will distinguish between scenarios where bandwidth needs to be reserved
 both from each virtual machine to its replica as well as to the other virtual machines
 (i.e., $\CostTrans>0$ and $\CostCom>0$), and
- scenarios where only the access network requires bandwidth reservation (i.e., $\CostTrans>0$ and $\CostCom=0$). 
+ scenarios where only the access network requires bandwidth reservation (i.e., $\CostTrans>0$ and $\CostCom=0$).
  We will refer to the former scenarios
 where bandwidth needs to be reserved for the inter-connect, by $\CC$.
 
@@ -370,33 +370,39 @@ where bandwidth needs to be reserved for the inter-connect, by $\CC$.
 of the substrate network come with bandwidth
 constraints, and will refer to the bandwidth-constrained version by $\BW$; the capacity of servers
 (the number of virtual machines which can be hosted concurrently) is always limited.
-Note that capacity constraints introduce infeasible problem instances, where it is impossible to 
+Note that capacity constraints introduce infeasible problem instances, where it is impossible to
 allocate sufficient resources to satisfy an embedding request; in this case, we will say that the
 resource footprint is \emph{infinite}.
-
-here i am
 
 %\textbf{Remark on Practical Motivation.}
 
 \subsection{Remark on Practical Motivation}
 
-Our model is inspired by batch-processing applications such as MapReduce.
-The standard datacenter topology today are fat-trees~\cite{fattree},
-and the most popular virtual network abstraction is the virtual cluster~\cite{oktopus}.
-MapReduce applications cycle through three main phases: during the first phase,
-the input data is mapped in a distributed fashion, by the mappers.
-The resulting output is then transmitted to the so-called reducers; this phase is
-called the shuffling phase. In the third phase, the data is processed by the reducers.
-Moreover, in the beginning resp.~in the end, data needs to be loaded from resp.~written
-back to the distributed file system.
-Typically, a node serves both as a mapper and a reducer.
-
-In our formal model, we distinguish between the bandwidth $\CostTrans$ needed to
-transmit the input data to its assigned node, and the bandwidth $\CostCom$
-needed during the shuffling phase between the virtual nodes.
-The ratio $\CostCom/\CostTrans$ can be seen as the so-called mapping ratio:
-how much smaller is the input after the mapping phase.
-
+Our model is motivated by batch-processing applications such as MapReduce.
+Such applications use of multiple compute units or virtual machines to
+process data, initially often redundantly stored in a distributed file system implemented
+by multiple servers.~\cite{mapreduce}
+The standard datacenter topology today are fat-trees resp.~Clos topologies,~\cite{fattree}
+which motivates our focus on tree-like substrate networks where servers are located at the
+tree leaves.
+During execution, batch-processing applications typically cycle through different phases,
+most prominently, a mapping phase and a reducing phase; between the two phases,
+a shuffling operation is performed, phase where the results from the mappers
+are communicated to the reducers. Since the shuffling phase can constitute a
+non-negligible part of the overall runtime~\cite{orchestra},
+and since concurrent network transmissions can introduce interference and
+performance unpredictability~\cite{amazonbw}, it is important
+to provide explicit minimal bandwidth guarantees.~\cite{talk-about}
+In particular, our inter-connect (the virtual network connecting the virtual machines)
+is motivated by the popular virtual cluster abstraction.~\cite{oktopus,talk-about,proteus}
+In this paper, we extend this model with a notion of data-locality.
+In particular, we distinguish between the bandwidth needed between replica
+and virtual machine ($\CostTrans$) and the bandwidth needed between
+two virtual machines ($\CostCom$); in practice, for applications with a large so-called
+\emph{mapping ratio}, $\CostCom<\CostTrans$. Finally, note that it is frequently assumed
+that the nodes implementing the mapper functionality also implement the reducer functionality,
+and vice versa; however, it can also make sense to have more mappers or more reducers for
+certain applications.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Polynomial-Time Algorithms}\label{sec:poly}
@@ -417,23 +423,73 @@ can be solved optimally using dynamic programming.
 
 \subsection{Matching Algorithms ($\RS+\MA+\CC$)}
 
-Stefan: I think it would be better to directly show $\RS+\MA$ here, so it's more interesting. (It's important not to start the technical part not too trivial)
-
 Several problems related to replica selection,
-are essentially matching problems. Consider the problem $\RS$:
-Given a set of redundant chunks and a set of virtual machines (including
-their locations), which replicas should be chosen and assigned to which
-virtual machines, in order to minimize the resource footprint $\Cost$ (in this case
-simply the cost of transferring replicas to nodes)?
-This problem boils down to a Minimum Weight
+are essentially matching problems.
+In the following, we show how to solve
+the $\RS+\MA+\CC$ problem using a matching approach.
+Recall that in the $\RS+\MA+\CC$ problem,
+we are given a set of redundant chunks ($\RS$) and a set of virtual machines
+at fixed locations. The number of chunk types is larger than the number
+of virtual machines ($\MA$), and each virtual machine needs to be connected
+to its chunks as well as to other virtual machines ($\CC$).
+Our goal is to minimize the resource footprint $\Cost$, consisting
+of the bandwidth reservations in the access network and the inter-connect.
+
+First we observe that in the absence of node placement flexibilities (no $\FP$),
+due to the tree structure of the substrate topology $\Tree$, the bandwidth required
+for the inter-connect network can be allocated upfront, and does not depend on the replica
+selection and assignment. Thus, the problem boils down to $\RS+\MA$.
+
+In order to solve $\RS+\MA$, we construct a bipartite graph between the set
+$\VirtualNodes$ of virtual machines and
+the set of chunks.
+Concretely, we clone each node $\MaFactor$ times,
+as each node needs to process
+$\MaFactor$ replica types, and collect all copies of a given chunk type in a
+single %$\ChunkType$
+``super-node''. We connect each node to all chunk types using the
+\emph{lowest hop count} to one of the copies, as the weight.
+
+On the resulting graph, we can compute a Minimum Weight
 Perfect Bipartite
-Matching problem~\cite{schrijver_combinatorial_optimization}:
-we can construct a bipartite graph between the set $\VirtualNodes$ of virtual machines and
-the set of chunks, where we connect each virtual machine to
-each chunk by an edge whose cost corresponds to the number of hops between the
-two entities in the underlying substrate network $\Tree$.
-We can interpret the perfect matching solution computed on this graph (which takes polynomial time only~\cite{schrijver_combinatorial_optimization})
-as an assignment of chunks to nodes.
+Matching, which takes polynomial time~\cite{schrijver_combinatorial_optimization}:
+the matching denotes the assignment of chunks to nodes.
+
+
+\textbf{Example.} \stefan{TODO CARLO: MAKE EXAMPLE FOR $\RS+\MA$ DIRECTLY.} Let us give a small example.
+Figure~\ref{fig:matching_basic} shows an example for the problem instance introduced in
+Figure~\ref{fig:basic_problem}: $\NodeMapping(\VirtualNode_1)$ is four hops
+away from all chunks; in the matching problem, this is
+reflected in the corresponding edge
+weights. Similarly, $\NodeMapping(\VirtualNode_2)$ is
+two hops away from $\achunk_2$, and four hops away from $\achunk_1$. Hence the
+weight of the edge $(\NodeMapping(\VirtualNode_2),\achunk_2)$ is $2$, while the
+weight on the edge to $\achunk_1$ is $4$. The solution to the minimum weight
+perfect bipartite matching contains the edges $(\NodeMapping(\VirtualNode_1),
+\achunk_1)$ and $(\NodeMapping(\VirtualNode_2),
+\achunk_2)$, which is exactly the chunk to node assignment $\VmChunkAssignment$
+which we identified as an optimal solution in Section~\carlo{TODO}.
+Figure~\ref{fig:matching} illustrates this for the scenario of
+Figure~\ref{fig:model_combined}: The two nodes are
+cloned into $\MaFactor = 2$ nodes each, resulting in a total of four nodes in
+the matching problem. The $\RedundancyFactor = 2$ chunks of each chunk type are
+aggregated $\achunk_j$ into a single chunk type node in the matching problem;
+this gives a total of $4$ chunk type nodes in the matching graph. The weight
+on the edges between all clones of a specific node and a chunk type are set to
+the minimum distance. This can for instance be observed at the edges connecting
+the two clones of $\VirtualNode_1$ to $\achunk_2$: both weights are 0.
+
+\stefan{TODO: Maciek: please doublecheck the following as well:}
+
+\textbf{Remark on runtime.} There are many algorithms too solve the minimum weight
+perfect matching problem on bipartite
+graphs. The corresponding runtimes depend on  the number $n$ of nodes and
+the number of edges $m$ in the
+graph, and on the largest edge weight $W$. The currently best algorithm is due to
+Gabow et al.~\cite{gabow_scaling_algorithm}; it has a runtime of $\mathcal{O}(n^{3/4}
+\cdot m \cdot \log W)$.  which, when applied to our problem $\RS+\MA+\CC$ translates to $\mathcal{O}((\MaFactor \cdot \Vms +
+\ChunkTypes)^{3/4} \cdot  \MaFactor \cdot \Vms \cdot \ChunkTypes \cdot \log
+(2 \cdot h(\Tree)))$, where $h(\Tree)$ denotes the height of the tree $\Tree$.
 
 \begin{figure}
 \begin{minipage}[b]{0.49\linewidth}
@@ -452,53 +508,6 @@ shadowed lines.}
 \label{fig:matching}
 \end{minipage}
 \end{figure}
-
-Figure~\ref{fig:matching_basic} shows an example for the problem instance introduced in
-Figure~\ref{fig:basic_problem}: $\NodeMapping(\VirtualNode_1)$ is four hops
-away from all chunks; in the matching problem, this is
-reflected in the corresponding edge
-weights. Similarly, $\NodeMapping(\VirtualNode_2)$ is
-two hops away from $\achunk_2$, and four hops away from $\achunk_1$. Hence the
-weight of the edge $(\NodeMapping(\VirtualNode_2),\achunk_2)$ is $2$, while the
-weight on the edge to $\achunk_1$ is $4$. The solution to the minimum weight
-perfect bipartite matching contains the edges $(\NodeMapping(\VirtualNode_1),
-\achunk_1)$ and $(\NodeMapping(\VirtualNode_2),
-\achunk_2)$, which is exactly the chunk to node assignment $\VmChunkAssignment$
-which we identified as an optimal solution in Section~\carlo{TODO}.
-
-Note that the approach can also be generalized to scenarios with multiple assignments,
-i.e., to problems
-$\RS+\MA$. In the $\MA$ problem variant, a single node has to process
-$\MaFactor$ replicas, and we can simply clone each node $\MaFactor$ times.
-In order to incorporate the different
-replicas of the chunks, we depict all copies of a given $\ChunkTypes$ in a
-single %$\ChunkType$
-``super-node''. We connect each node to all chunk types using the
-\emph{lowest hop count} to one of the copies, as the weight.
-
-Figure~\ref{fig:matching} illustrates this for the scenario of
-Figure~\ref{fig:model_combined}: The two nodes are
-cloned into $\MaFactor = 2$ nodes each, resulting in a total of four nodes in
-the matching problem. The $\RedundancyFactor = 2$ chunks of each chunk type are
-aggregated $\achunk_j$ into a single chunk type node in the matching problem;
-this gives a total of $4$ chunk type nodes in the matching graph. The weight
-on the edges between all clones of a specific node and a chunk type are set to
-the minimum distance. This can for instance be observed at the edges connecting
-the two clones of $\VirtualNode_1$ to $\achunk_2$: both weights are 0.
-
-TODO Stefan: We can also do CV, and maybe should say this right away!
-
-TODO: Maciek: please doublecheck the following as well:
-
-\textbf{Remark on runtime.} There are many algorithms too solve the minimum weight
-perfect matching problem on bipartite
-graphs. The corresponding runtimes depend on  the number $n$ of nodes and
-the number of edges $m$ in the
-graph, and on the largest edge weight $W$. The currently best algorithm is due to
-Gabow et al.~\cite{gabow_scaling_algorithm}; it has a runtime of $\mathcal{O}(n^{3/4}
-\cdot m \cdot \log W)$.  which, when applied to our problem $\RS+\MA+\CC$ translates to $\mathcal{O}((\MaFactor \cdot \Vms +
-\ChunkTypes)^{3/4} \cdot  \MaFactor \cdot \Vms \cdot \ChunkTypes \cdot \log
-(2 \cdot h(\Tree)))$, where $h(\Tree)$ denotes the height of the tree $\Tree$.
 
 \subsection{Flow Algorithm ($\RS+\MA+\CC+\BW$)}
 
@@ -1578,7 +1587,7 @@ number of nodes in each of the $\clauses$ clause gadgets.
 The available bandwidth for the top edge of each clause gadget is set to
 $\capa(\clauses) = 3  \cdot  2  \cdot  (2  \cdot  (\clauses - 1) + 3  \cdot  \vars) $.
 
-FIXME: The construction is illustrated in Figure~\ref{fig:two}.
+\stefan{TODO Carlo: The construction is illustrated in Figure~\ref{fig:two}.}
 
 
 \textbf{Proof of correctness.}
@@ -1714,6 +1723,8 @@ $\top$; therefore the clause is satisfied.
 \includegraphics[angle=90,origin=c, height=7cm]{figs/model_fig_skteches/basic_problem}
 \caption{solution for basic problem (green is pathes for transfer)}
 \end{figure}
+
+\begin{comment}
 
 \section{Model}
 
