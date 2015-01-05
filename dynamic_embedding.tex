@@ -10,7 +10,7 @@ Mention correctness requirements: substructure optimality and overlapping subpro
 
 We will want to go through all VM placements, for each of those do greedy matching and choose the cheapest.
 
-Solution for subtree - how it can look like? Some matched VMs and chunks, but also some chunks transported out of subtree or some VMs/slots that will have chunks transported into from outside. So we charge already those incomplete matchings.
+Solution for subtree - how it can look like? It is ``partial matching''. Some matched VMs and chunks, but also some chunks transported out of subtree or some VMs/slots that will have chunks transported into from outside. So we charge already those incomplete matchings.
 
 Cost charging model - two edges. Recursive formula for calculating the cost.
 Recursive formula for cost with bandwidth. 
@@ -29,28 +29,45 @@ Note that it computationally intensive, and we can trade it for memory - we can 
 \subsection{Algorithm correctness}
 \subsubsection{Optimality of greedy matching}
 
-TODO: unfinished matching?
+For general complete bipartite graphs the matching constructed by greedily choosing the cheapest edge can be arbitrarily bad.
+However, in case of very specific graph, where weights are induced by distance in a tree, this strategy produces optimal solution.
+By using properties of the tree, we will show following lemma:
 
-Let's assume that we already guessed the optimal positions of VMs. Then the greedy matching produces matching.
+\begin{lemma}
+  Given fixed positions of VMs, the local greedy perfect matching of chunks to VMs inclines minimal cost among all possible perfect matchings.
+\end{lemma}
 
-I think that we have to look at inductive step of joining two subtrees. If we match left-right we have cost x. We can do it arbitrary way, as
-distances are the same.
+\begin{proof}
+Proof by contradiction. Let's assume that there exists matching of cost lower than cost of $G$. Let's take cheapest such matching and call it $H$.
 
-Proof by contradiction. Let's take cheapest matching possible and assume that it has cheaper cost than the one produced by algorithm. If it had matched locally, then it has the same cost, as all solutions produced this way has the same cost x. Therefore it had to match it non-locally. Let's take any such place.
-Then transportation paths cross and this solution can be cheaper. Contradiction.
+Let's find smallest subtree $S$ where partial matching of $G$ has different cost than partial matching of $H$. It means that in both left and right subtree we did local matching (do we need this sentence?). It means that non-local decision was made in this subtree (perhaps hoping for savings higher?). Then there exist two such two such matched pairs in $H$ that shares an edge (one pair is transporting chunk up, the second one is transporting chunk down). Then we can create matching $H'$ that uncrosses those edges (does the local matching on them) and is cheaper than $H$. Contradiction.
+
+
+\end{proof}
+
+It means basically that in every subtree we can only have more costly solution. Perhaps there exist cleaner way of proving that.
 
 \subsubsection{Substructure optimality.}
 
-What is our substructure? It is unfinished matching. Show that we can build optimal matching out of those unfinished ones.
+What is our substructure? It is unfinished matching. Show that we can build optimal matching out of those unfinished ones. Here we need to
+consider different number of VMs to choose best composition.
 
-Optimality of greedy local matching in the subtree
-Also mention overlapping subproblems.
-Formulate the lemma and sketch the proof.
+Basically, it is the correctness proof of our strategy. You have to use optimality of greedy matching here.
 
-Proof. Let's assume that we already guessed the optimal positions of VMs (to have clear picture). I don't know if we can do that guessing!
+\subsubsection{Bandwidth correctness.}
 
-\subsubsection{Bandwidth - no feasible solution for instance when algorithm says NO}
+\begin{lemma}
+  If algorithm returns solution $\Sol$ of cost $\neq \infty$, then in $\Sol$ no link exceeds its capacity limit.
+  \end{lemma}
 
-Reasoning about adding bandwidth.
+\begin{lemma}
+An instance of $\Problem$ is infeasible iff. algorithm returns $\infty$.
+\end{lemma}
+\begin{proof}
+  ($\rightarrow$)
+
+  ($\leftarrow$)
+  \end{proof}
+
 
 \subsection{Running time and memory consumption analysis}
