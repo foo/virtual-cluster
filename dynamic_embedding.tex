@@ -1,1 +1,33 @@
 It is an attempt to rewrite dynamic programming section.
+
+TODO: hosting multiple VMs in the same node
+
+\subsubsection{Introduction to DP in general}
+
+Intro to dynamic programming. Intro to dynamic programming on tree with subtree decoupling.
+Introduce binarization as way of dealing with trees of larger arity.
+
+\subsubsection{Introduction to our algorithm}
+
+We will want to go through all VM placements, for each of those do greedy matching and choose the cheapest.
+
+Solution for subtree - how it can look like? Some matched VMs and chunks, but also some chunks transported out of subtree or some VMs/slots that will have chunks transported into from outside. So we charge already those incomplete matchings.
+
+Cost charging model - two edges. Recursive formula for calculating the cost.
+
+\subsubsection{Algorithm}
+
+Present the pseudocode, with base cases, aggregate function.
+
+Tell how to go back through the array to reconstruct the actual placements. ``Following path of minimas''.
+Note that it computationally intensive, and we can trade it for memory - we can remember the best placement.
+
+\subsubsection{Algorithm correctness - substructure optimality}
+
+\subsubsection{Algorithm correctness - optimality of local matching in the tree}
+
+Formulate the lemma and sketch the proof.
+
+\subsubsection{Algorithm correctness - no feasible solution for instance when algorithm says NO}
+
+\subsubsection{Running time analysis}
