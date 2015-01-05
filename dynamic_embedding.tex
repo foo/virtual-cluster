@@ -1,33 +1,56 @@
-It is an attempt to rewrite dynamic programming section.
+Description of the problem ($\FP+\CC+\MA+\BW$).
 
-TODO: hosting multiple VMs in the same node
+\subsection{Dynamic programming on trees}
 
-\subsubsection{Introduction to DP in general}
-
-Intro to dynamic programming. Intro to dynamic programming on tree with subtree decoupling.
+Intro to dynamic programming on trees with subtree decomposition.
 Introduce binarization as way of dealing with trees of larger arity.
+Mention correctness requirements: substructure optimality and overlapping subproblems.
 
-\subsubsection{Introduction to our algorithm}
+\subsection{Introduction to our algorithm}
 
 We will want to go through all VM placements, for each of those do greedy matching and choose the cheapest.
 
 Solution for subtree - how it can look like? Some matched VMs and chunks, but also some chunks transported out of subtree or some VMs/slots that will have chunks transported into from outside. So we charge already those incomplete matchings.
 
 Cost charging model - two edges. Recursive formula for calculating the cost.
+Recursive formula for cost with bandwidth. 
 
-\subsubsection{Algorithm}
+\subsection{Algorithm}
+
+TODO: hosting multiple VMs in the same node
+
+List all needed functions like distance, counter of number of chunks in subtree.
 
 Present the pseudocode, with base cases, aggregate function.
 
 Tell how to go back through the array to reconstruct the actual placements. ``Following path of minimas''.
 Note that it computationally intensive, and we can trade it for memory - we can remember the best placement.
 
-\subsubsection{Algorithm correctness - substructure optimality}
+\subsection{Algorithm correctness}
+\subsubsection{Optimality of greedy matching}
 
-\subsubsection{Algorithm correctness - optimality of local matching in the tree}
+TODO: unfinished matching?
 
+Let's assume that we already guessed the optimal positions of VMs. Then the greedy matching produces matching.
+
+I think that we have to look at inductive step of joining two subtrees. If we match left-right we have cost x. We can do it arbitrary way, as
+distances are the same.
+
+Proof by contradiction. Let's take cheapest matching possible and assume that it has cheaper cost than the one produced by algorithm. If it had matched locally, then it has the same cost, as all solutions produced this way has the same cost x. Therefore it had to match it non-locally. Let's take any such place.
+Then transportation paths cross and this solution can be cheaper. Contradiction.
+
+\subsubsection{Substructure optimality.}
+
+What is our substructure? It is unfinished matching. Show that we can build optimal matching out of those unfinished ones.
+
+Optimality of greedy local matching in the subtree
+Also mention overlapping subproblems.
 Formulate the lemma and sketch the proof.
 
-\subsubsection{Algorithm correctness - no feasible solution for instance when algorithm says NO}
+Proof. Let's assume that we already guessed the optimal positions of VMs (to have clear picture). I don't know if we can do that guessing!
 
-\subsubsection{Running time analysis}
+\subsubsection{Bandwidth - no feasible solution for instance when algorithm says NO}
+
+Reasoning about adding bandwidth.
+
+\subsection{Running time and memory consumption analysis}
