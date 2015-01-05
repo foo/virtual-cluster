@@ -33,7 +33,7 @@
 \newcommand{\VM}{\textsc{VM}}
 \newcommand{\Problem}{\textsc{DummyName Problem}}
 \newcommand{\carlo}[1]{\textcolor{red}{#1}}
-\newcommand{\maciek}[1]{\textcolor{green}{#1}}
+\newcommand{\maciek}[1]{\textcolor{brown}{#1}}
 \newcommand{\stefan}[1]{\textcolor{blue}{#1}}
 \newcommand{\MaFactor}{\ensuremath{\textsc{MA}}}
 \newcommand{\Path}{\ensuremath{p}}
@@ -515,8 +515,9 @@ flow associated on every edge. We set $\VmChunkAssignment(\achunk_j) =
 one. This is repeated, until $|\hat f| = 0$. Due to the tree properties of
 $\Tree$, that there is only one path between two nodes, all VM chunk
 assignments generated in this value will have the same overall costs.
- \maciek{I have no idea what this paragraph is about. We have mix of construction for replica with construction of the matching? Rewrite or remove.}
+ \maciek{I have no idea what this paragraph is about. We have mix of construction for replica with construction of the matching. Rewrite or remove.}
 
+ \maciek{What we have left to do is to prove or at least say that it is trivial: (1) if our algorithm says NO, then there should not be any feasible solution (2) argue about optimality of constructed flow (it follows from optimality of flow and our awesome construction)}
 
 \begin{comment}
 \item For a given chunk \textit{type} to VM assignment, the replica selection
