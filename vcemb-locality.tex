@@ -830,61 +830,78 @@ e_n\}$ \carlo{TODO check n}, such that $f(e_i) > 1 ~ \forall i \in
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Related Work}\label{sec:relwork}
 
-Our work is motivated by the resource allocation and computational model of
-batch-processing cloud applications, such as MapReduce.
+There has recently been much interest in programming models and distributed
+systems for the processing and analysis of big data (e.g.~\cite{nodb,mapreduce,shark}). The model studied in 
+this paper is motivated by MapReduce~\cite{mapreduce} like batch-processing applications, also known
+from the popular open-source implementation \emph{Apache Hadoop}. 
 These applications
-generate large amounts of network traffic, and a considerable
-fraction of the runtime is due to network acti\-vi\-ty.~\cite{talk-about,amazonbw,orchestra}.
-Accordingly, systems have been proposed which provide
-a provable network performance by making explicit bandwidth reservations
-between the virtual machines or compute units, either relative~\cite{seawall,faircloud,elasticswitch}
-or absolute~\cite{secondnet,oktopus, proteus, drl, gatekeeper}.
-
-The need to take into account both node as well as link resources motivates
-the design of virtual networks, and the question of how to efficiently embed virtual networks
-has been studied intensively, also from an algorithmic perspective.
+generate large amounts of network traffic~\cite{talk-about,amazonbw,orchestra},
+and over the last years, several systems have been proposed which provide
+a provable network performance, also in shared cloud environments, namely by supporting explicit 
+relative~\cite{seawall,faircloud,elasticswitch}
+or, as in the case of our paper, \emph{absolute}~\cite{secondnet,oktopus,proteus,drl,gatekeeper} bandwidth reservations
+between the virtual machines or compute units.
+In particular, the notion of virtual networks which combine compute and network resources has been introduced.
 For a good survey on network virtualization and in particular virtual network embeddings,
 we refer the reader to~\cite{boutaba-survey} and~\cite{fischer-survey}.
 
-The most popular abstraction for batch-processing applications is the virtual cluster,
-introduced in the Oktopus paper~\cite{oktopus}, and later studied by many other researchers~\cite{proteus}.
-Many heuristics have been developed to compute ``good'' embeddings of virtual clusters, in the sense that
-they result in small footprints (minimal bandwidth reservation costs).
+The most popular abstraction for batch-processing applications today is the \emph{virtual cluster},
+introduced in the Oktopus paper~\cite{oktopus}, and later studied by many other researchers~\cite{talk-about,proteus}.
+Several heuristics have been developed to compute ``good'' embeddings of virtual clusters: embeddings
+with small footprints (minimal bandwidth reservation costs).
+The virtual network embedding problem has also been studied for more general graph abstractions 
+(e.g., motivated by wide-area networks).~\cite{ammar,zhu06,simannealing,turner,infocom2009,ucc12mip}
 
-However, the virtual network embedding problem has not only been studied for virtual clusters,
-but also for more general graphs (motivated by wide-area networks). In contrast to the classic VPN
-graph embedding problems~\cite{gupta2001provisioning,Goyal2008},
-in these models, also the embedding endpoints are flexible and subject to optimization.
-In this respect, the problem can also be seen as a generalization of the classic NP-hard Minimum Linear Arrangement problem which asks for the
-embedding of guest graphs on a simple line topology.~\cite{mla,mla-survey,mla-feige}
-Indeed, many problem variants are NP-hard and much research so far has focused on heuristics~\cite{ammar,zhu06,simannealing,turner}
-or mixed integer programs~\cite{infocom2009,ucc12mip}.
+From a theoretical perspective, the virtual network embedding problem can be seen as a generalization
+of classic VPN graph embedding problems~\cite{gupta2001provisioning,Goyal2008},
+in the sense that in virtual network embedding problems, also the embedding endpoints are flexible and subject to optimization.
+In this sense, the virtual network embedding problem can also be seen as a generalization of the 
+classic NP-hard Minimum Linear Arrangement problem which asks for the
+embedding of guest graphs on a simple \emph{line topology} (rather than tree-like topologies as
+studied in this paper).~\cite{mla,mla-survey}
+There exist several interesting algorithms for the Minimum Linear Arrangement problem, 
+e.g., with sublogarithmic approximation ratios~\cite{mla-feige}. 
 
 However, to the best of our knowledge, we are the first to provide an algorithmic
-study of the cloud application embedding problem which also takes into account
+study of the cloud application embedding problem which takes into account
 data locality as well as the possibility to select replicas. As we have shown in this paper,
 the resulting problems can be seen as interesting new variants of several classic optimization
-problems, such as hitting sets, matchings and 3-dimensional matchings~\cite{3SC-hard} as well as cover and flow problems.~\cite{korte2002combinatorial}
-
+problems, such as hitting set and 3-dimensional matching problems~\cite{3SC-hard} as well as cover and flow problems~\cite{korte2002combinatorial}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Summary and Conclusion}\label{sec:conclusion}
 
-This paper investigated two fundamental new dimensions of virtual cluster
-embedding problems: data locality and replica selection. We pursued
-an algorithmic approach and decomposed the problem into fundamental aspects,
-namely $\BW$, $\CC$, $\RS$, $\MA$ and $\FP$. Our results are summarized in
-Figure~\ref{fig:summary}.
+This paper investigated data data locality aware algorithms which exploit two fundamental 
+degrees of freedom in virtual cluster
+embedding problems: replica selection and flexible node placement. We 
+decomposed the problem into its fundamental aspects,
+namely $\RS$, $\MA$, $\FP$, $\CC$, and $\BW$, and studied the computational
+tractability of different combinations. 
+
 In particular, we have shown that
-at the heart of our problem lie interesting new variants of classic
+at the heart of our model lie interesting new variants of classic
 optimization problems related to matchings and flows. Interestingly, despite the
-numerous
-flexibilities, many problem instances can actually be solved in polynomial time.
+different dimensions of flexibility (in terms of replica selection, assignment and embedding),
+many problem instances can actually be solved in polynomial time.
 On the negative side, we have also shown that there exist computationally hard
 problems even in uncapacitated networks. In particular,
-we have shown that several embeddings problems are NP-hard already in two-level fat-trees (practically speaking:
-problems inside a single \emph{pod}), and even if the the number of replicas is bounded by two.
+we have shown that several embeddings problems are NP-hard already in two- and three-level trees
+(a practically relevant result given today's datacenter topologies~\cite{fattree}), 
+and even if the the number of replicas is bounded by two.
 
+
+Our results are summarized in
+Figure~\ref{fig:summary}. 
+An interesting takeaway from this figure regards
+the question which properties render the problem
+NP-hard. For instance, we see that interestingly, $\BW$ 
+does not influence the hardness of any problem instance,
+while $\RS$ is crucial for NP-hardness. 
+$\MA$ only affects hardness if combined with $\RS$.
+$\CC$ is trivial without $\FP$, and $\FP$ requires
+more sophisticated algorithms when combined $\CC$ or $\MA$;
+together with $\RS$ and $\MA$ or $\CC$, $\FP$ renders the
+problem NP-hard.
 
 \begin{figure}[t]
 \includegraphics[width = \columnwidth]{figs/summary}
@@ -897,22 +914,10 @@ problems, several additional results are simple implications (indicated by arrow
 
 Our paper provides an almost complete overview of what can and cannot be
 computed optimally in our setting, and may of interest both to the algorithm
-and the networking community. However, our work also opens several interesting
+and the networking community. At the same time, we understand our model and work
+as a first step, and believe that our paper opens several interesting
 questions for future research, for instance, regarding randomized algorithms
-or approximation algorithms. A concrete and particularly interesting open
-question is whether FIXME.
-
-\maciek{
-I would like to propose that in summary we take each of MA/NI/FP/RS/BW and say how it affects hardness:
-}
-
-\begin{itemize}
-\item BW does not matter
-\item RS is crucial to NP-completeness
-\item MA does not matter unless paired with MA and RS
-\item FP simplifies to 0 cost, with MA or NI we have to use more sophisticated techniques, with RS and (MA or NI) we have NP-completeness
-\item NI is trivial without FP and can be precomputed
-\end{itemize}
+or approximation algorithms.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
