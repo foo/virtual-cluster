@@ -267,7 +267,17 @@ appear in the Appendix.
 \section{Model}\label{sec:model}
 
 We will first present our model formally, and subsequently discuss its motivation and how it relates
-to batch-processing applications. Figure~\ref{fic:overview} gives on overview of the model. TODO CARLO
+to batch-processing applications. Figure~\ref{fig:overview} gives on overview of the model.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.99\columnwidth]{figs/overview-fig.pdf}
+\caption{Overview: a 9-server (fat-tree) datacenter storing 4 different chunk
+types $\{c_1,\ldots,c_4\}$. The chunk replicas need to be selected and assigned to the two
+ virtual machines $v_1$ and $v_2$. In addition, the virtual machines are inter-connected among
+ each other. The objective of the embedding problem is to minimize the overall bandwidth allocation.}
+\label{fig:overview}
+\end{figure}
 
 
 %\textbf{Fundamental Parts.}
