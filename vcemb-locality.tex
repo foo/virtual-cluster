@@ -35,7 +35,7 @@
 \newcommand{\carlo}[1]{\textcolor{red}{carlo: #1}}
 \newcommand{\maciek}[1]{\textcolor{brown}{maciek: #1}}
 \newcommand{\stefan}[1]{\textcolor{blue}{stefan: #1}}
-\newcommand{\MaFactor}{\ensuremath{\textsc{MA}}}
+\newcommand{\MaFactor}{r}
 \newcommand{\Path}{\ensuremath{p}}
 \newcommand{\RedundancyFactor}{\ensuremath{r}}
 
@@ -103,8 +103,8 @@
 
 \newcommand{\Bandwidth}{\ensuremath{bw}}
 \newcommand{\Tree}{\ensuremath{T}}
-\newcommand{\CostCom}{\ensuremath{b_1}}
-\newcommand{\CostTrans}{\ensuremath{b_2}}
+\newcommand{\CostTrans}{\ensuremath{b_1}}
+\newcommand{\CostCom}{\ensuremath{b_2}}
 \newcommand{\Vms}{\ensuremath{n_V}}
 \newcommand{\TSC}{\textsc{3-SC}}
 \newcommand{\TDM}{\textsc{3-DM}}
@@ -168,8 +168,9 @@ physical counterparts: essentially a graph embedding problem.
 However, existing algorithms
 in the literature often ignore a crucial dimension of the embedding problem, namely \emph{data locality}:
 the input to a cloud application such as MapReduce is typically stored in a distributed,
-and sometimes redundant, file system or database. Since moving this data is costly, an embedding algorithm should be data locality aware,
-and allocate computation close to the data; in case of redundant storage, the algorithm should also optimize the \emph{replica selection}.
+and sometimes redundant, file system. Since moving 
+data is costly, an embedding algorithm should be data locality aware,
+and allocate computational resources close to the data; in case of redundant storage, the algorithm should also optimize the \emph{replica selection}.
 
 This paper initiates the algorithmic study of data locality aware virtual cluster embeddings for
 the widely used (fat-)tree like datacenter topologies.
@@ -178,10 +179,9 @@ show that
 despite the multiple degrees of freedom in terms of embedding and replica selection,
 many problems can be
 solved efficiently, and we highlight interesting connections
-to classic optimization problems, such as matching and
-flow problems. However, we also show the limitations of such optimizations,
+to classic optimization problems. However, we also show the limitations of such optimizations,
 by presenting several new NP-hardness results; interestingly,
-our hardness proofs are for uncapacitated settings.
+our hardness proofs even hold in uncapacitated settings.
 \end{abstract}
 
 \begin{comment}
@@ -204,50 +204,50 @@ we should maybe give the main algorithms a name; we should talk about the case w
 Server and link virtualization introduces interesting resource allocation flexibilities,
 in the sense that virtual machines and their interconnecting network,
 can in principle be embedded \emph{anywhere} in the datacenter.
-While these flexibilities
-can in principle be exploited to improve resource sharing,
-the underlying embedding problems are non-trivial,
-and have been studied intensively over the last years.
+The resource allocation flexibilities
+can in principle be exploited to improve resource sharing.
 
-A very popular abstraction for for batch-processing applications is the \emph{virtual cluster}.~\cite{oktopus}
-As batch-processing applications such as often generate significant
-network traffic (namely during the so-called shuffle phase)~\cite{amazonbw},
-in order to avoid interference in the underlying physical network and in order to provide a predictable
+A very popular abstraction for for batch-processing applications such as MapReduce is the \emph{virtual cluster}~\cite{oktopus}:
+As batch-processing applications often generate significant
+network traffic (namely during the so-called \emph{shuffle phase})~\cite{amazonbw},
+in order to avoid interference in the underlying physical network and in order to ensure a predictable
 application performance,
 it is important to provide performance isolation and bandwidth guarantees between virtual machines.~\cite{talk-about}
-Accordingly, the virtual cluster not only defines a set of virtual machines with resource guarantees,
-but also an interconnect with (symmetric and pair-wise) bandwidth guarantees, the \emph{virtual network}.
-In order to provide resource-efficiency, several algorithms have been proposed to map virtual machines as close as possible
-to each other in the datacenter, which minimizes communication costs.~\cite{oktopus,proteus}
+Accordingly, a virtual cluster not only defines a set of virtual machines offering computational resources,
+but also an interconnecting network with (symmetric and pair-wise) bandwidth guarantees: essentially a \emph{virtual network}.
 
-However, existing embedding algorithms often ignore an important aspect: the fact that the input to the batch-processing applications,
-the data, are stored in a distributed file system or database, on different servers. Therefore, in order to minimize
-costly data transmissions, an embedding algorithm should be \emph{data locality aware},
-and allocate (or \emph{embed}) the compute units close to the chunk locations. Moreover, in case of redundant storage (batch processing
-applications often provide a 3-fold redundancy), the algorithm should exploit flexibilities in
-the \emph{replica selection}.
+Several algorithms have been proposed over the last years to map virtual machines as close as possible
+to each other in the datacenter, which minimizes communication costs.~\cite{oktopus,proteus}
+However, existing embedding algorithms ignore the input to the batch-processing applications:
+the data. Often, data is stored in a distributed file system, on different servers,
+and in order to minimize
+communication costs, an embedding algorithm should be \emph{data locality aware},
+and allocate (or \emph{embed}) computational resources close to the to be processed data. Moreover, in case of redundant storage (batch processing
+applications often provide a 3-fold redundancy), the algorithm should also exploit \emph{replica selection}
+flexibilities.
 
 \subsection{Our Contributions}
 
 This paper initiates the study of data-locality and replica aware embedding problems in virtualized datacenters.
-In particular, we decompose the optimization problem into different fundamental models, in terms of
-replica selection, flexible virtual machine embedding, or capacity constraints, and ask questions such as:
+In particular, we decompose the optimization problem into different fundamental aspects, such as
+replica selection and flexible virtual machine embedding, and answer questions such as:
 \begin{enumerate}
-\item Can replicas selected and assigned optimally in polynomial time?
+\item How to efficiently select and assign replicas to virtual machines?
 
-\item Can virtual machines be embedded optimally in polynomial time?
+\item How to efficiently embed virtual machines and their inter-connecting network?
 
-\item Can the joint optimization problem of replica selection and virtual machine placement be solved in polynomial time?
+\item Can the replica selection and virtual machine embedding be jointly optimized, in polynomial time?
 \end{enumerate}
 
 We draw an almost complete picture of the problem space, show that indeed many problems
 can be solved optimally in polynomial time, even in the presence of multiple degrees of freedom (in terms of
-replica selection and embedding), and also highlight
-computational hardness limitations. We highlight interesting connections to classic algorithmic
-problems such as matching and flow problems. In terms of hardness results,
-we provide reductions from 3-D matching, SAT and coverage problems; interestingly,
+replica selection and embedding), and 
+we highlight interesting connections to classic algorithmic
+problems such as matching and flow problems. 
+We also prove limitations in terms of 
+computational tractability, by showing reductions from 3-D matching, SAT and coverage problems; interestingly,
 while it is well-known that (unsplittable) multi-commodity flow
-problems are NP-hard in capacitated networks, our hardness results also hold for uncapacitated
+problems are NP-hard in capacitated networks, our hardness results also hold in uncapacitated
 networks. We also show that NP-hard problems already arise in small-diameter networks (as they are
 widely used today~\cite{fattree}),
 and even if the number of replicas is bounded by two.
@@ -275,46 +275,46 @@ to batch-processing applications. Figure~\ref{fic:overview} gives on overview of
 \subsection{Fundamental Parts}
 
 Our model consists of three fundamental parts: (1) the substrate network (the servers
-and the connecting network),
+and the connecting physical network),
 (2) the to be processed input (the data), and
-(3) the virtual network (the virtual machines and the logical networking connecting the machines to each other
+(3) the virtual network (the virtual machines and the logical network connecting the machines to each other
 as well as to the data).
 
 \emph{The Substrate Network.} The substrate network (also known as the \emph{host graph}) represents the physical resources:
 a set $S$ of $n_S=|S|$ servers interconnected by a network consisting of a set $R$ of servers (or switches)
-and a set $E$ of links. Concretely, we assume that the inter-connecting network forms an (arbitrary) tree,
+and a set $E$ of (symmetric) links. Concretely, we assume that the inter-connecting network forms an (arbitrary) tree,
 and that the servers are located at the tree leaves.
 Each server $s\in S$ can host a certain number
 of virtual machines (available server capacity $\capacity(s)$), and each link $e\in E$ has a certain bandwidth
 capacity $\capacity(e)$.
 
 \emph{The Input Data.} The to be processed data constitutes the input to the batch-processing application.
-The data is stored in a distributed manner; this distribution is given and not subject to optimization.
-The input data consists of different \emph{chunk types} $\{\achunk_1, \ldots, \achunk_k\}$,
-where for each chunk type $\achunk_i$,
-there exist $r$ replicas $\{\achunk_{i}^{(1)},\ldots, \achunk_{i}^{(r)}\}$, where each replica is stored at a certain server.
+The data is stored in a distributed manner; this spatial distribution is given and not subject to optimization.
+The input data consists of different \emph{chunk types} $\{\achunk_1, \ldots, \achunk_{\ChunkType}\}$,
+where each chunk type $\achunk_i$ can have $r\geq 1$ instances (or replicas) $\{\achunk_{i}^{(1)},\ldots, \achunk_{i}^{(r)}\}$, 
+ stored at different servers.
 Concretely, for each of the $r\cdot k$ replicas $\achunk_{i}^{(j)}$, we will denote by $\pi(\achunk_{i}^{(j)})$ at
-which server it is stored. It is sufficient to process one replica, and we will refer to this
+which server it is stored. It is sufficient to process one replica, and we will sometimes refer to this
 replica as the \emph{active} (or selected) replica.
 
 \emph{The Virtual Network.} The virtual network consists of a set $\VirtualNodes$ of $n_V=|\VirtualNodes|$ virtual machines or compute
  units, henceforth often simply called \emph{nodes}.
-Each node $v$ can be placed (or, synonymously, \emph{embedded}) on a server; this placement can be subject
+Each node $v \in \VirtualNodes$ can be placed (or, synonymously, \emph{embedded}) on a server; this placement can be subject
 to optimization.
 Depending on the available capacity $\capacity(s)$ of server $s$, multiple nodes maybe be hosted on $s$.
 We will denote the server hosting node $v$ by $\pi(v)$.
 Since these virtual machines process the input data, they need to be assigned and connected to the
-chunks. Concretely, for each chunk type $\achunk_i$, one replica $\achunk_{i,j}$ must be processed by exactly one virtual machine $v$;
-which replica $\achunk_{i,k}$ is chosen is subject to optimization.
+chunks. Concretely, for each chunk type $\achunk_i$, one replica $\achunk_{i}^{(j)}$ must be processed by exactly one virtual machine $v$;
+which replica $\achunk_{i}^{(k)}$ is chosen is subject to optimization.
 We will denote by $\mu$ the assignment or ``matching'' of virtual machines to chunks.
 We will keep the model general, and consider both the case where there are more chunk types
 than virtual machines (requiring the assignment of multiple chunks per nodes) and the case
 where there are less chunks than virtual machines. (See below for motivations for the different scenarios.)
-However, in order to avoid stragglers, we require that each nodes needs to process the same number of chunks.
+However, in order to avoid stragglers, we require that each node needs to process the same number of chunks.
 Moreover, in order to ensure a predictable performance, both the connection to the chunks
-as well as the interconnection between the virtual machines may have to provide certain
-minimal bandwidth guarantees; we will refer to the first type of network as the \emph{access
-network}, and to the second type of network as the \emph{inter-connect}. The inter-connect will
+as well as the interconnection between the virtual machines may have to ensure certain
+minimal bandwidth guarantees; we will refer to the first type of virtual network as the \emph{access
+network}, and to the second type of virtual network as the \emph{inter-connect}. The inter-connect will
 is modeled as a complete network. Concretely, we assume that an  active chunk
 is connected to its node at a minimal bandwidth $\CostTrans$, and a node is connected to any other node
 at minimal bandwidth $\CostCom$.
@@ -324,7 +324,7 @@ at minimal bandwidth $\CostCom$.
 \subsection{Optimization Objective}
 
 Our goal is to develop algorithms which minimize
-the \emph{resource footprint}: the overall bandwidth allocation in the datacenter. (Note that
+the \emph{resource footprint}: the overall bandwidth allocation in the datacenter for a given embedding. (Note that
 the resource allocation at the servers does not depend on the replica selection or embedding.) That is,
 we aim to embed the virtual machines in a locality-aware manner, close to the input data
 (the chunks), as well as close to
@@ -349,11 +349,11 @@ if the input data is stored redundantly, the algorithm has the freedom to choose
 for each chunk type, and assign it to a virtual machine. Note that this
 selection or ``matching problem'' is non-trivial, even if the locations of the virtual machines
 are already given. In the following, we will refer to a scenario
-with redundant chunks by $\RS$; in the $\RS$ only scenario, the number of chunk types
+with redundant chunks by $\RS$; in the $\RS$-only scenario, the number of chunk types
 is less or equal the number of nodes. Otherwise, we will add the $+\MA$ property discussed next.
 
 \emph{Multiple Assignment ($\MA$).}
-In the number of chunk types is larger than the number of virtual machines,
+If the number of chunk types is larger than the number of virtual machines,
 each node needs to be assigned multiple chunks. We will refer to such a scenario by $\MA$.
 (Note that in a scenario with only $\MA$ but without $\RS$, chunk types are not redundant.)
 
@@ -366,7 +366,7 @@ both from each virtual machine to its replica as well as to the other virtual ma
 (i.e., $\CostTrans>0$ and $\CostCom>0$), and
  scenarios where only the access network requires bandwidth reservation (i.e., $\CostTrans>0$ and $\CostCom=0$).
  We will refer to the former scenarios
-where bandwidth needs to be reserved for the inter-connect, by $\CC$.
+where bandwidth needs to be reserved also for the inter-connect, by $\CC$.
 
 \emph{Bandwidth Capacities ($\BW$).} We distinguish between an uncapacitated and a capacitated scenario where the links
 of the substrate network come with bandwidth
@@ -389,7 +389,7 @@ which motivates our focus on tree-like substrate networks where servers are loca
 tree leaves.
 During execution, batch-processing applications typically cycle through different phases,
 most prominently, a mapping phase and a reducing phase; between the two phases,
-a shuffling operation is performed, phase where the results from the mappers
+a shuffling operation is performed, a phase where the results from the mappers
 are communicated to the reducers. Since the shuffling phase can constitute a
 non-negligible part of the overall runtime~\cite{orchestra},
 and since concurrent network transmissions can introduce interference and
@@ -400,8 +400,8 @@ is motivated by the popular virtual cluster abstraction.~\cite{oktopus,talk-abou
 In this paper, we extend this model with a notion of data-locality.
 In particular, we distinguish between the bandwidth needed between replica
 and virtual machine ($\CostTrans$) and the bandwidth needed between
-two virtual machines ($\CostCom$); in practice, for applications with a large so-called
-\emph{mapping ratio}, $\CostCom<\CostTrans$. Finally, note that it is frequently assumed
+two virtual machines ($\CostCom$); in practice, for applications with a large 
+``mapping ratio'', $\CostCom<\CostTrans$. Finally, note that it is frequently assumed
 that the nodes implementing the mapper functionality also implement the reducer functionality,
 and vice versa; however, it can also make sense to have more mappers or more reducers for
 certain applications.
@@ -447,10 +447,10 @@ $\VirtualNodes$ of virtual machines and
 the set of chunks.
 Concretely, we clone each node $\MaFactor$ times,
 as each node needs to process
-$\MaFactor$ replica types, and collect all copies of a given chunk type in a
+$\MaFactor$ replica types, and we collect all copies of a given chunk type in a
 single %$\ChunkType$
 ``super-node''. We connect each node to all chunk types using the
-\emph{lowest hop count} to one of the copies, as the weight.
+\emph{lowest hop count} to one of the copies as the cost metric (the link weight).
 
 On the resulting graph, we can compute a Minimum Weight
 Perfect Bipartite
@@ -513,27 +513,28 @@ shadowed lines.}
 
 \subsection{Flow Algorithm ($\RS+\MA+\CC+\BW$)}
 
-A large class of resource allocation problems can also be solved by a reduction to flow
-problems on extended (logical) host graphs.
+Another class of resource allocation problems, especially in capacitated models,
+can be solved by a reduction to flow
+problems on extended host graphs.
 
 First, let us observe that the problem $\RS+\MA+\CC+\BW$
 can be trivially reduced to $\RS+\MA+\BW$, as without a flexible
-placement ($\FP$) and due to the unique paths in $\Tree$, we can simply subtract the bandwidth needed
-for $\CC$ from the link capacities: given $\RS+\MA+\CC+\BW$
-we can therefore construct a
+placement (no $\FP$) and due to the unique paths in $\Tree$, we can simply subtract the bandwidth needed
+for $\CC$ from the link capacities upfront: given $\RS+\MA+\CC+\BW$
+we can construct a
 problem for $\RS+\MA+\BW$ with the same solution, by defining
 $\Capacity'(\SubstrateEdge_i)$ as
 $\Capacity(\SubstrateEdge_i) - \CC(\SubstrateEdge_i)$, where
-$\CC(\SubstrateEdge_i)$ denotes the amount which
-had to be allocated on the link $\SubstrateEdge_i$ for the communication
-between the virtual machines.
+$\CC(\SubstrateEdge_i)$ denotes the bandwidth which
+had to be reserved on the link $\SubstrateEdge_i$ for the 
+inter-connect.
 Second, we observe that we can constrain ourselves to scenarios with  normalized link
 requirements $\CostTrans = 1$, as the $\CostTrans$ costs are
 the same between each pair of virtual machines and as paths are unsplittable.
 
 Given these observations, we show how to reduce the $\RS+\CC$ problem
 to an \emph{Integral Minimal Cost Multi-Commodity Flow Problem}:
-We extend the substrate network $\Tree$ as follows: we introduce an
+We extend the substrate network $\Tree$ as follows. We introduce an
 artificial \emph{super-source} $\Source$ and edges $\SubstrateEdge_i^+ = (\Source,
 \NodeMapping(\VM_i))$ for
 $i \in \{1,\dots,\Vms\}$ with $\Capacity(\SubstrateEdge_i^+) = \MaFactor$,
@@ -833,36 +834,36 @@ e_n\}$ \carlo{TODO check n}, such that $f(e_i) > 1 ~ \forall i \in
 \section{Related Work}\label{sec:relwork}
 
 There has recently been much interest in programming models and distributed
-systems for the processing and analysis of big data (e.g.~\cite{nodb,mapreduce,shark}). The model studied in 
+system architectures for the processing and analysis of big data (e.g.~\cite{nodb,mapreduce,shark}). The model studied in
 this paper is motivated by MapReduce~\cite{mapreduce} like batch-processing applications, also known
-from the popular open-source implementation \emph{Apache Hadoop}. 
+from the popular open-source implementation \emph{Apache Hadoop}.
 These applications
-generate large amounts of network traffic~\cite{talk-about,amazonbw,orchestra},
+generate large amounts of network traffic~\cite{orchestra,talk-about,amazonbw},
 and over the last years, several systems have been proposed which provide
-a provable network performance, also in shared cloud environments, namely by supporting explicit 
+a provable network performance, also in shared cloud environments, by supporting explicit
 relative~\cite{seawall,faircloud,elasticswitch}
 or, as in the case of our paper, \emph{absolute}~\cite{secondnet,oktopus,proteus,drl,gatekeeper} bandwidth reservations
-between the virtual machines or compute units.
+between the virtual machines.
 In particular, the notion of virtual networks which combine compute and network resources has been introduced.
 For a good survey on network virtualization and in particular virtual network embeddings,
 we refer the reader to~\cite{boutaba-survey} and~\cite{fischer-survey}.
 
-The most popular abstraction for batch-processing applications today is the \emph{virtual cluster},
-introduced in the Oktopus paper~\cite{oktopus}, and later studied by many other researchers~\cite{talk-about,proteus}.
+The most popular virtual network abstraction for batch-processing applications today is the \emph{virtual cluster},
+introduced in the Oktopus paper~\cite{oktopus}, and later studied by many others~\cite{talk-about,proteus}.
 Several heuristics have been developed to compute ``good'' embeddings of virtual clusters: embeddings
-with small footprints (minimal bandwidth reservation costs).
-The virtual network embedding problem has also been studied for more general graph abstractions 
-(e.g., motivated by wide-area networks).~\cite{ammar,zhu06,simannealing,turner,infocom2009,ucc12mip}
+with small footprints (minimal bandwidth reservation costs).\cite{oktopus,talk-about,proteus}
+The virtual network embedding problem has also been studied for more general graph abstractions
+(e.g., motivated by wide-area networks).~\cite{turner,ammar,infocom2009,zhu06,simannealing,ucc12mip}
 
 From a theoretical perspective, the virtual network embedding problem can be seen as a generalization
-of classic VPN graph embedding problems~\cite{gupta2001provisioning,Goyal2008},
+of classic VPN graph embedding problems~\cite{Goyal2008,gupta2001provisioning},
 in the sense that in virtual network embedding problems, also the embedding endpoints are flexible and subject to optimization.
-In this sense, the virtual network embedding problem can also be seen as a generalization of the 
+In this sense, the virtual network embedding problem can also be seen as a generalization of the
 classic NP-hard Minimum Linear Arrangement problem which asks for the
 embedding of guest graphs on a simple \emph{line topology} (rather than tree-like topologies as
 studied in this paper).~\cite{mla,mla-survey}
-There exist several interesting algorithms for the Minimum Linear Arrangement problem, 
-e.g., with sublogarithmic approximation ratios~\cite{mla-feige}. 
+There exist several interesting algorithms for the Minimum Linear Arrangement problem,
+e.g., providing sublogarithmic approximation ratios~\cite{mla-feige}.
 
 However, to the best of our knowledge, we are the first to provide an algorithmic
 study of the cloud application embedding problem which takes into account
@@ -873,12 +874,12 @@ problems, such as hitting set and 3-dimensional matching problems~\cite{3SC-hard
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Summary and Conclusion}\label{sec:conclusion}
 
-This paper investigated data data locality aware algorithms which exploit two fundamental 
+This paper investigated data data locality aware algorithms which exploit two fundamental
 degrees of freedom in virtual cluster
-embedding problems: replica selection and flexible node placement. We 
+embedding problems: replica selection and flexible node placement. We
 decomposed the problem into its fundamental aspects,
 namely $\RS$, $\MA$, $\FP$, $\CC$, and $\BW$, and studied the computational
-tractability of different combinations. 
+tractability of different combinations.
 
 In particular, we have shown that
 at the heart of our model lie interesting new variants of classic
@@ -888,21 +889,21 @@ many problem instances can actually be solved in polynomial time.
 On the negative side, we have also shown that there exist computationally hard
 problems even in uncapacitated networks. In particular,
 we have shown that several embeddings problems are NP-hard already in two- and three-level trees
-(a practically relevant result given today's datacenter topologies~\cite{fattree}), 
+(a practically relevant result given today's datacenter topologies~\cite{fattree}),
 and even if the the number of replicas is bounded by two.
 
 
 Our results are summarized in
-Figure~\ref{fig:summary}. 
-An interesting takeaway from this figure regards
+Figure~\ref{fig:summary}.
+One interesting takeaway from this figure regards
 the question which properties render the problem
-NP-hard. For instance, we see that interestingly, $\BW$ 
-does not influence the hardness of any problem instance,
-while $\RS$ is crucial for NP-hardness. 
+NP-hard. For instance, we see that interestingly, $\BW$
+does not influence the hardness of any problem variant,
+while $\RS$ is crucial for NP-hardness.
 $\MA$ only affects hardness if combined with $\RS$.
 $\CC$ is trivial without $\FP$, and $\FP$ requires
-more sophisticated algorithms when combined $\CC$ or $\MA$;
-together with $\RS$ and $\MA$ or $\CC$, $\FP$ renders the
+more sophisticated algorithms when combined with $\CC$ or $\MA$;
+in combination with $\RS$ and $\MA$ or $\CC$, $\FP$ renders the
 problem NP-hard.
 
 \begin{figure}[t]
@@ -915,7 +916,7 @@ problems, several additional results are simple implications (indicated by arrow
 
 
 Our paper provides an almost complete overview of what can and cannot be
-computed optimally in our setting, and may of interest both to the algorithm
+computed optimally in our setting, and may be of interest both to the algorithm
 and the networking community. At the same time, we understand our model and work
 as a first step, and believe that our paper opens several interesting
 questions for future research, for instance, regarding randomized algorithms
@@ -954,7 +955,7 @@ due to the fact that the sequence adds up to $\clauses \cdot \variables$,
 there must also exist a $k'$ such that $a_{k'}<\clauses$ (by a simple
 pigeon hole principle). Thus, this case can
 also be reduced to the second case (\textbf{Case $a_k>\clauses$}) proved
-next
+next.
 
 \textbf{Case $a_k>\clauses$:} Since it also holds that $a_k < 2\clauses$,
 $a_k$ must be of the form $\clauses + x$ for $x \in [1, \ldots, \clauses]$.
@@ -1063,7 +1064,7 @@ distributed across $\positive(\variab)$ and $\negative(\variab)$ subtrees.
 
 We calculate the chunk-node matching $\mu$ by assigning every chunk to
 the node which is collocated with the first chunk replica. This solution is feasible
-(every chunk type is processed), 
+(every chunk type is processed),
 because the given valuation satisfied $\Phi$.
 
 Now we will show that this solution has cost $\Thr$.
@@ -1076,7 +1077,7 @@ the solution to $\RS+\FP+\BW$.
 
 We make the following observations. In every solution of cost
 $\leq \Thr$, every gadget has exactly $\clauses$ many nodes
-at its leaves. This is due to the Bandwidth Lemma (Lemma~\ref{lem:bandwidth-lemma}). 
+at its leaves. This is due to the Bandwidth Lemma (Lemma~\ref{lem:bandwidth-lemma}).
 Also, inside
 every gadget either all nodes are in the $\positive(\variab)$ subtree
 of variable $\variab$, or in the $\negative(\variab)$ subtree. This is true
