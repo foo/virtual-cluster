@@ -538,251 +538,68 @@ $\Capacity(\SubstrateEdge_i) - \CC(\SubstrateEdge_i)$, where
 $\CC(\SubstrateEdge_i)$ denotes the bandwidth which
 had to be reserved on the link $\SubstrateEdge_i$ for the 
 inter-connect.
-Second, we observe that we can constrain ourselves to scenarios with  normalized link
-requirements $\CostTrans = 1$, as the $\CostTrans$ costs are
-the same between each pair of virtual machines and as paths are unsplittable.
 
-Given these observations, we show how to reduce the $\RS+\CC$ problem
-to an \emph{Integral Minimal Cost Multi-Commodity Flow Problem}:
-We extend the substrate network $\Tree$ as follows. We introduce an
-artificial \emph{super-source} $\Source$ and edges $\SubstrateEdge_i^+ = (\Source,
-\NodeMapping(\VM_i))$ for
-$i \in \{1,\dots,\Vms\}$ with $\Capacity(\SubstrateEdge_i^+) = \MaFactor$,
-which connect $\Source$
-to the nodes in the host graph, where nodes are located.
-Similarly, we create an artificial \emph{super-sink} $\Sink$ and edges $\SubstrateEdge_j^- =
-(\VmChunkAssignment(\ChunkLocation(\achunk_j)), \Sink)$ with capacities
-$\Capacity(\SubstrateEdge_j^-) = 1$, which connect the servers on which the
-chunks are located to the sink. We now assume that each node $\VirtualNode_i$ has a demand of $1$ to each
-of its assigned chunks $\VmChunkAssignment(\VirtualNode_i)$,
-and we want to compute a flow $f$
-of value $\ChunkTypes$ from $\Source$ to $\Sink$. \maciek{Above construction does not solve replication. We need a vertex for each chunk type.}
+\maciek{In this intro we have to emphasis that we are really presenting integer min-cost max-flow algorithm with trivial modification}
 
-\carlo{TODO: The
-equivalency...}
+\subsubsection{Algorithm}
 
-Since the assignment $\VmChunkAssignment$ of chunks to nodes
-is subject to optimization, the edges connecting $\Sink$ to the
-chosen chunks are no longer implementable. Instead, we create a meta node
-$\SubstrateNode_{\achunk_j}$ for each chunk type
-$\achunk_j$ and connect it with \carlo{TODO Check directed?!?} edges
-$\SubstrateEdge_{\achunk_j}^k = (\SubstrateNode_{\achunk_j},
-\VmChunkAssignment(\achunk_{j_k}))$ for all $k \in
-\{1,\dots,\RedundancyFactor\}$. Subsequently we connect the super sink
-$\Sink$ to these meta nodes, via
-edges $\SubstrateEdge_j^- = (\SubstrateNode)$ with
-$\Capacity(\SubstrateEdge_j^-) = 1$. If an integral minimum cost flow $\hat f
-: \SubstrateEdges \rightarrow \mathbb{N}$ of value $\ChunkTypes$ exists, it
-enters the graph at leaves the graph at $\Sink$. Since the only
-edges which connect to $\Sink$ are introduced by our construction $\sum_{j\in
-\{1,\dots,\ChunkTypes\}} \hat f(\SubstrateEdge_j^-) = \ChunkTypes$ holds. From
-$\Capacity(\SubstrateEdge_j^-) = 1$, follows $\hat f(\SubstrateEdge_j^-) = 1 ~
-\forall j \in \{1,\dots, \ChunkTypes\}$. Hence, for each chunk type $\achunk_j$,
-$\sum_{k \in \{0,\dots,\RedundancyFactor\}}\hat f(\SubstrateEdge_{c_j}^k) = 1$
-holds, which - due to the integral solution to the minimal cost flow problem -
-can be interpreted as the replica selection. $\hat f$ enters the graph at
-$\Source$ resulting in $\sum_{i \in \{1,\dots,\Vms\}}\hat f(\SubstrateEdge_i^+)
-= \ChunkTypes = \Vms \cdot \MaFactor$. Due to the capacity limitations this is
-equivalent to $\hat f(\SubstrateEdge_i^+) = \MaFactor ~ \forall i \in
-\{1,\dots, \Vms\}$, which represents $\MaFactor$ outgoing flows for each node
-in the host graph, to which a VM is assigned.To compute $\VmChunkAssignment$ from $\hat f$, we process $\hat f$ in the
-following way: We chose an aribtrary path $\Path =
-\{\SubstrateEdge_{1}, \dots, \SubstrateEdge_{n}\}$, with $\SubstrateEdge_{1} =
-(\Source, \NodeMapping(\VirtualNode_i))$, $\SubstrateEdge_{n} =
-(\SubstrateNode_j, \Sink)$, $\SubstrateEdge_k= (\SubstrateNode_x,
-\SubstrateNode_y) \rightarrow \SubstrateEdge_{k+1} = (\SubstrateNode_y,
-\SubstrateNode_z)$, and $\hat f(\SubstrateEdge)\geq 1 ~ \forall \SubstrateEdge
-\in \Path$. This is a connected path from the source, to the sink, which has
-flow associated on every edge. We set $\VmChunkAssignment(\achunk_j) =
-\VirtualNode_i$ and reduce $\hat f$ on every edge $\SubstrateEdge \in \Path$ by
-one. This is repeated, until $|\hat f| = 0$. Due to the tree properties of
-$\Tree$, that there is only one path between two nodes, all VM chunk
-assignments generated in this value will have the same overall costs.
- \maciek{I have no idea what this paragraph (above) is about. We have mix of construction for replica with construction of the matching. Rewrite or remove.}
-
- \maciek{What we have left to do is to prove or at least say that it is trivial: (1) if our algorithm says NO, then there should not be any feasible solution (2) argue about optimality of constructed flow (it follows from optimality of flow and our awesome construction)}
-
-\begin{comment}
-\item For a given chunk \textit{type} to VM assignment, the replica selection
-problem
-can be integrated into this problem, by introducing nodes
-$\SubstrateNode_\ChunkType$ for each
-chunk type $\ChunkType$ and connect these nodes via edges
-$\SubstrateEdge_\ChunkType = (\SubstrateNode_\ChunkTypes, \SubstrateNode_i)$
-for all $i$ such that \carlo{Check macieks part for assigned = true}. The
-capacity of all of these edges is set to
-$\Capacity(\SubstrateEdge_\ChunkTypes) = 1$. In this problem
-%
-This problem can be converted into
-a integral minimum cost single commodity flow problem,
-%
-In addition we create a super sink
-$\Sink$ and edges
-$\SubstrateEdge_\ChunkType^-$ with $\Capacity(\SubstrateEdge_\ChunkType^-) = 1$
-%
-\item The chunk to vm assignment decision, can be
-integrated into the above described flow problem, by transforming it into a
-integral minimum cost single commodity flow problem.
-We introduce a super source $\Source$ and edges $\SubstrateEdge_i^+ = (\Source,
-\NodeMapping(\VM_i))$ for $i \in \{1,\dots,\Vms}$ with
-$\Capacity(\SubstrateEdge_i^+) = \MaFactor$, which
-connects $\Source$ to the nodes in the host graph, to which the VMs are mapped.
-In addition we create a super sink $\Sink$ and edges
-$\SubstrateEdge_\ChunkType^-$ with $\Capacity(\SubstrateEdge_\ChunkType^-) = 1$
-%
-We extend the flow graph with a nodes $\SubstrateNode_\ChunkType$ for each
-chunk type $\ChunkType$ and connect these nodes via edges
-$\SubstrateEdge_\ChunkType = (\SubstrateNode_\ChunkTypes, \SubstrateNode_i)$
-for all $i$ such that \carlo{Check macieks part for assigned = true}. The
-capacity of all of these edges is set to
-$\Capacity(\SubstrateEdge_\ChunkTypes) = 1$.
-In addition we create a super sink $\Sink$ and edges
-$\SubstrateEdge_\ChunkType^-$ with $\Capacity(\SubstrateEdge_\ChunkType^-) =
-1$, to connect the meta nodes for each chunk type to the super sink.
-%Instead of connecting
-%$\Source$ to the nodes, to which the VMs are mapped, we connect $\Source$ to
-%\textit{all leaves} in the host graph via edges $e_\Leaf^+ = (\Source,
-%\SubstrateNode)$. $\Capacity(e_\SubstrateNode^+)$ is set to one, since by
-%the definition of our model, only one VM may be mapped to one server. If a
-%feasible flow $f : \SubstrateEdges \rightarrow \mathbb{N}$ of value $\Vms$
-%exists, then $\Sum_{\Leaf \in \Leaves}$
-\end{comment}
-
-
-\begin{comment}
+\textbf{Construction}
+We extend the substrate network $\Tree$ in two parts:
 \begin{enumerate}
-\item $cv$ + $bw$ + $r$ + $ma$ degenerates to  $bw$ + $r$ + $ma$.
-The placement of the VMs is given. The bandwdith function $\Capacity$ assigns
-each edge in the host graph $\SubstrateEdge_i$ a capacity
-$\Capacity(\SubstrateEdge_i)$. Since the
-host graph is a tree, there exists only one path between two nodes, and hence
-it is known how much bandwidth has to be allocated on which links, in oder to
-satisfy the communication between the VMs. We can therefore construct a
-problem with $bw$ + $r$ + $ma$ which has the same solutions, by defining
-$\Capacity'(\SubstrateEdge_i)$ as
-$\Capacity(\SubstrateEdge_i) - \textsc{CV}(\SubstrateEdge_i)$, where
-$\textsc{CV}(\SubstrateEdge_i)$ denotes the amount which
-had to be allocated on the link $\SubstrateEdge_i$ for the communication
-between the $\VM s$. If any of the resulting edge capacities is negative, the
-instance of $\Problem$ is infeasible.
-\item The required bandwidth $\CostTrans$ between each chosen chunk and the
-assigned VM of a given $\VC$ is
-the same and the pathes to the VMs have to be embedded as unsplittable
-pathes.
+  \item (chunk replicas) for each chunk type we create an artificial source vertex that we connect to each leaf containing replica of this type by edge of capacity 1
+  \item (virtual machines) we create an artificial \emph{super-sink} and connect it to every leaf containing VM by edge of capacity $MA$
+\end{enumerate}
 
-TODO: rethink if normalization allows solving the problem by integer min-cost-max flow
+We assign cost 1 to every edge of substrate network. We assign cost 0 to every artificial edge (added in construction).
 
-Hence, all edge capacities in can be normalized to $\CostTrans = 1$.
-\item For a (by model) fixed node mapping $\NodeMapping$ and a given chunks to
-vm assignment $\VmChunkAssignment$, the computation of a cost
-optimal link mapping can be transformed to an integral minimal cost multi-commodity
-flow problem, where each VM $\VirtualNode_i$ has a flow demand of $1$ to each
-of its assigned chunks $\VmChunkAssignment(\VirtualNode_i)$. This problem can
-again be transformed into a integral minimum cost single commodity flow problem
-in the following way:
-We introduce a
-super source $\Source$ and edges $\SubstrateEdge_i^+ = (\Source,
-\NodeMapping(\VM_i))$ for
-$i \in \{1,\dots,\Vms\}$ with $\Capacity(\SubstrateEdge_i^+) = \MaFactor$,
-which connects $\Source$
-to the nodes in the host graph, on which the VMs are located.
-In addition we create a super sink $\Sink$ and edges $\SubstrateEdge_j^- =
-(\VmChunkAssignment(\ChunkLocation(\achunk_j)), \Sink)$ with capacities
-$\Capacity(\SubstrateEdge_j^-) = 1$, which connect the leaves on which the
-chunks are located to the sink. In this graph we ask for a flow $f$
-of value $\ChunkTypes$ from $\Source$ to $\Sink$. \carlo{TODO: The
-equivalency...}
-\item The replica selection problem can be integrated into the above described
-minimum cost integral single commodity flow problem. Since $\VmChunkAssignment$
-is not given, but subject to optimization, the edges connecting $\Sink$ to the
-chosen chunks are no longer implementable. Instead, we create a meta node
-$\SubstrateNode_{\achunk_j}$ for each chunk type
-$\achunk_j$ and connect it with \carlo{TODO Check directed?!?} edges
-$\SubstrateEdge_{\achunk_j}^k = (\SubstrateNode_{\achunk_j},
-\VmChunkAssignment(\achunk_{j_k}))$ for all $k \in
-\{1,\dots,\RedundancyFactor\}$. Subsequently we connect the super sink
-$\Sink$ to these meta nodes, via
-edges $\SubstrateEdge_j^- = (\SubstrateNode)$ with
-$\Capacity(\SubstrateEdge_j^-) = 1$. If an integral minimum cost flow $\hat f
-: \SubstrateEdges \rightarrow \mathbb{N}$ of value $\ChunkTypes$ exists, it
-enters the graph at leaves the graph at $\Sink$. Since the only
-edges which connect to $\Sink$ are introduced by our construction $\sum_{j\in
-\{1,\dots,\ChunkTypes\}} \hat f(\SubstrateEdge_j^-) = \ChunkTypes$ holds. From
-$\Capacity(\SubstrateEdge_j^-) = 1$, follows $\hat f(\SubstrateEdge_j^-) = 1 ~
-\forall j \in \{1,\dots, \ChunkTypes\}$. Hence, for each chunk type $\achunk_j$,
-$\sum_{k \in \{0,\dots,\RedundancyFactor\}}\hat f(\SubstrateEdge_{c_j}^k) = 1$
-holds, which - due to the integral solution to the minimal cost flow problem -
-can be interpreted as the replica selection. $\hat f$ enters the graph at
-$\Source$ resulting in $\sum_{i \in \{1,\dots,\Vms\}}\hat f(\SubstrateEdge_i^+)
-= \ChunkTypes = \Vms \cdot \MaFactor$. Due to the capacity limitations this is
-equivalent to $\hat f(\SubstrateEdge_i^+) = \MaFactor ~ \forall i \in
-\{1,\dots, \Vms\}$, which represents $\MaFactor$ outgoing flows for each node
-in the host graph, to which a VM is assigned.
-\item To compute $\VmChunkAssignment$ from $\hat f$, we process $\hat f$ in the
-following way: We chose an aribtrary path $\Path =
-\{\SubstrateEdge_{1}, \dots, \SubstrateEdge_{n}\}$, with $\SubstrateEdge_{1} =
-(\Source, \NodeMapping(\VirtualNode_i))$, $\SubstrateEdge_{n} =
-(\SubstrateNode_j, \Sink)$, $\SubstrateEdge_k= (\SubstrateNode_x,
-\SubstrateNode_y) \rightarrow \SubstrateEdge_{k+1} = (\SubstrateNode_y,
-\SubstrateNode_z)$, and $\hat f(\SubstrateEdge)\geq 1 ~ \forall \SubstrateEdge
-\in \Path$. This is a connected path from the source, to the sink, which has
-flow associated on every edge. We set $\VmChunkAssignment(\achunk_j) =
-\VirtualNode_i$ and reduce $\hat f$ on every edge $\SubstrateEdge \in \Path$ by
-one. This is repeated, until $|\hat f| = 0$. Due to the tree properties of
-$\Tree$, that there is only one path between two nodes, all VM chunk
-assignments generated in this value will have the same overall costs.
-\end{comment}
-
-\begin{comment}
-\item For a given chunk \textit{type} to VM assignment, the replica selection
-problem
-can be integrated into this problem, by introducing nodes
-$\SubstrateNode_\ChunkType$ for each
-chunk type $\ChunkType$ and connect these nodes via edges
-$\SubstrateEdge_\ChunkType = (\SubstrateNode_\ChunkTypes, \SubstrateNode_i)$
-for all $i$ such that \carlo{Check macieks part for assigned = true}. The
-capacity of all of these edges is set to
-$\Capacity(\SubstrateEdge_\ChunkTypes) = 1$. In this problem
-%
-This problem can be converted into
-a integral minimum cost single commodity flow problem,
-%
-In addition we create a super sink
-$\Sink$ and edges
-$\SubstrateEdge_\ChunkType^-$ with $\Capacity(\SubstrateEdge_\ChunkType^-) = 1$
-%
-\item The chunk to vm assignment decision, can be
-integrated into the above described flow problem, by transforming it into a
-integral minimum cost single commodity flow problem.
-We introduce a super source $\Source$ and edges $\SubstrateEdge_i^+ = (\Source,
-\NodeMapping(\VM_i))$ for $i \in \{1,\dots,\Vms}$ with
-$\Capacity(\SubstrateEdge_i^+) = \MaFactor$, which
-connects $\Source$ to the nodes in the host graph, to which the VMs are mapped.
-In addition we create a super sink $\Sink$ and edges
-$\SubstrateEdge_\ChunkType^-$ with $\Capacity(\SubstrateEdge_\ChunkType^-) = 1$
-%
-We extend the flow graph with a nodes $\SubstrateNode_\ChunkType$ for each
-chunk type $\ChunkType$ and connect these nodes via edges
-$\SubstrateEdge_\ChunkType = (\SubstrateNode_\ChunkTypes, \SubstrateNode_i)$
-for all $i$ such that \carlo{Check macieks part for assigned = true}. The
-capacity of all of these edges is set to
-$\Capacity(\SubstrateEdge_\ChunkTypes) = 1$.
-In addition we create a super sink $\Sink$ and edges
-$\SubstrateEdge_\ChunkType^-$ with $\Capacity(\SubstrateEdge_\ChunkType^-) =
-1$, to connect the meta nodes for each chunk type to the super sink.
-%Instead of connecting
-%$\Source$ to the nodes, to which the VMs are mapped, we connect $\Source$ to
-%\textit{all leaves} in the host graph via edges $e_\Leaf^+ = (\Source,
-%\SubstrateNode)$. $\Capacity(e_\SubstrateNode^+)$ is set to one, since by
-%the definition of our model, only one VM may be mapped to one server. If a
-%feasible flow $f : \SubstrateEdges \rightarrow \mathbb{N}$ of value $\Vms$
-%exists, then $\Sum_{\Leaf \in \Leaves}$
-\end{comment}
+We call extended graph as $G$.
 
 \begin{figure}
 \includegraphics[angle=90,origin=c, height=7cm]{figs/model_fig_skteches/flow}
 \end{figure}
 
+\textbf{Algorithm}
+
+We run shortest path algorithm $\Chunks$ times (from each chunk type vertex to supersink). After each found path we store the matching and update the bandwidth. In the end we output the matching as well as cost of the flow. If on any step we cannot find the path, we say that the instance is infeasible.
+
+\subsubsection{Algorithm correctness}
+
+\maciek{Those are sketches of lemmas that need to be in this chapter. Order is arbitrary and probably wrong, as lemmas depend on eachother.}
+
+
+
+\begin{lemma}Integrality of flow
+\end{lemma}
+\begin{proof}
+  All links have integer capacities - we just have to assume it in the model. All links have integer cost - either 0 or 1. From integer flow theorem we know that there exist integer flow and successive shortest paths is an algorithm to find it.
+\end{proof}
+
+\begin{lemma}
+On each step we find path of cost exactly 1.
+\end{lemma}
+\begin{proof}
+  Use integrality of flow. We say that each shortest path is separate flow!
+\end{proof}
+
+
+\begin{lemma}Optimality of solution
+\end{lemma}
+\begin{proof}
+Our algorithm is successive shortest paths algorithm, therefore is optimal. The modification does not interfere with capacities, we just store something more.  
+\end{proof}
+
+
+\begin{lemma}Algorithm says ``NO'' iff instance infeasible
+\end{lemma}
+\begin{proof}
+  Don't be too formal, it is very easy observation.
+  ($=>$)
+  ($<=$)
+\end{proof}
+
+\subsubsection{Runtime and memory consumption}
+
+\maciek{Our algorithm has the same runtime up to constants. More memory is needed to store the matching.}
 
 \textbf{A Note on Runtime.} There exist several polynomial-time algorithms to compute
 the integral minimum cost maximum flow problem on networks with integer capacities.
