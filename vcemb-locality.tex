@@ -427,6 +427,19 @@ exploit them to devise polynomial-time algorithms for a wide range
 of problem variants. We also show that a large number of problems
 can be solved optimally using dynamic programming.
 
+\begin{figure}
+\includegraphics[width=\columnwidth]{figs/venn_trivial.pdf}
+\caption{Trivially solvable property combinations}
+\label{fig:venn_trivial}
+\end{figure}
+
+\carlo{A trivial strategy can solve instances with $\FP$: The strategy 
+collocates all VMs with chunks and hence inflicts $0$ costs, as long as $CV$ is 
+not a part of the problem. This strategy can even solve problem instances with 
+$\BW$ and $\RS$ or a combination of both. Figure~\ref{fig:venn_trivial} 
+shows a Venn diagram of all possible combinations of properties. The properties 
+which can be solved with this trivial strategy, are marked with a checked 
+pattern.}
 %Stefan: I dont think we should say this, at least not here!
 %Note that all proposed
 %algorithms solve the problem optimally w.r.t. to the overall bandwidth costs
@@ -466,6 +479,15 @@ On the resulting graph, we can compute a Minimum Weight
 Perfect Bipartite
 Matching, which takes polynomial time~\cite{schrijver_combinatorial_optimization}:
 the matching denotes the assignment of chunks to nodes.
+
+\begin{figure}
+\includegraphics[width=\columnwidth]{figs/venn_matching.pdf}
+\caption{Property combinations which can be transformed into matching problems.}
+\label{fig:venn_matching}
+\end{figure}
+
+\carlo{Figure~\ref{fig:venn_matching} shows illustrates which problem 
+combiantions can be solved by the presented matching approach.}
 
 
 \textbf{Example.} \stefan{TODO CARLO: MAKE EXAMPLE FOR $\RS+\MA$ DIRECTLY.} Let us give a small example.
@@ -611,6 +633,14 @@ $m$ is the number of edges in the substrate graph ($|\SubstrateEdges| + \Vms + \
 \cdot \ChunkTypes$) and $W$ is the highest capacity in the substrate
 ($\max(\Capacity(\SubstrateEdge))~\SubstrateEdge\in\SubstrateEdges$).
 
+\begin{figure}
+\includegraphics[width=\columnwidth]{figs/venn_flow.pdf}
+\caption{Property combinations which can be solved by our flow-based algorithm.}
+\label{fig:venn_flow}
+\end{figure}
+
+\carlo{Figure~\ref{fig:venn_flow} shows illustrates which problem 
+combiantions can be solved by the presented flow-based approach.}
 
 \begin{comment}
 \paragraph{FLOW Construction}
@@ -653,6 +683,17 @@ e_n\}$ \carlo{TODO check n}, such that $f(e_i) > 1 ~ \forall i \in
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{NP-Hardness Results}\label{sec:np}
+
+\begin{figure}
+\includegraphics[width=\columnwidth]{figs/venn_full.pdf}
+\caption{Trivially solvable property combinations}
+\label{fig:venn_full}
+\end{figure}
+
+\carlo{TODO: Move embedd in surrounding text / move. Figure~\ref{fig:venn_full} 
+gives an overview of the problems, which have been solved in polynomial time in 
+Section~\ref{sec:poly}. This section will present proofs to show that all 
+remaining property combinations (marked in black) are np-hard.}
 
 \input{np-completeness}
 
