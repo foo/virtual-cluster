@@ -567,6 +567,7 @@ We run shortest path algorithm $\Chunks$ times (from each chunk type vertex to s
 \maciek{Those are sketches of lemmas that need to be in this chapter. Order is arbitrary and probably wrong, as lemmas depend on eachother.}
 
 
+\maciek{There are two ways of proving that. One is flow approach with minimal mentioning about successive shortest paths algorithm modification. Second one is more technical way, by analyzing actual shortest paths and mentioning flow just for optimality. Below is medicore mix of both.}
 
 \begin{lemma}Integrality of flow
 \end{lemma}
@@ -575,10 +576,10 @@ We run shortest path algorithm $\Chunks$ times (from each chunk type vertex to s
 \end{proof}
 
 \begin{lemma}
-On each step we find path of cost exactly 1.
+On each step we find path of flow exactly 1.
 \end{lemma}
 \begin{proof}
-  Use integrality of flow. We say that each shortest path is separate flow!
+  Use integrality of flow. We say that each shortest path is separate flow, otherwise there is no way to prove it!
 \end{proof}
 
 

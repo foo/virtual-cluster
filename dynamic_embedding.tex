@@ -12,7 +12,8 @@ We will want to go through all VM placements, for each of those do greedy matchi
 
 Solution for subtree - how it can look like? It is ``partial matching''. Some matched VMs and chunks, but also some chunks transported out of subtree or some VMs/slots that will have chunks transported into from outside. So we charge already those incomplete matchings.
 
-Cost charging model - two edges. Recursive formula for calculating the cost.
+Cost charging model - two edges. Recursive formula for calculating the cost - the $f$ function. \maciek{I had the early sketch of definition of $f$ somewhere, but it was deleted or commented out and I cannot find that.}
+
 Recursive formula for cost with bandwidth. 
 
 \subsection{Algorithm}
@@ -50,9 +51,12 @@ Let's find smallest subtree $S$ where partial matching of $G$ has different cost
 \subsubsection{Bandwidth correctness.}
 
 \begin{lemma}
-  If algorithm returns solution $\Sol$ of cost $\neq \infty$, then in $\Sol$ no link exceeds its capacity limit.
-  \end{lemma}
+Let's say that we calculated solution for our instance of VC with ignoring the bandwidth. Then we analyzed every link and it turned out that some of them exceed their capacity. Then the instance is infeasible and we cannot fix that by choosing any other matching (even suboptimal one).
+\end{lemma}
 
+It might happen that this lemma does not hold, beware!
+
+\maciek{Below there is emergency lemma in case that above lemma does not hold. In case above lemma is true it implies that below lemma is true.}
 \begin{lemma}
 An instance of $\Problem$ is infeasible iff. algorithm returns $\infty$.
 \end{lemma}
@@ -62,25 +66,33 @@ An instance of $\Problem$ is infeasible iff. algorithm returns $\infty$.
   ($\leftarrow$)
   \end{proof}
 
+\maciek{I think that we do not need that lemma, it might be obvious. I leave it there just in case.}
+\begin{lemma}
+  If algorithm returns solution $\Sol$ of cost $\neq \infty$, then in $\Sol$ no link exceeds its capacity limit.
+  \end{lemma}
 
 \subsubsection{Substructure optimality without bandwidth.}
 
 Definition of partial matching (matching + transporting imbalanced chunks out of tree and transporting chunk into imbalanced VMs from outside the tree). Definition of partial matching optimality (parametrized by number of VMs, subtree and chunks; best among all possible that match the same chunks and transports the imbalance).
 
 \begin{lemma}
+(uplink lemma)
+For every tree T (with chunks) and number of VMs $x$ the bandwidth of uplink is the same among all possible feasible solutions (\maciek{it is the lemma that Carlo formulated})
+
+\maciek{unless we allow something as stupid as routing communication and transport through loops}
+\end{lemma}
+
+\begin{lemma}
 
 Let's consider an arbitrary tree $T$ with chunks $c_i$ and number of VMs $v$. Than $f(T, v)$ is cost of optimal partial matching.
-
-\maciek{Shouldn't this lemma be about the matching, not the cost? But $f$ is only about cost, and we do not want to use algorithm, just $f$, otherwise we would spend 100 years on that.}
 
 \end{lemma}
 
 \begin{proof}
 Proof by structural induction. First, we take definition of $f$, which contains values of $f$ for left and right subtree for different number of VMs (but which sum to $v$). We can assume by induction that those are optimal. Then we calculate the cost of communication and matching between left and right subtree (also in $f$'s definition. Then we choose the minimum cost one. We argue that this one is optimal partial matching, and we use optimality of greedy matching for that.
+
+Also, we use the uplink lemma to show that choosing optimal partial matching in left and right subtree does not generate excessive bandwidth on both uplink edges (we might have doubted that because optimal partial matchings were restricted to their subtrees and we might thought that there is some other more costly matching that has less bandwidth on uplink - to save there).
 \end{proof}
 
 \subsubsection{Substructure optimality with bandwidth.}
-
-Lemma to be formulated.
-
 \subsection{Running time and memory consumption analysis}
