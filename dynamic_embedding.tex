@@ -49,10 +49,18 @@ It means basically that in every subtree we can only have more costly solution. 
 
 \subsubsection{Substructure optimality.}
 
-What is our substructure? It is unfinished matching. Show that we can build optimal matching out of those unfinished ones. Here we need to
-consider different number of VMs to choose best composition.
+Definition of partial matching (matching + transporting imbalanced chunks out of tree and transporting chunk into imbalanced VMs from outside the tree). Definition of partial matching optimality (best among all possible that match the same chunks).
 
-Basically, it is the correctness proof of our strategy. You have to use optimality of greedy matching here.
+\begin{lemma}
+
+Let's consider an arbitrary tree $T$ with chunks $c_i$ and number of VMs $v$. Than $f(T, v)$ is cost of optimal partial matching.
+
+\maciek{Shouldn't this lemma be about the matching, not the cost? But $f$ is only about cost, and we do not want to use algorithm, just $f$, otherwise we would spend 100 years on that.}
+\end{lemma}
+
+\begin{proof}
+Proof by structural induction. First, we take definition of $f$, which contains values of $f$ for left and right subtree for different number of VMs (but which sum to $v$). We can assume by induction that those are optimal. Then we calculate the cost of communication and matching between left and right subtree (also in $f$'s definition. Then we choose the minimum cost one. We argue that this one is optimal partial matching, and we use optimality of greedy matching for that.
+\end{proof}
 
 \subsubsection{Bandwidth correctness.}
 
