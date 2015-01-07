@@ -43,24 +43,9 @@ Proof by contradiction. Let's assume that there exists matching of cost lower th
 Let's find smallest subtree $S$ where partial matching of $G$ has different cost than partial matching of $H$. It means that in both left and right subtree we did local matching (do we need this sentence?). It means that non-local decision was made in this subtree (perhaps hoping for savings higher?). Then there exist two such two such matched pairs in $H$ that shares an edge (one pair is transporting chunk up, the second one is transporting chunk down). Then we can create matching $H'$ that uncrosses those edges (does the local matching on them) and is cheaper than $H$. Contradiction.
 
 
+\maciek{It means basically that in every subtree we can only have more costly solution. Perhaps there exist cleaner way of proving that.}
 \end{proof}
 
-It means basically that in every subtree we can only have more costly solution. Perhaps there exist cleaner way of proving that.
-
-\subsubsection{Substructure optimality.}
-
-Definition of partial matching (matching + transporting imbalanced chunks out of tree and transporting chunk into imbalanced VMs from outside the tree). Definition of partial matching optimality (best among all possible that match the same chunks).
-
-\begin{lemma}
-
-Let's consider an arbitrary tree $T$ with chunks $c_i$ and number of VMs $v$. Than $f(T, v)$ is cost of optimal partial matching.
-
-\maciek{Shouldn't this lemma be about the matching, not the cost? But $f$ is only about cost, and we do not want to use algorithm, just $f$, otherwise we would spend 100 years on that.}
-\end{lemma}
-
-\begin{proof}
-Proof by structural induction. First, we take definition of $f$, which contains values of $f$ for left and right subtree for different number of VMs (but which sum to $v$). We can assume by induction that those are optimal. Then we calculate the cost of communication and matching between left and right subtree (also in $f$'s definition. Then we choose the minimum cost one. We argue that this one is optimal partial matching, and we use optimality of greedy matching for that.
-\end{proof}
 
 \subsubsection{Bandwidth correctness.}
 
@@ -77,5 +62,25 @@ An instance of $\Problem$ is infeasible iff. algorithm returns $\infty$.
   ($\leftarrow$)
   \end{proof}
 
+
+\subsubsection{Substructure optimality without bandwidth.}
+
+Definition of partial matching (matching + transporting imbalanced chunks out of tree and transporting chunk into imbalanced VMs from outside the tree). Definition of partial matching optimality (parametrized by number of VMs, subtree and chunks; best among all possible that match the same chunks and transports the imbalance).
+
+\begin{lemma}
+
+Let's consider an arbitrary tree $T$ with chunks $c_i$ and number of VMs $v$. Than $f(T, v)$ is cost of optimal partial matching.
+
+\maciek{Shouldn't this lemma be about the matching, not the cost? But $f$ is only about cost, and we do not want to use algorithm, just $f$, otherwise we would spend 100 years on that.}
+
+\end{lemma}
+
+\begin{proof}
+Proof by structural induction. First, we take definition of $f$, which contains values of $f$ for left and right subtree for different number of VMs (but which sum to $v$). We can assume by induction that those are optimal. Then we calculate the cost of communication and matching between left and right subtree (also in $f$'s definition. Then we choose the minimum cost one. We argue that this one is optimal partial matching, and we use optimality of greedy matching for that.
+\end{proof}
+
+\subsubsection{Substructure optimality with bandwidth.}
+
+Lemma to be formulated.
 
 \subsection{Running time and memory consumption analysis}
