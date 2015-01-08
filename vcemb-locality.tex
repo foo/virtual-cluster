@@ -456,9 +456,7 @@ have lower capacities due to $\CC$ - the dashed lines represent one unit of
 flow allocation in the cost optimal solution.}
 \end{figure}
 
-
-
-Another class of resource allocation problems, especially in capacitated models,
+A large class of resource allocation problems, especially in capacitated models,
 can be solved by a reduction to flow
 problems on extended host graphs.
 
@@ -591,24 +589,30 @@ e_n\}$ \carlo{TODO check n}, such that $f(e_i) > 1 ~ \forall i \in
 \{1,\dots,n\}$.
 \end{comment}
 
-\subsection{Matching Algorithms ($\RS+\MA+\CC$)}
+\subsection{Matching Algorithms ($\RS+\MA+\CC+\BW$)}
 
 Several problems related to replica selection,
-are essentially matching problems.
+are essentially matching problems. As we will see,
+matching algorithms are often very fast, compared
+to other approaches such as flow computations.
+
 In the following, we show how to solve
-the $\RS+\MA+\CC$ problem using a matching approach.
-Recall that in the $\RS+\MA+\CC$ problem,
+the $\RS+\MA+\CC+\BW$ problem using a matching approach.
+Recall that in the $\RS+\MA+\CC+\BW$ problem,
 we are given a set of redundant chunks ($\RS$) and a set of virtual machines
 at fixed locations. The number of chunk types is larger than the number
 of virtual machines ($\MA$), and each virtual machine needs to be connected
-to its chunks as well as to other virtual machines ($\CC$).
+to its chunks as well as to other virtual machines ($\CC$), while respecting
+capacity constraints ($\BW$).
 Our goal is to minimize the resource footprint $\Cost$, consisting
 of the bandwidth reservations in the access network and the inter-connect.
 
-First we observe that in the absence of node placement flexibilities (no $\FP$),
+We will first only discuss the simpler uncapacitated variant $\RS+\MA+\CC$, and postpone
+the discussion of the capacitated extension $\RS+\MA+\CC+\BW$ to the end of the section.
+Moreover, we observe that in the absence of node placement flexibilities (no $\FP$),
 due to the tree structure of the substrate topology $\Tree$, the bandwidth required
 for the inter-connect network can be allocated upfront, and does not depend on the replica
-selection and assignment. Thus, the problem boils down to $\RS+\MA$.
+selection and assignment. Thus, the $\RS+\MA+\CC$ problem boils down to $\RS+\MA$.
 
 In order to solve $\RS+\MA$, we construct a bipartite graph between the set
 $\VirtualNodes$ of virtual machines and
@@ -622,7 +626,7 @@ single %$\ChunkType$
 
 On the resulting graph, we can compute a Minimum Weight
 Perfect Bipartite
-Matching, which takes polynomial time~\cite{schrijver_combinatorial_optimization}:
+Matching:
 the matching denotes the assignment of chunks to nodes.
 
 \begin{figure}
@@ -631,11 +635,11 @@ the matching denotes the assignment of chunks to nodes.
 \label{fig:venn_matching}
 \end{figure}
 
-\carlo{Figure~\ref{fig:venn_matching} shows illustrates which problem
-combiantions can be solved by the presented matching approach.}
+Figure~\ref{fig:venn_matching} provides an overview of 
+which problem combinations can be solved by the presented matching approach.
 
 
-\textbf{Example.} \stefan{TODO CARLO: MAKE EXAMPLE FOR $\RS+\MA$ DIRECTLY.} Let us give a small example.
+\textbf{Example.} Let us give a small example.
 Figure~\ref{fig:matching_basic} shows an example for the problem instance introduced in
 Figure~\ref{fig:basic_problem}: $\NodeMapping(\VirtualNode_1)$ is four hops
 away from all chunks; in the matching problem, this is
@@ -658,27 +662,29 @@ on the edges between all clones of a specific node and a chunk type are set to
 the minimum distance. This can for instance be observed at the edges connecting
 the two clones of $\VirtualNode_1$ to $\achunk_2$: both weights are 0.
 
-\subsubsection{Optimality of greedy matching}
+\textbf{Runtime: Matchings are fast!}
+Let us now study the runtime of the matching approach.
+While matching problems can be solved in polynomial time~\cite{schrijver_combinatorial_optimization} using
+general algorithms, in the following, we show that for our problem
+a simple and fast greedy strategy is sufficient. 
+Accordingly, we can use greedy bottom-up construction of matching. 
+Its runtime is linear with respect to number of tree vertices. It is more efficient that more general methods of 
+finding perfect matching in general bipartite graphs.
 
-For general complete bipartite graphs the matching constructed by greedily choosing the cheapest edge can be arbitrarily bad.
-However, in case of very specific graph, where weights are induced by distance in a tree, this strategy produces optimal solution.
-By using properties of the tree, we will show following lemma:
 
 \begin{lemma}
-  Given fixed positions of VMs, the local greedy perfect matching of chunks to VMs inclines minimal cost among all possible perfect matchings.
+A local and greedy perfect matching of chunks to nodes is optimal. 
 \end{lemma}
-
 \begin{proof}
-Proof by contradiction. Let's assume that there exists matching of cost lower than cost of $G$. Let's take cheapest such matching and call it $H$.
+Proof by contradiction. Let us assume that there exists matching of cost lower 
+than cost of $G$. Let's take cheapest such matching and call it $H$.
 
 Let's find smallest subtree $S$ where partial matching of $G$ has different cost than partial matching of $H$. It means that in both left and right subtree we did local matching (do we need this sentence?). It means that non-local decision was made in this subtree (perhaps hoping for savings higher?). Then there exist two such two such matched pairs in $H$ that shares an edge (one pair is transporting chunk up, the second one is transporting chunk down). Then we can create matching $H'$ that uncrosses those edges (does the local matching on them) and is cheaper than $H$. Contradiction.
-
 
 \maciek{It means basically that in every subtree we can only have more costly solution. Perhaps there exist cleaner way of proving that.}
 \end{proof}
 
 
-We will use greedy bottom-up construction of matching. Its runtime is linear with respect to number of tree vertices. It is more efficient that more general methods of finding perfect matching in general bipartite graphs.
 
 \begin{figure}
 \begin{minipage}[b]{0.49\linewidth}
@@ -698,7 +704,7 @@ shadowed lines.}
 \end{minipage}
 \end{figure}
 
-\subsubsection{Bandwidth correctness.}
+\textbf{Adding $\BW$.} Let us know show why the matching approach can also be used to solve $\RS+\MA+\CC+\BW$.
 
 \begin{lemma}
 (uplink lemma)
@@ -751,27 +757,29 @@ there just in case.}
 link exceeds its capacity limit.
   \end{lemma}
 
-\subsection{Dynamic Program ($\FP+\CC+\MA+\BW$)}
+\subsection{Dynamic Programming ($\FP+\CC+\MA+\BW$)}
 
+Dynamic programming solutions are generally useful in for problems
+exhibiting the \emph{optimal substructure property}, namely, if given
+the optimal solutions of subproblems, an optimal solution for the
+larger problem can be computed efficiently. 
+In the following, we show that the $\FP+\CC+\MA+\BW$ problem
+exhibits such a structure, and show how to exploit it to
+compute efficient embeddings, even in scenarios where multiple chunks
+need to be assigned to flexibly placeable nodes.
 
-Intro to dynamic programming on trees with subtree decomposition.
-Introduce binarization as way of dealing with trees of larger arity.
-Mention correctness requirements: substructure optimality and
-overlapping subproblems.
+\textbf{Basic ideas.} For ease of presentation, we will transform the substrate network $\Tree$
+into a binary tree, using binarization: 
+The
+strategy we use is to clone every node of degree $\Delta$, $\Delta(v) - 1$ times,
+placing subsequent clones as right son of the previous one and placing
+subsequent children as left son of the clone. Last child is placed as
+right son of last clone.
 
-\subsection{Introduction to our algorithm}
 
 \maciek{We will want to go through all VM placements, for each of those do greedy matching and choose the cheapest.}
 
 \maciek{Solution for subtree - how it can look like? It is ``partial matching''. Some matched VMs and chunks, but also some chunks transported out of subtree or some VMs/slots that will have chunks transported into from outside. So we charge already those incomplete matchings.}
-
-
-Let's start by transforming our tree to binary tree with arbitrary
-depth. We also introduce weights on edges (either $0$ or $1$). The
-strategy we use is to clone every vertex $|children(v)| - 2$ times,
-placing subsequent clones as right son of the previous one and placing
-subsequent children as left son of the clone. Last child is placed as
-right son of last clone.
 
 Let's begin designing our algorithm by writing recursive formula for
 minimal cost inclined by placing virtual machines in leaves of a given
