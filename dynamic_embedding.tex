@@ -130,25 +130,6 @@ Tell how to go back through the array to reconstruct the actual placements. ``Fo
 Note that it computationally intensive, and we can trade it for memory - we can remember the best placement.
 
 \subsection{Algorithm correctness}
-\subsubsection{Optimality of greedy matching}
-
-For general complete bipartite graphs the matching constructed by greedily choosing the cheapest edge can be arbitrarily bad.
-However, in case of very specific graph, where weights are induced by distance in a tree, this strategy produces optimal solution.
-By using properties of the tree, we will show following lemma:
-
-\begin{lemma}
-  Given fixed positions of VMs, the local greedy perfect matching of chunks to VMs inclines minimal cost among all possible perfect matchings.
-\end{lemma}
-
-\begin{proof}
-Proof by contradiction. Let's assume that there exists matching of cost lower than cost of $G$. Let's take cheapest such matching and call it $H$.
-
-Let's find smallest subtree $S$ where partial matching of $G$ has different cost than partial matching of $H$. It means that in both left and right subtree we did local matching (do we need this sentence?). It means that non-local decision was made in this subtree (perhaps hoping for savings higher?). Then there exist two such two such matched pairs in $H$ that shares an edge (one pair is transporting chunk up, the second one is transporting chunk down). Then we can create matching $H'$ that uncrosses those edges (does the local matching on them) and is cheaper than $H$. Contradiction.
-
-
-\maciek{It means basically that in every subtree we can only have more costly solution. Perhaps there exist cleaner way of proving that.}
-\end{proof}
-
 
 \subsubsection{Bandwidth correctness.}
 
@@ -176,14 +157,6 @@ An instance of $\Problem$ is infeasible iff. algorithm returns $\infty$.
 \subsubsection{Substructure optimality without bandwidth.}
 
 Definition of partial matching (matching + transporting imbalanced chunks out of tree and transporting chunk into imbalanced VMs from outside the tree). Definition of partial matching optimality (parametrized by number of VMs, subtree and chunks; best among all possible that match the same chunks and transports the imbalance).
-
-\begin{lemma}
-(uplink lemma)
-For every tree T (with chunks) and number of VMs $x$ the bandwidth of uplink is the same among all possible feasible solutions (\maciek{it is the lemma that Carlo formulated})
-
-\maciek{unless we allow something as stupid as routing communication and transport through loops}
-\end{lemma}
-
 \begin{lemma}
 
 Let's consider an arbitrary tree $T$ with chunks $c_i$ and number of VMs $v$. Than $f(T, v)$ is cost of optimal partial matching.
@@ -194,6 +167,8 @@ Let's consider an arbitrary tree $T$ with chunks $c_i$ and number of VMs $v$. Th
 Proof by structural induction. First, we take definition of $f$, which contains values of $f$ for left and right subtree for different number of VMs (but which sum to $v$). We can assume by induction that those are optimal. Then we calculate the cost of communication and matching between left and right subtree (also in $f$'s definition. Then we choose the minimum cost one. We argue that this one is optimal partial matching, and we use optimality of greedy matching for that.
 
 Also, we use the uplink lemma to show that choosing optimal partial matching in left and right subtree does not generate excessive bandwidth on both uplink edges (we might have doubted that because optimal partial matchings were restricted to their subtrees and we might thought that there is some other more costly matching that has less bandwidth on uplink - to save there).
+
+Also, we use optimality of greedy matching that is in matching chapter.
 \end{proof}
 
 \subsubsection{Substructure optimality with bandwidth.}

@@ -513,17 +513,27 @@ on the edges between all clones of a specific node and a chunk type are set to
 the minimum distance. This can for instance be observed at the edges connecting
 the two clones of $\VirtualNode_1$ to $\achunk_2$: both weights are 0.
 
-\stefan{TODO: Maciek: please doublecheck the following as well:}
+\subsubsection{Optimality of greedy matching}
 
-\textbf{Remark on runtime.} There are many algorithms too solve the minimum weight
-perfect matching problem on bipartite
-graphs. The corresponding runtimes depend on  the number $n$ of nodes and
-the number of edges $m$ in the
-graph, and on the largest edge weight $W$. The currently best algorithm is due to
-Gabow et al.~\cite{gabow_scaling_algorithm}; it has a runtime of $\mathcal{O}(n^{3/4}
-\cdot m \cdot \log W)$.  which, when applied to our problem $\RS+\MA+\CC$ translates to $\mathcal{O}((\MaFactor \cdot \Vms +
-\ChunkTypes)^{3/4} \cdot  \MaFactor \cdot \Vms \cdot \ChunkTypes \cdot \log
-(2 \cdot h(\Tree)))$, where $h(\Tree)$ denotes the height of the tree $\Tree$.
+For general complete bipartite graphs the matching constructed by greedily choosing the cheapest edge can be arbitrarily bad.
+However, in case of very specific graph, where weights are induced by distance in a tree, this strategy produces optimal solution.
+By using properties of the tree, we will show following lemma:
+
+\begin{lemma}
+  Given fixed positions of VMs, the local greedy perfect matching of chunks to VMs inclines minimal cost among all possible perfect matchings.
+\end{lemma}
+
+\begin{proof}
+Proof by contradiction. Let's assume that there exists matching of cost lower than cost of $G$. Let's take cheapest such matching and call it $H$.
+
+Let's find smallest subtree $S$ where partial matching of $G$ has different cost than partial matching of $H$. It means that in both left and right subtree we did local matching (do we need this sentence?). It means that non-local decision was made in this subtree (perhaps hoping for savings higher?). Then there exist two such two such matched pairs in $H$ that shares an edge (one pair is transporting chunk up, the second one is transporting chunk down). Then we can create matching $H'$ that uncrosses those edges (does the local matching on them) and is cheaper than $H$. Contradiction.
+
+
+\maciek{It means basically that in every subtree we can only have more costly solution. Perhaps there exist cleaner way of proving that.}
+\end{proof}
+
+
+We will use greedy bottom-up construction of matching. Its runtime is linear with respect to number of tree vertices. It is more efficient that more general methods of finding perfect matching in general bipartite graphs.
 
 \begin{figure}
 \begin{minipage}[b]{0.49\linewidth}
@@ -543,7 +553,15 @@ shadowed lines.}
 \end{minipage}
 \end{figure}
 
-\subsubsection{Bandwidth correctness (moved from DP).}
+\subsubsection{Bandwidth correctness.}
+
+\begin{lemma}
+(uplink lemma)
+For every tree T (with chunks) and number of VMs $x$ the bandwidth of uplink is the same among all possible feasible solutions (\maciek{it is the lemma that Carlo formulated})
+
+\maciek{unless we allow something as stupid as routing communication and transport through loops}
+\end{lemma}
+
 
 \begin{corollary}
 In the abscene of $\RS$ and $\FP$, all bandwdith optimal assignments 
