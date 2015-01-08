@@ -117,17 +117,13 @@ $\ChunkCount_\SubstrateNode = \ChunkCount_{\SubstrateNode_l} +
 \label{algo:dynAggregation}
 \end{algorithm}
 
-TODO: hosting multiple VMs in the same node
-
 List all needed functions like distance, counter of number of chunks
 in subtree.
 
-Present the pseudocode, with base cases, aggregate function.
-
 Tell how to go back through the array to reconstruct the actual
-placements. ``Following path of minimas''.  Note that it
-computationally intensive, and we can trade it for memory - we can
-remember the best placement.
+placements. Following path of minimas. Other approach is to store pointers to minimas on lower levels as those are chosen.
+
+(Base case) We fill the entire array $Opt_l$ for the leaf $l$ with zeros. It means that we allow hosting $0, 1, \ldots, n$ VMs in this leaf. We can restrict the number of VMs that are hosted in the same leaf by some constant $x$ (that can be independent for every leaf) by setting $Opt_l[x+1] = Opt_l[x+2] = \ldots = Opt_l[n] = \infty$.
 
 \subsection{Algorithm correctness}
 
