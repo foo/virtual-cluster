@@ -168,7 +168,7 @@ physical counterparts: essentially a graph embedding problem.
 However, existing algorithms
 in the literature often ignore a crucial dimension of the embedding problem, namely \emph{data locality}:
 the input to a cloud application such as MapReduce is typically stored in a distributed,
-and sometimes redundant, file system. Since moving 
+and sometimes redundant, file system. Since moving
 data is costly, an embedding algorithm should be data locality aware,
 and allocate computational resources close to the data; in case of redundant storage, the algorithm should also optimize the \emph{replica selection}.
 
@@ -241,10 +241,10 @@ replica selection and flexible virtual machine embedding, and answer questions s
 
 We draw an almost complete picture of the problem space, show that indeed many problems
 can be solved optimally in polynomial time, even in the presence of multiple degrees of freedom (in terms of
-replica selection and embedding), and 
+replica selection and embedding), and
 we highlight interesting connections to classic algorithmic
-problems such as matching and flow problems. 
-We also prove limitations in terms of 
+problems such as matching and flow problems.
+We also prove limitations in terms of
 computational tractability, by showing reductions from 3-D matching, SAT and coverage problems; interestingly,
 while it is well-known that (unsplittable) multi-commodity flow
 problems are NP-hard in capacitated networks, our hardness results also hold in uncapacitated
@@ -301,7 +301,7 @@ capacity $\capacity(e)$.
 \emph{The Input Data.} The to be processed data constitutes the input to the batch-processing application.
 The data is stored in a distributed manner; this spatial distribution is given and not subject to optimization.
 The input data consists of different \emph{chunk types} $\{\achunk_1, \ldots, \achunk_{\ChunkType}\}$,
-where each chunk type $\achunk_i$ can have $r\geq 1$ instances (or replicas) $\{\achunk_{i}^{(1)},\ldots, \achunk_{i}^{(r)}\}$, 
+where each chunk type $\achunk_i$ can have $r\geq 1$ instances (or replicas) $\{\achunk_{i}^{(1)},\ldots, \achunk_{i}^{(r)}\}$,
  stored at different servers.
 Concretely, for each of the $r\cdot k$ replicas $\achunk_{i}^{(j)}$, we will denote by $\pi(\achunk_{i}^{(j)})$ at
 which server it is stored. It is sufficient to process one replica, and we will sometimes refer to this
@@ -342,10 +342,10 @@ each other. Let $\dist(v,\achunk)$ denote the distance (in the underlying physic
 chunk $\achunk$, and let $\dist(v_1,v_2)$ denote the distance between the two nodes $v_1$ and $v_2$.
 We define the footprint $\Cost(v)$ of a node $v$ as follows:
 $$
-\Cost(v) = \sum_{\achunk\in \mu(v)} \CostTrans \cdot \dist(v,\achunk) \underbrace{+ \sum_{v' \in \VirtualNodes\setminus\{v\}} \CostCom \cdot d(v,v')}_{\text{only for interconnect}},
+\Cost(v) = \sum_{\achunk\in \mu(v)} \CostTrans \cdot \dist(v,\achunk) \underbrace{+ \sum_{v' \in \VirtualNodes\setminus\{v\}} \CostCom \cdot \dist(v,v')}_{\text{only for inter-connect}},
 $$
 \noindent where $\mu(v)$ is the set of chunks assigned to $v$. Our goal is to minimize the overall footprint
-$\Cost=\sum_v \Cost(v)$.
+$\Cost=\sum_{v\in V} \Cost(v)$.
 
 %\textbf{Problem Decomposition.}
 
@@ -410,7 +410,7 @@ is motivated by the popular virtual cluster abstraction.~\cite{oktopus,talk-abou
 In this paper, we extend this model with a notion of data-locality.
 In particular, we distinguish between the bandwidth needed between replica
 and virtual machine ($\CostTrans$) and the bandwidth needed between
-two virtual machines ($\CostCom$); in practice, for applications with a large 
+two virtual machines ($\CostCom$); in practice, for applications with a large
 ``mapping ratio'', $\CostCom<\CostTrans$. Finally, note that it is frequently assumed
 that the nodes implementing the mapper functionality also implement the reducer functionality,
 and vice versa; however, it can also make sense to have more mappers or more reducers for
@@ -433,18 +433,163 @@ can be solved optimally using dynamic programming.
 \label{fig:venn_trivial}
 \end{figure}
 
-\carlo{A trivial strategy can solve instances with $\FP$: The strategy 
-collocates all VMs with chunks and hence inflicts $0$ costs, as long as $CV$ is 
-not a part of the problem. This strategy can even solve problem instances with 
-$\BW$ and $\RS$ or a combination of both. Figure~\ref{fig:venn_trivial} 
-shows a Venn diagram of all possible combinations of properties. The properties 
-which can be solved with this trivial strategy, are marked with a checked 
+\carlo{A trivial strategy can solve instances with $\FP$: The strategy
+collocates all VMs with chunks and hence inflicts $0$ costs, as long as $CV$ is
+not a part of the problem. This strategy can even solve problem instances with
+$\BW$ and $\RS$ or a combination of both. Figure~\ref{fig:venn_trivial}
+shows a Venn diagram of all possible combinations of properties. The properties
+which can be solved with this trivial strategy, are marked with a checked
 pattern.}
 %Stefan: I dont think we should say this, at least not here!
 %Note that all proposed
 %algorithms solve the problem optimally w.r.t. to the overall bandwidth costs
 %independently of $\CostTrans$ and (if present in the properties) $\CostCom$ and
 %$\Capacity$
+
+\subsection{Flow Algorithm ($\RS+\MA+\CC+\BW$)}
+
+\begin{figure}
+\includegraphics[width = \columnwidth]{figs/flow_ma_cv}
+\caption{To solve $\RS+\MA+\CC+\BW$, we have to find a cost minimal flow of
+value $4$ from $\Source$ to $\Sink$. The dotted link represents links, which
+have lower capacities due to $\CC$ - the dashed lines represent one unit of
+flow allocation in the cost optimal solution.}
+\end{figure}
+
+
+
+Another class of resource allocation problems, especially in capacitated models,
+can be solved by a reduction to flow
+problems on extended host graphs.
+
+First, let us observe that the problem $\RS+\MA+\CC+\BW$
+can be trivially reduced to $\RS+\MA+\BW$, as without a flexible
+placement (no $\FP$) and due to the unique paths in $\Tree$, we can simply subtract the bandwidth needed
+for $\CC$ from the link capacities upfront: given $\RS+\MA+\CC+\BW$
+we can construct a
+problem for $\RS+\MA+\BW$ with the same solution, by defining
+$\Capacity'(\SubstrateEdge_i)$ as
+$\Capacity(\SubstrateEdge_i) - \CC(\SubstrateEdge_i)$, where
+$\CC(\SubstrateEdge_i)$ denotes the bandwidth which
+had to be reserved on the link $\SubstrateEdge_i$ for the
+inter-connect.
+
+\maciek{In this intro we have to emphasis that we are really presenting integer min-cost max-flow algorithm with trivial modification}
+
+\subsubsection{Algorithm}
+
+\textbf{Construction}
+We extend the substrate network $\Tree$ in two parts:
+\begin{enumerate}
+  \item (chunk replicas) for each chunk type we create an artificial source vertex that we connect to each leaf containing replica of this type by edge of capacity 1
+  \item (virtual machines) we create an artificial \emph{super-sink} and connect it to every leaf containing VM by edge of capacity $MA$
+\end{enumerate}
+
+We assign cost 1 to every edge of substrate network. We assign cost 0 to every artificial edge (added in construction).
+
+We call extended graph as $G$.
+
+\begin{figure}
+\includegraphics[angle=90,origin=c, height=7cm]{figs/model_fig_skteches/flow}
+\end{figure}
+
+\textbf{Algorithm}
+
+We run shortest path algorithm $\Chunks$ times (from each chunk type vertex to supersink). After each found path we store the matching and update the bandwidth. In the end we output the matching as well as cost of the flow. If on any step we cannot find the path, we say that the instance is infeasible.
+
+\subsubsection{Algorithm correctness}
+
+\maciek{Those are sketches of lemmas that need to be in this chapter. Order is arbitrary and probably wrong, as lemmas depend on eachother.}
+
+
+\maciek{There are two ways of proving that. One is flow approach with minimal mentioning about successive shortest paths algorithm modification. Second one is more technical way, by analyzing actual shortest paths and mentioning flow just for optimality. Below is medicore mix of both.}
+
+\begin{lemma}Integrality of flow
+\end{lemma}
+\begin{proof}
+  All links have integer capacities - we just have to assume it in the model. All links have integer cost - either 0 or 1. From integer flow theorem we know that there exist integer flow and successive shortest paths is an algorithm to find it.
+\end{proof}
+
+\begin{lemma}
+On each step we find path of flow exactly 1.
+\end{lemma}
+\begin{proof}
+  Use integrality of flow. We say that each shortest path is separate flow, otherwise there is no way to prove it!
+\end{proof}
+
+
+\begin{lemma}Optimality of solution
+\end{lemma}
+\begin{proof}
+Our algorithm is successive shortest paths algorithm, therefore is optimal. The modification does not interfere with capacities, we just store something more.
+\end{proof}
+
+
+\begin{lemma}Algorithm says ``NO'' iff instance infeasible
+\end{lemma}
+\begin{proof}
+  Don't be too formal, it is very easy observation.
+  ($=>$)
+  ($<=$)
+\end{proof}
+
+\subsubsection{Runtime and memory consumption}
+
+\maciek{Our algorithm has the same runtime up to constants. More memory is needed to store the matching.}
+
+\textbf{A Note on Runtime.} There exist several polynomial-time algorithms to compute
+the integral minimum cost maximum flow problem on networks with integer capacities.
+One example is the \emph{Successive Shortest Path} algorithm,
+whose time complexity is $\mathcal{O}(n \cdot W((n+m)\log n)
+)$ time \cite{successive_shortest_path_complexity}, where $n$ is the number of
+nodes in the extended graph (consisting of substrate nodes and chunks),
+$m$ is the number of edges in the substrate graph ($|\SubstrateEdges| + \Vms + \RedundancyFactor
+\cdot \ChunkTypes$) and $W$ is the highest capacity in the substrate
+($\max(\Capacity(\SubstrateEdge))~\SubstrateEdge\in\SubstrateEdges$).
+
+\begin{figure}
+\includegraphics[width=\columnwidth]{figs/venn_flow.pdf}
+\caption{Property combinations which can be solved by our flow-based algorithm.}
+\label{fig:venn_flow}
+\end{figure}
+
+\carlo{Figure~\ref{fig:venn_flow} shows illustrates which problem
+combiantions can be solved by the presented flow-based approach.}
+
+\begin{comment}
+\paragraph{FLOW Construction}
+
+This section presents a flow based solution for the variant of the model which
+has bandwidth limitations, communicatin between the $\VM s$ and redundant
+$\achunk s$.
+
+We start by showing that $cv$ + $bw$ + $r$ is the same problem as $bw$ + $r$.
+The placement of the $\VM s$ is given. The bandwdith function $b$ assigns
+each link in the physical substrate $l_i$ a capacity $c_i$. Since the phyiscal
+stubstrate is a tree there exists only one path between two nodes, and hence it
+is known how much bandwidth has to be allocated on which links, in oder to
+satisfy the communication between the $\VM s$. We can therefore construct a
+problem with $bw$ + $r$ which has the same solutions, by defining $b'(l)$ as
+$b(l) - cv_l$, where $cv_l$ denotes the amount which had to be allocated on the
+link $l$ for the communication between the $\VM s$.
+
+To construct the flow graph, we start from the physical
+substrate. Each edge has a associated costs of $1$ and bandwidth according the
+available bandwidth due to the distribution provided by the $b$ function of the
+$bw$ property of the model. In addition we create and a node for each
+$\ChunkType$. Each of these nodes is connected to every node in the physical
+topology, which has a $\achunk$ of the corresponding type. The capacity of these
+edges is $1$ and the costs are $0$. In addition we create the source, and
+connect it to all nodes, which represent $\ChunkType s$. The capacity of the
+edges from the sink is $1$ and it's costs are $0$.
+On this flow graph, we now solve the (integer) Max-Flow-Min-Cost Problem.
+
+If the resulting maximal flow $\hat f$ has a value $|\hat f|< |C| = |V_V|$, the
+$\Problem$ is infeasible - otherwise we can construct a solution from $\hat f$.
+To construct the solution we choose an arbitrary path $p = \{e_1,\dots,
+e_n\}$ \carlo{TODO check n}, such that $f(e_i) > 1 ~ \forall i \in
+\{1,\dots,n\}$.
+\end{comment}
 
 \subsection{Matching Algorithms ($\RS+\MA+\CC$)}
 
@@ -486,7 +631,7 @@ the matching denotes the assignment of chunks to nodes.
 \label{fig:venn_matching}
 \end{figure}
 
-\carlo{Figure~\ref{fig:venn_matching} shows illustrates which problem 
+\carlo{Figure~\ref{fig:venn_matching} shows illustrates which problem
 combiantions can be solved by the presented matching approach.}
 
 
@@ -564,29 +709,29 @@ For every tree T (with chunks) and number of VMs $x$ the bandwidth of uplink is 
 
 
 \begin{corollary}
-In the abscene of $\RS$ and $\FP$, all bandwdith optimal assignments 
-$\VmChunkAssignment$ have identical bandwdith costs on all links in the host 
+In the abscene of $\RS$ and $\FP$, all bandwdith optimal assignments
+$\VmChunkAssignment$ have identical bandwdith costs on all links in the host
 graph.
 \end{corollary}
 
-This is a direct consequence of Lemma~\carlo{TODO: REF uplink lemma}, as the 
-amount of chunks and VMs in all subtrees is static, and all links are uplinks 
+This is a direct consequence of Lemma~\carlo{TODO: REF uplink lemma}, as the
+amount of chunks and VMs in all subtrees is static, and all links are uplinks
 of subtrees (which possibly consist of only one node).
 
 \begin{lemma}
-Given a minimal cost solution assignment $\VmChunkAssignment$ to a problem 
-instance with $\MA$, any bandwdith function $\capacity$, which assigns less 
-bandwidth to any link in the host graph then $\Cost(\VmChunkAssignment, 
+Given a minimal cost solution assignment $\VmChunkAssignment$ to a problem
+instance with $\MA$, any bandwdith function $\capacity$, which assigns less
+bandwidth to any link in the host graph then $\Cost(\VmChunkAssignment,
 \SubstrateEdge)$, renders the problem infeasible.
 \end{lemma}
 
 \begin{proof}
- By contradiction. Assume the problem is still feasible, although 
-$\VmChunkAssignment$ exceeds the capacity on at least one link. Then there has 
-to be a minimal cost assignment $\VmChunkAssignment'$, with 
-$\Cost(\VmChunkAssignment') > \Cost(\VmChunkAssignment)$, which does not 
-violate the capacity on each individual link. We can now choose an arbitrary 
-link, which has a higher costs in $\VmChunkAssignment'$ than in 
+ By contradiction. Assume the problem is still feasible, although
+$\VmChunkAssignment$ exceeds the capacity on at least one link. Then there has
+to be a minimal cost assignment $\VmChunkAssignment'$, with
+$\Cost(\VmChunkAssignment') > \Cost(\VmChunkAssignment)$, which does not
+violate the capacity on each individual link. We can now choose an arbitrary
+link, which has a higher costs in $\VmChunkAssignment'$ than in
 $\VmChunkAssignment$.
 \end{proof}
 
@@ -599,161 +744,231 @@ An instance of $\Problem$ is infeasible iff. algorithm returns $\infty$.
   ($\leftarrow$)
   \end{proof}
 
-\maciek{I think that we do not need that lemma, it might be obvious. I leave it 
+\maciek{I think that we do not need that lemma, it might be obvious. I leave it
 there just in case.}
 \begin{lemma}
-  If algorithm returns solution $\Sol$ of cost $\neq \infty$, then in $\Sol$ no 
+  If algorithm returns solution $\Sol$ of cost $\neq \infty$, then in $\Sol$ no
 link exceeds its capacity limit.
   \end{lemma}
-  
-\subsection{Flow Algorithm ($\RS+\MA+\CC+\BW$)}
 
-\begin{figure}
-\includegraphics[width = \columnwidth]{figs/flow_ma_cv} 
-\caption{To solve $\RS+\MA+\CC+\BW$, we have to find a cost minimal flow of 
-value $4$ from $\Source$ to $\Sink$. The dotted link represents links, which 
-have lower capacities due to $\CC$ - the dashed lines represent one unit of 
-flow allocation in the cost optimal solution.}
-\end{figure}
+\subsection{Dynamic Program ($\FP+\CC+\MA+\BW$)}
 
 
+Intro to dynamic programming on trees with subtree decomposition.
+Introduce binarization as way of dealing with trees of larger arity.
+Mention correctness requirements: substructure optimality and
+overlapping subproblems.
 
-Another class of resource allocation problems, especially in capacitated models,
-can be solved by a reduction to flow
-problems on extended host graphs.
+\subsection{Introduction to our algorithm}
 
-First, let us observe that the problem $\RS+\MA+\CC+\BW$
-can be trivially reduced to $\RS+\MA+\BW$, as without a flexible
-placement (no $\FP$) and due to the unique paths in $\Tree$, we can simply subtract the bandwidth needed
-for $\CC$ from the link capacities upfront: given $\RS+\MA+\CC+\BW$
-we can construct a
-problem for $\RS+\MA+\BW$ with the same solution, by defining
-$\Capacity'(\SubstrateEdge_i)$ as
-$\Capacity(\SubstrateEdge_i) - \CC(\SubstrateEdge_i)$, where
-$\CC(\SubstrateEdge_i)$ denotes the bandwidth which
-had to be reserved on the link $\SubstrateEdge_i$ for the 
-inter-connect.
+\maciek{We will want to go through all VM placements, for each of those do greedy matching and choose the cheapest.}
 
-\maciek{In this intro we have to emphasis that we are really presenting integer min-cost max-flow algorithm with trivial modification}
-
-\subsubsection{Algorithm}
-
-\textbf{Construction}
-We extend the substrate network $\Tree$ in two parts:
-\begin{enumerate}
-  \item (chunk replicas) for each chunk type we create an artificial source vertex that we connect to each leaf containing replica of this type by edge of capacity 1
-  \item (virtual machines) we create an artificial \emph{super-sink} and connect it to every leaf containing VM by edge of capacity $MA$
-\end{enumerate}
-
-We assign cost 1 to every edge of substrate network. We assign cost 0 to every artificial edge (added in construction).
-
-We call extended graph as $G$.
-
-\begin{figure}
-\includegraphics[angle=90,origin=c, height=7cm]{figs/model_fig_skteches/flow}
-\end{figure}
-
-\textbf{Algorithm}
-
-We run shortest path algorithm $\Chunks$ times (from each chunk type vertex to supersink). After each found path we store the matching and update the bandwidth. In the end we output the matching as well as cost of the flow. If on any step we cannot find the path, we say that the instance is infeasible.
-
-\subsubsection{Algorithm correctness}
-
-\maciek{Those are sketches of lemmas that need to be in this chapter. Order is arbitrary and probably wrong, as lemmas depend on eachother.}
+\maciek{Solution for subtree - how it can look like? It is ``partial matching''. Some matched VMs and chunks, but also some chunks transported out of subtree or some VMs/slots that will have chunks transported into from outside. So we charge already those incomplete matchings.}
 
 
-\maciek{There are two ways of proving that. One is flow approach with minimal mentioning about successive shortest paths algorithm modification. Second one is more technical way, by analyzing actual shortest paths and mentioning flow just for optimality. Below is medicore mix of both.}
+Let's start by transforming our tree to binary tree with arbitrary
+depth. We also introduce weights on edges (either $0$ or $1$). The
+strategy we use is to clone every vertex $|children(v)| - 2$ times,
+placing subsequent clones as right son of the previous one and placing
+subsequent children as left son of the clone. Last child is placed as
+right son of last clone.
 
-\begin{lemma}Integrality of flow
-\end{lemma}
-\begin{proof}
-  All links have integer capacities - we just have to assume it in the model. All links have integer cost - either 0 or 1. From integer flow theorem we know that there exist integer flow and successive shortest paths is an algorithm to find it.
-\end{proof}
+Let's begin designing our algorithm by writing recursive formula for
+minimal cost inclined by placing virtual machines in leaves of a given
+tree. Our approach is to evaluate this function using bottom-up
+technique using auxilary array, which yields a dynamic programming
+solution. To find actual placements of virtual machines in addition to
+the cost, we traverse the array backwards, following the path of
+minimas.
+
+Keep in mind that number of virtual machines is equal to number of
+chunks. However, our function $f$ will be defined by structural
+induction on the tree and we will invalidate the property of having
+the same number of chunks and virtual machines in a given subtree
+(which is true when we look at whole tree).
+
+Let's define $f$ in following way. First argument is a subtree (with
+available informations like number of chunks in its leaves), and the
+second argument is number of virtual machines that we decided to place
+in the subtree (given as first parameter). To calculate optimum
+placement of $x$ virtual machines in subtree $T$ ($f(T, x)$) we will
+consider every possible split of number $x$ into two positive integer
+values: $l$ and $r = x - l$. We will place $l$ virtual machines in
+left subtree of $T$ and $r$ virtual machines in right subtree of
+$T$. Having such information allow us to compute how much cost we
+incline through edge $e_1$ (which connects left subtree of $T$ to root
+of $T$) and edge $e_2$ (which connects right subtree of $T$ to root of
+$T$). In a given recursive call we charge only those two edges, rest
+of edges will be charged is subsequent calls.
+
+Our cost function consists of two factors. First one, communication
+cost between virtual machines is easy to compute. We know how many
+virtual machines are in left subtree, how many are in right subtree
+and how many are in whole tree outside of $T$. For each pair of
+virtual machines, first of which is in left subtree and second of
+which is in right subtree, we charge $b_2 \cdot (w(e_1) +
+w(e_2))$. For each pair of virtual machines, first of which is in left
+subtree and second of which is outside $T$, we charge $b_2 \cdot
+w(e_1)$. Right subtree case is symmetrical. Second factor of our cost
+function is the cost of transferring chunks to virtual machines. Let's
+call number of chunks in left subtree as $c_l$ and number of chunks in
+right subtree as $c_r$. To incline minimal cost we connect chunks in
+given subtree to virtual machines in the same subtree. If we can no
+longer do that, because $v_i < c_i (i \in \{l,r\})$, then we connect
+leftover chunks to virtual machines in second subtree of $T$. If we
+can no longer do that, we connect leftover chunks outside of $T$. This
+strategy is optimal, because connecting any other way can be amended
+(TODO: need better argument here), inclining lower cost. Connections
+inside either left or right subtrees inclines cost $0$ to edges $e_1$
+and $e_2$. Connections between left and right subtree incline cost
+$b_1
+\cdot (w(e_1) + w(e_2))$. Connections from either subtree to outside
+of $T$ inclines either $b_1 \cdot w(e_1)$ or $b_2 \cdot
+w(e_2)$. Finally, we can write down our formula for $f$:
+
+\begin{multline}
+f(T, x) = min_{l \in \{0, \ldots, x\}} \{ f(T_l, l) + f(T_r, x - l) \\
++ TransferCost(T_l,l,T_r,x-l) \\ + ConnectionCost(l,x-l)\}
+\end{multline}
+
+One simplifying observation is that to calculate $TransferCost$ we can
+just use the absolute value of difference between number of chunks and
+number of virtual machines in a given subtree, without knowing which
+is bigger, because in our model if there are some virtual machines
+left, we know that some chunks from outside will use the same transfer
+as if we have excessive chunks in the subtree.
+
+\subsection{Algorithm}
+\newcommand{\SumIndex}{\ensuremath{n}}
+\begin{algorithm}[tbhp]
+\DontPrintSemicolon % Some LaTeX compilers require you to use
+%%\dontprintsemicolon instead
+\SetAlgoNoEnd
+\KwIn{$\Opt_{\SubstrateNode_l} ,
+\Opt_{\SubstrateNode_r},
+\ChunkCount_{\SubstrateNode_l},\ChunkCount_{\SubstrateNode_r} $}
+$\ChunkCount_\SubstrateNode = \ChunkCount_{\SubstrateNode_l} +
+\ChunkCount_{\SubstrateNode_r}$\;
+\For{$\SumIndex \in \{0,\dots,\Vms\}$}{
+  \For{$i \in \{0,\dots,\SumIndex\}$}{ \If{$\Opt_\SubstrateNode[\SumIndex]
+  > \Opt_{\SubstrateNode_l}[i] +
+\Opt_{\SubstrateNode_r}[\SumIndex - i]$}{
+	$\Opt_\SubstrateNode[\SumIndex] \gets \Opt_{\SubstrateNode_l}[i]
+	+
+\Opt_{\SubstrateNode_r}[\SumIndex - i]$\;
+    } }
+
+ $bw \gets (\Vms -
+\SumIndex) \cdot \SumIndex \cdot \CostCom +   |i -
+\ChunkCount_\SubstrateNode| \cdot \CostTrans$\;
+  \eIf{$bw \leq \Capacity(\Uplink(v))$}{
+    $\Opt_\SubstrateNode[\SumIndex] \gets \Opt_\SubstrateNode[\SumIndex]
+    + bw$\; }{ $\Opt_\SubstrateNode[\SumIndex] \gets \infty$\; } }
+%
+\caption{$aggregate(\SubstrateNode \in \SubstrateNodes)$}
+\label{algo:dynAggregation}
+\end{algorithm}
+
+List all needed functions like distance, counter of number of chunks
+in subtree.
+
+Tell how to go back through the array to reconstruct the actual
+placements. Following path of minimas. Other approach is to store pointers to minimas on lower levels as those are chosen.
+
+(Base case) We fill the entire array $Opt_l$ for the leaf $l$ with zeros. It means that we allow hosting $0, 1, \ldots, n$ VMs in this leaf. We can restrict the number of VMs that are hosted in the same leaf by some constant $x$ (that can be independent for every leaf) by setting $Opt_l[x+1] = Opt_l[x+2] = \ldots = Opt_l[n] = \infty$.
+
+\subsection{Algorithm correctness}
+
+\subsubsection{Bandwidth correctness.}
 
 \begin{lemma}
-On each step we find path of flow exactly 1.
+Let's say that we calculated solution for our instance of VC with
+ignoring the bandwidth. Then we analyzed every link and it turned out
+that some of them exceed their capacity. Then the instance is
+infeasible and we cannot fix that by choosing any other matching (even
+suboptimal one).
+\end{lemma}
+
+It might happen that this lemma does not hold, beware!
+
+\maciek{Below there is emergency lemma in case that above lemma does not hold. In case above lemma is true it implies that below lemma is true.}
+\begin{lemma}
+An instance of $\Problem$ is infeasible iff. algorithm returns
+$\infty$.
 \end{lemma}
 \begin{proof}
-  Use integrality of flow. We say that each shortest path is separate flow, otherwise there is no way to prove it!
-\end{proof}
+  ($\rightarrow$)
 
+  ($\leftarrow$) \end{proof}
 
-\begin{lemma}Optimality of solution
+\maciek{I think that we do not need that lemma, it might be obvious. I leave it there just in case.}
+\begin{lemma}
+  If algorithm returns solution $\Sol$ of cost $\neq \infty$, then in
+  $\Sol$ no link exceeds its capacity limit.  \end{lemma}
+
+\subsubsection{Substructure optimality without bandwidth.}
+
+Definition of partial matching (matching + transporting imbalanced
+chunks out of tree and transporting chunk into imbalanced VMs from
+outside the tree). Definition of partial matching optimality
+(parametrized by number of VMs, subtree and chunks; best among all
+possible that match the same chunks and transports the imbalance).
+\begin{lemma}
+
+Let's consider an arbitrary tree $T$ with chunks $c_i$ and number of
+VMs $v$. Than $f(T, v)$ is cost of optimal partial matching.
+
 \end{lemma}
+
 \begin{proof}
-Our algorithm is successive shortest paths algorithm, therefore is optimal. The modification does not interfere with capacities, we just store something more.  
+Proof by structural induction. First, we take definition of $f$, which
+contains values of $f$ for left and right subtree for different number
+of VMs (but which sum to $v$). We can assume by induction that those
+are optimal. Then we calculate the cost of communication and matching
+between left and right subtree (also in $f$'s definition. Then we
+choose the minimum cost one. We argue that this one is optimal partial
+matching, and we use optimality of greedy matching for that.
+
+Also, we use the uplink lemma to show that choosing optimal partial
+matching in left and right subtree does not generate excessive
+bandwidth on both uplink edges (we might have doubted that because
+optimal partial matchings were restricted to their subtrees and we
+might thought that there is some other more costly matching that has
+less bandwidth on uplink - to save there).
+
+Also, we use optimality of greedy matching that is in matching
+chapter.
 \end{proof}
 
-
-\begin{lemma}Algorithm says ``NO'' iff instance infeasible
+\subsubsection{Substructure optimality with bandwidth.}
+\begin{lemma}
+Function $f$ modified to take bandwidth into account returns cost of feasible optimal partial matching (or no feasible solution exists).
 \end{lemma}
+
 \begin{proof}
-  Don't be too formal, it is very easy observation.
-  ($=>$)
-  ($<=$)
+
+For a given positions of VMs if optimal matching is infeasible, no other (even suboptimal) matching is feasible. Our algorithm checks every possible placement of VMs, so if there would be any feasible placement, our algorithm would have found feasible matching for that (the optimal one).
+
 \end{proof}
+\subsection{Running time and memory consumption analysis}
 
-\subsubsection{Runtime and memory consumption}
-
-\maciek{Our algorithm has the same runtime up to constants. More memory is needed to store the matching.}
-
-\textbf{A Note on Runtime.} There exist several polynomial-time algorithms to compute
-the integral minimum cost maximum flow problem on networks with integer capacities.
-One example is the \emph{Successive Shortest Path} algorithm,
-whose time complexity is $\mathcal{O}(n \cdot W((n+m)\log n)
-)$ time \cite{successive_shortest_path_complexity}, where $n$ is the number of
-nodes in the extended graph (consisting of substrate nodes and chunks),
-$m$ is the number of edges in the substrate graph ($|\SubstrateEdges| + \Vms + \RedundancyFactor
-\cdot \ChunkTypes$) and $W$ is the highest capacity in the substrate
-($\max(\Capacity(\SubstrateEdge))~\SubstrateEdge\in\SubstrateEdges$).
+We spend certain amount of time in every of $2|T|$ vertices of binary
+tree (factor 2 is inclined there because of binary
+transformation). This time can be bound by iterating over splits of
+$n$ into two integers, times some constant and we do it for every
+possible number of VMs from $0$ to $n$. Therefore, resulting running
+time is $O(Nn^2)$.
 
 \begin{figure}
-\includegraphics[width=\columnwidth]{figs/venn_flow.pdf}
-\caption{Property combinations which can be solved by our flow-based algorithm.}
-\label{fig:venn_flow}
+\includegraphics[width=\columnwidth]{figs/venn_dp.pdf}
+\caption{Property combinations which can be solved by our dynamic prorgramming
+appraoch.}
+\label{fig:venn_dp}
 \end{figure}
 
-\carlo{Figure~\ref{fig:venn_flow} shows illustrates which problem 
-combiantions can be solved by the presented flow-based approach.}
-
-\begin{comment}
-\paragraph{FLOW Construction}
-
-This section presents a flow based solution for the variant of the model which
-has bandwidth limitations, communicatin between the $\VM s$ and redundant
-$\achunk s$.
-
-We start by showing that $cv$ + $bw$ + $r$ is the same problem as $bw$ + $r$.
-The placement of the $\VM s$ is given. The bandwdith function $b$ assigns
-each link in the physical substrate $l_i$ a capacity $c_i$. Since the phyiscal
-stubstrate is a tree there exists only one path between two nodes, and hence it
-is known how much bandwidth has to be allocated on which links, in oder to
-satisfy the communication between the $\VM s$. We can therefore construct a
-problem with $bw$ + $r$ which has the same solutions, by defining $b'(l)$ as
-$b(l) - cv_l$, where $cv_l$ denotes the amount which had to be allocated on the
-link $l$ for the communication between the $\VM s$.
-
-To construct the flow graph, we start from the physical
-substrate. Each edge has a associated costs of $1$ and bandwidth according the
-available bandwidth due to the distribution provided by the $b$ function of the
-$bw$ property of the model. In addition we create and a node for each
-$\ChunkType$. Each of these nodes is connected to every node in the physical
-topology, which has a $\achunk$ of the corresponding type. The capacity of these
-edges is $1$ and the costs are $0$. In addition we create the source, and
-connect it to all nodes, which represent $\ChunkType s$. The capacity of the
-edges from the sink is $1$ and it's costs are $0$.
-On this flow graph, we now solve the (integer) Max-Flow-Min-Cost Problem.
-
-If the resulting maximal flow $\hat f$ has a value $|\hat f|< |C| = |V_V|$, the
-$\Problem$ is infeasible - otherwise we can construct a solution from $\hat f$.
-To construct the solution we choose an arbitrary path $p = \{e_1,\dots,
-e_n\}$ \carlo{TODO check n}, such that $f(e_i) > 1 ~ \forall i \in
-\{1,\dots,n\}$.
-\end{comment}
-
-\section{Dynamic programming solution}
-
-\input{dynamic_embedding}
+\carlo{Figure~\ref{fig:venn_dp} shows illustrates which problem
+combiantions can be solved by the presented dynamic programming
+approach.}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{NP-Hardness Results}\label{sec:np}
@@ -764,9 +979,9 @@ e_n\}$ \carlo{TODO check n}, such that $f(e_i) > 1 ~ \forall i \in
 \label{fig:venn_full}
 \end{figure}
 
-\carlo{TODO: Move embedd in surrounding text / move. Figure~\ref{fig:venn_full} 
-gives an overview of the problems, which have been solved in polynomial time in 
-Section~\ref{sec:poly}. This section will present proofs to show that all 
+\carlo{TODO: Move embedd in surrounding text / move. Figure~\ref{fig:venn_full}
+gives an overview of the problems, which have been solved in polynomial time in
+Section~\ref{sec:poly}. This section will present proofs to show that all
 remaining property combinations (marked in black) are np-hard.}
 
 \input{np-completeness}
@@ -783,8 +998,8 @@ These applications
 generate large amounts of network traffic~\cite{orchestra,talk-about,amazonbw},
 and over the last years, several systems have been proposed which provide
 a provable network performance, also in shared cloud environments, by supporting explicit
-relative~\cite{seawall,faircloud,elasticswitch}
-or, as in the case of our paper, \emph{absolute}~\cite{secondnet,oktopus,proteus,drl,gatekeeper} bandwidth reservations
+relative~\cite{faircloud,elasticswitch,seawall}
+or, as in the case of our paper, \emph{absolute}~\cite{oktopus,secondnet,drl,gatekeeper,proteus} bandwidth reservations
 between the virtual machines.
 In particular, the notion of virtual networks which combine compute and network resources has been introduced.
 For a good survey on network virtualization and in particular virtual network embeddings,
@@ -795,7 +1010,7 @@ introduced in the Oktopus paper~\cite{oktopus}, and later studied by many others
 Several heuristics have been developed to compute ``good'' embeddings of virtual clusters: embeddings
 with small footprints (minimal bandwidth reservation costs).\cite{oktopus,talk-about,proteus}
 The virtual network embedding problem has also been studied for more general graph abstractions
-(e.g., motivated by wide-area networks).~\cite{turner,ammar,infocom2009,zhu06,simannealing,ucc12mip}
+(e.g., motivated by wide-area networks).~\cite{infocom2009,ammar,turner,simannealing,ucc12mip,zhu06}
 
 From a theoretical perspective, the virtual network embedding problem can be seen as a generalization
 of classic VPN graph embedding problems~\cite{Goyal2008,gupta2001provisioning},
@@ -913,7 +1128,7 @@ and no
 positive $x \leq \clauses$ can satisfy this inequality for $\variables > 4$. Contradiction.
 \end{proof}
 
-
+\begin{comment}
 \section{Capacities are hard ($\RS+\FP+\BW$)}
 
 We prove that $\RS+\FP+\BW$ is NP-hard by reduction from the Boolean Satisfiability Problem ($\SAT$).
@@ -1041,6 +1256,9 @@ as the solution to $\RS+\FP+\BW$ covers all chunks. To see this,
 consider the leaf handling any given clause chunk;
 it is a witness that the corresponding clause is true.
 \end{proof}
+
+\end{comment}
+
 
 \subsection{Two replicas are hard ($\RS(2)+\FP+\CC+\BW$)}\label{ssec:two}
 
@@ -1181,6 +1399,8 @@ In our valuation $\Val$, we set the literal of the node leaf to
 $\top$; therefore the clause is satisfied.
 \end{proof}
 \end{proof}
+
+\begin{comment}
 
 \subsection{Images}
 
@@ -1552,7 +1772,6 @@ can be solved by which algorihms can be found in Figure~\ref{fig:summary}.
 \item r + bw + cv + fp - N
 \item ma + r + bw + cv + fp - N
 \end{enumerate}
-\end{comment}
 
 \subsection{Leftovers from dynamic program}
 For the simplified computation, we first represent the substrate network
@@ -1916,7 +2135,7 @@ n)$ communications - which each inflict $\CostCom$ bandwidth costs.
 %, we generate a
 %function $\ChunkCount : \SubstrateNode \rightarrow \mathbb{N}$ and second
 \maciek{I commented out everything in this section as it is generalization of section above which is wrong.}
-\end{comment}
+
 \subsubsection{The $\MA+\FP+\CC$ Algorithm}
 
 \maciek{I removed BW}
@@ -2034,7 +2253,6 @@ Note that $\VmCount$ will not be implemented at all - it is only neccessary for
 the former proofs.
 
 
-\end{comment}
 
 \stefan{I dont think we really need this section:}
 \maciek{I commented it out}
@@ -2082,6 +2300,7 @@ for a leaf node - which have been initialized with $0$ and
 are never modified.
 \end{proof}
 
+\end{comment}
 
 
 \end{appendix}
