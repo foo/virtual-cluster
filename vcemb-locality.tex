@@ -543,6 +543,60 @@ shadowed lines.}
 \end{minipage}
 \end{figure}
 
+\subsubsection{Bandwidth correctness (moved from DP).}
+
+\begin{corollary}
+In the abscene of $\RS$ and $\FP$, all bandwdith optimal assignments 
+$\VmChunkAssignment$ have identical bandwdith costs on all links in the host 
+graph.
+\end{corollary}
+
+This is a direct consequence of Lemma~\ref{}, as the amount of chunks and VMs 
+in all subtrees is static, and all links are uplinks of subtrees (which 
+possibly consist of only one node).
+
+
+
+
+\begin{lemma}
+Given a minimal cost solution assignment $\VmChunkAssignment$ to a problem 
+instance with $\MA$, any bandwdith function $\capacity$, which assigns less 
+bandwidth to any link in the host graph then $\Cost(\VmChunkAssignment, 
+\SubstrateEdge)$, renders the problem infeasible.
+\end{lemma}
+
+\carlo{We should point out, that all optimal assignment have exactly the same 
+footpint (not only the sum, but on each individual link). This is a consequence 
+of the lemmas in the DP part.}
+
+\begin{proof}
+ By contradiction. Assume a different assignment $\VmChunkAssignment'$ exists, 
+with $\Cost(\VmChunkAssignment') > \Cost(\VmChunkAssignment)$.
+\end{proof}
+
+
+
+
+
+
+\maciek{Below there is emergency lemma in case that above lemma does not hold. 
+In case above lemma is true it implies that below lemma is true.}
+\begin{lemma}
+An instance of $\Problem$ is infeasible iff. algorithm returns $\infty$.
+\end{lemma}
+\begin{proof}
+  ($\rightarrow$)
+
+  ($\leftarrow$)
+  \end{proof}
+
+\maciek{I think that we do not need that lemma, it might be obvious. I leave it 
+there just in case.}
+\begin{lemma}
+  If algorithm returns solution $\Sol$ of cost $\neq \infty$, then in $\Sol$ no 
+link exceeds its capacity limit.
+  \end{lemma}
+  
 \subsection{Flow Algorithm ($\RS+\MA+\CC+\BW$)}
 
 Another class of resource allocation problems, especially in capacitated models,
