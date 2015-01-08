@@ -551,12 +551,9 @@ $\VmChunkAssignment$ have identical bandwdith costs on all links in the host
 graph.
 \end{corollary}
 
-This is a direct consequence of Lemma~\ref{}, as the amount of chunks and VMs 
-in all subtrees is static, and all links are uplinks of subtrees (which 
-possibly consist of only one node).
-
-
-
+This is a direct consequence of Lemma~\carlo{TODO: REF uplink lemma}, as the 
+amount of chunks and VMs in all subtrees is static, and all links are uplinks 
+of subtrees (which possibly consist of only one node).
 
 \begin{lemma}
 Given a minimal cost solution assignment $\VmChunkAssignment$ to a problem 
@@ -565,13 +562,14 @@ bandwidth to any link in the host graph then $\Cost(\VmChunkAssignment,
 \SubstrateEdge)$, renders the problem infeasible.
 \end{lemma}
 
-\carlo{We should point out, that all optimal assignment have exactly the same 
-footpint (not only the sum, but on each individual link). This is a consequence 
-of the lemmas in the DP part.}
-
 \begin{proof}
- By contradiction. Assume a different assignment $\VmChunkAssignment'$ exists, 
-with $\Cost(\VmChunkAssignment') > \Cost(\VmChunkAssignment)$.
+ By contradiction. Assume the problem is still feasible, although 
+$\VmChunkAssignment$ exceeds the capacity on at least one link. Then there has 
+to be a minimal cost assignment $\VmChunkAssignment'$, with 
+$\Cost(\VmChunkAssignment') > \Cost(\VmChunkAssignment)$, which does not 
+violate the capacity on each individual link. We can now choose an arbitrary 
+link, which has a higher costs in $\VmChunkAssignment'$ than in 
+$\VmChunkAssignment$.
 \end{proof}
 
 
