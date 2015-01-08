@@ -599,6 +599,16 @@ link exceeds its capacity limit.
   
 \subsection{Flow Algorithm ($\RS+\MA+\CC+\BW$)}
 
+\begin{figure}
+\includegraphics[width = \columnwidth]{figs/flow_ma_cv} 
+\caption{To solve $\RS+\MA+\CC+\BW$, we have to find a cost minimal flow of 
+value $4$ from $\Source$ to $\Sink$. The dotted link represents links, which 
+have lower capacities due to $\CC$ - the dashed lines represent one unit of 
+flow allocation in the cost optimal solution.}
+\end{figure}
+
+
+
 Another class of resource allocation problems, especially in capacitated models,
 can be solved by a reduction to flow
 problems on extended host graphs.
