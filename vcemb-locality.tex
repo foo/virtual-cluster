@@ -448,36 +448,26 @@ pattern.}
 
 \subsection{Flow Algorithm ($\RS+\MA+\CC+\BW$)}
 
-\begin{figure}
-\includegraphics[width = \columnwidth]{figs/flow_ma_cv}
-\caption{To solve $\RS+\MA+\CC+\BW$, we have to find a cost minimal flow of
-value $4$ from $\Source$ to $\Sink$. The dotted link represents links, which
-have lower capacities due to $\CC$ - the dashed lines represent one unit of
-flow allocation in the cost optimal solution.}
-\end{figure}
+\subsubsection{Introduction}
 
-A large class of resource allocation problems, especially in capacitated models,
-can be solved by a reduction to flow
-problems on extended host graphs.
+In the following section, we show how to solve
+the $\RS+\MA+\CC+\BW$ problem using a flow approach.
+Recall that in the $\RS+\MA+\CC+\BW$ problem,
+we are given a set of redundant chunks ($\RS$) and a set of virtual machines
+at fixed locations. The number of chunk types is larger than the number
+of virtual machines ($\MA$), and each virtual machine needs to be connected
+to its chunks as well as to other virtual machines ($\CC$), while respecting
+capacity constraints ($\BW$).
+Our goal is to minimize the resource footprint $\Cost$, consisting
+of the bandwidth reservations in the access network and the inter-connect.
 
-First, let us observe that the problem $\RS+\MA+\CC+\BW$
-can be trivially reduced to $\RS+\MA+\BW$, as without a flexible
-placement (no $\FP$) and due to the unique paths in $\Tree$, we can simply subtract the bandwidth needed
-for $\CC$ from the link capacities upfront: given $\RS+\MA+\CC+\BW$
-we can construct a
-problem for $\RS+\MA+\BW$ with the same solution, by defining
-$\Capacity'(\SubstrateEdge_i)$ as
-$\Capacity(\SubstrateEdge_i) - \CC(\SubstrateEdge_i)$, where
-$\CC(\SubstrateEdge_i)$ denotes the bandwidth which
-had to be reserved on the link $\SubstrateEdge_i$ for the
-inter-connect.
+We allow an instance to have multiple virtual machines in single leaf.
 
-\maciek{In this intro we have to emphasis that we are really presenting integer min-cost max-flow algorithm with trivial modification}
+\subsubsection{Construction}
 
-\subsubsection{Algorithm}
 
-\textbf{Construction}
-We extend the substrate network $\Tree$ in two parts:
+
+We extend the substrate network $T$ by two parts:
 \begin{enumerate}
   \item (chunk replicas) for each chunk type we create an artificial source vertex that we connect to each leaf containing replica of this type by edge of capacity 1
   \item (virtual machines) we create an artificial \emph{super-sink} and connect it to every leaf containing VM by edge of capacity $MA$
@@ -487,20 +477,13 @@ We assign cost 1 to every edge of substrate network. We assign cost 0 to every a
 
 We call extended graph as $G$.
 
-\begin{figure}
-\includegraphics[angle=90,origin=c, height=7cm]{figs/model_fig_skteches/flow}
-\end{figure}
 
-\textbf{Algorithm}
+\subsubsection{Algorithm}
 
-We run shortest path algorithm $\Chunks$ times (from each chunk type vertex to supersink). After each found path we store the matching and update the bandwidth. In the end we output the matching as well as cost of the flow. If on any step we cannot find the path, we say that the instance is infeasible.
+We run min-cost max-flow algorithm. Then we go from each chunk following the non-zero flow path greedily (without returning to previous vertex) until we reach a VM. We output the pair as match. We decrease each edge on followed path by 1, remove chunk-vm pair from the tree and start again.
 
 \subsubsection{Algorithm correctness}
 
-\maciek{Those are sketches of lemmas that need to be in this chapter. Order is arbitrary and probably wrong, as lemmas depend on eachother.}
-
-
-\maciek{There are two ways of proving that. One is flow approach with minimal mentioning about successive shortest paths algorithm modification. Second one is more technical way, by analyzing actual shortest paths and mentioning flow just for optimality. Below is medicore mix of both.}
 
 \begin{lemma}Integrality of flow
 \end{lemma}
@@ -509,31 +492,32 @@ We run shortest path algorithm $\Chunks$ times (from each chunk type vertex to s
 \end{proof}
 
 \begin{lemma}
-On each step we find path of flow exactly 1.
 \end{lemma}
 \begin{proof}
-  Use integrality of flow. We say that each shortest path is separate flow, otherwise there is no way to prove it!
 \end{proof}
 
 
-\begin{lemma}Optimality of solution
+\begin{lemma}Algorithm produces perfect matching (Every chunk has matching pair) or the instance is infeasible
 \end{lemma}
 \begin{proof}
-Our algorithm is successive shortest paths algorithm, therefore is optimal. The modification does not interfere with capacities, we just store something more.
+  \begin{enumerate}
+\item  Matching is perfect (a) every chunk can find its machine. We have to argue that it cannot happen that some path goes nowhere. It is easy to see in the begining, but in the middle we might need some invariant that will hold.
+  
+\item Matching is perfect (b) no repetition of VMs that are matched - by flow of size 1 on lowest link, otherwise flow suboptimal.
+
+  \item Each flow-path from chunk ends in VM, because flow is directed (and the flow is optimal, so does not have any incoming flow to other chunk).
+  \end{enumerate}
+
 \end{proof}
 
+Observation. Flow needs to be optimal for this strategy to work, otherwise we can construct such an example that reconstruction fails (because it needs to go back an edge which is disallowed) by following some path. Let's construct binary tree with vertices a,b,c,d. Chunks are in a and d, vms are in b and c. Let's say that we have found suboptimal flow of a->c and d->b. Let's attempt reconstruction. Chunk at a finds VM at b (the closest one). Chunk at d happens to go towards root (it has flow this direction). Then it is forced to go to left child of the root (the last link with flow, and it cannot go back). Then it has no path left, as it cannot go back and path to b is already taken by a.
 
-\begin{lemma}Algorithm says ``NO'' iff instance infeasible
-\end{lemma}
-\begin{proof}
-  Don't be too formal, it is very easy observation.
-  ($=>$)
-  ($<=$)
-\end{proof}
+So we need yet another lemma: optimal flow does not have flow cycles! But it is obvious from definition of optimal flow.
+
+
 
 \subsubsection{Runtime and memory consumption}
 
-\maciek{Our algorithm has the same runtime up to constants. More memory is needed to store the matching.}
 
 \textbf{A Note on Runtime.} There exist several polynomial-time algorithms to compute
 the integral minimum cost maximum flow problem on networks with integer capacities.
