@@ -522,7 +522,7 @@ There are no cycles in optimal flow because $T$ is a tree and every cycle would 
   \end{enumerate}
  Follows directly from flow optimality on extended substrate network.
  
-  (1) We can transfer the same amount of flow with smaller cost by removing flow from uplink of leaf that we ended into. If we ended in leaf without the virtual machine, there is no connection from the leaf to sink; if we ended in leaf which is already full, we do not benefit from this flow as well, as no more flow can be transported by artificial edge from virtual machine to sink (as it can only transfer $vms \cdot ma$).
+  (1) We can transfer the same amount of flow with smaller cost by removing flow from uplink of leaf that we ended into. If we ended in leaf without the virtual machine, there is no connection from the leaf to sink; if we ended in leaf which is already full, we do not benefit from this flow as well, as no more flow can be transported by artificial edge from virtual machine to sink (as it can only transfer $vms \cdot ma$). Please note that flow is directed, therefore we cannot follow the path from replica $c_1$ to other replica $c_2$, because outgoing flow from $c_2$ (if selected) is directed upwards.
 
   (2) We can construct cheaper cost solution by reducing the flow on this path by $1$. We can do that without losing total flow from source to sink, because followed path didn't ended in sink.
 
