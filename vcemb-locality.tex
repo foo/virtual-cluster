@@ -501,7 +501,8 @@ is indicated by the dotted lines: each line represents one unit of flow.}
 
 
 We assign cost $1$ to every edge of the substrate network and $0$ to all other 
-edges. We will refer to the extended graph as $G$. 
+edges. \maciek{Is this still needed? We will refer to the extended graph as 
+$G$}. 
 Figure~\ref{fig:flow_construction} shows an example of the extended substrate 
 network: The source $\Source$ is connected, to the two leaves, which host the 
 VMs. The artificial nodes are depicted below the leaves, are labled with 
@@ -723,23 +724,29 @@ Let's find smallest subtree $S$ where partial matching of $G$ has different cost
 
 
 \begin{figure}
-\begin{minipage}[b]{0.49\linewidth}
-\centering
-\includegraphics[width =\columnwidth]{figs/matching_basic}
-\caption{The matching problem generated from the basic scenario in
-Figure~\ref{fig:basic_problem}}
+\includegraphics[width = 0.49\columnwidth]{figs/matching_topology_simple}
+\hfill
+\includegraphics[width =0.4\columnwidth]{figs/matching_basic}
+\caption{The problem instance \emph(left) contains two VMs and two chunks. The 
+optimal solution is indicated by the dashed lines. The corresponding matching 
+problem \emph{(right)} represenets the same situation. The weights on the edges 
+are set according to the distance in the substrate. The solution of the minimum 
+cost perfect matching is depicted by the shaded lines.}
 \label{fig:matching_basic}
-\end{minipage}
-\quad
-\begin{minipage}[b]{0.49\linewidth}
-\includegraphics[width = \columnwidth]{figs/matching}
-\caption{The matching problem for the instance from
-Figure~\ref{fig:model_combined} without $cv$. The solution is indicated by
-shadowed lines.}
-\label{fig:matching}
-\end{minipage}
 \end{figure}
 
+\begin{figure}
+\includegraphics[width = 0.49\columnwidth]{figs/model_ma_r_cv_boxes}
+\hfill
+\includegraphics[width =0.49\columnwidth]{figs/matching}
+\caption{The problem instance with $\MA+\RS$ \emph{(left)} is converted into a 
+matching problem \emph{(right)}. Since each VM has to process two chunks, the 
+VMs are replicated in the matching representation. The two replicas of each 
+chunk type are represented by a single node, and all edges connecting to this 
+node have a weight according to the shorter distance to one of the replicas. 
+This is exemplarically visualized for $\achunk_2$.}
+\label{fig:matching}
+\end{figure}
 \textbf{Adding $\BW$.} Let us know show why the matching approach can also be used to solve $\RS+\MA+\CC+\BW$.
 
 \begin{lemma}
