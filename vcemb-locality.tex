@@ -480,8 +480,13 @@ link $l$ for the communication between the $\VM s$.
 done (remeber Figure).}
 
 We extend the substrate network $T$ in the following way:
-For each chunk type we create an artificial vertex that we connect to each leaf 
-containing replica of this type by edge of capacity 1. In addition we create a 
+At first we normalize the bandwdith with $\CostTrans$ \carlo{Normalize by or 
+with? It should contain  $math.floor(\Capacity(e)/\CostTrans)$ afterwards}. 
+Note that the capacity reduction of $\CC$ has to be done prior to this step.
+Ongoing we create an artificial vertex for each chunktype. These artificial 
+vertices are connected to each leaf 
+containing replica of the respective chunk type by an edge of capacity $1$. In 
+addition we create a 
 \emph{super-source} $\Source$, and connect it to each of the artificial chunk 
 type nodes. Subsequently, we create an artificial \emph{super-sink} and 
 connect it to every leaf containing a VM by edge of capacity $\MaFactor$; in 
@@ -626,7 +631,7 @@ e_n\}$ \carlo{TODO check n}, such that $f(e_i) > 1 ~ \forall i \in
 \{1,\dots,n\}$.
 \end{comment}
 
-\subsection{Matching Algorithms ($\RS+\MA+\CC+\BW$)}
+\subsection{Matching Algorithms ($\RS+\MA+\CC$ or $\MA+\CC+\BW$)}
 
 Several problems related to replica selection,
 are essentially matching problems. As we will see,
@@ -634,18 +639,18 @@ matching algorithms are often very fast, compared
 to other approaches such as flow computations.
 
 In the following, we show how to solve
-the $\RS+\MA+\CC+\BW$ problem using a matching approach.
-Recall that in the $\RS+\MA+\CC+\BW$ problem,
+the $\RS+\MA+\CC$ problem using a matching approach.
+Recall that in the $\RS+\MA+\CC$ problem,
 we are given a set of redundant chunks ($\RS$) and a set of virtual machines
 at fixed locations. The number of chunk types is larger than the number
 of virtual machines ($\MA$), and each virtual machine needs to be connected
-to its chunks as well as to other virtual machines ($\CC$), while respecting
-capacity constraints ($\BW$).
+to its chunks as well as to other virtual machines ($\CC$).
 Our goal is to minimize the resource footprint $\Cost$, consisting
 of the bandwidth reservations in the access network and the inter-connect.
 
 We will first only discuss the simpler uncapacitated variant $\RS+\MA+\CC$, and postpone
-the discussion of the capacitated extension $\RS+\MA+\CC+\BW$ to the end of the section.
+the discussion of the capacitated extension $\MA+\CC+\BW$ to the end of the 
+section.
 Moreover, we observe that in the absence of node placement flexibilities (no $\FP$),
 due to the tree structure of the substrate topology $\Tree$, the bandwidth required
 for the inter-connect network can be allocated upfront, and does not depend on the replica
@@ -675,10 +680,20 @@ the matching denotes the assignment of chunks to nodes.
 Figure~\ref{fig:venn_matching} provides an overview of 
 which problem combinations can be solved by the presented matching approach.
 
-
+\begin{figure}[h]
+\includegraphics[width = 0.49\columnwidth]{figs/matching_topology_simple}
+\hfill
+\includegraphics[width =0.4\columnwidth]{figs/matching_basic}
+\caption{The problem instance \emph(left) contains two VMs and two chunks. The 
+optimal solution is indicated by the dashed lines. The corresponding matching 
+problem \emph{(right)} represenets the same situation. The weights on the edges 
+are set according to the distance in the substrate. The solution of the minimum 
+cost perfect matching is depicted by the shaded lines.}
+\label{fig:matching_basic}
+\end{figure}
 \textbf{Example.} Let us give a small example.
-Figure~\ref{fig:matching_basic} shows an example for the problem instance introduced in
-Figure~\ref{fig:basic_problem}: $\NodeMapping(\VirtualNode_1)$ is four hops
+Figure~\ref{fig:matching_basic} shows an example: 
+$\NodeMapping(\VirtualNode_1)$ is four hops
 away from all chunks; in the matching problem, this is
 reflected in the corresponding edge
 weights. Similarly, $\NodeMapping(\VirtualNode_2)$ is
@@ -687,13 +702,28 @@ weight of the edge $(\NodeMapping(\VirtualNode_2),\achunk_2)$ is $2$, while the
 weight on the edge to $\achunk_1$ is $4$. The solution to the minimum weight
 perfect bipartite matching contains the edges $(\NodeMapping(\VirtualNode_1),
 \achunk_1)$ and $(\NodeMapping(\VirtualNode_2),
-\achunk_2)$, which is exactly the chunk to node assignment $\VmChunkAssignment$
-which we identified as an optimal solution in Section~\carlo{TODO}.
-Figure~\ref{fig:matching} illustrates this for the scenario of
-Figure~\ref{fig:model_combined}: The two nodes are
+\achunk_2)$, which is exactly the optimal chunk to node assignment 
+$\VmChunkAssignment$
+which is visualized witht the dashed lines in Figure~\ref{fig:matching_basic}.
+
+\begin{figure}
+\includegraphics[width = 0.49\columnwidth]{figs/model_ma_r_cv_boxes}
+\hfill
+\includegraphics[width =0.49\columnwidth]{figs/matching}
+\caption{The problem instance with $\MA+\RS$ \emph{(left)} is converted into a 
+matching problem \emph{(right)}. Since each VM has to process two chunks, the 
+VMs are replicated in the matching representation. The two replicas of each 
+chunk type are represented by a single node, and all edges connecting to this 
+node have a weight according to the shorter distance to one of the replicas. 
+This is exemplarically visualized for $\achunk_2$.}
+\label{fig:matching}
+\end{figure}
+
+Figure~\ref{fig:matching} illustrates the procudure for a more complex problem 
+instance: The two nodes are
 cloned into $\MaFactor = 2$ nodes each, resulting in a total of four nodes in
 the matching problem. The $\RedundancyFactor = 2$ chunks of each chunk type are
-aggregated $\achunk_j$ into a single chunk type node in the matching problem;
+aggregated into a single chunk type node $\achunk_j$  in the matching problem;
 this gives a total of $4$ chunk type nodes in the matching graph. The weight
 on the edges between all clones of a specific node and a chunk type are set to
 the minimum distance. This can for instance be observed at the edges connecting
@@ -723,82 +753,81 @@ Let's find smallest subtree $S$ where partial matching of $G$ has different cost
 
 
 
-\begin{figure}
-\includegraphics[width = 0.49\columnwidth]{figs/matching_topology_simple}
-\hfill
-\includegraphics[width =0.4\columnwidth]{figs/matching_basic}
-\caption{The problem instance \emph(left) contains two VMs and two chunks. The 
-optimal solution is indicated by the dashed lines. The corresponding matching 
-problem \emph{(right)} represenets the same situation. The weights on the edges 
-are set according to the distance in the substrate. The solution of the minimum 
-cost perfect matching is depicted by the shaded lines.}
-\label{fig:matching_basic}
-\end{figure}
 
-\begin{figure}
-\includegraphics[width = 0.49\columnwidth]{figs/model_ma_r_cv_boxes}
-\hfill
-\includegraphics[width =0.49\columnwidth]{figs/matching}
-\caption{The problem instance with $\MA+\RS$ \emph{(left)} is converted into a 
-matching problem \emph{(right)}. Since each VM has to process two chunks, the 
-VMs are replicated in the matching representation. The two replicas of each 
-chunk type are represented by a single node, and all edges connecting to this 
-node have a weight according to the shorter distance to one of the replicas. 
-This is exemplarically visualized for $\achunk_2$.}
-\label{fig:matching}
-\end{figure}
-\textbf{Adding $\BW$.} Let us know show why the matching approach can also be used to solve $\RS+\MA+\CC+\BW$.
+
+
+\textbf{Adding $\BW$.} 
+
+We can also solve $\CC+\MA+\BW$ with our matching approach. The algorithm works 
+similar as the previous one: in fact the construction is the same - we entirely 
+ignore the bandwdith constraints until we computed a solution to minimum weight 
+perfect matching. Once we have the solution, we can check whether any bandwdith 
+constraints are violated. If none are violated, we obviously found the cheapest 
+overall solution. We will now show, that the problem is infeasible, if the 
+solution which ignored the bandwdith constraints exceeds the constraints on at 
+least one link. Before we can proof the infeasibility of the instances, we will 
+introduce a lemma, to better understand the \emph{locality} of optimal 
+assignments.
 
 \begin{lemma}
-(uplink lemma)
-For every tree T (with chunks) and number of VMs $x$ the bandwidth of uplink is the same among all possible feasible solutions)
-
-\maciek{unless we allow something as stupid as routing communication and transport through loops}
+Given a problem instance with $\MA$ and subtree $\Tree'$, containing $n$ 
+chunks and $m$ VMs, the bandwidth costs of each optimal assignment 
+$\VmChunkAssignment$ on the uplink of $\Tree'$ are $|n-(m\cdot\MaFactor)|\cdot 
+\CostTrans$.
+\label{lemma:uplink}
 \end{lemma}
 
-
-\begin{corollary}
-In the abscene of $\RS$ and $\FP$, all bandwdith optimal assignments
-$\VmChunkAssignment$ have identical bandwdith costs on all links in the host
-graph.
-\end{corollary}
-
-This is a direct consequence of Lemma~\carlo{TODO: REF uplink lemma}, as the
-amount of chunks and VMs in all subtrees is static, and all links are uplinks
-of subtrees (which possibly consist of only one node).
+\begin{proof}
+The costs result from a ``local'' assignment, in which all chunks inside the 
+subtree are assigned to VMs in the subtree and vice-versa. However, the 
+number of chunks in the subtree may differ from the processing capacities of 
+the VMs in the subtree. In case there are more chunks in the subtree, each 
+excess chunk has to be transferred to a different subtree, which will 
+inflict bandwdith costs of$\CostCom$ on the uplink connecting $\Tree'$ with the 
+remaining parts of $\Tree$. If the processing capabilities exceeed the amout of 
+avialable chunks, chunks from other subtrees will have to be transferred to 
+VMs in $\Tree'$ - inflicting bandwdith costs of $\CostCom$. Every solution 
+which does not provide this ``locality'' cannot be optimal, since a better 
+solution can be constructed, by exchanging the assignments of one of the chunks 
+which is transferred to $\Tree'$ and one chunk which is transferred from 
+$\Tree'$ to a VM outside of $\Tree'$.
+\end{proof}
 
 \begin{lemma}
 Given a minimal cost solution assignment $\VmChunkAssignment$ to a problem
 instance with $\MA$, any bandwdith function $\capacity$, which assigns less
-bandwidth to any link in the host graph then $\Cost(\VmChunkAssignment,
-\SubstrateEdge)$, renders the problem infeasible.
+than $\Cost(\VmChunkAssignment,
+\SubstrateEdge)$ bandwidth to any link in the host graph , renders the problem 
+infeasible.
+\label{lemma:no_bandwidth}
 \end{lemma}
 
 \begin{proof}
- By contradiction. Assume the problem is still feasible, although
-$\VmChunkAssignment$ exceeds the capacity on at least one link. Then there has
-to be a minimal cost assignment $\VmChunkAssignment'$, with
-$\Cost(\VmChunkAssignment') > \Cost(\VmChunkAssignment)$, which does not
-violate the capacity on each individual link. We can now choose an arbitrary
-link, which has a higher costs in $\VmChunkAssignment'$ than in
-$\VmChunkAssignment$.
+Assume there exists a link on which the assignment $\VmChunkAssignment$ 
+violated the capacity. From Lemma~\ref{lemma:uplink} it is 
+known, that$\VmChunkAssignment$ keps the assignment ``local''.  As a result of 
+this, the Footprint on the uplink of a specific subtree is the number of chunks 
+(or VMs) which have to be connected to VMs (or chunks) outside the subtree 
+times the bandwdith which is neccessary to transfer a chunk to a VM. There 
+cannot be an assignment which requires less bandwdith on the link, since all VMs 
+and chunks have to be used in the assignment and removing the 
+locality will increase the bandwdith requirements . 
 \end{proof}
-
-\begin{lemma}
-An instance of $\Problem$ is infeasible iff. algorithm returns $\infty$.
-\end{lemma}
-\begin{proof}
-  ($\rightarrow$)
-
-  ($\leftarrow$)
-  \end{proof}
-
-\maciek{I think that we do not need that lemma, it might be obvious. I leave it
-there just in case.}
-\begin{lemma}
-  If algorithm returns solution $\Sol$ of cost $\neq \infty$, then in $\Sol$ no
-link exceeds its capacity limit.
-  \end{lemma}
+%\begin{lemma}
+%An instance of $\Problem$ is infeasible iff. algorithm returns $\infty$.
+%\end{lemma}
+%\begin{proof}
+%  ($\rightarrow$)
+%
+%  ($\leftarrow$)
+%  \end{proof}
+%
+%\maciek{I think that we do not need that lemma, it might be obvious. I leave it
+%there just in case.}
+%\begin{lemma}
+%  If algorithm returns solution $\Sol$ of cost $\neq \infty$, then in $\Sol$ no
+%link exceeds its capacity limit.
+%  \end{lemma}
 
 \subsection{Dynamic Programming ($\FP+\CC+\MA+\BW$)}
 
