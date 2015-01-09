@@ -463,6 +463,17 @@ of the bandwidth reservations in the access network and the inter-connect.
 
 We allow an instance to have multiple virtual machines in single leaf.
 
+We start by showing that $cv$ + $bw$ + $r$ is the same problem as $bw$ + $r$.
+The placement of the $\VM s$ is given. The bandwdith function $b$ assigns
+each link in the physical substrate $l_i$ a capacity $c_i$. Since the phyiscal
+stubstrate is a tree there exists only one path between two nodes, and hence it
+is known how much bandwidth has to be allocated on which links, in oder to
+satisfy the communication between the $\VM s$. We can therefore construct a
+problem with $bw$ + $r$ which has the same solutions, by defining $b'(l)$ as
+$b(l) - cv_l$, where $cv_l$ denotes the amount which had to be allocated on the
+link $l$ for the communication between the $\VM s$.
+
+
 \subsubsection{Construction}
 
 
@@ -470,7 +481,7 @@ We allow an instance to have multiple virtual machines in single leaf.
 We extend the substrate network $T$ by two parts:
 \begin{enumerate}
   \item (chunk replicas) for each chunk type we create an artificial source vertex that we connect to each leaf containing replica of this type by edge of capacity 1
-  \item (virtual machines) we create an artificial \emph{super-sink} and connect it to every leaf containing VM by edge of capacity $MA$
+  \item (virtual machines) we create an artificial \emph{super-sink} and connect it to every leaf containing VM by edge of capacity $MA$; in case of $x$ VMs hosted at the same leaf, we multiply available capacity of the edge to $x \cdot MA$
 \end{enumerate}
 
 We assign cost 1 to every edge of substrate network. We assign cost 0 to every artificial edge (added in construction).
@@ -488,7 +499,7 @@ We run min-cost max-flow algorithm. Then we go from each chunk following the non
 \begin{lemma}Integrality of flow
 \end{lemma}
 \begin{proof}
-  All links have integer capacities - we just have to assume it in the model. All links have integer cost - either 0 or 1. From integer flow theorem we know that there exist integer flow and successive shortest paths is an algorithm to find it.
+  All links have integer capacities - we just have to assume it in the model. All links have integer cost - either 0 or 1. From integer flow theorem we know that there exist integer flow and there are multiple algorithms that return such flow. One of the examples is successive shortest paths algorithm.
 \end{proof}
 
 \begin{lemma}
@@ -518,6 +529,7 @@ So we need yet another lemma: optimal flow does not have flow cycles! But it is 
 
 \subsubsection{Runtime and memory consumption}
 
+\maciek{This section is under construction, no validation was performed!}
 
 \textbf{A Note on Runtime.} There exist several polynomial-time algorithms to compute
 the integral minimum cost maximum flow problem on networks with integer capacities.
