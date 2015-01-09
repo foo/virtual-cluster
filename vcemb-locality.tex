@@ -758,19 +758,20 @@ Let's find smallest subtree $S$ where partial matching of $G$ has different cost
 
 \textbf{Adding $\BW$.} 
 
-We can also solve $\CC+\MA+\BW$ with our matching approach. The algorithm works 
-similar as the previous one: in fact the construction is the same - we entirely 
-ignore the bandwdith constraints until we computed a solution to minimum weight 
-perfect matching. Once we have the solution, we can check whether any bandwdith 
-constraints are violated. If none are violated, we obviously found the cheapest 
-overall solution. We will now show, that the problem is infeasible, if the 
-solution which ignored the bandwdith constraints exceeds the constraints on at 
-least one link. Before we can proof the infeasibility of the instances, we will 
-introduce a lemma, to better understand the \emph{locality} of optimal 
-assignments.
+We can also solve $\CC+\MA+\BW$ with our matching approach. The algorithm uses 
+the same construction described above for $\CC+\MA$ to compute a solution 
+to minimum weight perfect matching. Afterwards it is verified, that the 
+resulting bandwidth allocations do not violate any capacity constraints. If 
+none are violated, we found the cheapest assignment. We will 
+now show, that the problem is infeasible, if the resulting assignment, which 
+ignored the bandwdith constraints, exceeds the constraints on at least one 
+link. Before we can proof the infeasibility of the instances, we will introduce 
+a lemma, to better understand the \emph{locality} of optimal assignments.
+
+\carlo{We also need a node mapping (for both lemmas). Shall we state this here?}
 
 \begin{lemma}
-Given a problem instance with $\MA$ and subtree $\Tree'$, containing $n$ 
+Given a problem instance without $\RS$ and subtree $\Tree'$, containing $n$ 
 chunks and $m$ VMs, the bandwidth costs of each optimal assignment 
 $\VmChunkAssignment$ on the uplink of $\Tree'$ are $|n-(m\cdot\MaFactor)|\cdot 
 \CostTrans$.
@@ -795,7 +796,7 @@ $\Tree'$ to a VM outside of $\Tree'$.
 
 \begin{lemma}
 Given a minimal cost solution assignment $\VmChunkAssignment$ to a problem
-instance with $\MA$, any bandwdith function $\capacity$, which assigns less
+instance without $\RS$, any bandwdith function $\capacity$, which assigns less
 than $\Cost(\VmChunkAssignment,
 \SubstrateEdge)$ bandwidth to any link in the host graph , renders the problem 
 infeasible.
@@ -828,6 +829,32 @@ locality will increase the bandwdith requirements .
 %  If algorithm returns solution $\Sol$ of cost $\neq \infty$, then in $\Sol$ no
 %link exceeds its capacity limit.
 %  \end{lemma}
+
+\carlo{TODO: change notation of instance of chunk types.}
+
+\begin{figure}
+ \includegraphics[width = \columnwidth]{figs/matching_no_rs}
+ \caption{An example of $\RS+\BW$. $\achunk_{1_1}$ or $\achunk_{2_1}$ are 
+located subtree with uplink capacity $1$. The bandwidth allocation in the right 
+subtree depends on which chunk is chosen for processing in the left 
+subtree.}
+ \label{fig:matching_no_rs}
+\end{figure}
+
+
+$\RS+\BW$ cannot be solved in this way, since Lemma~\ref{lemma:uplink} does not 
+hold for problem instances with $\RS$. Figure~\ref{fig:matching_no_rs} 
+illustrates this: It shows a feasible problem instance in which, due 
+to bandwdith constraints, only one chunk can be processed localy. If for 
+instance $\achunk_{1_1}$ is assigned to $\VirtualNode_1$, $\achunk_{2_1}$ cannot 
+be processed by $\VirtualNode_2$, since this would exceed the bandwidth 
+capacity. Instead $\achunk_{2_2}$ wil be processed by $\VirtualNode_2$. This 
+requires bandwdith allocations on links, which would not have been utilized, 
+when $\achunk_{2_1}$ would have been assigned to $\VirtualNode_1$. Hence the 
+bandwidth utilization on individual links is no longer predictable in $\RS$. 
+When this problem is transformed into a matching problem, the resulting 
+assignment will use $\achunk_{1_1}$ and $\achunk_{2_1}$ - which violates 
+bandwdith constraints, although the instance itself is feasible.
 
 \subsection{Dynamic Programming ($\FP+\CC+\MA+\BW$)}
 
