@@ -491,7 +491,9 @@ We call extended graph as $G$.
 
 \subsubsection{Algorithm}
 
-We run min-cost max-flow algorithm. Then we go from each chunk following the non-zero flow path greedily (without returning to previous vertex) until we reach a VM. We output the pair as match. We decrease each edge on followed path by 1, remove chunk-vm pair from the tree and start again.
+Our algorithm for $\RS+\MA+\CC+\BW$ consists of two parts. First part is to compute min-cost max-flow on extended substrate network. This step is already well-known and there exists multiple algorithms for that. If we only want to know the cost of embedding, this is sufficient.
+
+Second part is matching reconstruction. Specification of our algorithm is to produce valid matching in addition to its cost. We can do that by looking into flow that is assigned to edges at original substrate network. In order to restore a single matched pair, we start by choosing arbitrary replica $ch$ that has non-zero flow assigned to edge directly above it. Then we follow arbitrary path where there is assigned non-zero flow to the path's links. We follow the path until we reach the virtual machine $v$. We output the pair $\lbrace ch, v \rbrace$, remove replica from the tree and decrease number of available slots in $v$. We also decrease flow assigned to each edge on followed path by $1$. We continue building the matching by selecting replicas until every chunk type is processed.
 
 \subsubsection{Algorithm correctness}
 
@@ -501,6 +503,8 @@ We run min-cost max-flow algorithm. Then we go from each chunk following the non
 \begin{proof}
   All links have integer capacities - we just have to assume it in the model. All links have integer cost - either 0 or 1. From integer flow theorem we know that there exist integer flow and there are multiple algorithms that return such flow. One of the examples is successive shortest paths algorithm.
 \end{proof}
+
+No cycles in optimal flow because $T$ is a tree and every cycle would have to go back through the same edges both ways. Therefore we don't need to go back.
 
 \begin{lemma}
 \end{lemma}
