@@ -520,8 +520,13 @@ There are no cycles in optimal flow because $T$ is a tree and every cycle would 
     \item path does reach the leaf, but it is empty, contains only chunk replica or contains virtual machine that does not have any slots left
     \item path does not reach the leaf
   \end{enumerate}
+ Follows directly from flow optimality on extended substrate network.
+ 
+  (1) We can transfer the same amount of flow with smaller cost by removing flow from uplink of leaf that we ended into. If we ended in leaf without the virtual machine, there is no connection from the leaf to sink; if we ended in leaf which is already full, we do not benefit from this flow as well, as no more flow can be transported by artificial edge from virtual machine to sink (as it can only transfer $vms \cdot ma$).
 
-  (1) Follows directly from flow optimality on extended substrate network. We can transfer the same amount of flow with smaller cost by removing flow from uplink of leaf that we ended into. If we ended in leaf without the virtual machine, there is no connection from the leaf to sink; if we ended in leaf which is already full, we do not benefit from this flow as well, as no more flow can be transported by artificial edge from virtual machine to sink (as it can only transfer $vms \cdot ma$).
+  (2) We can construct cheaper cost solution by reducing the flow on this path by $1$. We can do that without losing total flow from source to sink, because followed path didn't ended in sink.
+
+ \maciek{This lemma can be proved by flow conservation argument together with no cycle argument. It might be better approach, as I have some doubts with (2).}
 \end{proof}
 
 \begin{lemma}Path following produces perfect matching of selected chunk replicas and virtual machine slots
