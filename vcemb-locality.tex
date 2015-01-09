@@ -514,7 +514,9 @@ capacity due to $\CC$.
 
 \subsubsection{Algorithm}
 
-We run min-cost max-flow algorithm. Then we go from each chunk following the non-zero flow path greedily (without returning to previous vertex) until we reach a VM. We output the pair as match. We decrease each edge on followed path by 1, remove chunk-vm pair from the tree and start again.
+Our algorithm for $\RS+\MA+\CC+\BW$ consists of two parts. First part is to compute min-cost max-flow on extended substrate network. This step is already well-known and there exists multiple algorithms for that. If we only want to know the cost of embedding, this is sufficient.
+
+Second part is matching reconstruction. Specification of our algorithm is to produce valid matching in addition to its cost. We can do that by looking into flow that is assigned to edges at original substrate network. In order to restore a single matched pair, we start by choosing arbitrary replica $ch$ that has non-zero flow assigned to edge directly above it. Then we follow arbitrary path where there is assigned non-zero flow to the path's links. We follow the path until we reach the virtual machine $v$. We output the pair $\lbrace ch, v \rbrace$, remove replica from the tree and decrease number of available slots in $v$. We also decrease flow assigned to each edge on followed path by $1$. We continue building the matching by selecting replicas until every chunk type is processed.
 
 \subsubsection{Algorithm correctness}
 
@@ -525,28 +527,37 @@ We run min-cost max-flow algorithm. Then we go from each chunk following the non
   All links have integer capacities - we just have to assume it in the model. All links have integer cost - either 0 or 1. From integer flow theorem we know that there exist integer flow and there are multiple algorithms that return such flow. One of the examples is successive shortest paths algorithm.
 \end{proof}
 
+
+\begin{lemma}When applied to optimal flow, path following never runs into cycles (which means that it terminates).
+\end{lemma}
+\begin{proof}
+There are no cycles in optimal flow because $T$ is a tree and every cycle would have to go back through the same edges both ways, which would contradict optimality of the flow. This remains true in residual flow graph, because no cycles can be introduces by removing paths.
+\end{proof}
+
 \begin{lemma}
+  When applied to optimal flow, path following always ends in virtual machine. Also, this virtual machine has at least one empty slot.
 \end{lemma}
 \begin{proof}
-\end{proof}
-
-
-\begin{lemma}Algorithm produces perfect matching (Every chunk has matching pair) or the instance is infeasible
-\end{lemma}
-\begin{proof}
+  Let's consider two cases:
   \begin{enumerate}
-\item  Matching is perfect (a) every chunk can find its machine. We have to argue that it cannot happen that some path goes nowhere. It is easy to see in the begining, but in the middle we might need some invariant that will hold.
-  
-\item Matching is perfect (b) no repetition of VMs that are matched - by flow of size 1 on lowest link, otherwise flow suboptimal.
-
-  \item Each flow-path from chunk ends in VM, because flow is directed (and the flow is optimal, so does not have any incoming flow to other chunk).
+    \item path does reach the leaf, but it is empty, contains only chunk replica or contains virtual machine that does not have any slots left
+    \item path does not reach the leaf
   \end{enumerate}
+ Follows directly from flow optimality on extended substrate network.
+ 
+  (1) We can transfer the same amount of flow with smaller cost by removing flow from uplink of leaf that we ended into. If we ended in leaf without the virtual machine, there is no connection from the leaf to sink; if we ended in leaf which is already full, we do not benefit from this flow as well, as no more flow can be transported by artificial edge from virtual machine to sink (as it can only transfer $vms \cdot ma$). Please note that flow is directed, therefore we cannot follow the path from replica $c_1$ to other replica $c_2$, because outgoing flow from $c_2$ (if selected) is directed upwards.
 
+  (2) We can construct cheaper cost solution by reducing the flow on this path by $1$. We can do that without losing total flow from source to sink, because followed path didn't ended in sink.
+
+ \maciek{This lemma can be proved by flow conservation argument together with no cycle argument. It might be better approach, as I have some doubts with (2).}
 \end{proof}
 
-Observation. Flow needs to be optimal for this strategy to work, otherwise we can construct such an example that reconstruction fails (because it needs to go back an edge which is disallowed) by following some path. Let's construct binary tree with vertices a,b,c,d. Chunks are in a and d, vms are in b and c. Let's say that we have found suboptimal flow of a->c and d->b. Let's attempt reconstruction. Chunk at a finds VM at b (the closest one). Chunk at d happens to go towards root (it has flow this direction). Then it is forced to go to left child of the root (the last link with flow, and it cannot go back). Then it has no path left, as it cannot go back and path to b is already taken by a.
+\begin{corollary}Path following on optimal flow produces perfect matching of selected chunk replicas and virtual machine slots
+\end{corollary}
 
-So we need yet another lemma: optimal flow does not have flow cycles! But it is obvious from definition of optimal flow.
+\begin{comment}
+Observation. Flow needs to be optimal for this strategy to work, otherwise we can construct such an example that reconstruction fails (because it needs to go back an edge which is disallowed) by following some path. Let's construct binary tree with vertices a,b,c,d. Chunks are in a and d, vms are in b and c. Let's say that we have found suboptimal flow of a->c and d->b. Let's attempt reconstruction. Chunk at a finds VM at b (the closest one). Chunk at d happens to go towards root (it has flow this direction). Then it is forced to go to left child of the root (the last link with flow, and it cannot go back). Then it has no path left, as it cannot go back and path to b is already taken by a.
+\end{comment}
 
 
 
