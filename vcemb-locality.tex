@@ -540,7 +540,13 @@ Observation. Flow needs to be optimal for this strategy to work, otherwise we ca
 
 \subsubsection{Runtime and memory consumption}
 
-\maciek{This section is under construction, no validation was performed!}
+I have found some well-performing algorithms here (look at state of the art section):
+  \url{http://courses.csail.mit.edu/6.854/06/scribe/s12-minCostFlowAlg.pdf}; But unlike successive shortest paths algorithm, we do not have guarantees of flow integrality. 
+
+Also, algorithm of successive shortest paths can improved a little bit because we do not need to use Bellman-Ford algorithm - we can just use Dijkstra, because we do not have negative costs. This way we can further improve the runtime.
+
+Also, we can upper bound the bandwidth capacity of every edge by total number of slots multiplied squared (squared because there are the same number of chunk types as slots).
+
 
 \textbf{A Note on Runtime.} There exist several polynomial-time algorithms to compute
 the integral minimum cost maximum flow problem on networks with integer capacities.
