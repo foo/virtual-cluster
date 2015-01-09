@@ -504,15 +504,27 @@ Second part is matching reconstruction. Specification of our algorithm is to pro
   All links have integer capacities - we just have to assume it in the model. All links have integer cost - either 0 or 1. From integer flow theorem we know that there exist integer flow and there are multiple algorithms that return such flow. One of the examples is successive shortest paths algorithm.
 \end{proof}
 
-No cycles in optimal flow because $T$ is a tree and every cycle would have to go back through the same edges both ways. Therefore we don't need to go back.
 
-\begin{lemma}
+\begin{lemma}When applied to optimal flow, path following never runs into cycles (which means that it terminates).
 \end{lemma}
 \begin{proof}
+There are no cycles in optimal flow because $T$ is a tree and every cycle would have to go back through the same edges both ways, which would contradict optimality of the flow. This remains true in residual flow graph, because no cycles can be introduces by removing paths.
 \end{proof}
 
+\begin{lemma}
+  When applied to optimal flow, path following always ends in virtual machine. Also, this virtual machine has at least one empty slot.
+\end{lemma}
+\begin{proof}
+  Let's consider two cases:
+  \begin{enumerate}
+    \item path does reach the leaf, but it is empty, contains only chunk replica or contains virtual machine that does not have any slots left
+    \item path does not reach the leaf
+  \end{enumerate}
 
-\begin{lemma}Algorithm produces perfect matching (Every chunk has matching pair) or the instance is infeasible
+  (1) Follows directly from flow optimality on extended substrate network. We can transfer the same amount of flow with smaller cost by removing flow from uplink of leaf that we ended into. If we ended in leaf without the virtual machine, there is no connection from the leaf to sink; if we ended in leaf which is already full, we do not benefit from this flow as well, as no more flow can be transported by artificial edge from virtual machine to sink (as it can only transfer $vms \cdot ma$).
+\end{proof}
+
+\begin{lemma}Path following produces perfect matching of selected chunk replicas and virtual machine slots
 \end{lemma}
 \begin{proof}
   \begin{enumerate}
