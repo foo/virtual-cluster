@@ -160,7 +160,7 @@ variable gadgets; however, now we place distinct chunks instead of
 three copies of the same chunk. Second, we place three chunks that
 correspond to clauses in all three leaves of their clause gadgets.
 Thus, in total, $6 \cdot \clauses$ variable chunks are mapped.
-We will consider a setting where $cv + 2\clauses$ nodes \stefan{what is $cv$ here?} need to be mapped. Our intention is that in
+We will consider a setting where $\clauses \cdot \vars + 2\clauses$ nodes need to be mapped. Our intention is that in
 every variable gadget, there will be $\clauses$ nodes,
  and in every clause
 gadgets there will be two nodes.
@@ -182,6 +182,7 @@ $\capa(\clauses) = 3  \cdot  2  \cdot  (2  \cdot  (\clauses - 1) + 3  \cdot  \va
 
 
 \textbf{Proof of correctness.}
+
 We first prove the following helper lemma.
 \begin{lemma}
 Every valid solution to $\FP+\RS(2)+\BW+\CC$
@@ -314,9 +315,14 @@ and no
 positive $x \leq \clauses$ can satisfy this inequality for $\variables > 4$. Contradiction.
 \end{proof}
 
+\subsection{Extended SAT bandwidth lemma proof}
+
+\maciek{Formulate lemma, and proof in the same way as the one in previous section}
+
 
 \subsection{Images}
 
+\begin{comment}
 \begin{figure}[htbp]
 \includegraphics[width = \columnwidth]{figs/gadget-no-bw}
 \end{figure}
@@ -342,3 +348,4 @@ positive $x \leq \clauses$ can satisfy this inequality for $\variables > 4$. Con
 \end{figure}
 
 
+\end{comment}
