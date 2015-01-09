@@ -476,17 +476,40 @@ link $l$ for the communication between the $\VM s$.
 
 \subsubsection{Construction}
 
+\carlo{Source and Sink have been swapped. check for consistency once section is 
+done (remeber Figure).}
+
+We extend the substrate network $T$ in the following way:
+For each chunk type we create an artificial vertex that we connect to each leaf 
+containing replica of this type by edge of capacity 1. In addition we create a 
+\emph{super-source} $\Source$, and connect it to each of the artificial chunk 
+type nodes. Subsequently, we create an artificial \emph{super-sink} and 
+connect it to every leaf containing a VM by edge of capacity $\MaFactor$; in 
+case of $x$ VMs hosted at the same leaf, we multiply available capacity of the 
+edge to $x \cdot \MaFactor$. \carlo{Check model section (multiple VMs per 
+Host).}
+
+\begin{figure}
+\includegraphics[width=\columnwidth]{figs/flow_ma_cv}
+\caption{An example construction of a flow problem, with two VMs, four chunk 
+types and two replicas of each chunk type. The maxmimal flow with minimum costs 
+is indicated by the dotted lines: each line represents one unit of flow.}
+\label{fig:flow_construction}
+\end{figure}
 
 
-We extend the substrate network $T$ by two parts:
-\begin{enumerate}
-  \item (chunk replicas) for each chunk type we create an artificial source vertex that we connect to each leaf containing replica of this type by edge of capacity 1
-  \item (virtual machines) we create an artificial \emph{super-sink} and connect it to every leaf containing VM by edge of capacity $MA$; in case of $x$ VMs hosted at the same leaf, we multiply available capacity of the edge to $x \cdot MA$
-\end{enumerate}
 
-We assign cost 1 to every edge of substrate network. We assign cost 0 to every artificial edge (added in construction).
 
-We call extended graph as $G$.
+We assign cost $1$ to every edge of the substrate network and $0$ to all other 
+edges. We will refer to the extended graph as $G$. 
+Figure~\ref{fig:flow_construction} shows an example of the extended substrate 
+network: The source $\Source$ is connected, to the two leaves, which host the 
+VMs. The artificial nodes are depicted below the leaves, are labled with 
+their respective chunk types (e.g. $\achunk_1$), and are connected to the sink 
+$\Sink$ as well as the leaves which contain replicas of their chunk type. The 
+maximum flow with minimal costs is indicated by the dashed lines: each line 
+represents one unit of flow. The dotted lines indicate links which have reduced 
+capacity due to $\CC$.
 
 
 \subsubsection{Algorithm}
