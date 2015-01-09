@@ -529,22 +529,12 @@ There are no cycles in optimal flow because $T$ is a tree and every cycle would 
  \maciek{This lemma can be proved by flow conservation argument together with no cycle argument. It might be better approach, as I have some doubts with (2).}
 \end{proof}
 
-\begin{lemma}Path following produces perfect matching of selected chunk replicas and virtual machine slots
-\end{lemma}
-\begin{proof}
-  \begin{enumerate}
-\item  Matching is perfect (a) every chunk can find its machine. We have to argue that it cannot happen that some path goes nowhere. It is easy to see in the begining, but in the middle we might need some invariant that will hold.
-  
-\item Matching is perfect (b) no repetition of VMs that are matched - by flow of size 1 on lowest link, otherwise flow suboptimal.
+\begin{corollary}Path following on optimal flow produces perfect matching of selected chunk replicas and virtual machine slots
+\end{corollary}
 
-  \item Each flow-path from chunk ends in VM, because flow is directed (and the flow is optimal, so does not have any incoming flow to other chunk).
-  \end{enumerate}
-
-\end{proof}
-
+\begin{comment}
 Observation. Flow needs to be optimal for this strategy to work, otherwise we can construct such an example that reconstruction fails (because it needs to go back an edge which is disallowed) by following some path. Let's construct binary tree with vertices a,b,c,d. Chunks are in a and d, vms are in b and c. Let's say that we have found suboptimal flow of a->c and d->b. Let's attempt reconstruction. Chunk at a finds VM at b (the closest one). Chunk at d happens to go towards root (it has flow this direction). Then it is forced to go to left child of the root (the last link with flow, and it cannot go back). Then it has no path left, as it cannot go back and path to b is already taken by a.
-
-So we need yet another lemma: optimal flow does not have flow cycles! But it is obvious from definition of optimal flow.
+\end{comment}
 
 
 
