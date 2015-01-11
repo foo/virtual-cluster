@@ -188,6 +188,10 @@ our hardness proofs even hold in uncapacitated settings.
 we should maybe give the main algorithms a name; we should talk about the case where the number of machines is not a perfect multiple;
 \end{comment}
 
+\section*{TODOs}
+
+determine all runtimes (check related work for flow and match!), make float-figures, finish appendix, order properties in the same way always (the order we had in the model!),
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 
@@ -839,7 +843,7 @@ cost placement of $x$ virtual machines in subtree $T'$, we will
 consider every possible split of the $x$ nodes into two positive integer
 values: $\ell$ and $r = x - l$. That is, we take the optimal cost 
 (given recursively) of placing $\ell$ nodes in
-the left subtree of $T'$ and $r$ nodes in right subtree of
+the left subtree $\textsc{Le}(T')$ of $T'$ and $r$ nodes in right subtree $\textsc{Ri}(T')$ of
 $T'$. Given each combination, we compute the minimal overall solution for $T'$
 for $x$, by taking into account the resulting flow allocation on the edge $e_{1}$ 
 leading to the left subtree of $T'$ and 
@@ -856,7 +860,7 @@ outside.
 %w(e_1)$. Right subtree case is symmetrical. 
 (2) The chunk access cost
 can be computed by greedily matching nodes to chunks locally (first
-inside the subtree, then across subtrees, then outside $T'$.
+inside the subtree, then across subtrees, then outside $T'$).
 %In particular, we can
 %just consider the absolute value of the difference between the number of chunks and
 %the number of nodes in a given subtree, without knowing which
@@ -886,8 +890,8 @@ inside the subtree, then across subtrees, then outside $T'$.
 
 Therefore, we have:
 \begin{eqnarray*}
-f(T', x) &=& \min_{\ell \in \{0, \ldots, x\}}  f(T'_{\ell}, {\ell}) + f(T'_r, x - {\ell}) \\
-&&+ \emph{AccessCost}(T'_{\ell},{\ell},T'_r,x-l)\\ &&+ \emph{InterconnectCost}({\ell},x-{\ell})\\
+f(T', x) &=& \min_{\ell \in \{0, \ldots, x\}}  f(\textsc{Le}(T'), {\ell}) + f(\textsc{Ri}(T'), x - {\ell}) \\
+&&+ \CostTrans(\textsc{Le}(T'),{\ell},\textsc{Ri}(T'),x-l)\\ &&+ \CostCom({\ell},x-{\ell})\\
 \end{eqnarray*}
 
 
@@ -944,7 +948,7 @@ The substructure optimality follows from the observation that
 in a partial matching (i.e., costs of transporting unmatched
 chunks out and intro the tree), 
 optimality can be established greedily, and the fact
- that we check each possible node distribution (. 
+ that we check each possible node distribution. 
 For each substrate vertex ($n_S$ many) we have 
 to check the cost of all possible splits, 
 resulting in an overall runtime of $O(n_S \cdot (n_V)^2)$.
@@ -1015,14 +1019,13 @@ review it in the following.
 $\TDM$ is defined as follows. We are given three finite and disjoint
 sets $X$, $Y$, and $Z$ of cardinality $k$, as well as a subset of triples $T\subset
 X \times Y \times Z$.  Set $M \subseteq T$ is a 3-dimensional matching
-if and only if, for any two distinct triples $(x_1, y_1, z_1) \in M$
-and $(x_2, y_2, z_2) \in M$, it holds that $x_1\neq x_2$, $y_1\neq
+if and only if, for any two distinct triples $t_1=(x_1, y_1, z_1) \in M$
+and $t_2=(x_2, y_2, z_2) \in M$, it holds that $x_1\neq x_2$, $y_1\neq
 y_2$, and $z_1\neq z_2$. Our goal is to decide if we can construct
 a $M \subseteq T$ which is \emph{perfect}, that is, a subset which covers all
 elements of $X \times Y \times Z$.
 
-TODO: cite Karp on result of NP-completeness
-TODO: image like this: \url{https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/3-dimensional-matching.svg/240px-3-dimensional-matching.svg.png}
+%TODO: image like this: \url{https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/3-dimensional-matching.svg/240px-3-dimensional-matching.svg.png}
 
 \subsection{Multi-Assignments are hard ($\FP+\RS+\MA$)}\label{ssec:fprsma}
 
@@ -1047,7 +1050,7 @@ We encode an $\TDM$ instance as an $\FP+\RS+\MA$ instance as follows:
  A node will process the chunk which is located on the same server,
  as well as the chunks in other two leaves of the same gadget.
 
-\item We will use threshold cost to ensure that no node
+\item We will use threshold $\Thr$  to ensure that no node
 will process
 any chunk outside its gadget.
 \end{itemize}
@@ -1060,11 +1063,11 @@ $\FP+\RS+\MA$ as follows:
 and for each triple, we create a gadget which we directly attach as
 child of the root. The gadget is of height 2,
 and has the following form:
-The gadget of each triple $T_i$ consists of an inner node (a router) and three leaves.
+The gadget of each triple $t_i$ consists of an inner node (a router) and three leaves.
 \item \emph{Chunks and chunk replicas:} For each element in $X$, $Y$ and $Z$,
  we create a chunk type
 ($3 \cdot k$ in total). Every gadget
-contains three chunk replicas, corresponding to the elements of $T_i$.
+contains three chunk replicas, corresponding to the elements of $t_i$.
 \item \emph{Other properties:} We set the number of to-be-embedded nodes to $k$,
 $\CostTrans$ to $1$, and the number of slots in each node to $m=3$ \stefan{what
 is the number of slots here?}. We use a threshold $\Thr=2 \cdot 2 \cdot k$.
@@ -1078,10 +1081,10 @@ The construction is illustrated in Figure~\ref{fig:fprsma}.
 \includegraphics[width = 0.3\columnwidth]{figs/np_3dm_formular}
 \hfill
 \includegraphics[width = 0.6\columnwidth]{figs/np_3dm_construction}
-\caption{\textit{(Left:)}A $\TDM$ instance with three triples:
+\caption{\textit{(Left:)} A $\TDM$ instance with three triples:
 $(x_1, y_1, z_1)$, $(x_2, y_1, z_2)$, and $(x_2, y_2, z_2)$. The solution is
-indicated by the gray triples - the dashed triple is not used for the
-solution. \textit{(Right:)}The corresponding problem and solution of $\FP + \MA
+indicated by the grey triples; the dashed triple is not used for the
+solution. \textit{(Right:)} The corresponding problem and solution of $\FP + \MA
 + \RS$.}
 \label{fig:fprsma}
 \end{figure}
@@ -1123,14 +1126,14 @@ is NP-hard if an inter-connect has to be established between virtual machines.
 In our terminology, this is the $\FP+\RS+\CC$ problem.
 
 \textbf{Construction.}
-Concretely, let $I$ be an instance of $\TDM$. We will create an instance $I'$
+Let $I$ be an instance of $\TDM$. We will create an instance $I'$
 for $\FP+\RS+\CC$ as follows:
 \begin{itemize}
 \item We will construct the same tree as in previous reduction with
 chunk replicas placed in the same way.
 \item We set the access cost $\CostTrans$ to a chunk replica to a high value $W$. This will force
 nodes to be collocated with the replica.
-(For now, we can assume that $W=\infty$; a lower and sufficient bound will be given
+(For now, we can assume that $W=\infty$; a polynomial and sufficient bound will be given
 in the Appendix.)
 \item The communication cost in the inter-connect is set to $\CostCom = 1$.
 \item The number of nodes (virtual machines) is $\Vms = 3 \cdot k$.
@@ -1144,7 +1147,7 @@ Intuitively, in order to minimize embedding costs,
 nodes should be placed on near-by replicas. We use the following
 helper lemma.
 \begin{lemma}\label{lemma:helper}
-In every valid solution $\Sol$ of $I'$ of cost $\leq \Thr$, each gadget
+In every valid solution of $I'$ of cost $\leq \Thr$, each gadget
 falls in one of two categories:
 $k$ gadgets have exactly
 $3$ nodes, and $n-k$ gadgets remain empty.
@@ -1153,7 +1156,7 @@ $3$ nodes, and $n-k$ gadgets remain empty.
 Since $W=\infty$, nodes will always be placed
 directly on chunks (the access network cost is zero).
 Moreover, since
-$\Sol$ is valid, $3 \cdot k$ nodes are mapped
+is valid, $3 \cdot k$ nodes are mapped
 directly to the different chunk locations.
 Now, consider any pair of nodes communicating over the
 inter-connect; due to our construction, the communication cost
@@ -1177,7 +1180,7 @@ $I$ has a solution.
 
 ($\Rightarrow$) In order to compute a solution
 for $I'$ given a solution for $I$, we proceed as follows.
-Given a covering set of triples $S = \{T_1, T_2, \ldots, T_k\}$, we place three nodes in each gadget that
+Given a covering set of triples $S = \{t_1, t_2, \ldots, t_k\}$, we place three nodes in each gadget that
 corresponds to every triple of $S$. Chunks are matched to nodes that are located
 on the same server.
 
@@ -1315,19 +1318,22 @@ or approximation algorithms.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{appendix}
 
-\section{Two replicas are hard}
+\section{Replica selection is hard}\label{ap:tworep}
 
-In presented model replication is crucial property that makes problems hard. Here we will show that giving minimal replication
-possibilities - that is to allow at most 2 replicas of each chunk type - is enough to make problems hard.
+We have seen that replica selection flexibilities can render problems computationally hard.
+In the following, we will explore the minimal requirements for rendering replica selection hard.
+In particular, we will show that already two replicas for each chunk type are sufficient to
+introduce intractability. 
 
-\subsection{Idle machines model extension}
+In the following, we first give an alternative proof for the hardness of $\CC+\FP+\RS+\BW$.
+Subsequently, we show that the 2-replica variant $\RS(2)$ is hard.
+For our proof, we assume a model where there can be more nodes than chunk types,
+and additional nodes only participate in the inter-connect, and not the replica access network.
 
-We allow spawning more VMs that there are chunk types. Those machines that does not process any chunk still needs to communicate with
-other machines.
+% TODO
+%\subsection{Three replicas are hard ($\CC+\FP+\RS+\BW$)}\label{ssec:three}
 
-\subsection{3SAT introduction - NP-completeness of $\CC+\FP+\RS+\BW$}
-
-We prove that $\CC+\RS+\FP+\BW$ is NP-hard by reduction from the Boolean Satisfiability Problem ($\SAT$).
+We first prove that $\CC+\RS+\FP+\BW$ is NP-hard by reduction from the Boolean Satisfiability Problem ($\SAT$).
 Since $\SAT$ is a decision
 problem, we transform $\RS+\FP+\BW$ into a decision problem too, by
 introducing a cost threshold $\Thr$.
@@ -1355,8 +1361,7 @@ We set the number of virtual machines to $\Vms = \clauses \cdot \variables$.
 Moreover, we define the inter-connect communication cost to be $1$,
 and the access cost to be a sufficiently large constant $W$,
 such that nodes must always be collocated with chunks.
-(For a concrete value, use $W=$TODO).
-
+(For a concrete value, see Appendix~\ref{ap:W}).
 
 We set the following bandwidth capacities in the substrate. There are three
 levels of edges in the substrate network $\Tree_{\Formula}$ given by formula
@@ -1499,7 +1504,6 @@ $\capa(\clauses) = 3  \cdot  2  \cdot  (2  \cdot  (\clauses - 1) + 3  \cdot  \va
 
 
 \textbf{Proof of correctness.}
-
 We first prove the following helper lemma.
 \begin{lemma}
 Every valid solution to $\FP+\RS(2)+\BW+\CC$
@@ -1594,6 +1598,8 @@ $\top$; therefore the clause is satisfied.
 \end{proof}
 \end{proof}
 
+\begin{comment}
+
 \subsection{SAT bandwidth lemma proof}
 The following lemma is useful in our NP-hardness proofs.
 
@@ -1636,8 +1642,15 @@ positive $x \leq \clauses$ can satisfy this inequality for $\variables > 4$. Con
 
 \maciek{Formulate lemma, and proof in the same way as the one in previous section}
 
+\end{comment}
 
 
+\section{Computing $W$}\label{ap:w}
+
+For the NP-hardness proof to work, $W$ must be polynomial in the input size.
+In the following, we show that such a $W$ exists.
+
+\stefan{TODO Maciek}
 
 \end{appendix}
 
