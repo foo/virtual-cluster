@@ -604,12 +604,6 @@ Perfect Bipartite
 Matching:
 the matching denotes the assignment of chunks to nodes.
 
-\begin{figure}
-\includegraphics[width=\columnwidth]{figs/venn_matching.pdf}
-\caption{Property combinations which can be transformed into matching problems.}
-\label{fig:venn_matching}
-\end{figure}
-
 \begin{figure}[h]
 \includegraphics[width = 0.49\columnwidth]{figs/matching_topology_simple}
 \hfill
@@ -809,9 +803,9 @@ variants which can be solved with our flow-based approach.
 
 \subsection{Dynamic Programming ($\FP+\CC+\MA+\BW$)}\label{ssec:dyn}
 
-Dynamic programming solutions are generally useful in for problems
+Dynamic programming solutions are generally useful for problems
 exhibiting the \emph{optimal substructure property}, namely, if given
-the optimal solutions of subproblems, an optimal solution for the
+the optimal solutions for subproblems, an optimal solution for the
 larger problem can be computed efficiently.
 In the following, we show that the $\FP+\CC+\MA+\BW$ problem
 exhibits such a structure, and show how to exploit it to
@@ -821,82 +815,85 @@ need to be assigned to flexibly placeable nodes.
 \textbf{Basic ideas.} For ease of presentation, we will transform the substrate network $\Tree$
 into a binary tree, using binarization:
 The
-strategy we use is to clone every node of degree $\Delta$, $\Delta(v) - 1$ times,
-placing subsequent clones as right son of the previous one and placing
-subsequent children as left son of the clone. Last child is placed as
-right son of last clone.
+strategy we use is to clone every higher-degree node,
+iteratively attaching additional clones as right children 
+and original children as left descendants. 
+%Last child is placed as
+%right son of last clone.
+
+As usual in dynamic programs, we define, over the structure of the tree, an inductive formula $f$ for
+the minimal cost solution \emph{given} any possible number of virtual
+machines embedded in a given subtree. (The actual set does not matter,
+due to symmetry arguments.) 
+Our approach is to evaluate this function in a bottom-up
+manner.  
+To finally compute the actual optimal embedding, 
+we traverse the computed minimal-cost path backwards.
+
+Concretely, the first argument to function $f$ 
+is a subtree (which contains a given set of servers and chunks), 
+and the
+second argument is the number of virtual machines to be embedded in the subtree.
+To calculate $f(T, x)$, the optimum
+cost placement of $x$ virtual machines in subtree $T'$, we will
+consider every possible split of the $x$ nodes into two positive integer
+values: $\ell$ and $r = x - l$. That is, we take the optimal cost 
+(given recursively) of placing $\ell$ nodes in
+the left subtree of $T'$ and $r$ nodes in right subtree of
+$T'$. Given each combination, we compute the minimal overall solution for $T'$
+for $x$, by taking into account the resulting flow allocation on the edge $e_{1}$ 
+leading to the left subtree of $T'$ and 
+edge $e_2$ leading to the right subtree, and by
+taking into account the capacity constraints on the uplink of $T'$.
+This allocation consists of two parts: (1) The node inter-connect
+communication is easy to compute, as we know how many
+virtual machines are in the left and right subtree, and how many are 
+outside. 
+%Concretely, for each node pair communicating across subtrees we
+%charge $b_2 \cdot (w(e_1) +
+%w(e_2))$, for each pair where one is in the subtree and the other outside,
+%we charge $b_2 \cdot
+%w(e_1)$. Right subtree case is symmetrical. 
+(2) The chunk access cost
+can be computed by greedily matching nodes to chunks locally (first
+inside the subtree, then across subtrees, then outside $T'$.
+%In particular, we can
+%just consider the absolute value of the difference between the number of chunks and
+%the number of nodes in a given subtree, without knowing which
+%is bigger, because in our model if there are some virtual machines
+%left, we know that some chunks from outside will use the same transfer
+%as if we have excessive chunks in the subtree.
+
+%Assume there are $c_{\ell}$ chunks in the left and $c_r$
+%chunks in the right subtree. To incline minimal cost we connect chunks in
+%given subtree to virtual machines in the same subtree. If we can no
+%longer do that, because $v_i < c_i (i \in \{l,r\})$, then we connect
+%leftover chunks to virtual machines in second subtree of $T$. If we
+%can no longer do that, we connect leftover chunks outside of $T$. This
+%strategy is optimal, because connecting any other way can be amended
+%(TODO: need better argument here), inclining lower cost. Connections
+%inside either left or right subtrees inclines cost $0$ to edges $e_1$
+%and $e_2$. Connections between left and right subtree incline cost
+%$b_1
+%\cdot (w(e_1) + w(e_2))$. Connections from either subtree to outside
+%of $T$ inclines either $b_1 \cdot w(e_1)$ or $b_2 \cdot
+%w(e_2)$. Finally, we can write down our formula for $f$:
 
 
-\maciek{We will want to go through all VM placements, for each of those do greedy matching and choose the cheapest.}
+%\maciek{We will want to go through all VM placements, for each of those do greedy matching and choose the cheapest.}%
+%
+%\maciek{Solution for subtree - how it can look like? It is ``partial matching''. Some matched VMs and chunks, but also some chunks transported out of subtree or some %VMs/slots that will have chunks transported into from outside. So we charge already those incomplete matchings.}
 
-\maciek{Solution for subtree - how it can look like? It is ``partial matching''. Some matched VMs and chunks, but also some chunks transported out of subtree or some VMs/slots that will have chunks transported into from outside. So we charge already those incomplete matchings.}
+Therefore, we have:
+\begin{eqnarray*}
+f(T', x) &=& \min_{\ell \in \{0, \ldots, x\}}  f(T'_{\ell}, {\ell}) + f(T'_r, x - {\ell}) \\
+&&+ \emph{AccessCost}(T'_{\ell},{\ell},T'_r,x-l)\\ &&+ \emph{InterconnectCost}({\ell},x-{\ell})\\
+\end{eqnarray*}
 
-Let's begin designing our algorithm by writing recursive formula for
-minimal cost inclined by placing virtual machines in leaves of a given
-tree. Our approach is to evaluate this function using bottom-up
-technique using auxilary array, which yields a dynamic programming
-solution. To find actual placements of virtual machines in addition to
-the cost, we traverse the array backwards, following the path of
-minimas.
 
-Keep in mind that number of virtual machines is equal to number of
-chunks. However, our function $f$ will be defined by structural
-induction on the tree and we will invalidate the property of having
-the same number of chunks and virtual machines in a given subtree
-(which is true when we look at whole tree).
+\begin{comment}
 
-Let's define $f$ in following way. First argument is a subtree (with
-available informations like number of chunks in its leaves), and the
-second argument is number of virtual machines that we decided to place
-in the subtree (given as first parameter). To calculate optimum
-placement of $x$ virtual machines in subtree $T$ ($f(T, x)$) we will
-consider every possible split of number $x$ into two positive integer
-values: $l$ and $r = x - l$. We will place $l$ virtual machines in
-left subtree of $T$ and $r$ virtual machines in right subtree of
-$T$. Having such information allow us to compute how much cost we
-incline through edge $e_1$ (which connects left subtree of $T$ to root
-of $T$) and edge $e_2$ (which connects right subtree of $T$ to root of
-$T$). In a given recursive call we charge only those two edges, rest
-of edges will be charged is subsequent calls.
 
-Our cost function consists of two factors. First one, communication
-cost between virtual machines is easy to compute. We know how many
-virtual machines are in left subtree, how many are in right subtree
-and how many are in whole tree outside of $T$. For each pair of
-virtual machines, first of which is in left subtree and second of
-which is in right subtree, we charge $b_2 \cdot (w(e_1) +
-w(e_2))$. For each pair of virtual machines, first of which is in left
-subtree and second of which is outside $T$, we charge $b_2 \cdot
-w(e_1)$. Right subtree case is symmetrical. Second factor of our cost
-function is the cost of transferring chunks to virtual machines. Let's
-call number of chunks in left subtree as $c_l$ and number of chunks in
-right subtree as $c_r$. To incline minimal cost we connect chunks in
-given subtree to virtual machines in the same subtree. If we can no
-longer do that, because $v_i < c_i (i \in \{l,r\})$, then we connect
-leftover chunks to virtual machines in second subtree of $T$. If we
-can no longer do that, we connect leftover chunks outside of $T$. This
-strategy is optimal, because connecting any other way can be amended
-(TODO: need better argument here), inclining lower cost. Connections
-inside either left or right subtrees inclines cost $0$ to edges $e_1$
-and $e_2$. Connections between left and right subtree incline cost
-$b_1
-\cdot (w(e_1) + w(e_2))$. Connections from either subtree to outside
-of $T$ inclines either $b_1 \cdot w(e_1)$ or $b_2 \cdot
-w(e_2)$. Finally, we can write down our formula for $f$:
-
-\begin{multline}
-f(T, x) = min_{l \in \{0, \ldots, x\}} \{ f(T_l, l) + f(T_r, x - l) \\
-+ TransferCost(T_l,l,T_r,x-l) \\ + ConnectionCost(l,x-l)\}
-\end{multline}
-
-One simplifying observation is that to calculate $TransferCost$ we can
-just use the absolute value of difference between number of chunks and
-number of virtual machines in a given subtree, without knowing which
-is bigger, because in our model if there are some virtual machines
-left, we know that some chunks from outside will use the same transfer
-as if we have excessive chunks in the subtree.
-
-\subsection{Algorithm}
 \newcommand{\SumIndex}{\ensuremath{n}}
 \begin{algorithm}[tbhp]
 \DontPrintSemicolon % Some LaTeX compilers require you to use
@@ -935,121 +932,60 @@ placements. Following path of minimas. Other approach is to store pointers to mi
 
 (Base case) We fill the entire array $Opt_l$ for the leaf $l$ with zeros. It means that we allow hosting $0, 1, \ldots, n$ VMs in this leaf. We can restrict the number of VMs that are hosted in the same leaf by some constant $x$ (that can be independent for every leaf) by setting $Opt_l[x+1] = Opt_l[x+2] = \ldots = Opt_l[n] = \infty$.
 
-\subsection{Algorithm correctness}
+\end{comment}
 
-\subsubsection{Bandwidth correctness.}
 
-\begin{lemma}
-Let's say that we calculated solution for our instance of VC with
-ignoring the bandwidth. Then we analyzed every link and it turned out
-that some of them exceed their capacity. Then the instance is
-infeasible and we cannot fix that by choosing any other matching (even
-suboptimal one).
-\end{lemma}
+\textbf{Analysis.}
+The correctness and optimality of our dynamic program 
+is due to the decoupling of the costs induced by the tree
+structure of $\Tree$ and the inductive substructure
+optimality property. 
+The substructure optimality follows from the observation that 
+in a partial matching (i.e., costs of transporting unmatched
+chunks out and intro the tree), 
+optimality can be established greedily, and the fact
+ that we check each possible node distribution (. 
+For each substrate vertex ($n_S$ many) we have 
+to check the cost of all possible splits, 
+resulting in an overall runtime of $O(n_S \cdot (n_V)^2)$.
 
-It might happen that this lemma does not hold, beware!
 
-\maciek{Below there is emergency lemma in case that above lemma does not hold. In case above lemma is true it implies that below lemma is true.}
-\begin{lemma}
-An instance of $\Problem$ is infeasible iff. algorithm returns
-$\infty$.
-\end{lemma}
-\begin{proof}
-  ($\rightarrow$)
-
-  ($\leftarrow$) \end{proof}
-
-\maciek{I think that we do not need that lemma, it might be obvious. I leave it there just in case.}
-\begin{lemma}
-  If algorithm returns solution $\Sol$ of cost $\neq \infty$, then in
-  $\Sol$ no link exceeds its capacity limit.  \end{lemma}
-
-\subsubsection{Substructure optimality without bandwidth.}
-
-Definition of partial matching (matching + transporting imbalanced
-chunks out of tree and transporting chunk into imbalanced VMs from
-outside the tree). Definition of partial matching optimality
-(parametrized by number of VMs, subtree and chunks; best among all
-possible that match the same chunks and transports the imbalance).
-\begin{lemma}
-
-Let's consider an arbitrary tree $T$ with chunks $c_i$ and number of
-VMs $v$. Than $f(T, v)$ is cost of optimal partial matching.
-
-\end{lemma}
-
-\begin{proof}
-Proof by structural induction. First, we take definition of $f$, which
-contains values of $f$ for left and right subtree for different number
-of VMs (but which sum to $v$). We can assume by induction that those
-are optimal. Then we calculate the cost of communication and matching
-between left and right subtree (also in $f$'s definition. Then we
-choose the minimum cost one. We argue that this one is optimal partial
-matching, and we use optimality of greedy matching for that.
-
-Also, we use the uplink lemma to show that choosing optimal partial
-matching in left and right subtree does not generate excessive
-bandwidth on both uplink edges (we might have doubted that because
-optimal partial matchings were restricted to their subtrees and we
-might thought that there is some other more costly matching that has
-less bandwidth on uplink - to save there).
-
-Also, we use optimality of greedy matching that is in matching
-chapter.
-\end{proof}
-
-\subsubsection{Substructure optimality with bandwidth.}
-\begin{lemma}
-Function $f$ modified to take bandwidth into account returns cost of feasible optimal partial matching (or no feasible solution exists).
-\end{lemma}
-
-\begin{proof}
-
-For a given positions of VMs if optimal matching is infeasible, no other (even suboptimal) matching is feasible. Our algorithm checks every possible placement of VMs, so if there would be any feasible placement, our algorithm would have found feasible matching for that (the optimal one).
-
-\end{proof}
-\subsection{Running time and memory consumption analysis}
-
-We spend certain amount of time in every of $2|T|$ vertices of binary
-tree (factor 2 is inclined there because of binary
-transformation). This time can be bound by iterating over splits of
-$n$ into two integers, times some constant and we do it for every
-possible number of VMs from $0$ to $n$. Therefore, resulting running
-time is $O(Nn^2)$.
-
+\textbf{Summary.}
+Figure~\ref{fig:venn_dp} summarizes all problem
+variants which can be solved with our dynamic programming approach.
 \begin{figure}
 \includegraphics[width=\columnwidth]{figs/venn_dp.pdf}
-\caption{Property combinations which can be solved by our dynamic prorgramming
-appraoch.}
+\caption{Problem variants which can be solved using our dynamic programs.}
 \label{fig:venn_dp}
 \end{figure}
 
-\carlo{Figure~\ref{fig:venn_dp} shows illustrates which problem
-combiantions can be solved by the presented dynamic programming
-approach.}
+\subsection{Remark: Simple Problems}
+
+To conclude, for the sake of completeness, we also observe that there are
+several problems which
+allow for a trivial solution. Concretely, problems with $\FP$
+plus any combination of
+$\RS$ and $\BW$ (but without $\CC$ or $\MA$) can easily be solved by mapping nodes to chunk locations.
+Figure~\ref{fig:venn_trivial}
+shows a Venn diagram of the trivial property combinations.
+
+\begin{figure}
+\includegraphics[width=\columnwidth]{figs/venn_trivial.pdf}
+\caption{Trivially solvable problem variants.}
+\label{fig:venn_trivial}
+\end{figure}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{NP-Hardness Results}\label{sec:np}
 
-\begin{figure}
-\includegraphics[width=\columnwidth]{figs/venn_full.pdf}
-\caption{Trivially solvable property combinations}
-\label{fig:venn_full}
-\end{figure}
-
-\carlo{TODO: Move embedd in surrounding text / move. Figure~\ref{fig:venn_full}
-gives an overview of the problems, which have been solved in polynomial time in
-Section~\ref{sec:poly}. This section will present proofs to show that all
-remaining property combinations (marked in black) are np-hard.}
+%\carlo{TODO: Move embedd in surrounding text / move. Figure~\ref{fig:venn_full}
+%gives an overview of the problems, which have been solved in polynomial time in
+%Section~\ref{sec:poly}. This section will present proofs to show that all
+%remaining property combinations (marked in black) are np-hard.}
 
 We have seen that even problems with multiple dimensions of
 flexibility can be solved optimally in polynomial time.
-In particular, we presented a dynamic program to
-jointly optimize the node placement and (multiple)
-chunk assignment, even under capacity
-constraints ($\FP+\MA+\CC+\BW$), or an algorithm
-to optimize the replica selection and assignment of multiple chunk types ($\RS+\MA+\CC+\BW$).
-
 This section now points out fundamental
 limitations in terms of computational tractability. In particular, we
 will show that problems become NP-hard if multiple replicas have to be
@@ -1265,21 +1201,6 @@ $k$ gadgets contain exactly 3 nodes. These gadgets correspond to a valid
 chunk was processed and hence every element in the $X \cup Y \cup Z$ is covered.
 \end{proof}
 
-\subsection{Remark: Simple Problems}
-
-To conclude, for the sake of completeness, we also observe that there are
-several problems which
-allow for a trivial solution. Concretely, problems with $\FP$  
-plus any combination of
-$\RS$ and $\BW$ (but without $\CC$ or $\MA$) can easily be solved by mapping nodes to chunk locations.
-Figure~\ref{fig:venn_trivial}
-shows a Venn diagram of the trivial property combinations. 
-
-\begin{figure}
-\includegraphics[width=\columnwidth]{figs/venn_trivial.pdf}
-\caption{Trivially solvable property combinations.}
-\label{fig:venn_trivial}
-\end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Related Work}\label{sec:relwork}
@@ -1358,13 +1279,25 @@ more sophisticated algorithms when combined with $\CC$ or $\MA$;
 in combination with $\RS$ and $\MA$ or $\CC$, $\FP$ renders the
 problem NP-hard.
 
-\begin{figure}[t]
-\includegraphics[width = \columnwidth]{figs/summary}
-\caption{Summary of results. As this paper only presented algorithms for the most
-difficult problems and, respectively, proved NP-hardness of the simplest
-problems, several additional results are simple implications (indicated by arrows).}
+\begin{figure}
+\includegraphics[width=\columnwidth]{figs/venn_full}
+\caption{Summary of results. As this paper only presented algorithms (approaches indicated in the same
+color and pattern as in the previous figures) for the most
+difficult problems and, respectively, proved NP-hardness (indicated in black) of the simplest
+problems, several additional results are simple implications. In this figure,
+we always suggest the best (simplest and fastest) approach to solve a specific problem variant.}
 \label{fig:summary}
 \end{figure}
+
+
+%\begin{figure}[t]
+%\includegraphics[width = \columnwidth]{figs/summary}
+%\caption{Summary of results. As this paper only presented algorithms for the most
+%difficult problems and, respectively, proved NP-hardness of the simplest
+%problems, several additional results are simple implications (indicated by arrows).}
+%\label{fig:summary}
+%\end{figure}
+
 
 Our paper draws an almost complete picture of what can and cannot be
 computed optimally in our setting, and may be of interest both to the algorithm
