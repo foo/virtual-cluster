@@ -1368,7 +1368,8 @@ levels of edges in the substrate network $\Tree_{\Formula}$ given by formula
 $\Formula$: \emph{top}, \emph{middle} and \emph{bottom}.
 We do not consider any capacities at the \emph{bottom} and \emph{middle} levels.
 At a top-level edge, we set the bandwidth to $\clauses \cdot (\variables -
-\clauses)$.
+\clauses)$ \carlo{I think this is wrong. It should be $\clauses \cdot(\variables 
+- 1)$}.
 
 We set the number of chunks to be equal to the number of clauses, $\ChunkTypes =
 \clauses$. To finish our construction, we place data chunks at
@@ -1401,6 +1402,9 @@ gadget to nodes outside the gadget. The RHS of the inequality is the
 bandwidth constraint for the gadget. This implies that
 any feasible solution must embed exactly $\clauses$ nodes in every gadget.
 
+\carlo{Imo it would be nice to have a referrence to the 4 variables here - I 
+suppose the bandwidth lemma will not work otherwise.}
+
 
 \begin{theorem}
 The problem $\RS+\FP+\BW+\CC$ is NP-hard.
@@ -1425,6 +1429,7 @@ the node which is collocated with the first chunk replica. This solution is feas
 (every chunk type is processed),
 because the given valuation satisfied $\Phi$.
 
+\carlo{?}
 Now we will show that this solution has cost $\Thr$.
 Due to the Bandwidth Lemma (Lemma~\ref{lem:bandwidth-lemma}),
 we only have to consider the communication cost.
@@ -1451,6 +1456,7 @@ Now we can construct our valuation $\Val$, as follows
 (for each variable $\variab$ in $\Formula$):
 If $v_1$ hosts a node then $\Val(\variab) = \top$,
 otherwise $\Val(\variab) = \bot$.
+\carlo{Terminology deviates from above}
 
 The valuation $\Val$ satisfies all clauses, and hence $\Formula$,
 as the solution to $\RS+\FP+\BW$ covers all chunks. To see this,
@@ -1476,6 +1482,8 @@ gadgets for clauses. \emph{Nota bene:}
 unlike in the previous proofs, for every clause we will create three chunk types instead of just one.
 
 \textbf{Construction.}
+\carlo{I do not understand this. I think this section might benefit from a 
+construction paragraph, similar to the previous section.}
 We distribute chunks among servers as follows. First,
 similarly to the previous proofs with three replicas, we put clause chunks in
 variable gadgets; however, now we place distinct chunks instead of
