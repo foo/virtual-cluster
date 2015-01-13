@@ -136,10 +136,6 @@ because the cost of a solution where at least one gadget has nodes
 distributed across subtrees is
 always greater than $\Thr$.
 
-TODO Maciek: prove it more formally. First, define semi-feasible solution. Let's take any $p,q$ being the number of nodes
-spawned in left and right subtree. Then we say that we can improve the
-solution by moving all $q$ to where $p$s lie and we have cheaper solution.
-
 Now we can construct our valuation $\Val$, as follows
 (for each variable $\variab$ in $\Formula$):
 If $v_1$ hosts a node then $\Val(\variab) = \top$,
@@ -152,7 +148,13 @@ consider the leaf handling any given clause chunk;
 it is a witness that the corresponding clause is true.
 \end{proof}
 
-\subsection{Two replicas are hard ($\RS(2)+\FP+\CC+\BW$)}\label{ssec:two}
+
+\subsection{Two replicas are hard
+  ($\RS(2)+\FP+\CC+\BW$)}\label{ssec:two}
+
+\maciek{We need to tell the reader that our proof holds only for
+  (NP-complete) subset of 3SAT where we have more than 4
+  clauses. Otherwise the bandwidth lemma does not work!}
 
 Our results so far indicate that dealing with replication can be challenging.
 However, all our hardness proofs concerned scenarios with three replicas,
@@ -174,7 +176,8 @@ unlike in the previous proofs, for every clause we will create three chunk types
 construction paragraph, similar to the previous section.}
 We distribute chunks among servers as follows. First,
 similarly to the previous proofs with three replicas, we put clause chunks in
-variable gadgets; however, now we place distinct chunks instead of
+variable gadgets; however, now we place distinct chunks $c^1_i, c^2_i,
+c^3_i$ instead of
 three copies of the same chunk. Second, we place three chunks that
 correspond to clauses in all three leaves of their clause gadgets.
 Thus, in total, $6 \cdot \clauses$ variable chunks are mapped.
@@ -233,20 +236,16 @@ third leaf of the corresponding clause gadget.
 and second leaf of the clause gadget.
 \end{itemize}
 
-TODO: chunk assignment should be based on valuation!
-
 We then assign chunks to nodes as follows:
 \begin{itemize}
 \item Chunk $\achunk_i^1$ is matched to the node which is located in a variable gadget; there
 must be one, as the valuation satisfies the formula.
 \item Chunks $\achunk_i^2$ and $\achunk_i^3$ are matched to nodes which are
 located in clause
-gadgets; there exist corresponding minimal-cost solutions.
+gadgets
 \end{itemize}
 
-Thus, we have produced a feasible solution of cost $\Thr$, as there are no
-access and inter-connect costs.
-
+Thus, we have produced a feasible solution of cost $\Thr$.
 ($\Leftarrow$)
 Let us take any solution $\Sol$ to $\RS(2)+\FP+\BW$ of cost $\leq \Thr$.
 Then we can compute a positive valuation by setting each variable $\variab$
@@ -294,8 +293,6 @@ $\top$; therefore the clause is satisfied.
 \end{proof}
 \end{proof}
 
-\begin{comment}
-
 \subsection{SAT bandwidth lemma proof}
 The following lemma is useful in our NP-hardness proofs.
 
@@ -338,8 +335,32 @@ positive $x \leq \clauses$ can satisfy this inequality for $\variables > 4$. Con
 
 \maciek{Formulate lemma, and proof in the same way as the one in previous section}
 
-\end{comment}
 
+\begin{lemma}[Bandwidth Lemma]\label{lem:bandwidth-lemma}
+\maciek{this lemma might be expressed more clearly if we use two
+  sequences instead of one - now $a_1, \ldots, a_{\variables}$
+  correspond to number of VMs in variable gadgets and remaining of the
+  sequence corresponds to number of VMs in clause gadgets.}
+  Let $\clauses$ and $\variables > 4$ be two arbitrary positive integers. Let $a_1, a_2, \ldots,
+  a_{\variables+\clauses}$ be a sequence of integers which adds up to
+  $\clauses \cdot \variables + \clauses \cdot 2$. Also, for
+  each $i \leq \variables$ we have $a_i \leq 2 \cdot \clauses$
+  (\maciek{variable gadget capacity}). Also,
+  for each $i >\variables$ we have $a_i \leq 3$ (\maciek{clause gadget capacity}). Then it holds that if
+  $$ \forall_{i\leq\variables}:~~ a_i \cdot (\clauses \cdot \variables
+  + 2\cdot \clauses- a_i) \leq \clauses \cdot (\clauses \cdot \variables -
+  \clauses + 2 \cdot \clauses), $$
+and
+$$ \forall_{i>\variables}:~~ a_i \cdot (\clauses \cdot \variables + 2 \cdot \clauses - a_i) \leq 2 \cdot (\clauses \cdot \variables -
+  2 \cdot \clauses - 2), $$
+
+\noindent  then for each $i\leq \variables$: $a_i = \clauses$ and for
+each $i>\variables$: $a_i = 2$.
+\end{lemma}
+
+\maciek{proof will be painful and we should skip on showing that,
+  pointing into the previous proof. Even if we did this proof, nobody
+  would read that. I can do it though.}
 
 
 \subsection{Images}

@@ -1293,10 +1293,6 @@ for $\FP+\RS+\CC$ as follows:
 \begin{itemize}
 \item We will construct the same tree as in previous reduction with
 chunk replicas placed in the same way.
-\item We set the access cost $\CostTrans$ to a chunk replica to a high value $W$. This will force
-nodes to be collocated with the replica.
-(For now, we can assume that $W=\infty$; a polynomial and sufficient bound will be given
-in the Appendix.)
 \item The communication cost in the inter-connect is set to $\CostCom = 1$.
 \item The number of nodes (virtual machines) is $\Vms = 3 \cdot k$.
 \item We use a threshold $\Thr =  6 \cdot k + 3 \cdot 3 \cdot 2 \cdot
@@ -1306,7 +1302,11 @@ in the Appendix.)
   already forced by infinite transportation cost, however we need to
   define it anyway.
   }
-
+\item We set the access cost $\CostTrans$ to a chunk replica to a high value $W$. This will force
+nodes to be collocated with the replica. One example of sufficient
+(and polynomial) $W$
+is the value of threshold, defined above. \maciek{it is not minimal,
+  but clean and sufficient}
 \end{itemize}
 
 
@@ -1536,14 +1536,6 @@ or approximation algorithms.
 \begin{appendix}
 
 \input{two-replicas}
-
-\section{Computing $W$}\label{ap:w}
-
-For the NP-hardness proof to work, $W$ must be polynomial in the input size.
-In the following, we show that such a $W$ exists.
-
-\stefan{TODO Maciek}
-
 \end{appendix}
 
 
