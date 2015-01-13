@@ -1,10 +1,11 @@
-\documentclass[9pt,twocolumn]{scrartcl}
+%\documentclass[9pt,twocolumn]{scrartcl}
 
-%\documentclass[9pt]{sigcomm-alternate}
+
+\documentclass[9pt]{sigcomm-alternate}
 
 %\usepackage[margin=1in,bottom=1.2in]{geometry}
 \usepackage{amsfonts,amssymb,amsmath}
-\usepackage[thmmarks,hyperref,amsthm,amsmath]{ntheorem}
+%\usepackage[thmmarks,hyperref,amsthm,amsmath]{ntheorem}
 \usepackage{graphicx}
 \usepackage[ruled,vlined,commentsnumbered]{algorithm2e}
 \usepackage[usenames,dvipsnames]{color}
@@ -17,6 +18,7 @@
 \usepackage{comment}
 \usepackage{fancyhdr}
 \usepackage{tikz}
+\usepackage{wrapfig}
 %Used Symbols
 %c_i = chunk i
 %v_i = vm i
@@ -561,11 +563,11 @@ Also, we can upper bound the bandwidth capacity of every edge by total number of
 \textbf{Summary.}
 Figure~\ref{fig:venn_flow} summarizes all problem
 variants which can be solved with our flow-based approach.
-\begin{figure}
-\includegraphics[width=\columnwidth]{figs/venn_flow.pdf}
+\begin{wrapfigure}{r}{0.5\columnwidth}
+\includegraphics[width=0.48\columnwidth]{figs/venn_flow.pdf}
 \caption{Problem variants which can be solved using our flow approach.}
 \label{fig:venn_flow}
-\end{figure}
+\end{wrapfigure}
 
 
 \subsection{Matching Algorithms ($\RS+\MA+\CC$ and $\MA+\CC+\BW$)}\label{ssec:match}
@@ -608,17 +610,32 @@ Perfect Bipartite
 Matching:
 the matching denotes the assignment of chunks to nodes.
 
-\begin{figure}[h]
-\includegraphics[width = 0.49\columnwidth]{figs/matching_topology_simple}
+%\begin{figure}[h]
+%\includegraphics[width = 0.49\columnwidth]{figs/matching_topology_simple}
+%\hfill
+%\includegraphics[width =0.4\columnwidth]{figs/matching_basic}
+%\caption{The problem instance on the \emph{left} consists of 
+%two nodes and two chunks. The
+%optimal solution is indicated by the dashed lines. The corresponding matching
+%problem on the \emph{right} represents the same situation. The weights on the 
+%edges
+%are set according to the distance in the substrate. The solution of the minimum
+%cost perfect matching is depicted by the shaded lines.}
+%\label{fig:matching_basic}
+%\end{figure}
+
+\begin{figure}
+\includegraphics[width = 0.49\columnwidth]{figs/model_ma_r_cv_boxes}
 \hfill
-\includegraphics[width =0.4\columnwidth]{figs/matching_basic}
-\caption{The problem instance on the \emph{left} consists of 
-two nodes and two chunks. The
-optimal solution is indicated by the dashed lines. The corresponding matching
-problem on the \emph{right} represents the same situation. The weights on the edges
-are set according to the distance in the substrate. The solution of the minimum
-cost perfect matching is depicted by the shaded lines.}
-\label{fig:matching_basic}
+\includegraphics[width =0.49\columnwidth]{figs/matching}
+\caption{The $\MA+\RS$ problem on the \emph{left} is converted into a
+matching problem on the \emph{right}. Since each node has to process two 
+chunks, the
+nodes are replicated in the matching representation. The two replicas of each
+chunk type are represented by a single node, and all edges connecting to this
+node have a weight according to the shorter distance to one of the replicas.
+This is visualized for $\achunk_2$.}
+\label{fig:matching}
 \end{figure}
 
 \textbf{Example.} Let us give a small example.
@@ -662,14 +679,32 @@ on the links between all clones of a specific node and a chunk type are set to
 the minimum distance. This can for instance be observed at the edges connecting
 the two clones of $\VirtualNode_1$ to $\achunk_2$: both weights are 0.
 
+\textbf{Construction:} 
+
 \textbf{Runtime: Matchings are fast!}
 %Let us now study the runtime of the matching approach.
-While matching problems can be solved in polynomial time~\cite{schrijver_combinatorial_optimization} using
-general algorithms, in the following, we show that for our problem
-a simple and fast greedy strategy is sufficient.
-Accordingly, we can use greedy bottom-up construction of matching.
-Its runtime is linear with respect to number of tree vertices. It is more efficient that more general methods of
-finding perfect matching in general bipartite graphs.
+
+
+
+\carlo{Many algorithms solve the minimum weith perfect matching problem on 
+bipartite 
+graphs. The algorithms runtimes depend on  the number of nodes in the 
+graph $n$, the number of edges in the graph $m$, and the largest magnitude of 
+an edge weight $N$. An efficient algorithm is described by Gabow et al. in 
+\cite{gabow_scaling_algorithm} and provides a runtime of $\mathcal{O}(n^{3/4} 
+\cdot m \cdot \log n)$ which translates to $\mathcal{O}((\MaFactor \cdot \Vms 
++ \ChunkTypes)^{3/4} \cdot  \MaFactor \cdot \Vms \cdot \ChunkTypes \cdot 
+\log 
+(2 \cdot h(\Tree)))$, where $h(T)$ denotes the height of the tree. This is the 
+dominant part of the runtime, as the graph on which the matching 
+is 
+computed, can be constructed in linear time. The distance 
+between each node and chunk in the substrate graph, has to be annotated as 
+costs on the edges. 
+By exploiting the tree structure of the substrage graph, this can be done 
+in $\mathcal{O}(\SubstrateNodes)$ for each individual pair, resulting in a 
+total runtime of $\mathcal{O}(\SubstrateNodes \cdot \MaFactor \cdot \Vms \cdot 
+\ChunkTypes)$ }
 
 The following lemma essentially states that any non-local matching can only have higher
 costs in all subtrees. 
@@ -690,11 +725,15 @@ and there must exist two matched pairs in $M'$ that shares a link (one pair is t
 \end{proof}
 
 
+
+
 \subsubsection{$\MA+\CC+\BW$}
 
-We can also solve the $\CC+\MA+\BW$ problem variant with our matching approach. The algorithm 
+We can also solve the $\CC+\MA+\BW$ problem variant with our matching approach. 
+The algorithm 
 essentially uses
-the same construction described above for $\CC+\MA$ (but without $\RS$) to compute a solution
+the same construction described above for $\CC+\MA$ (but without $\RS$) to 
+compute a solution
 to minimum weight perfect matching. Afterwards it is verified whether the
 resulting bandwidth allocations satisfy capacity constraints. If
 no capacities are violated, we found the cheapest assignment. We will
@@ -702,7 +741,44 @@ now show, that the problem is infeasible if the resulting assignment
 violates capacity constraints of at least one link. 
 Before we can prove the infeasibility of the instances, we will 
 state the following lemma
-which gives us a better understanding of the \emph{locality} of optimal assignments.
+which gives us a better understanding of the \emph{locality} of optimal 
+assignments.
+\carlo{NEW VERSION STARTS HERE:}
+
+\begin{lemma}
+\label{lemma:local}
+Given an instance of $\MA+\CC$ and an arbitrary subtree, an optimal assignment 
+$\VmChunkAssignment$, assigns all chunks in the subtree to nodes in the same 
+subtree (subject to the number of avialable nodes in the 
+subtree).\stefan{Can this stay this way?}
+\end{lemma}
+
+
+\begin{proof}
+\carlo{
+By contradiction. Assume an optimal assignment $\VmChunkAssignment$ exists, 
+which assigns a chunk $\achunk_i$ to a node $\VirtualNode_i$ outside the 
+subtree, although there are sufficient nodes for all chunks in the subtree. 
+Then 
+at least one node $\VirtualNode_j$ in the subtree has to process a chunk 
+$\achunk_k$ located outside the subtree. We construct an alternative 
+assignment $\VmChunkAssignment'$, by exachanging the assignments of 
+$\achunk_i$ and $\achunk_j$. Since $\achunk_i$ is located in a subtree which 
+contains $\VirtualNode_j$ but not $\VirtualNode_i$, and both nodes and chunks 
+are only located at leaves, the distance between $\achunk_i$ and it's assigned 
+node is smaller in $\VmChunkAssignment'$. For the distance between $\achunk_j$ 
+we have to do a case differentiation: if there exists a subtree which 
+contains $\achunk_i$, $\achunk_j$ but not $\VirtualNode_i$, the distance 
+between $\achunk_i$ and $\VirtualNode_i$ is equal to the distance between 
+$\achunk_j$ and $\VirtualNode_i$. Since $\achunk_i$ is closer to 
+$\VirtualNode_j$ than $\achunk_j$ the overall costs of $\VmChunkAssignment'$ 
+would be lower in this case. If the described subtree does not exists, the 
+distance between $\achunk_j$ and the two nodes is the same - which would also 
+render $\VmChunkAssignment'$ cheaper than an optimal solution.}
+\end{proof}
+
+
+
 
 \carlo{We also need a node mapping (for both lemmas). Shall we state this here?}
 
@@ -780,6 +856,31 @@ subtree.}
 \end{figure}
 
 
+\textbf{Runtime.} While matching problems can be solved in polynomial 
+time~\cite{schrijver_combinatorial_optimization} using
+general algorithms, in the following, we show that for our problem
+a simple and fast greedy strategy is sufficient.
+Accordingly, we can use greedy bottom-up construction of matching.
+Its runtime is linear with respect to number of tree vertices. It is more 
+efficient that more general methods of
+finding perfect matching in general bipartite graphs.
+
+\begin{corollary}
+An optimal matching of nodes to chunks can be computed greedily, by 
+alternating selecting edges with the lowest cost and removing the chossen 
+edge, and all edges connected to the nodes of these edge.
+\end{corollary}
+
+\begin{proof}
+Given an edge with the lowest costs, we can compute the smallest subtree, which 
+contains both, the node and the chunk which are connected by the edge. Since we 
+know that there is no node in a smaller subtree containing the chunk, we can 
+assign the node to the chunk, and according to Lemma~\ref{lemma:local}, the 
+resulting assignment will be optimal.
+\end{proof}
+
+
+
 Finally, let us observe that $\RS+\BW$ cannot be solved using this approach, 
 as Lemma~\ref{lemma:uplink} does not
 hold for problem instances with $\RS$. Figure~\ref{fig:matching_no_rs}
@@ -798,11 +899,11 @@ bandwidth constraints, although the instance itself is feasible.
 \textbf{Summary.}
 Figure~\ref{fig:venn_match} summarizes all problem
 variants which can be solved with our flow-based approach.
-\begin{figure}
-\includegraphics[width=\columnwidth]{figs/venn_matching.pdf}
+\begin{wrapfigure}{r}{0.5\columnwidth}
+\includegraphics[width=0.48\columnwidth]{figs/venn_matching.pdf}
 \caption{Problem variants which can be solved using our matching approach.}
 \label{fig:venn_match}
-\end{figure}
+\end{wrapfigure}
 
 
 \subsection{Dynamic Programming ($\FP+\CC+\MA+\BW$)}\label{ssec:dyn}
@@ -957,11 +1058,11 @@ resulting in an overall runtime of $O(n_S \cdot (n_V)^2)$.
 \textbf{Summary.}
 Figure~\ref{fig:venn_dp} summarizes all problem
 variants which can be solved with our dynamic programming approach.
-\begin{figure}
-\includegraphics[width=\columnwidth]{figs/venn_dp.pdf}
+\begin{wrapfigure}{r}{0.5\columnwidth}
+\includegraphics[width=0.48\columnwidth]{figs/venn_dp.pdf}
 \caption{Problem variants which can be solved using our dynamic programs.}
 \label{fig:venn_dp}
-\end{figure}
+\end{wrapfigure}
 
 \subsection{Remark: Simple Problems}
 
@@ -973,11 +1074,11 @@ $\RS$ and $\BW$ (but without $\CC$ or $\MA$) can easily be solved by mapping nod
 Figure~\ref{fig:venn_trivial}
 shows a Venn diagram of the trivial property combinations.
 
-\begin{figure}
-\includegraphics[width=\columnwidth]{figs/venn_trivial.pdf}
+\begin{wrapfigure}{r}{0.5\columnwidth}
+\includegraphics[width=0.48\columnwidth]{figs/venn_trivial.pdf}
 \caption{Trivially solvable problem variants.}
 \label{fig:venn_trivial}
-\end{figure}
+\end{wrapfigure}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1267,6 +1368,54 @@ problems even in uncapacitated networks. In particular,
 we have shown that several embeddings problems are NP-hard already in two- and three-level trees
 (a practically relevant result given today's datacenter topologies~\cite{fattree}),
 and even if the the number of replicas is bounded by two.
+
+\begin{table}
+ 
+
+\begin{small}
+\begin{tabular}{|l|l|p{4cm}|}
+\hline
+\multirow{3}{*}{NP-hard} & 5 combinations & \mbox{$\RS+\MA+\FP+\CC+\BW$}\\ 
+\cline{2-3}
+ & 4 combinations &  \mbox{$\RS+\MA+\FP+\CC$}; \mbox{$\RS+\MA+\FP+\BW$}; 
+\mbox{$\RS+\FP+\CC+\BW$} \\ \cline{2-3}
+ & 3 combinations &\mbox{$\RS+\MA+\FP$};\mbox{$\RS+\FP+\CC$} \\ 
+ \hline
+ \hline
+\multirow{3}{*}{Flow} & 4 combinations & \mbox{$\RS+\MA+\CC+\BW$} \\ \cline{2-3}
+ & 3 combinations & \mbox{$\RS+\CC+\BW$};\mbox{$\RS+\MA+\BW$}    \\ \cline{2-3}
+ & 2 combinations &$\RS+\BW$ \\ 
+ \hline
+ \hline
+\multirow{3}{*}{DP} & 4 combinations & \mbox{$\MA+\FP+\CC+\BW$} \\ \cline{2-3}
+ & 3 combinations &   \mbox{$\MA+\FP+\CC$};  
+\mbox{$\MA+\FP+\BW$}; \mbox{$\FP+\CC+\BW$} \\ \cline{2-3}
+ & 2 combinations &\mbox{$\MA+\FP$}; \mbox{$\FP+\CC$};  
+\mbox{$\FP+\BW$} \\ 
+ \hline
+ \hline
+\multirow{3}{*}{Matching} &3 combinations& 
+\mbox{$\RS+\MA+\CC$};\mbox{$\MA+\CC+\BW$}  \\ 
+\cline{2-3}
+ & 2 combinations & \mbox{$\RS+\MA$}; 
+\mbox{$\RS+\CC$}; \mbox{$\MA+\CC$}; 
+\mbox{$\MA+\BW$};\mbox{$\CC+\BW$} \\ \cline{2-3} 
+& 1 combinations & \mbox{$\RS$}; \mbox{$\MA$}; 
+\mbox{$\CC$};\mbox{$\BW$}\\
+ \hline
+ \hline
+ \multirow{3}{*}{0 Cost} & 3 combinations & \mbox{$\RS+\FP+\BW$}\\ 
+\cline{2-3}
+ & 2 combinations & \mbox{$\RS+\FP$}; \mbox{$\FP+\BW$}  
+\\ \cline{2-3}
+ & 1 combinations & \mbox{$\FP$}\\ 
+ \hline
+\end{tabular}
+\end{small}
+\caption{The use cases of the proposed algorithms, expressed in property 
+combinations which it can solve faster, than any other algorithm.}
+\label{tab:summary}
+\end{table}
 
 
 Our results are summarized in
