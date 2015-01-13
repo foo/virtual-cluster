@@ -18,6 +18,11 @@ In the following, we will explore the minimal requirements for rendering replica
 In particular, we will show that already two replicas for each chunk type are sufficient to
 introduce intractability. 
 
+\maciek{We need to tell the reader that our proof holds only for
+  (NP-complete) subset of 3SAT where we have more than 4
+  clauses. Otherwise the bandwidth lemma does not work!}
+
+
 In the following, we first give an alternative proof for the hardness of $\CC+\FP+\RS+\BW$.
 Subsequently, we show that the 2-replica variant $\RS(2)$ is hard.
 For our proof, we assume a model where there can be more nodes than chunk types,
@@ -84,7 +89,7 @@ We calculate threshold to be (\maciek{we might not want to introduce
 $$ \Thr = \variables \cdot (InnerCommunication +
 PartialOuterCommunication)$$
 
-Where $InnerCommunication = (\clauses  \choose 2) \cdot 2$ and
+Where $InnerCommunication = {\clauses  \choose 2} \cdot 2$ and
 $PartialOuterCommunication = cap(uplink) = \clauses \cdot (\clauses
 \cdot \variables - \clauses)$
 
@@ -165,11 +170,6 @@ it is a witness that the corresponding clause is true.
 
 \subsection{Two replicas are hard
   ($\RS(2)+\FP+\CC+\BW$)}\label{ssec:two}
-
-\maciek{We need to tell the reader that our proof holds only for
-  (NP-complete) subset of 3SAT where we have more than 4
-  clauses. Otherwise the bandwidth lemma does not work!}
-
 Our results so far indicate that dealing with replication can be challenging.
 However, all our hardness proofs concerned scenarios with three replicas,
 which raises the question whether the problems can be solved in polynomial time
@@ -215,6 +215,9 @@ $\capa(\clauses) = 3  \cdot  2  \cdot  (2  \cdot  (\clauses - 1) + 3  \cdot  \va
 
 \stefan{TODO Carlo: The construction is illustrated in Figure~\ref{fig:two}.}
 
+\maciek{TODO: Threshold increases by inner communication in clause
+  gadgets (2 hops), outer communication among clause gadgets (4hops),
+  communication from variable gadgets to clause gadgets (4hops)}
 
 \textbf{Proof of correctness.}
 We first prove the following helper lemma.
