@@ -1,11 +1,17 @@
 \section{Replica selection is hard}\label{ap:tworep}
 
 \maciek{We need to introduce the idle machines extension, that is
-  needed for reduction to work. We can also tell the reader that our
-  dynamic program works for this extension (f(T,x,idle)), and even
-  with MA (with assumption that each VM either EMPTY or FULL); NP-hardness
-  proofs holds with setting $idle=0$; our flow algorithm does not
-  work, though}
+  needed for reduction to work. Motivation: We can say that idle vms are only idle in
+  mapping phase of MapReduce, but participate in shuffle phase. We can
+  call it ``Additional shuffle nodes extension''.We can also tell the reader that our
+  dynamic program works for this extension (f(T,x,idle)) . Considering
+  mixing this extension with $\MA$:
+   (1) NP-hardness
+  proofs holds with setting $idle=0$; (2) dynamic program work with
+  assumption that every VM either processes 0 chunks or processes
+  maximum number of chunks (3) our flow algorithm
+  work with contrary model assumption, that we can have arbitrary
+  number of chunks assigned to VMs. }
 
 We have seen that replica selection flexibilities can render problems computationally hard.
 In the following, we will explore the minimal requirements for rendering replica selection hard.
