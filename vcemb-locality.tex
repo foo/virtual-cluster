@@ -251,7 +251,8 @@ replica selection and embedding), and
 we highlight interesting connections to classic algorithmic
 problems such as matching and flow problems.
 We also prove limitations in terms of
-computational tractability, by showing reductions from 3-D matching and SAT; interestingly,
+computational tractability, by showing reductions from 3-D matching
+and SAT \maciek{Boolean Satisfiability}; interestingly,
 while it is well-known that (unsplittable) multi-commodity flow
 problems are NP-hard in capacitated networks, our hardness results also hold in uncapacitated
 networks. We also show that NP-hard problems already arise in small-diameter networks (as they are
@@ -311,7 +312,7 @@ The input data consists of different \emph{chunk types} $\{\achunk_1, \ldots, \a
 where each chunk type $\achunk_i$ can have $r\geq 1$ instances (or replicas) $\{\achunk_{i}^{(1)},\ldots, \achunk_{i}^{(r)}\}$,
  stored at different servers.
 Concretely, for each of the $r\cdot k$ replicas $\achunk_{i}^{(j)}$, we will denote by $\pi(\achunk_{i}^{(j)})$ at
-which server it is stored. It is sufficient to process one replica, and we will sometimes refer to this
+which server it is stored \maciek{Do we use $\pi$ anywhere else in paper?}. It is sufficient to process one replica, and we will sometimes refer to this
 replica as the \emph{active} (or selected) replica.
 
 \emph{The Virtual Network.} The virtual network consists of a set $\VirtualNodes$ of $n_V=|\VirtualNodes|$ virtual machines or compute
@@ -323,7 +324,8 @@ We will denote the server hosting node $v$ by $\pi(v)$.
 Since these virtual machines process the input data, they need to be assigned and connected to the
 chunks. Concretely, for each chunk type $\achunk_i$, one replica $\achunk_{i}^{(j)}$ must be processed by exactly one virtual machine $v$;
 which replica $\achunk_{i}^{(k)}$ is chosen is subject to optimization.
-We will denote by $\mu$ the assignment or ``matching'' of virtual machines to chunks.
+We will denote by $\mu$ the assignment or ``matching'' of virtual
+machines to chunks \maciek{matching is an assignment}.
 We will keep the model general, and consider both the case where there are more chunk types
 than virtual machines (requiring the assignment of multiple chunks per nodes) and the case
 where there are less chunks than virtual machines. (See below for motivations for the different scenarios.)
@@ -367,9 +369,11 @@ problem variants, we decompose our problem into its fundamental parts, as descri
 if the input data is stored redundantly, the algorithm has the freedom to choose a replica
 for each chunk type, and assign it to a virtual machine (i.e., \emph{node}). Note that this
 selection or ``matching problem'' is non-trivial, even if the locations of the virtual machines
-are already given. In the following, we will refer to a scenario
+are already given \maciek{it is trivial in locations are not given}. In the following, we will refer to a scenario
 with redundant chunks by $\RS$; in the $\RS$-only scenario, the number of chunk types
-is less or equal the number of nodes. Otherwise, we will add the $+\MA$ property discussed next.
+is less or equal the number of nodes \maciek{the number of chunk types
+  is exactly equal to number of nodes; do you refer to idle machines
+  for more machines than chunk types?}. Otherwise, we will add the $+\MA$ property discussed next.
 
 \emph{Multiple Assignment ($\MA$).}
 If the number of chunk types is larger than the number of virtual machines,
@@ -378,7 +382,11 @@ each node needs to be assigned multiple chunks. We will refer to such a scenario
 
 \emph{Flexible Placement ($\FP$).} The second fundamental degree of freedom, besides replica selection and assignment,
 regards the flexibility in the placement (or synonymously: \emph{embedding}) of virtual machines to physical servers.
-We will refer to this aspect by $\FP$.
+We will refer to this aspect by $\FP$. \maciek{Here we would like to
+  introduce hosting multiple VMs in one leaf. How do we do that - by
+  setting global upper bound on number of VMs per leaf - or by
+  per-leaf constant? We also need to update NP-hardness proofs to set
+  those numbers to 1 and to modify the dynamic program's base case.}
 
 \emph{Node Interconnect ($\CC$).} We will distinguish between scenarios where bandwidth needs to be reserved
 both from each virtual machine to its replica as well as to the other virtual machines
@@ -387,13 +395,24 @@ both from each virtual machine to its replica as well as to the other virtual ma
  We will refer to the former scenarios
 where bandwidth needs to be reserved also for the inter-connect, by $\CC$.
 
-\emph{Bandwidth Capacities ($\BW$).} We distinguish between an uncapacitated and a capacitated scenario where the links
+\emph{Bandwidth Capacities ($\BW$).} 
+\maciek{We need to introduce several assumptions in model with
+  bandwidth. First is that we have bandwidth on each edge that is
+  multiplicity of $\CostTrans$. Second is that if we have $\BW$ together with
+$\CC$, we need to assume that subtracting $k$ times $\CostCom$ for
+arbitrary natural $k$, we still have remaining bandwidth to be
+multiplicity of $\CostTrans$. It might be beneficial to introduce
+model as: (1) $\CostTrans$ is always $1$ (2) $\CostCom$ is integral
+(3) bandwidth on each edge is integral.}
+We distinguish between an uncapacitated and a capacitated scenario where the links
 of the substrate network come with bandwidth
 constraints, and will refer to the bandwidth-constrained version by $\BW$; the capacity of servers
 (the number of virtual machines which can be hosted concurrently) is always limited.
 Note that capacity constraints introduce infeasible problem instances, where it is impossible to
 allocate sufficient resources to satisfy an embedding request; in this case, we will say that the
-resource footprint is \emph{infinite}.
+resource footprint is \emph{infinite}. \maciek{I do not like defining
+  value of footprint of infeasible instance. What is the motivation
+  for that?}
 
 %\textbf{Remark on Practical Motivation.}
 
@@ -459,6 +478,8 @@ of the bandwidth reservations in the (chunk) access network and the (node) inter
 %We allow an instance to have multiple virtual machines in single leaf.
 
 \textbf{Construction.}
+
+\maciek{We lost $\MA$ in showing degeneration in following section.}
 We start by observing that $\RS+\CC+\BW$ boils down to
 $\RS+\BW$ in the absence of $\FP$: due to the unique paths
 on $\Tree$, the bandwidth allocation for the node interconnect
@@ -473,7 +494,9 @@ an artificial graph $\Tree^*$, extending the substrate network $\Tree$ and
 normalizing bandwidth capacities, as follows. For $\Tree^*$,
 we normalize the bandwidth of $\Tree$ to integer multiples of $\CostTrans$,
 i.e., for each link $e\in E(\Tree)$, we set its new
-capacity in $\Tree^*$ to $\lfloor\capacity(e)/\CostTrans\rfloor$. 
+capacity in $\Tree^*$ to $\lfloor\capacity(e)/\CostTrans\rfloor$
+\maciek{I do not understand the floor here. I strongly suggest setting
+$\CostTrans$ to $1$ in the model}. 
 After this normalization, we extend the $\Tree$ topology by
 introducing an artificial vertex for each chunk type. These artificial
 vertices are connected to each leaf in $\Tree$,
@@ -483,7 +506,9 @@ addition, we create a
 type vertices. Moreover, we create an artificial \emph{super-sink} and
 connect it to every leaf, connecting to each node by an edge of capacity $\MaFactor$; 
 concretely, if $x$ nodes are hosted at the same leaf, we use an available capacity of 
-$x \cdot \MaFactor$.
+$x \cdot \MaFactor$ \maciek{I think that flow should be from chunks
+  towards virtual machines for transporting reference. The reader can
+  find the direction unnatural.}.
 We additionally assign the following costs to edges of $\Tree^*$:
 every edge of the original substrate network costs one unit, and all other edges
 cost nothing.
@@ -511,7 +536,7 @@ capacity due to $\CC$.
 
 \textbf{Algorithm.}
 Our algorithm to solve $\RS+\MA+\CC+\BW$ consists of two parts. 
-First, we compute a min-cost-max-flow solution on the normalized and extended graph $\Tree^*$. 
+First, we compute a \maciek{an integer} min-cost-max-flow solution on the normalized and extended graph $\Tree^*$. 
 This can be done using existing algorithms, such as the successive shortest path algorithm~\cite{successive_shortest_path_complexity}.
 Given this solution, we need to reconstruct the replica assignment. 
 The assignment can be obtained be decomposing the flow allocated in the
@@ -549,6 +574,13 @@ path reaches a leaf, but the leaf does not contain a node but only a chunk repli
  Also recall that the flow is directed, therefore we cannot follow a path 
  from a replica $\achunk_1$ to a replica $\achunk_2$: the 
  outgoing flow from $\achunk_2$ (if selected) is directed upwards.
+
+\maciek{There is one more doubt that the reader might have - do we
+  start from every chunk type? Maybe we start from 0 replicas of type
+  1 and 2 replicas of type 2 (we can show that by capacity incoming to
+  type gadget)? Also, we might not have sufficient
+  starting points (but it holds by amount of flow). Those doubts might
+  be too trivial, I just pointed out that we do not mention that.} 
 
 In terms of runtime, there exist several polynomial-time algorithms to compute
 the integral minimum cost maximum flow on networks with integer capacities.
@@ -708,6 +740,9 @@ total runtime of $\mathcal{O}(\SubstrateNodes \cdot \MaFactor \cdot \Vms \cdot
 
 The following lemma essentially states that any non-local matching can only have higher
 costs in all subtrees. 
+
+\maciek{We need to introduce what we mean by partial matching before
+  formulating this lemma.}
 \begin{lemma}\label{lemma:local}
 A local and greedy perfect matching of chunks to nodes is optimal.
 \end{lemma}
@@ -750,7 +785,8 @@ assignments.
 Given an instance of $\MA+\CC$ and an arbitrary subtree, an optimal assignment 
 $\VmChunkAssignment$, assigns all chunks in the subtree to nodes in the same 
 subtree (subject to the number of avialable nodes in the 
-subtree).\stefan{Can this stay this way?}
+subtree).\stefan{Can this stay this way?} \maciek{Why did we restate
+  the local matching lemma (it is worse here)? And why are we rewriting working proof?}
 \end{lemma}
 
 
@@ -774,7 +810,9 @@ $\achunk_j$ and $\VirtualNode_i$. Since $\achunk_i$ is closer to
 $\VirtualNode_j$ than $\achunk_j$ the overall costs of $\VmChunkAssignment'$ 
 would be lower in this case. If the described subtree does not exists, the 
 distance between $\achunk_j$ and the two nodes is the same - which would also 
-render $\VmChunkAssignment'$ cheaper than an optimal solution.}
+render $\VmChunkAssignment'$ cheaper than an optimal
+solution.}\maciek{This proof only considers complete matchings, but we
+need to show that property on partial matchings.}
 \end{proof}
 
 
@@ -786,8 +824,7 @@ render $\VmChunkAssignment'$ cheaper than an optimal solution.}
 Given a $\CC+\MA$ problem instance and a subtree rooted at vertex $u$ containing $x$
 chunks and $y$ nodes, the bandwidth allocation of each optimal assignment
 $\VmChunkAssignment$ on the uplink of $u$ is $|x-(y\cdot\MaFactor)|\cdot
-\CostTrans$.
-\label{lemma:uplink}
+\CostTrans$.\label{lemma:uplink}
 \end{lemma}
 \begin{proof}
 From the local lemma (Lemma~\ref{lemma:local}), 
@@ -819,6 +856,7 @@ infeasible.
 \end{lemma}
 \begin{proof}
 Assume there exists a link on which the assignment $\VmChunkAssignment$
+  \maciek{This proof is too slippery! Simpler way to proof that surely exists.}
 violates the capacity. From Lemma~\ref{lemma:uplink} it is
 known that $\VmChunkAssignment$ keeps the assignment ``local''. 
 Therefore, the footprint on the uplink of a specific subtree is the number of chunks
@@ -908,6 +946,15 @@ variants which can be solved with our flow-based approach.
 
 \subsection{Dynamic Programming ($\FP+\CC+\MA+\BW$)}\label{ssec:dyn}
 
+\maciek{In each of previous sections we had an example where we show
+  non-triviality of the problem. Here we also have an interesting
+  example, which show that placing VMs on chunks can be arbitrarily
+  bad. In this example optimal solution places each VM in separate
+  subtree and transports every chunk to this subtree. The subtree was
+  chosen because it was able to host all the machines, unlike the
+  subtries with chunks. The reader might wonder why we considered
+  every possible location for a VM and this is exactly the reason}
+
 Dynamic programming solutions are generally useful for problems
 exhibiting the \emph{optimal substructure property}, namely, if given
 the optimal solutions for subproblems, an optimal solution for the
@@ -989,11 +1036,20 @@ inside the subtree, then across subtrees, then outside $T'$).
 %
 %\maciek{Solution for subtree - how it can look like? It is ``partial matching''. Some matched VMs and chunks, but also some chunks transported out of subtree or some %VMs/slots that will have chunks transported into from outside. So we charge already those incomplete matchings.}
 
+\maciek{TODO: base cases for f that take into consideration hosting
+  multiple VMs in one node}
+
 Therefore, we have:
 \begin{eqnarray*}
 f(T', x) &=& \min_{\ell \in \{0, \ldots, x\}}  f(\textsc{Le}(T'), {\ell}) + f(\textsc{Ri}(T'), x - {\ell}) \\
 &&+ \CostTrans(\textsc{Le}(T'),{\ell},\textsc{Ri}(T'),x-l)\\ &&+ \CostCom({\ell},x-{\ell})\\
 \end{eqnarray*}
+
+\maciek{We forgot to mention how we deal with bandwidth here. Our
+  approach is to check at every placement, at every subtree whether
+  uplink edge does not exceed its capacity. If it does for any subtree, we cross out
+  this placement. We also need to show correctness of this strategy in
+  analysis - but it holds from uplink lemma.}
 
 
 \begin{comment}
@@ -1171,7 +1227,12 @@ The gadget of each triple $t_i$ consists of an inner node (a router) and three l
 contains three chunk replicas, corresponding to the elements of $t_i$.
 \item \emph{Other properties:} We set the number of to-be-embedded nodes to $k$,
 $\CostTrans$ to $1$, and the number of slots in each node to $m=3$ \stefan{what
-is the number of slots here?}. We use a threshold $\Thr=2 \cdot 2 \cdot k$.
+is the number of slots here?}\maciek{it is number of replicas that
+each VM can process (the MA property)}. We use a threshold $\Thr=2 \cdot 2
+\cdot k$. \maciek{If we update the model to take care of hosting
+  multiple VMs in one leaf, we should set this instance to allow only
+  one VM per leaf. However, any number of VMs per leaf will be OK for
+  this proof.}
 \end{itemize}
 
 The construction is illustrated in Figure~\ref{fig:fprsma}.
@@ -1239,7 +1300,13 @@ in the Appendix.)
 \item The communication cost in the inter-connect is set to $\CostCom = 1$.
 \item The number of nodes (virtual machines) is $\Vms = 3 \cdot k$.
 \item We use a threshold $\Thr =  6 \cdot k + 3 \cdot 3 \cdot 2 \cdot
-(k - 1) \cdot k$.
+(k - 1) \cdot k$.  \maciek{If we update the model to take care of hosting
+  multiple VMs in one leaf, we should set this instance to allow only
+  one VM per leaf. In this proof it also does not matter, as it is
+  already forced by infinite transportation cost, however we need to
+  define it anyway.
+  }
+
 \end{itemize}
 
 
@@ -1412,7 +1479,8 @@ and even if the the number of replicas is bounded by two.
  \hline
 \end{tabular}
 \end{small}
-\caption{The use cases of the proposed algorithms, expressed in property 
+\caption{\maciek{This summary is wrong, I sent you an update in e-mail
+  (original image summary.pdf is wrong as well - see update)}The use cases of the proposed algorithms, expressed in property 
 combinations which it can solve faster, than any other algorithm.}
 \label{tab:summary}
 \end{table}
