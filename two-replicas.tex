@@ -46,9 +46,9 @@ We set the following bandwidth capacities in the substrate. There are three
 levels of edges in the substrate network $\Tree_{\Formula}$ given by formula
 $\Formula$: \emph{top}, \emph{middle} and \emph{bottom}.
 We do not consider any capacities at the \emph{bottom} and \emph{middle} levels.
-At a top-level edge, we set the bandwidth to $\clauses \cdot (\variables -
-\clauses)$ \carlo{I think this is wrong. It should be $\clauses \cdot(\variables 
-- 1)$}.
+At a top-level edge, we set the bandwidth to $\clauses \cdot (\clauses
+\cdot \variables -
+\clauses)$.
 
 We set the number of chunks to be equal to the number of clauses, $\ChunkTypes =
 \clauses$. To finish our construction, we place data chunks at
@@ -62,8 +62,17 @@ communication cost among nodes in
 a certain solution to our instance. This solution is constructed by embedding
 nodes at all leaves of $\positive(\variab)$ and none at leaves
 $\negative(\variab)$, for every gadget of variable $\variab$. Please note that $\Thr$
-computed in such a way does not contain transportation cost. TODO: calculate
-$\Thr$.
+computed in such a way does not contain transportation cost.
+
+We calculate threshold to be (\maciek{we might not want to introduce
+  those variable names, as those have no meaning here}):
+
+$$ \Thr = \variables \cdot (InnerCommunication +
+PartialOuterCommunication)$$
+
+Where $InnerCommunication = (\clauses  \choose 2) \cdot 2$ and
+$PartialOuterCommunication = cap(uplink) = \clauses \cdot (\clauses
+\cdot \variables - \clauses)$
 
 \textbf{Proof of correctness of construction.}
 With our construction completed, we need to prove that it indeed
