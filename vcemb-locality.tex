@@ -760,7 +760,110 @@ and there must exist two matched pairs in $M'$ that shares a link (one pair is t
 \end{proof}
 
 
+\subsubsection{New Strcuture (in progress)}
 
+We will now try to improve the complexity of the matching for $\MA+\CC$ by 
+leveraging a certain locality property, which (as we will show) is present in 
+all optimal assignments. In addition we will show that instances of 
+$\MA+\CC+\BW$, can be solved with the same matching appraoches combined with 
+postprocessing, in oder to verify that the soltuion does not violate bandwidth 
+constraints.
+
+\carlo{TODO import remove of $\CC$}
+
+\textbf{Definition: Locality} We define an assignment $\VmChunkAssignment$ to 
+be \emph{local in a specific subtree $T'$}, iff it assigns all chunks in the 
+subtree to nodes in the same subtree (subject to the number of avialable nodes 
+in the 
+subtree). We further define the $\VmChunkAssignment$ to be \emph{local}, when 
+it is local in all possible subtrees of the substrate network.
+
+
+\begin{lemma}
+Given a $\CC+\MA$ problem instance and a subtree rooted at vertex $u$ containing 
+$x$
+chunks and $y$ nodes, the bandwidth allocation of each local assignment
+$\VmChunkAssignment$ on the uplink of $u$ is $|x-(y\cdot\MaFactor)|\cdot
+\CostTrans$.\label{lemma:uplink}
+\end{lemma}
+
+\begin{proof}
+If the number of chunks in the subtree is equal to the number of nodes in the 
+subtree, the bandwidth allocation for the transport of chunks on the uplink 
+will be $0$, since from the locality property, we know that each chunk is 
+assigned to a node in the subtree. If the
+number of chunks in the subtree differs from the processing capacities of
+the nodes in the subtree, we have to conduct a case differentiation: In case 
+there are more chunks in the subtree, each
+excess chunk has to be transferred to a different subtree, which will
+inflict bandwidth costs of $\CostCom$ on the uplink connecting $u$ with the
+remaining parts of $\Tree$. Similarly, if the processing capabilities exceed the 
+amount of
+available chunks, chunks from other subtrees will have to be transferred to
+nodes in the subtree of $u$, inflicting bandwidth costs of $\CostCom$ each. 
+Hence the bandwidth allocation for the chunk transport on the uplink will be 
+the difference between the number of chunks and the processing capabilities of 
+the subtree $|x-(y\cdot\MaFactor)|$ times the amount of bandwidth needed, for a 
+single transfer $\CostTrans$.
+\end{proof}
+
+Since all links are uplinks of subtrees (which might consist of only one node), 
+we can state the following corollary:
+
+\begin{corollary}
+Given a $\CC+\MA$ problem instance, all local assignments have the same costs. 
+\end{corollary}
+
+
+\begin{lemma}
+Given a $\CC+\MA$ problem instance, a feasible assignment $\VmChunkAssignment$ 
+is optimal iff it is local. 
+\end{lemma}
+
+\begin{proof}
+\carlo{
+By contradiction. Assume an optimal assignment $\VmChunkAssignment$ exists, 
+which is not local. This means, for at least one subtree, it assigns 
+a chunk $\achunk_i$, located in the subtree, to a node $\VirtualNode_i$ outside 
+the 
+subtree. In addition, 
+at least one node $\VirtualNode_j$ in the subtree has to process a chunk 
+$\achunk_k$ located outside the subtree. We construct an alternative 
+assignment $\VmChunkAssignment'$, by exchanging the assignments of 
+$\achunk_i$ and $\achunk_j$. Since $\achunk_i$ is located in a subtree which 
+contains $\VirtualNode_j$ but not $\VirtualNode_i$, and both nodes and chunks 
+are only located at leaves, the distance between $\achunk_i$ and it's assigned 
+node is smaller in $\VmChunkAssignment'$. For the distance between $\achunk_j$ 
+we have to do a case differentiation: if there exists a subtree which 
+contains $\achunk_i$, $\achunk_j$ but not $\VirtualNode_i$, the distance 
+between $\achunk_i$ and $\VirtualNode_i$ is equal to the distance between 
+$\achunk_j$ and $\VirtualNode_i$. Since $\achunk_i$ is closer to 
+$\VirtualNode_j$ than $\achunk_j$ the overall costs of $\VmChunkAssignment'$ 
+would be lower in this case. If the described subtree does not exists, the 
+distance between $\achunk_j$ and the two nodes is the same - which would also 
+render $\VmChunkAssignment'$ cheaper than an optimal
+solution.}
+\end{proof}
+\begin{lemma}
+Given a minimal cost assignment $\VmChunkAssignment$, 
+any solution with bandwidth allocation less
+than $\Cost(\VmChunkAssignment,
+\SubstrateEdge)$ to any link renders the problem
+infeasible.
+\label{lemma:no_bandwidth}
+\end{lemma}
+\begin{proof}
+\maciek{This proof is too slippery! Simpler way to proof that surely exists.}
+From Lemma~\ref{lemma:uplink} we know that each optimal assignment 
+$\VmChunkAssignment$ to $\MA+\CC$ assigns a certain bandwidth to a link. This is 
+the minimal bandwidth which has to be allocated on this link by \emph{any} 
+feasible assignment, since removing the locality, can only increase the number 
+of chunks which have to be transported across the uplink.
+Assume there exists a link on which the assignment $\VmChunkAssignment$
+violates the capacity. Since $\VmChunkAssignment$ allocated the minimal 
+bandwidth on this link, which has to be allocated by \emph{any} feasible 
+assignment, the problem has to be infeasible. 
+\end{proof}
 
 \subsubsection{$\MA+\CC+\BW$}
 
@@ -894,7 +997,8 @@ subtree.}
 \end{figure}
 
 
-\textbf{Runtime.} While matching problems can be solved in polynomial 
+\textbf{Runtime.} While \carlo{minimum weight perfect} matching problems can be 
+solved in polynomial 
 time~\cite{schrijver_combinatorial_optimization} using
 general algorithms, in the following, we show that for our problem
 a simple and fast greedy strategy is sufficient.
@@ -983,20 +1087,48 @@ To finally compute the actual optimal embedding,
 we traverse the computed minimal-cost path backwards.
 
 Concretely, the first argument to function $f$ 
-is a subtree (which contains a given set of servers and chunks), 
+is a subtree (which contains a given set of servers \carlo{is this necessary?} 
+and chunks), 
 and the
 second argument is the number of virtual machines to be embedded in the subtree.
-To calculate $f(T, x)$, the optimum
-cost placement of $x$ virtual machines in subtree $T'$, we will
-consider every possible split of the $x$ nodes into two positive integer
+\carlo{$f$ is evaluted in a bottom up manner, with the following initilization: 
+For every subtree $T_l$, which consists only of a leaf $l$, we set $f(T_l,x) = 
+\infty$ for all numbers of virtual machines $x$ which are larger than 
+$\capacity(l)$ to indicate that this subtree cannot host $x$ virtual machines.
+To calculate $f(T_l, x)$, for $x \leq \capacity(l)$, we compute the  
+bandwidth allocation on the uplink of $T_l$, reffered to by the function 
+$bw(T_l,x)$. \begin{eqnarray*}
+ bw(T_l,x)&=& |x - \CostTrans \cdot |\ChunkCount(T_l)|| \\ && + 
+\CostCom \cdot (\Vms - x) \cdot x.
+\end{eqnarray*}
+which accounts for the bandwidth allocation on the uplink of $T_l$. The first 
+term represents the required bandwidth for the communication between the $x$ 
+nodes on $l$, and the $\Vms - x$ nodes in the remaining parts of the substrate 
+network. Obviously the communication $x$ among the $x$ nodes within $T_l$ 
+does not require bandwidth on the uplink of $T_l$. The second term represents 
+the bandwidth, which is necessary to transport the chunks from their location to 
+the node which should process the data (see Lemma~\ref{lemma:uplink} for more 
+details). Since placing nodes on servers will not require additional bandwidth 
+allocations, $bw$ is equal to $f$ on all subtrees $T_l$, which consist only of 
+a single leaf. If the required bandwidth $bw$ exceeds the avialble bandwidth 
+$\capacity$ on the uplink, $f(T_l,x)$ is set to $\infty$, to mark the 
+corresponding number of nodes in the subtree as infeasible.}
+
+\carlo{After the initilization, we proceed to compute $f(T_l,x)$ for non-leaf 
+nodes in a bottom up manner: We }consider every possible split of the $x$ nodes 
+into two positive integer
 values: $\ell$ and $r = x - l$. That is, we take the optimal cost 
 (given recursively) of placing $\ell$ nodes in
 the left subtree $\textsc{Le}(T')$ of $T'$ and $r$ nodes in right subtree $\textsc{Ri}(T')$ of
-$T'$. Given each combination, we compute the minimal overall solution for $T'$
-for $x$, by taking into account the resulting flow allocation on the edge $e_{1}$ 
-leading to the left subtree of $T'$ and 
-edge $e_2$ leading to the right subtree, and by
-taking into account the capacity constraints on the uplink of $T'$.
+$T'$. \carlo{Given the cheapest combination, we add the bandwidth requirements 
+on the uplink of $T'$ to generate the overall costs for placing $x$ virtual 
+machines in $T'$.
+$$f(T',x) =   \min_{\ell \in \{0, \ldots, x\}}  f(\textsc{Le}(T'), {\ell}) + 
+f(\textsc{Ri}(T'), x - {\ell}) + bw(T',x)$$
+Similar to the leaves, we set $f(T',x)$ to infinity if the required bandwidth 
+$bw$ exceeds the capacity $\capacity$ of the uplink of $T'$.}
+
+
 This allocation consists of two parts: (1) The node inter-connect
 communication is easy to compute, as we know how many
 virtual machines are in the left and right subtree, and how many are 
@@ -1108,7 +1240,7 @@ optimality can be established greedily, and the fact
  that we check each possible node distribution. 
 For each substrate vertex ($n_S$ many) we have 
 to check the cost of all possible splits, 
-resulting in an overall runtime of $O(n_S \cdot (n_V)^2)$.
+resulting in an overall complexity of $\mathcal{O}(n_S \cdot (n_V)^2)$.
 
 
 \textbf{Summary.}
