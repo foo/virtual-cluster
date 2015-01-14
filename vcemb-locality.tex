@@ -396,14 +396,6 @@ both from each virtual machine to its replica as well as to the other virtual ma
 where bandwidth needs to be reserved also for the inter-connect, by $\CC$.
 
 \emph{Bandwidth Capacities ($\BW$).} 
-\maciek{We need to introduce several assumptions in model with
-  bandwidth. First is that we have bandwidth on each edge that is
-  multiplicity of $\CostTrans$. Second is that if we have $\BW$ together with
-$\CC$, we need to assume that subtracting $k$ times $\CostCom$ for
-arbitrary natural $k$, we still have remaining bandwidth to be
-multiplicity of $\CostTrans$. It might be beneficial to introduce
-model as: (1) $\CostTrans$ is always $1$ (2) $\CostCom$ is integral
-(3) bandwidth on each edge is integral.}
 We distinguish between an uncapacitated and a capacitated scenario where the links
 of the substrate network come with bandwidth
 constraints, and will refer to the bandwidth-constrained version by $\BW$; the capacity of servers
@@ -474,6 +466,13 @@ to its selected chunks as well as to other nodes ($\CC$), while respecting
 capacity constraints ($\BW$).
 Our goal is to minimize the resource footprint $\Cost$, consisting
 of the bandwidth reservations in the (chunk) access network and the (node) inter-connect.
+
+\maciek{We do not need any assumption about bandwidth. If we do not
+  have integrality, we round down every bandwidth. If we do not have
+  multiplicity of $\CostTrans$, we round to highest $\CostTrans \cdot
+  k$. We can deal with mixing $\CostTrans$ and $\CostCom$ by first
+  decreasing bandwidth by (constant) cost of communication, and then
+  rounding down.}
 
 %We allow an instance to have multiple virtual machines in single leaf.
 
