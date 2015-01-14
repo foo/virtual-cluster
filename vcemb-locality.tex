@@ -724,10 +724,9 @@ graphs. The algorithms runtimes depend on  the number of nodes in the
 graph $n$, the number of edges in the graph $m$, and the largest magnitude of 
 an edge weight $N$. An efficient algorithm is described by Gabow et al. in 
 \cite{gabow_scaling_algorithm} and provides a runtime of $\mathcal{O}(n^{3/4} 
-\cdot m \cdot \log n)$ which translates to $\mathcal{O}((\MaFactor \cdot \Vms 
-+ \ChunkTypes)^{3/4} \cdot  \MaFactor \cdot \Vms \cdot \ChunkTypes \cdot 
-\log 
-(2 \cdot h(\Tree)))$, where $h(T)$ denotes the height of the tree. This is the 
+\cdot m \cdot \log N)$ which translates to $\mathcal{O}((\ChunkType)^{11/4} 
+\cdot \log (h(\Tree)))$, where $h(T)$ denotes the height of the tree. 
+This is the 
 dominant part of the runtime, as the graph on which the matching 
 is 
 computed, can be constructed in linear time. The distance 
@@ -736,7 +735,7 @@ costs on the edges.
 By exploiting the tree structure of the substrage graph, this can be done 
 in $\mathcal{O}(\SubstrateNodes)$ for each individual pair, resulting in a 
 total runtime of $\mathcal{O}(\SubstrateNodes \cdot \MaFactor \cdot \Vms \cdot 
-\ChunkTypes)$ }
+\ChunkType)$ }
 
 The following lemma essentially states that any non-local matching can only have higher
 costs in all subtrees. 
@@ -780,10 +779,10 @@ it is local in all possible subtrees of the substrate network.
 
 
 \begin{lemma}
-Given a $\CC+\MA$ problem instance and a subtree rooted at vertex $u$ containing 
-$x$
+Given a $\CC+\MA$ problem instance and a subtree $T'$ 
+containing $x$
 chunks and $y$ nodes, the bandwidth allocation of each local assignment
-$\VmChunkAssignment$ on the uplink of $u$ is $|x-(y\cdot\MaFactor)|\cdot
+$\VmChunkAssignment$ on the uplink of $T'$ is $|x-(y\cdot\MaFactor)|\cdot
 \CostTrans$.\label{lemma:uplink}
 \end{lemma}
 
@@ -796,11 +795,11 @@ number of chunks in the subtree differs from the processing capacities of
 the nodes in the subtree, we have to conduct a case differentiation: In case 
 there are more chunks in the subtree, each
 excess chunk has to be transferred to a different subtree, which will
-inflict bandwidth costs of $\CostCom$ on the uplink connecting $u$ with the
+inflict bandwidth costs of $\CostTrans$ on the uplink connecting $T'$ with the
 remaining parts of $\Tree$. Similarly, if the processing capabilities exceed the 
 amount of
 available chunks, chunks from other subtrees will have to be transferred to
-nodes in the subtree of $u$, inflicting bandwidth costs of $\CostCom$ each. 
+nodes in the subtree $T'$, inflicting bandwidth costs of $\CostTrans$ each. 
 Hence the bandwidth allocation for the chunk transport on the uplink will be 
 the difference between the number of chunks and the processing capabilities of 
 the subtree $|x-(y\cdot\MaFactor)|$ times the amount of bandwidth needed, for a 
@@ -811,18 +810,24 @@ Since all links are uplinks of subtrees (which might consist of only one node),
 we can state the following corollary:
 
 \begin{corollary}
-Given a $\CC+\MA$ problem instance, all local assignments have the same costs. 
+Given an $\CC+\MA$ problem instance, all local assignments have the same costs. 
+\label{corollary:same_costs}
 \end{corollary}
 
 
 \begin{lemma}
-Given a $\CC+\MA$ problem instance, a feasible assignment $\VmChunkAssignment$ 
+Given an $\CC+\MA$ problem instance, a feasible assignment $\VmChunkAssignment$ 
 is optimal iff it is local. 
 \end{lemma}
 
 \begin{proof}
 \carlo{
-By contradiction. Assume an optimal assignment $\VmChunkAssignment$ exists, 
+We will show, that a non-local assignment is not optimal. Combined with 
+Corollary~\ref{corollary:same_costs}, this results in the optimality of all 
+local assignments.}
+
+\carlo{
+Assume an optimal assignment $\VmChunkAssignment$ exists, 
 which is not local. This means, for at least one subtree, it assigns 
 a chunk $\achunk_i$, located in the subtree, to a node $\VirtualNode_i$ outside 
 the 
@@ -951,10 +956,9 @@ the subtree to a node outside.
 The optimality then follows from the following lemma.
 \begin{lemma}
 Given a minimal cost assignment $\VmChunkAssignment$, 
-any solution with bandwidth allocation less
-than $\Cost(\VmChunkAssignment,
-\SubstrateEdge)$ to any link renders the problem
-infeasible.
+any bandwidth function with a capaciy which is lower then the bandwidth 
+allocation of $\VmChunkAssignment$ on any link, renders the 
+problem infeasible.
 \label{lemma:no_bandwidth}
 \end{lemma}
 \begin{proof}
