@@ -33,7 +33,7 @@ and additional nodes only participate in the inter-connect, and not the replica 
 
 We first prove that $\CC+\RS+\FP+\BW$ is NP-hard by reduction from the Boolean Satisfiability Problem ($\SAT$).
 Since $\SAT$ is a decision
-problem, we transform $\RS+\FP+\BW$ into a decision problem too, by
+problem, we transform $\CC+\RS+\FP+\BW$ into a decision problem too, by
 introducing a cost threshold $\Thr$.
 
 Let's first recall that the $\SAT$ problem asks whether a positive valuation exists
@@ -48,10 +48,26 @@ a root and separate gadgets for each variable of $\Formula$, each of which
 is a child of the root.
 The gadget of variable $\variab$ has a root, $\aroot(\variab)$, and two children:
 $\positive(\variab)$ and $\negative(\variab)$. Child $\positive(\variab)$ has $\clauses$
-many children $v_1, v_2, \ldots, v_{\clauses}$, and child $\negative(\variab)$ has
-$\clauses$ many children $\neg v_1, \neg v_2, \dots, v_{\clauses}$. Every
+many children $\nu_1, \nu_2, \ldots, \nu_{\clauses}$, and child 
+$\negative(\variab)$ has
+$\clauses$ many children $\neg \nu_1, \neg \nu_2, \dots, \nu_{\clauses}$. Every
 gadget has the same structure: the same height and the same number of
-leaves. By default, we will set the available bandwidth to be the
+leaves. This construction is illustrated in 
+Figure~\ref{fig:construction_3sat}. 
+
+
+\begin{figure}
+\includegraphics[width=\columnwidth]{figs/construction_3sat}
+\caption{The construction of the gadget for $\nu$. If $\nu$ appears in the 
+first clause, a chunk $\achunk_1$, will be located at $\nu_1$. If $\neg \nu$ 
+satisfies the last clause, $\neg 
+\nu_\alpha$ will host $\achunk_\alpha$.}
+\label{fig:construction_3sat}
+\end{figure}
+
+
+By default, we will set the available 
+bandwidth to be the
 same everywhere, in every gadget; differences will be shown when we
 will place chunks.
 
@@ -121,7 +137,8 @@ We will prove that formula $\Formula$ is satisfiable iff $\RS+\FP+\BW+\CC$ has
 a solution of cost $\leq \Thr$.
 
 ($\Rightarrow$) Let us take any valuation $\Val$ that satisfies $\Formula$.
-We will construct a solution to $\RS+\FP+\BW$ using $\Val$ in the following way.
+We will construct a solution to $\RS+\FP+\BW+\CC$ using $\Val$ in the following 
+way.
 For each variable $\variab$ in $\Formula$, we embed $\clauses$ many nodes
 at the  leaves of the gadget of $\variab$. We need to choose $\clauses$ out of
 $2 \cdot \clauses$ leaves to embed nodes. If $\Val(\variab) = 1$, we embed
@@ -186,8 +203,12 @@ gadgets for clauses. \emph{Nota bene:}
 unlike in the previous proofs, for every clause we will create three chunk types instead of just one.
 
 \textbf{Construction.}
-\carlo{I do not understand this. I think this section might benefit from a 
-construction paragraph, similar to the previous section.}
+\carlo{TODO: Describe construction of clause gadgets, and emphazise that we use 
+the same construction as in Figure~\ref{fig:construction_3sat} for the variable 
+gadgets. Introduce symbols for clauses, which can be transferred to the Figure.}
+
+\includegraphics{figs/construction_2replica}
+
 We distribute chunks among servers as follows. First,
 similarly to the previous proofs with three replicas, we put clause chunks in
 variable gadgets; however, now we place distinct chunks $c^1_i, c^2_i,
