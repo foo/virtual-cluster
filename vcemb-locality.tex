@@ -455,6 +455,12 @@ can be solved optimally using dynamic programming (Section~\ref{ssec:dyn}).
 
 \subsection{Flow Algorithms ($\RS+\MA+\CC+\BW$)}\label{ssec:flow}
 
+\begin{wrapfigure}{r}{0.5\columnwidth}
+\includegraphics[width=0.48\columnwidth]{figs/venn_flow.pdf}
+\caption{Problem variants which can be solved using our flow approach.}
+\label{fig:venn_flow}
+\end{wrapfigure}
+
 We first show how to solve
 the $\RS+\MA+\CC+\BW$ problem using a flow approach.
 Recall that in the $\RS+\MA+\CC+\BW$ problem,
@@ -465,7 +471,10 @@ of nodes ($\MA$), and each node needs to be connected
 to its selected chunks as well as to other nodes ($\CC$), while respecting
 capacity constraints ($\BW$).
 Our goal is to minimize the resource footprint $\Cost$, consisting
-of the bandwidth reservations in the (chunk) access network and the (node) inter-connect.
+of the bandwidth reservations in the (chunk) access network and the (node) 
+inter-connect.
+
+
 
 \maciek{We do not need any assumption about bandwidth. If we do not
   have integrality, we round down every bandwidth. If we do not have
@@ -594,14 +603,16 @@ Also, we can upper bound the bandwidth capacity of every edge by total number of
 \textbf{Summary.}
 Figure~\ref{fig:venn_flow} summarizes all problem
 variants which can be solved with our flow-based approach.
-\begin{wrapfigure}{r}{0.5\columnwidth}
-\includegraphics[width=0.48\columnwidth]{figs/venn_flow.pdf}
-\caption{Problem variants which can be solved using our flow approach.}
-\label{fig:venn_flow}
-\end{wrapfigure}
+
 
 
 \subsection{Matching Algorithms ($\RS+\MA+\CC$ and $\MA+\CC+\BW$)}\label{ssec:match}
+
+\begin{wrapfigure}{r}{0.5\columnwidth}
+\includegraphics[width=0.48\columnwidth]{figs/venn_matching.pdf}
+\caption{Problem variants which can be solved using our matching approach.}
+\label{fig:venn_match}
+\end{wrapfigure}
 
 Several problems related to replica selection,
 are essentially matching problems. As we will see,
@@ -609,6 +620,7 @@ matching algorithms are often very fast, compared
 to other approaches such as flow computations.
 In the following, we will provide matching solutions to
 two different problems: $\RS+\MA+\CC$ and $\MA+\CC+\BW$.
+
 
 \subsubsection{$\RS+\MA+\CC$}
 
@@ -621,12 +633,17 @@ to its chunks as well as to other virtual machines ($\CC$).
 Our goal is to minimize the resource footprint $\Cost$, consisting
 of the bandwidth reservations in the access network and the inter-connect.
 
-We will first observe that in the absence of node placement flexibilities (no $\FP$),
+\carlo{We should find a better environment here.}
+\textbf{Observation: $\RS+\MA+\CC + \BW$ degenerates to $\RS+\MA+\BW$}
+In the absence of node placement flexibilities (no $\FP$),
 due to the tree structure of the substrate topology $\Tree$, the bandwidth required
 for the inter-connect network can be allocated upfront, and does not depend on the replica
-selection and assignment. Thus, the $\RS+\MA+\CC$ problem boils down to $\RS+\MA$.
+selection and assignment. Thus $\RS+\MA+\CC + \BW$ problems boil down to 
+$\RS+\MA+\BW$.
 
-In order to solve $\RS+\MA$, we construct a bipartite graph between the set
+This implies, that it is sufficient to solve $\RS + \MA$, if we want 
+to solve $\RS+\MA+\CC$. In order to solve $\RS+\MA$, we construct a bipartite 
+graph between the set
 $\VirtualNodes$ of virtual machines and
 the set of chunks.
 Concretely, we clone each node $\MaFactor$ times,
@@ -710,14 +727,10 @@ on the links between all clones of a specific node and a chunk type are set to
 the minimum distance. This can for instance be observed at the edges connecting
 the two clones of $\VirtualNode_1$ to $\achunk_2$: both weights are 0.
 
-\textbf{Construction:} 
 
-\textbf{Runtime: Matchings are fast!}
+\textbf{Compelxity}
 %Let us now study the runtime of the matching approach.
-
-
-
-\carlo{Many algorithms solve the minimum weith perfect matching problem on 
+Many algorithms solve the minimum weith perfect matching problem on 
 bipartite 
 graphs. The algorithms runtimes depend on  the number of nodes in the 
 graph $n$, the number of edges in the graph $m$, and the largest magnitude of 
@@ -734,8 +747,10 @@ costs on the edges.
 By exploiting the tree structure of the substrage graph, this can be done 
 in $\mathcal{O}(\SubstrateNodes)$ for each individual pair, resulting in a 
 total runtime of $\mathcal{O}(\SubstrateNodes \cdot \MaFactor \cdot \Vms \cdot 
-\ChunkType)$ }
+\ChunkType)$ 
 
+
+\begin{comment}
 The following lemma essentially states that any non-local matching can only have higher
 costs in all subtrees. 
 
@@ -757,17 +772,23 @@ and there must exist two matched pairs in $M'$ that shares a link (one pair is t
   and is cheaper than $M'$. Contradiction.
 \end{proof}
 
+\end{comment}
 
-\subsubsection{New Strcuture (in progress)}
+\subsubsection{$\MA+\CC+\BW$}
 
-We will now try to improve the complexity of the matching for $\MA+\CC$ by 
+We will now try to improve the complexity for $\MA+\CC$ by 
 leveraging a certain locality property, which (as we will show) is present in 
-all optimal assignments. In addition we will show that instances of 
-$\MA+\CC+\BW$, can be solved with the same matching appraoches combined with 
-postprocessing, in oder to verify that the soltuion does not violate bandwidth 
+all optimal assignments for these instances. In addition we will show that 
+instances of 
+$\MA+\CC+\BW$ can be solved with the same appraoch, combined with 
+postprocessing in oder to verify that the soltuion does not violate bandwidth 
 constraints.
 
-\carlo{TODO import remove of $\CC$}
+
+
+From the observation in the last section, we know that it is sufficient to show 
+a solution to $\MA$, from which it is trivial to generate a solution for 
+$\MA+\CC$.
 
 \textbf{Definition: Locality} We define an assignment $\VmChunkAssignment$ to 
 be \emph{local in a specific subtree $T'$}, iff it assigns all chunks in the 
@@ -776,9 +797,47 @@ in the
 subtree). We further define the $\VmChunkAssignment$ to be \emph{local}, when 
 it is local in all possible subtrees of the substrate network.
 
+\textbf{Construction} We will now describe, how to construct a \emph{local} 
+assignment in linear time. At the heart of our construction, lies a FIFO queue, 
+which determines the order in which vertices of the substrate graph are 
+traversed. At initialization, the queue contains all leaves of the substrate 
+graph. At each node, we keep two lists: one contains known and unmatched 
+chunks, 
+the other known and unmatched nodes. The lists are initilized with $\emptyset$
+
+Once a leaf $l$ in the substrate graph is chosen for processing, we add any 
+nodes or chunks which are located on $l$ to the corresponding lists. As long as 
+both lists contain elements, we remove an arbitrary element from each list, and 
+assign the removed chunk to the removed node. Subsequently, we check if all 
+other children, of the parent of $l$ are allready processed. If they are, we 
+add 
+the parent of $l$ to the FIFO queue.
+
+A non-leaf vertex $v$ is processed in the following way: The lists, containing 
+the unmatched chunks and nodes are generated by uniting the lists of all 
+children of $v$. Again, we remove arbitrary entries of both list, and match the 
+removed chunk to the removed node, until at least one of the lists is empty. 
+Subsequently we add the parent of $v$ to the FIFO queue, if all other chrildren 
+of the parent of $v$ have allready been processed.
+
+On a given vertex, emptying one of the lists, results in \emph{locality} in the 
+subtree rooted by this vertex. Since the insert strategy of the FIFO queue 
+ensures bottom up processing of the substrate graph, this results in 
+\emph{locality} in all subtree, which renders the resulting assignment to 
+be \emph{local}. The complexity of this 
+construction is low: Each 
+vertex in the substrate graph has to be processed once 
+$\mathcal{O}(|\SubstrateNodes|)$. The sum of all remove operations, is equal to 
+the number of chunks $\mathcal{O}(\ChunkType)$. Verifying that all children 
+have 
+been processed can be done in constant time, leveraging a counter on the parent 
+node. Hence the overall complexity of this construction is 
+$\mathcal{O}(|\SubstrateNodes| + \ChunkType)$.
+
+We will now show that every \emph{local} assignment is optimal.
 
 \begin{lemma}
-Given a $\CC+\MA$ problem instance and a subtree $T'$ 
+Given an $\MA$ problem instance and a subtree $T'$ 
 containing $x$
 chunks and $y$ nodes, the bandwidth allocation of each local assignment
 $\VmChunkAssignment$ on the uplink of $T'$ is $|x-(y\cdot\MaFactor)|\cdot
@@ -817,15 +876,14 @@ Given an $\CC+\MA$ problem instance, all local assignments have the same costs.
 \begin{lemma}
 Given an $\CC+\MA$ problem instance, a feasible assignment $\VmChunkAssignment$ 
 is optimal iff it is local. 
+\label{lemma:local_optimal}
 \end{lemma}
 
 \begin{proof}
-\carlo{
 We will show, that a non-local assignment is not optimal. Combined with 
 Corollary~\ref{corollary:same_costs}, this results in the optimality of all 
-local assignments.}
+local assignments.
 
-\carlo{
 Assume an optimal assignment $\VmChunkAssignment$ exists, 
 which is not local. This means, for at least one subtree, it assigns 
 a chunk $\achunk_i$, located in the subtree, to a node $\VirtualNode_i$ outside 
@@ -846,8 +904,20 @@ $\VirtualNode_j$ than $\achunk_j$ the overall costs of $\VmChunkAssignment'$
 would be lower in this case. If the described subtree does not exists, the 
 distance between $\achunk_j$ and the two nodes is the same - which would also 
 render $\VmChunkAssignment'$ cheaper than an optimal
-solution.}
+solution.
 \end{proof}
+
+Combined with a simple postprocessing, this approach can also solve $\MA+\BW$ 
+(and therefore $\MA+\BW+\CC$). The central idea of this combination, is to show 
+that if the \emph{local} assignments violates the avialable bandwidth on any 
+link, all other assignments will also violate the bandwidth. As a consequence 
+it is possible, to compute the assignment without any bandwidth constaints, and 
+check in a postprocessing step, whether the bandwidth on any link is exceeded.
+This postprocessing step scales with the number of edges in the substrate, 
+which is lower than the number of nodes in the substrate, the substrate is a 
+tree. Hence the complexity class of the approach does not change.
+
+
 \begin{lemma}
 Given a minimal cost assignment $\VmChunkAssignment$, 
 any solution with bandwidth allocation less
@@ -869,6 +939,8 @@ bandwidth on this link, which has to be allocated by \emph{any} feasible
 assignment, the problem has to be infeasible. 
 \end{proof}
 
+
+\begin{comment}
 \subsubsection{$\MA+\CC+\BW$}
 
 We can also solve the $\CC+\MA+\BW$ problem variant with our matching approach. 
@@ -1049,7 +1121,7 @@ variants which can be solved with our flow-based approach.
 \caption{Problem variants which can be solved using our matching approach.}
 \label{fig:venn_match}
 \end{wrapfigure}
-
+\end{comment}
 
 \subsection{Dynamic Programming ($\FP+\CC+\MA+\BW$)}\label{ssec:dyn}
 
