@@ -92,13 +92,6 @@ construct as many replicas of chunk $\achunk_i$ as there are literals in the
 clause. For each literal $\ell$ (of the form $\variab$ or $\neg \variab$) that satisfies clause $i$ we place
 replica of chunk $\achunk_i$ in the leaf labeled $\achunk_{\ell_i}$.
 
-The threshold $\Thr$ is given by the
-communication cost among nodes in
-a certain solution to our instance. This solution is constructed by embedding
-nodes at all leaves of $\positive(\variab)$ and none at leaves
-$\negative(\variab)$, for every gadget of variable $\variab$. Please note that $\Thr$
-computed in such a way does not contain transportation cost.
-
 We calculate threshold to be (\maciek{we might not want to introduce
   those variable names, as those have no meaning here}):
 
@@ -126,7 +119,7 @@ bandwidth constraint for the gadget. This implies that
 any feasible solution must embed exactly $\clauses$ nodes in every gadget.
 
 \carlo{Imo it would be nice to have a referrence to the 4 variables here - I 
-suppose the bandwidth lemma will not work otherwise.}
+suppose the bandwidth lemma will not work otherwise.} \maciek{Great point!}
 
 
 \begin{theorem}
@@ -153,10 +146,9 @@ the node which is collocated with the first chunk replica. This solution is feas
 (every chunk type is processed),
 because the given valuation satisfied $\Phi$.
 
-\carlo{?}
 Now we will show that this solution has cost $\Thr$.
 Due to the Bandwidth Lemma (Lemma~\ref{lem:bandwidth-lemma}),
-we only have to consider the communication cost.
+we only have to consider the communication cost. We sum inner-gadget communication and communication among gadgets to get exactly $\Thr$.
 
 ($\Leftarrow$) Let us take any solution to $\RS+\FP+\BW$ constructed based on $\Formula$ of cost $\leq \Thr$.
 We will construct a positive valuation $\Val$ by considering the nodes in
@@ -184,6 +176,13 @@ consider the leaf handling any given clause chunk;
 it is a witness that the corresponding clause is true.
 \end{proof}
 
+Please notice that number of VMs to be placed might exceed the number
+of chunks to be processed. For example, if clause number 1: (x or y or z) is in
+$\Formula$, we can have x and y being true, which would result in
+placing VMs on vertices labeled $x_1$ and $y_1$, which contain the
+same chunk $c_1$.
+
+
 
 \subsection{Two replicas are hard
   ($\RS(2)+\FP+\CC+\BW$)}\label{ssec:two}
@@ -209,19 +208,33 @@ gadgets. Introduce symbols for clauses, which can be transferred to the Figure.}
 
 \includegraphics{figs/construction_2replica}
 
-We distribute chunks among servers as follows. First,
-similarly to the previous proofs with three replicas, we put clause chunks in
-variable gadgets; however, now we place distinct chunks $c^1_i, c^2_i,
-c^3_i$ instead of
-three copies of the same chunk. Second, we place three chunks that
-correspond to clauses in all three leaves of their clause gadgets.
-Thus, in total, $6 \cdot \clauses$ variable chunks are mapped.
-We will consider a setting where $\clauses \cdot \vars + 2\clauses$ nodes need to be mapped. Our intention is that in
-every variable gadget, there will be $\clauses$ nodes,
- and in every clause
+\begin{enumerate}
+
+  \item (Tree construction) In addition to variable gadget, that we
+    share with previous construction, we introduce clause
+    gadget. Clause gadget (ilustrated in figure) has two inner nodes:
+    $root(c)$, $middle(c)$ and three leaves\maciek{middle node is
+      necessary in order to preserve balanced tree property}. We connect leaves to the
+    middle vertex and the middle vertex to $root(c)$. We attach the
+    gadget to the tree by linking directly global root to
+    $root(c)$. We construct our tree out of $\vars$ variable gadgets
+    and $\clauses$ clause gadgets.
+  \item (Chunk distribution)
+
+    We distribute 2 replicas of  each of $\clauses \cdot 3$ chunk types among servers as follows. First, similarly to the
+previous proofs with three replicas, we put clause chunks in variable
+gadgets; however, now we place distinct chunks $c^1_i, c^2_i, c^3_i$
+instead of three copies of the same chunk. Second, we place three
+chunks that correspond to clauses in all three leaves of their clause
+gadgets.  Thus, in total, $6 \cdot \clauses$ variable chunks are
+mapped.  We will consider a setting where $\clauses \cdot \vars +
+2\clauses$ nodes need to be mapped. Our intention is that in every
+variable gadget, there will be $\clauses$ nodes, and in every clause
 gadgets there will be two nodes.
 
-The available bandwidth of the top edge of the gadget of each variable $\variab$ is set to
+  \item (Bandwidth constraints)
+
+    The available bandwidth of the top edge of the gadget of each variable $\variab$ is set to
 $\capa(v) = 3  \cdot  3  \cdot  (3  \cdot  (\vars - 1) + 2  \cdot  \clauses) $.
 The first factor is the tree distance which is 6 divided by 2 (as
 we count each pair twice). The second factor is
@@ -234,12 +247,22 @@ number of nodes in each of the $\clauses$ clause gadgets.
 The available bandwidth for the top edge of each clause gadget is set to
 $\capa(\clauses) = 3  \cdot  2  \cdot  (2  \cdot  (\clauses - 1) + 3  \cdot  \vars) $.
 
-\stefan{TODO Carlo: The construction is illustrated in Figure~\ref{fig:two}.}
+Notice that this construction spawns two replicas of each chunk type -
+one in variable gadget and one in clause gadget.
 
-\maciek{TODO: Threshold increases by inner communication in clause
+  \item (Additional properties of instance) We set threshold in
+    similar fashion as in previous proof. Comparatively, 
+threshold increases by inner communication in clause
   gadgets (2 hops), outer communication among clause gadgets (4hops),
-  communication from variable gadgets to clause gadgets (4hops)}
+  communication from variable gadgets to clause gadgets (4hops). We
+  set number of VMs to be spawned to $\clauses \cdot \vars + 2 \cdot
+  \clauses$. We set hosting capacity of each node to $1$. We set
+  $\CostTrans = \Thr$ to disallow transportation. We set $\CostCom = 1$.
 
+
+ \end{enumerate}
+
+\stefan{TODO Carlo: The construction is illustrated in Figure~\ref{fig:two}.}
 \textbf{Proof of correctness.}
 We first prove the following helper lemma.
 \begin{lemma}
