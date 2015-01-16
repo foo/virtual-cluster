@@ -214,16 +214,16 @@ we should maybe give the main algorithms a name; we should talk about the case w
 
 Distributed cloud applications, such as batch-processing applications or scale-out databases, generate a significant amount of network traffic.~\cite{talk-about}
 For instance, MapReduce applications consist of a network intensive shuffle phase,
-where data is transferred from the mappers to the reducers. 
+where data is transferred from the mappers to the reducers.
 In order to ensure a predictable application performance, especially in shared cloud environments,
 it is hence important to provide isolation and bandwidth guarantees between the virtual machines (or compute units)~\cite{amazonbw},
 e.g., by making explicit reservations.~\cite{oktopus}
 
 Indeed, modern batch-processing applications often provide the abstraction of entire \emph{virtual networks}~\cite{talk-about},
-defining both the virtual machines 
+defining both the virtual machines
 as well as their interconnecting network, and today's highly virtualized datacenters
 offer great flexibilities on where these virtual networks
-can be instantiated or \emph{embedded}. 
+can be instantiated or \emph{embedded}.
 
 In order to maximize the resource utilization in the datacenter, it is in principle desirable to
 map the virtual machines of a given virtual network as close as possible
@@ -232,7 +232,7 @@ However, existing embedding algorithms often ignore the input to the batch-proce
 the data chunks. The input data for a cloud application is typically stored in a distributed file system~\cite{hdfs}, on different servers,
 and in order to properly minimize
 communication costs, an embedding algorithm should also be \emph{data locality aware},
-and allocate (or \emph{embed}) computational resources close to the to be processed data. 
+and allocate (or \emph{embed}) computational resources close to the to be processed data.
 
 Moreover, in case of redundant storage (batch processing
 applications often provide a 3-fold redundancy~\cite{hdfs}), an algorithm should also be aware of, and exploit, \emph{replica selection}
@@ -254,7 +254,7 @@ replica selection and flexible virtual machine placement, and answer questions s
 We draw a complete picture of the problem space: We show that
 even problem variants exhibiting multiple degrees of freedom in terms of
 replica selection and embedding,
-can be solved optimally in polynomial time, and present several efficient 
+can be solved optimally in polynomial time, and present several efficient
 algorithms accordingly. However, we also prove limitations in terms of
 computational tractability, by providing reductions from 3-D matching
 and Boolean satisfiability ($\SAT$). Interestingly,
@@ -326,7 +326,7 @@ where each chunk type $\achunk_i$ can have $r_i\geq 1$ instances (or replicas) $
 It is sufficient to process one replica, and we will sometimes refer to this
 replica as the \emph{active} (or selected) replica.
 
-\textbf{\emph{The Virtual Network.}} The virtual network consists of a set $\VirtualNodes$ of $n_V=|\VirtualNodes|$ virtual machines, 
+\textbf{\emph{The Virtual Network.}} The virtual network consists of a set $\VirtualNodes$ of $n_V=|\VirtualNodes|$ virtual machines,
 henceforth often simply called \emph{nodes}.
 Each node $v \in \VirtualNodes$ can be placed (or, synonymously, \emph{embedded}) on a server; this placement can be subject
 to optimization.
@@ -362,7 +362,7 @@ the \emph{resource footprint}: the guaranteed bandwidth allocation (or synonymou
 only the resource allocation at the links but not at the servers depends on the replica selection or embedding. That is,
 we on the one hand aim to embed the virtual machines in a locality-aware manner, close to the input data
 (the chunks), and on the other hand also aim to embed the virtual machines as close as possible to
-each other. 
+each other.
 
 Let $\dist(v,\achunk)$ denote the distance (in the underlying physical network $\Tree$) between a node $v$ and
 its assigned (active) chunk replica $\achunk$, and let $\dist(v_1,v_2)$ denote the distance between the two nodes $v_1$ and $v_2$.
@@ -389,7 +389,7 @@ if the input data is stored redundantly, the algorithm has the freedom to choose
 for each chunk type, and assign it to a virtual machine (i.e., \emph{node}).
 % Note that this
 %selection or ``matching problem'' is non-trivial, even if the locations of the virtual machines
-%are already given \maciek{it is trivial in locations are not given}. 
+%are already given \maciek{it is trivial in locations are not given}.
 In the following, we will refer to a scenario
 with redundant chunks by $\RS$; in the $\RS$-only scenario, the number of chunk types
 is equal to the number of nodes. Otherwise, we will add the $+\MA$ property discussed next.
@@ -398,7 +398,7 @@ is equal to the number of nodes. Otherwise, we will add the $+\MA$ property disc
 If the number of chunk types is larger than the number of virtual machines,
 each node needs to be assigned multiple chunks. We will refer to such a scenario by $\MA$,
 and will denote the number of chunks per node by $\MaFactor\geq 1$; that is, we assume that
-$\MaFactor = n_V\cdot \tau$. 
+$\MaFactor = n_V\cdot \tau$.
 Note that in a scenario with only $\MA$ but without $\RS$, chunk types are not redundant.
 
 \textbf{\emph{Flexible Placement ($\FP$).}} The second fundamental degree of freedom, besides replica selection and assignment,
@@ -417,7 +417,7 @@ both from each virtual machine to its assigned replicas as well as to the other 
  scenarios where only the (chunk) access network requires bandwidth reservation (i.e., $\CostTrans>0$ and $\CostCom=0$).
  We will refer to the former scenarios
 where bandwidth needs to be reserved also for the inter-connect, by $\CC$.
-We also note that the case $\CostTrans=0$ and $\CostCom>0$ has been studied in prior literature~\cite{oktopus,talk-about,proteus}, 
+We also note that the case $\CostTrans=0$ and $\CostCom>0$ has been studied in prior literature~\cite{oktopus,talk-about,proteus},
 and refer the reader to our related work section.
 
 
@@ -528,7 +528,7 @@ problem variant.
 
 \textbf{Construction of Artificial Graph.}
 In order to solve the $\RS+\MA+\CC+\BW$ problem,
-we first remove the $\CC$ property using Observation~\ref{obs:nofp}. 
+we first remove the $\CC$ property using Observation~\ref{obs:nofp}.
 We then construct
 an artificial graph $\Tree^*$, extending the substrate network $\Tree$ and
 normalizing bandwidth capacities, as follows. For $\Tree^*$,
@@ -615,8 +615,8 @@ computation of the min-cost-max-flow, flow rounding, and decomposition. The
 dominant terms in the asymptotic runtime is the flow computation.
 Using the state-of-the-art min-cost-max-flow algorithms~\cite{mincostmaxflow-1,mincostmaxflow-2}
 we get a runtime of $\mathrm{O}(n_S^2 \log\log n_S)$;
-% resp.~$\mathrm{O}(n_S^5 \cdot \tau^3 \log n_S)$, where $\delta$ is the network diameter and 
-%where $U$ is the maximal link capacity in the substrate; 
+% resp.~$\mathrm{O}(n_S^5 \cdot \tau^3 \log n_S)$, where $\delta$ is the network diameter and
+%where $U$ is the maximal link capacity in the substrate;
 using~\cite{successive_shortest_path_complexity},
 together with the Dijkstra shortest-path algorithm we have $\mathrm{O}(n_S^2\cdot \tau)$.
 
@@ -634,7 +634,7 @@ together with the Dijkstra shortest-path algorithm we have $\mathrm{O}(n_S^2\cdo
 
 This section presents faster algorithms to solve the two problem variants
 $\RS+\MA+\CC$ and $\MA+\CC+\BW$ which can also be solved with the flow approach
-introduced above. 
+introduced above.
 In general, the algorithms presented in this section can be summarized
 as matching approaches.
 
@@ -745,7 +745,7 @@ the actual matching computation. The constructed graph consists of
 $\MaFactor \cdot n_V \cdot \ChunkType$ many edges,
 and for each edge we need to compute its cost, i.e., the shortest distance
 which in a tree can be computed in time $n_S$; thus, the overall construction time
-is 
+is
 %$\mathrm{O}(n_S \cdot \MaFactor \cdot n_V \cdot \ChunkType)$.
 $\mathrm{O}(n_S \cdot \tau^2)$.
 The state of the art algorithm to compute matchings are based on scaling techniques.~\cite{scale-match}
@@ -757,7 +757,7 @@ The runtime translates to
 %and where $\lambda= \MaFactor \cdot n_V \cdot \ChunkType$ represents the number of edges in the matching graph.
 %$\mathcal{O}(\tau^{11/4}*n_S)$,
 $\mathcal{O}(\tau^{5/2}\cdot \log(\tau\cdot C))$,
-where $C$ is the maximal link capacity. 
+where $C$ is the maximal link capacity.
 (Recall that $\tau = \MaFactor\cdot n_V$.)
 
 
@@ -792,7 +792,7 @@ locality. Moreover, we will show that
 even
 $\MA+\CC+\BW$ problem variants can be solved with our approach, by simply
 verifying feasibility.
-In the following, due to Observation~\ref{obs:nofp}, we can focus on 
+In the following, due to Observation~\ref{obs:nofp}, we can focus on
 the $\MA$ resp.~$\MA+\BW$ problem.
 
 We first need the following definition.
@@ -810,16 +810,16 @@ it is local with respect to all possible subtrees of the substrate network.
 \begin{figure}
 \center
 \includegraphics[width = 0.6\columnwidth]{figs/unbalanced_tree}
-\caption{The dashed lines indicate bandwidth allocations, which occur 
-independent of the chosen assignment. The dotted lines indicate bandwidth 
+\caption{The dashed lines indicate bandwidth allocations, which occur
+independent of the chosen assignment. The dotted lines indicate bandwidth
 allocation which occur only if $c_2$ is assigned to $v_1$.}
 \label{fig:unbalanced_tree}
 \end{figure}
 
-\carlo{Figure \ref{fig:unbalanced_tree} shows an instance with two chunks and 
-two nodes. A local assignment assigns $v_1$ to $c_1$, although $c_2$ is 
-closer to $v_1$, since a subtree $T'$ exists, such that $v_1 \in T'$ and $c_1 
-\in T'$, but $v_2 \notin T'$. The uplink of this subtree will have a higher 
+\carlo{Figure \ref{fig:unbalanced_tree} shows an instance with two chunks and
+two nodes. A local assignment assigns $v_1$ to $c_1$, although $c_2$ is
+closer to $v_1$, since a subtree $T'$ exists, such that $v_1 \in T'$ and $c_1
+\in T'$, but $v_2 \notin T'$. The uplink of this subtree will have a higher
 allocation if a non-local assignment is chosen.}
 
 
@@ -855,12 +855,12 @@ subtree rooted at $u$. Due to our bottom-up strategy, the overall assignment
 will also be local.
 The complexity of this
 construction is low: For each
-vertex in the substrate graph, 
-we have to build the union of the children's sets, 
-and since each vertex can only be the child of one vertex, 
+vertex in the substrate graph,
+we have to build the union of the children's sets,
+and since each vertex can only be the child of one vertex,
 the amortized runtime per vertex is constant; and hence the overall
 runtime $\mathcal{O}(n_S)$. The sum of all remove operations, is equal to
-the number of chunk types $\mathcal{O}(\ChunkType)$. 
+the number of chunk types $\mathcal{O}(\ChunkType)$.
 Hence the overall complexity of this construction amounts to
 $\mathcal{O}(n_S + \ChunkType)$.
 
@@ -962,14 +962,14 @@ solution. Contradiction.
 \end{comment}
 
 Combined with a simple postprocessing step, this approach can also solve $\MA+\BW$. The central idea of this extension, is
-that \emph{local} assignments allocate the minimal bandwidth 
+that \emph{local} assignments allocate the minimal bandwidth
 on each individual edge. In consequence, each bandwidth constraint
 which is lower than the allocation of a local assignment on one link, renders
 the problem infeasible. Hence, it is sufficient to temporarily omit the
 bandwidth limitations, compute an optimal assignment for an $\MA$ instance, and
 verify that the resulting allocations do not violate any capacities. The
 postprocessing step scales linearly with the number of edges in the substrate
-graph. 
+graph.
 %Due to the tree topology of the substrate graph, the number of
 %edges in the substrate is $n_S - 1$, which does not affect the
 %asymptotic complexity of this approach.}
@@ -1201,35 +1201,35 @@ in polynomial time. Note that this problem variant is non-trivial,
 and that collocating nodes with chunks (i.e., embedding virtual machines
 at the servers hosting the chunks) can be bad.
 
-\carlo{Every problem instance with $\FP$, asks for two things: the 
-assignment of chunks to nodes $\VmChunkAssignment$, which is allready an 
-objective of the previous algorithms, and the node placement $\NodeMapping$. 
-Different strategies can be used to distribute nodes across servers: One 
-extreme, is to try to minimize the distance between the chunks and the nodes. A 
-node mapping $\NodeMapping_1$ which implements this strategy, is given in 
-Figure~\ref{fig:dynamic_motivation} \emph{(left)}: the $4$ nodes are all 
-collocated with chunks, resulting in $0$ costs on the access network. As a 
-result the pathes between the individual nodes are longer than in alternative 
-node placements: Each of the nodes has a distance of $2$ hops to one other node, 
-and $4$ hops to $2$ other nodes. Hence the resulting allocations for the 
-node interconnect require $20 \cdot \CostCom$ bandwidth allocations in total. 
-Figure~\ref{fig:dynamic_motivation} \emph{(right)} illustrates a different node 
-placment $\NodeMapping_2$, which seeks to minimize the communication costs 
-between the nodes, and places all nodes in one subtree. The distance between all 
-nodes is $2$, wich results in a total bandwidth allocation of $12\cdot\CostCom$ 
-for the interconnect. However, this reduced price comes at additional costs in 
-the access network: $c_3$ and $c_4$ have to be transported to $v_4$ and $v_4$, 
-which requires a total bandwidth allocation of $8 \cdot \CostTrans$. Depending 
-on the values of $\CostTrans$ and $\CostCom$, the optimal strategy might 
-change. Note that for some instances the two extreme strategies described 
+\carlo{Every problem instance with $\FP$, asks for two things: the
+assignment of chunks to nodes $\VmChunkAssignment$, which is allready an
+objective of the previous algorithms, and the node placement $\NodeMapping$.
+Different strategies can be used to distribute nodes across servers: One
+extreme, is to try to minimize the distance between the chunks and the nodes. A
+node mapping $\NodeMapping_1$ which implements this strategy, is given in
+Figure~\ref{fig:dynamic_motivation} \emph{(left)}: the $4$ nodes are all
+collocated with chunks, resulting in $0$ costs on the access network. As a
+result the pathes between the individual nodes are longer than in alternative
+node placements: Each of the nodes has a distance of $2$ hops to one other node,
+and $4$ hops to $2$ other nodes. Hence the resulting allocations for the
+node interconnect require $20 \cdot \CostCom$ bandwidth allocations in total.
+Figure~\ref{fig:dynamic_motivation} \emph{(right)} illustrates a different node
+placment $\NodeMapping_2$, which seeks to minimize the communication costs
+between the nodes, and places all nodes in one subtree. The distance between all
+nodes is $2$, wich results in a total bandwidth allocation of $12\cdot\CostCom$
+for the interconnect. However, this reduced price comes at additional costs in
+the access network: $c_3$ and $c_4$ have to be transported to $v_4$ and $v_4$,
+which requires a total bandwidth allocation of $8 \cdot \CostTrans$. Depending
+on the values of $\CostTrans$ and $\CostCom$, the optimal strategy might
+change. Note that for some instances the two extreme strategies described
 above, can \emph{both} be suboptimal.}
 
 
-in polynomial time. Note that this problem variant requires to find a 
+in polynomial time. Note that this problem variant requires to find a
 tradeoff between the desire to place nodes as close as possible to each other
-(in order to minimize communication costs), and the desire to place nodes 
+(in order to minimize communication costs), and the desire to place nodes
 as close as possible to
-the chunk locations. 
+the chunk locations.
 
 \begin{figure}
 \includegraphics[width = 0.49\columnwidth]{figs/dynamic_bad}
@@ -1270,7 +1270,7 @@ and original children as left descendants.
 %right son of last clone.
 
 As usual in dynamic programs, we define, over the structure of the tree, an inductive formula $f$ for
-the minimal cost solution \emph{given} any possible number of nodes 
+the minimal cost solution \emph{given} any possible number of nodes
 embedded in a given subtree. (The actual set does not matter,
 due to symmetry arguments.)
 Our approach is to evaluate this function in a bottom-up
@@ -1481,17 +1481,16 @@ The hardness of $\FP+\RS+\MA$ and $\FP+\RS+\CC$ imply
 the hardness of four additional, more general models, as
 summarized in the following figure:
 
-\stefan{TODO MOVE BACK TICK}
-%\begin{figure}[htbp]
-%\small
-%%\includegraphics[width = \columnwidth]{figs/np-hierarchy}
+\begin{figure}[htbp]
+\small
+\includegraphics[width = \columnwidth]{figs/np_implications}
 % \begin{tikzcd}[arrows=Rightarrow, column sep = 0.5cm, row sep = 0.5cm]
 %RS+FP+NI\arrow{r}{}\arrow{d}{}& RS+FP+NI+BW\arrow{d}{}\\
 %% RS+FP+NI\arrow{ur}{}\arrow{dr}\\
 %RS+MA+FP+NI\arrow{r}{}&RS+MA+FP+NI+BW\\
 %RS+MA+FP\arrow{r}{}\arrow{u}&RA+MA+FP+BW\arrow{u}{}\\
 %\end{tikzcd}
-%\end{figure}
+\end{figure}
 
 
 \subsection{Introduction to 3D Perfect Matching}
@@ -2237,7 +2236,7 @@ We then assign chunks to nodes as follows:
 \begin{itemize}
 \item Chunk $\achunk_i^{(1)}$ is matched to the node which is located in a variable gadget; there
 must be one, as the valuation satisfies the formula.
-\item Chunks $\achunk_i^{(2)}$ and $\achunk_i^{(3)}$ are matched to nodes which 
+\item Chunks $\achunk_i^{(2)}$ and $\achunk_i^{(3)}$ are matched to nodes which
 are
 located in clause
 gadgets
@@ -2323,10 +2322,11 @@ each $i>\variables$: $a_i = 2$.
 \maciek{proof will be painful and we should skip on showing that,
   pointing into the previous proof. Even if we did this proof, nobody
   would read that. I can do it though.}
-
 \end{comment}
 
+
 \end{appendix}
+
 
 
 \end{document}
