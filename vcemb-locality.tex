@@ -1787,33 +1787,38 @@ positive $x \leq \clauses$ can satisfy this inequality for $\variables > 4$. Con
 
 \section{Replica selection is hard}\label{ap:tworep}
 
-\maciek{We need to introduce the idle machines extension, that is
-  needed for reduction to work. Motivation: We can say that idle vms are only idle in
-  mapping phase of MapReduce, but participate in shuffle phase. We can
-  call it ``Additional shuffle nodes extension''.We can also tell the reader that our
-  dynamic program works for this extension (f(T,x,idle)) . Considering
-  mixing this extension with $\MA$:
-   (1) NP-hardness
-  proofs holds with setting $idle=0$; (2) dynamic program work with
-  assumption that every VM either processes 0 chunks or processes
-  maximum number of chunks (3) our flow algorithm
-  work with contrary model assumption, that we can have arbitrary
-  number of chunks assigned to VMs. }
-
 We have seen that replica selection flexibilities can render problems computationally hard.
 In the following, we will explore the minimal requirements for rendering replica selection hard.
 In particular, we will show that already two replicas for each chunk type are sufficient to
 introduce intractability.
 
-\maciek{We need to tell the reader that our proof holds only for
-  (NP-complete) subset of 3SAT where we have more than 4
-  clauses. Otherwise the bandwidth lemma does not work!}
+In the following, we will allows the number of chunk types to be smaller than the number of nodes.
+ The ``idle'' nodes however do participate in the inter-connect communication (in practical terms: in the shuffle phase
+ and the reducing phase). 
+% (Note that the dynamic algorithms presented above work for this model too.)
 
+%they do not necessarily have to We need to introduce the idle machines extension, that is
+%  needed for reduction to work. Motivation: We can say that idle vms are only idle in
+%  mapping phase of MapReduce, but participate in shuffle phase. We can
+%  call it ``Additional shuffle nodes extension''.We can also tell the reader that our
+%  dynamic program works for this extension (f(T,x,idle)) . Considering
+%  mixing this extension with $\MA$:
+%   (1) NP-hardness
+%  proofs holds with setting $idle=0$; (2) dynamic program work with
+%  assumption that every VM either processes 0 chunks or processes
+%  maximum number of chunks (3) our flow algorithm
+%  work with contrary model assumption, that we can have arbitrary
+%  number of chunks assigned to VMs. }
+
+%\maciek{We need to tell the reader that our proof holds only for
+%  (NP-complete) subset of 3SAT where we have more than 4
+%  clauses. Otherwise the bandwidth lemma does not work!}
 
 In the following, we first give an alternative proof for the hardness of $\CC+\FP+\RS+\BW$.
 Subsequently, we show that the 2-replica variant $\RS(2)$ is hard.
-For our proof, we assume a model where there can be more nodes than chunk types,
-and additional nodes only participate in the inter-connect, and not the replica access network.
+
+%For our proof, we assume a model where there can be more nodes than chunk types,
+%and additional nodes only participate in the inter-connect, and not the replica access network.
 
 % TODO
 %\subsection{Three replicas are hard ($\CC+\FP+\RS+\BW$)}\label{ssec:three}
@@ -1826,7 +1831,7 @@ introducing a cost threshold $\Thr$.
 Let's first recall that the $\SAT$ problem asks whether a positive valuation exists
 for a formula $\Formula$ with $\clauses$ clauses and $\variables$ variables.
 In the following, we will only focus on $\SAT$ instances of at least four variables;
-this problem remains NP-hard.
+this $\SAT$ variant is still NP-hard.
 
 \textbf{Construction.}
 Given any formula $\Formula$ in Conjunctive Normal Form (CNF) with at least four variables, we produce
@@ -1858,10 +1863,11 @@ bandwidth to be the
 same everywhere, in every gadget; differences will be shown when we
 will place chunks.
 
-We set the number of virtual machines to $\Vms = \clauses \cdot \variables$.
+We set the number of nodes to $\Vms = \clauses \cdot \variables$.
 Moreover, we define the inter-connect communication cost to be $1$,
 and the access cost to be a sufficiently large constant $W$,
-such that nodes must always be collocated with chunks.
+such that nodes must always be collocated with chunks. ($W$ in the order of
+the threshold $\Thr$ is sufficient.)
 %(For a concrete value, see Appendix~\ref{ap:W}).
 
 We set the following bandwidth capacities in the substrate. There are three
@@ -1872,12 +1878,12 @@ At a top-level edge, we set the bandwidth to $\clauses \cdot (\clauses
 \cdot \variables -
 \clauses)$.
 
-We set the number of chunks to be equal to the number of clauses, $\ChunkTypes =
+We set the number of chunk types to be equal to the number of clauses, $\tau =
 \clauses$. To finish our construction, we place data chunks at
 leaves, as follows: for the $i$-th clause we
 construct as many replicas of chunk $\achunk_i$ as there are literals in the
 clause. For each literal $\ell$ (of the form $\variab$ or $\neg \variab$) that satisfies clause $i$ we place
-replica of chunk $\achunk_i$ in the leaf labeled $\achunk_{\ell_i}$.
+replica of chunk $\achunk_i$ in the leaf labeled $\ell_i$.
 
 We calculate threshold to be (\maciek{we might not want to introduce
   those variable names, as those have no meaning here}):
@@ -1953,14 +1959,16 @@ always greater than $\Thr$.
 
 Now we can construct our valuation $\Val$, as follows
 (for each variable $\variab$ in $\Formula$):
-If $v_1$ hosts a node then $\Val(\variab) = \top$,
-otherwise $\Val(\variab) = \bot$.
-\carlo{Terminology deviates from above}
+If $v_1$ hosts a node then $\Val(\variab) = 1$,
+otherwise $\Val(\variab) = 0$.
+%\carlo{Terminology deviates from above}
 
 The valuation $\Val$ satisfies all clauses, and hence $\Formula$,
 as the solution to $\RS+\FP+\BW$ covers all chunks. To see this,
-consider the leaf handling any given clause chunk;
-it is a witness that the corresponding clause is true.
+consider the leaf which
+hosts a node which is assigned to any given chunk (i.e., 
+the leaf handling any given clause chunk);
+it is a witness that the corresponding clause is satisfied.
 \end{proof}
 
 Please notice that number of VMs to be placed might exceed the number
