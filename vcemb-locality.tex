@@ -198,7 +198,7 @@ we should maybe give the main algorithms a name; we should talk about the case w
 
 \section*{TODOs}
 
-determine all runtimes (check related work for flow and match!), make float-figures, finish appendix, order properties in the same way always (the order we had in the model!),
+determine all runtimes (check related work for flow and match!), make float-figures, finish appendix, order properties in the same way always (the order we had in the model!), make all $O$-notations the same $\mathrm{O}$
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
@@ -629,15 +629,9 @@ to its chunks as well as to other virtual machines ($\CC$).
 Our goal is to minimize the resource footprint $\Cost$, consisting
 of the bandwidth reservations in the access network and the inter-connect.
 
-\textbf{Algorithm.} We first make some simplifying observations, and note that
-$\RS+\MA+\CC$ can be reduced to $\RS + \MA$. In fact,
-it more generally holds that $\RS+\MA+\CC + \BW$ degenerates to $\RS+\MA+\BW$,
-as in the absence of node placement flexibilities (no $\FP$),
-the bandwidth required
-for the inter-connect network can be allocated \emph{upfront}, and does not depend on the replica
-selection and assignment.
-
-We hence focus on $\RS+\MA$ in the following. In order to solve this problem variant,
+\textbf{Algorithm.} Recall that $\RS+\MA+\CC$ degenerates to $\RS+\MA$,
+in the absence of flexible placements. 
+In order to solve the $\RS+\MA$ problem variant,
 we construct a bipartite
 graph between the set
 $\VirtualNodes$ of nodes and
@@ -726,40 +720,24 @@ the two clones of $\VirtualNode_1$ to $\achunk_2$: both weights are 0.
 \textbf{Analysis.}
 %Let us now study the runtime of the matching approach.
 The correctness of our algorithm follows from the construction and the optimal
-solution of the minimum matching. In terms of runtime, the complexity
-is dominated by the minimum weight perfect matching computation on
-bipartite
-graphs. There exist several algorithms to solve this problem.
-The state of the art algorithm uses scaling and is due to Gabow et al.~\cite{gabow_scaling_algorithm}. TODO
-Its runtime depends on the maximum link cost in the graph, which in our case,
-corresponds to the diameter $\delta$ of $\Tree$.
-%and  TODO
-%which is
-%end on  the number of nodes in the
+solution of the minimum matching. 
+The runtime consists of two parts: the construction of the matching graph and
+the actual matching computation. The constructed graph consists of
+$\MaFactor \cdot n_V \cdot \ChunkType$ many edges,
+and for each edge we need to compute its cost, i.e., the shortest distance
+which can be computed in time $n_S$; thus, the overall construction time
+is $O(n_S \cdot \MaFactor \cdot n_V \cdot \ChunkType)$.
+The state of the art algorithm to compute matchings are due to Gabow et al.~\cite{gabow_scaling_algorithm}
+and are based on scaling techniques. 
+Its runtime translates to 
 %graph $n$, the number of edges in the graph $m$, and the largest magnitude of
 %an edge weight $N$. An efficient algorithm is described by Gabow et al. in
-%\cite{gabow_scaling_algorithm} and provides a runtime of $\mathcal{O}(n^{3/4}
-%\cdot m \cdot \log N)$ which translates to
-%This is the
-%dominant part of the runtime, as the graph on which the matching
-%is
-%computed, can be constructed in linear time.
-In our problem, there are $\MaFactor \cdot n_V \times \ChunkType$ many edges,
-and for each of which their distance needs to be computed (requiring time $v_S$).
-Thus,
-%
-%
-%When applied to our problem, the runtime translates to $\mathcal{O}((\ChunkType)^{11/4}
-%\cdot \log \delta)$.
-%
-%The distance
-%between each node and chunk in the substrate graph, has to be annotated as
-%costs on the edges.
-%By exploiting the tree structure of the substrage graph, this can be done
-%in $\mathcal{O}(\SubstrateNodes)$ for each individual pair, resulting in a
-the total runtime amounts to $\mathcal{O}(\SubstrateNodes \cdot \MaFactor \cdot \Vms \cdot
-\ChunkType)$
+%\cite{gabow_scaling_algorithm} and provides a runtime of 
+%$\mathcal{O}(n_S^{3/4} \cdot \lambda \cdot \log \delta)$, where $\delta$ is the network diameter
+%and where $\lambda= \MaFactor \cdot n_V \cdot \ChunkType$ represents the number of edges in the matching graph.
+$\mathcal{O}(\tau^{11/4}*n_S)$, which dominates the asymptotic runtime. (Recall that $\tau = \MaFactor\cdot n_V$.)
 
+\stefan{todo: doublecheck!!}
 
 \begin{comment}
 The following lemma essentially states that any non-local matching can only have higher
@@ -787,117 +765,114 @@ and there must exist two matched pairs in $M'$ that shares a link (one pair is t
 
 \subsubsection{Faster $\MA+\CC$ and $\MA+\CC+\BW$}
 
-We will now show that much faster algorithms exist for $\MA+\CC$, by exploiting
+We will now show that faster algorithms exist for $\MA+\CC$, by exploiting
 locality. Moreover, we will show that
 even
 $\MA+\CC+\BW$ problem variants can be solved with our approach, by simply
-verifying feasibility and bandwidth constraints.
-Let us also recall that we can ignore $\CC$, as it is constant
+verifying feasibility.
+Let us also recall that we can ignore $\CC$ and focus on the $\MA$ resp.~$\MA+\BW$ problem, 
+as it is constant
 without $\FP$.
 
 We first need the following definition.
-\begin{defn}[Local Assignment (LA)]
+\begin{defn}[Local Assignment (LA)]\label{def:loc}
 We define an assignment $\VmChunkAssignment$ to
 be \emph{local in a specific subtree $\Tree'$}, iff.~$\VmChunkAssignment$
 assigns the maximum number of chunks in the
-subtree to nodes in the same subtree (subject only to the number of available nodes
-in $\Tree'$). We define $\VmChunkAssignment$ to be \emph{local} when
+subtree to nodes in the same subtree.
+% (subject only to the number of available nodes
+%in $\Tree'$). 
+We define $\VmChunkAssignment$ to be \emph{local} when
 it is local with respect to all all possible subtrees of the substrate network.
 \end{defn}
 
-\textbf{Algorithm.} Our proposed algorithm for $\MA+\CC$ leverages
-the fact that optimal solutions to
-$\MA+\CC$ have a local assignment. This property facilitates linear-time
-solutions.
-Concretely, we use an iterative and FIFO queue-based approach:
-the queue determines the order in which vertices of the substrate graph are
-traversed; the queue is initialized with all leaves of $\Tree$.
-For each subtree $\Tree'$, we additionally maintain
-two lists: the first stores the ``over-flowing'' chunks (the unmatched
-chunks),
-and the second contains the ``over-flowing'' (unmatched) nodes.
+We will see later that 
+optimal solutions to
+$\MA+\CC$ have a local assignment. This is exploited by our algorithms described in the following.
 
-Once a leaf $\ell$ in the substrate graph is chosen for processing, we add any
-nodes or chunks which are located on $\ell$ to the corresponding lists. As long as
-both lists contain elements, we remove an arbitrary element from each list, and
-assign the removed chunk to the removed node. Subsequently, we check if all
-other children, of the parent of $\ell$ are already processed. If they are, we
-add
-the parent of $\ell$ to the FIFO queue.
+\textbf{Algorithm.} Our proposed algorithm for $\MA$ 
+proceeds in a bottom-up fashion, traversing the substrate network $\Tree$
+from the leaves toward the root.
+For each subtree $\Tree'$, we maintain
+two sets $S_1,S_2$ in order to match unmatched
+chunks $S_1$ in the subtree $\Tree'$ to unmatched 
+nodes $S_2$ in $\Tree'$. Both sets are initially empty.
 
-A non-leaf vertex $v$ is processed in the following way: The lists, containing
-the unmatched chunks and nodes are generated by uniting the lists of all
-children of $v$. Again, we remove arbitrary entries of both list, and match the
-removed chunk to the removed node, until at least one of the lists is empty.
-subsequently we add the parent of $v$ to the FIFO queue, if all other children
-of the parent of $v$ have already been processed.
+We first process all the leaves, in an arbitrary order; subsequently, we process arbitrary inner vertices
+of $\Tree$, whenever all their children have been processed. 
+We process any leaf $\ell$
+by adding any
+nodes or chunks which are located on $\ell$ to the corresponding sets $S_1$ and $S_2$. 
+A non-leaf vertex $vu$ is processed in the following way: we take the union of
+the sets of $u$'s children, i.e., the sets contain the unmatched chunks and nodes
+in this subtree. 
+For both leaf and inner nodes, whenever
+both sets are non-empty, we greedily match an arbitrary chunk in $S_1$ with an arbitrary chunk in $S_2$,
+and remove them from the sets.
 
-On a given vertex, emptying one of the lists, results in \emph{locality} in the
-subtree rooted by this vertex. Since the insert strategy of the FIFO queue
-ensures bottom up processing of the substrate graph, this results in
-\emph{locality} in all subtree, which renders the resulting assignment to
-be \emph{local}. The complexity of this
+\textbf{Analysis.} On a given vertex $u$, emptying one of the sets, results in a \emph{local assignment} (cf~Definition~\ref{def:loc})
+in the
+subtree rooted at $u$. Due to our bottom-up strategy, the overall assignment
+will also be local. 
+The complexity of this
 construction is low: Each
-vertex in the substrate graph has to be processed once
-$\mathcal{O}(|\SubstrateNodes|)$. The sum of all remove operations, is equal to
+vertex in the substrate graph has to be processed once (runtime
+$\mathcal{O}(|\SubstrateNodes|)$). The sum of all remove operations, is equal to
 the number of chunks $\mathcal{O}(\ChunkType)$. Verifying that all children
-have
+which have
 been processed can be done in constant time, leveraging a counter on the parent
 node. Hence the overall complexity of this construction is
 $\mathcal{O}(|\SubstrateNodes| + \ChunkType)$.
 
-We will now show that every \emph{local} assignment is optimal.
-
-\begin{lemma}
-Given an $\MA$ problem instance and a subtree $T'$
+It remains to prove optimality of such local assignments.
+We first characterize the bandwidth allocation on uplinks of subtrees.
+\begin{lemma}\label{lem:uplink-alloc}
+Given an $\MA$ problem and a subtree $\Tree'$
 containing $x$
 chunks and $y$ nodes, the bandwidth allocation of each local assignment
-$\VmChunkAssignment$ on the uplink of $T'$ is $|x-(y\cdot\MaFactor)|\cdot
+$\VmChunkAssignment$ on the uplink of $\Tree'$ is $|x-(y\cdot\MaFactor)|\cdot
 \CostTrans$.\label{lemma:uplink}
 \end{lemma}
-
 \begin{proof}
-If the number of chunks in the subtree is equal to the number of nodes in the
-subtree, the bandwidth allocation for the transport of chunks on the uplink
-will be $0$, since from the locality property, we know that each chunk is
-assigned to a node in the subtree. If the
-number of chunks in the subtree differs from the processing capacities of
-the nodes in the subtree, we have to conduct a case differentiation: In case
+Clearly, if the number of chunks equals the number of nodes in a subtree,
+the $\CostTrans$-inflicted bandwidth allocation at the uplink is zero in a local
+assignment. 
+Otherwise, we distinguish between two cases: In case
 there are more chunks in the subtree, each
 excess chunk has to be transferred to a different subtree, which will
-inflict bandwidth costs of $\CostTrans$ on the uplink connecting $T'$ with the
+inflict costs $\CostTrans$ on the uplink connecting $\Tree'$ with the
 remaining parts of $\Tree$. Similarly, if the processing capabilities exceed the
 amount of
 available chunks, chunks from other subtrees will have to be transferred to
-nodes in the subtree $T'$, inflicting bandwidth costs of $\CostTrans$ each.
-Hence the bandwidth allocation for the chunk transport on the uplink will be
-the difference between the number of chunks and the processing capabilities of
+nodes in the subtree $\Tree'$, inflicting bandwidth costs of $\CostTrans$ each.
+Hence, the bandwidth allocation for the chunk transport on the uplink is the 
+difference between the number of chunks and the processing capabilities of
 the subtree $|x-(y\cdot\MaFactor)|$ times the amount of bandwidth needed, for a
 single transfer $\CostTrans$.
 \end{proof}
 
-Since all links are uplinks of subtrees (which might consist of only one node),
-we can state the following corollary:
-
+Since each link is an uplink of one subtree,
+Lemma~\ref{lem:uplink-alloc} implies:
 \begin{corollary}
-Given an $\CC+\MA$ problem instance, all local assignments have the same costs.
+All local assignments result in the same cost, for any $\CC+\MA$ problem instance.
 \label{corollary:same_costs}
 \end{corollary}
 
+\stefan{TODO: add unbalanced tree pic}
 
-\begin{lemma}
+We can now prove optimality: 
+\begin{theorem}
 Given an $\CC+\MA$ problem instance, a feasible assignment $\VmChunkAssignment$
 is optimal iff it is local.
-\label{lemma:local_optimal}
-\end{lemma}
-
+\label{thm:local_optimal}
+\end{theorem}
 \begin{proof}
-We will show, that a non-local assignment is not optimal. Combined with
+By contradiction. We will show, that a non-local assignment is not optimal. Combined with
 Corollary~\ref{corollary:same_costs}, this results in the optimality of all
 local assignments.
 
-Assume an optimal assignment $\VmChunkAssignment$ exists,
-which is not local. This means, for at least one subtree, it assigns
+Assume a non-local optimal assignment $\VmChunkAssignment$ exists. 
+This means, for at least one subtree, it assigns
 a chunk $\achunk_i$, located in the subtree, to a node $\VirtualNode_i$ outside
 the
 subtree. In addition,
@@ -906,29 +881,31 @@ $\achunk_k$ located outside the subtree. We construct an alternative
 assignment $\VmChunkAssignment'$, by exchanging the assignments of
 $\achunk_i$ and $\achunk_j$. Since $\achunk_i$ is located in a subtree which
 contains $\VirtualNode_j$ but not $\VirtualNode_i$, and both nodes and chunks
-are only located at leaves, the distance between $\achunk_i$ and it's assigned
+are only located at leaves, the distance between $\achunk_i$ and its assigned
 node is smaller in $\VmChunkAssignment'$. For the distance between $\achunk_j$
-we have to do a case differentiation: if there exists a subtree which
+we make a case distinction: if there exists a subtree which
 contains $\achunk_i$, $\achunk_j$ but not $\VirtualNode_i$, the distance
 between $\achunk_i$ and $\VirtualNode_i$ is equal to the distance between
 $\achunk_j$ and $\VirtualNode_i$. Since $\achunk_i$ is closer to
-$\VirtualNode_j$ than $\achunk_j$ the overall costs of $\VmChunkAssignment'$
-would be lower in this case. If the described subtree does not exists, the
-distance between $\achunk_j$ and the two nodes is the same - which would also
-render $\VmChunkAssignment'$ cheaper than an optimal
-solution.
+$\VirtualNode_j$ than $\achunk_j$, the overall costs of $\VmChunkAssignment'$
+would be lower in this case. If the described subtree does not exist, the
+distance between $\achunk_j$ and the two nodes is the same, which 
+renders $\VmChunkAssignment'$ cheaper than an optimal
+solution. Contradiction.
 \end{proof}
 
 Combined with a simple postprocessing, this approach can also solve $\MA+\BW$
-(and therefore $\MA+\BW+\CC$). The central idea of this combination, is to show
-that if the \emph{local} assignments violates the avialable bandwidth on any
+(and therefore $\MA+\BW+\CC$). The central idea of this extension, is to show
+that if the \emph{local} assignments violates the available bandwidth on any
 link, all other assignments will also violate the bandwidth. As a consequence
-it is possible, to compute the assignment without any bandwidth constaints, and
+it is possible to simply compute the assignment without any bandwidth constraints, and
 check in a postprocessing step, whether the bandwidth on any link is exceeded.
 This postprocessing step scales with the number of edges in the substrate,
-which is lower than the number of nodes in the substrate, the substrate is a
-tree. Hence the complexity class of the approach does not change.
+which is lower than the number of nodes in the substrate. 
+Hence the asymptotic runtime of the approach does not change.
 
+
+\stefan{fix the following! also note that the notation $F(...)$ has not been introduced!}
 
 \begin{lemma}
 Given a minimal cost assignment $\VmChunkAssignment$,
@@ -1135,7 +1112,6 @@ variants which can be solved with our flow-based approach.
 \end{wrapfigure}
 \end{comment}
 
-TODO: does it work for multiple chunks and VMs?
 
 \subsection{Dynamic Programming ($\FP+\CC+\MA+\BW$)}\label{ssec:dyn}
 
@@ -1760,7 +1736,435 @@ or approximation algorithms.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{appendix}
 
-%\input{two-replicas}
+\subsection{The Bandwidth Lemma}
+
+The following lemma is useful in our NP-hardness proofs.
+
+\begin{lemma}[Bandwidth Lemma]\label{lem:bandwidth-lemma}
+  Let $\clauses$ and $\variables > 4$ be two arbitrary positive integers. Let $a_1, a_2, \ldots,
+  a_{\variables}$ be a sequence of $\variables$ integers which adds up to $\clauses \cdot \variables$. Also, for
+  each $i$ we have $a_i \leq 2 \cdot \clauses$. Then it holds that if
+  $$ \forall_i:~~ a_i \cdot (\clauses \cdot \variables - a_i) \leq \clauses \cdot (\clauses \cdot \variables -
+  \clauses), $$
+\noindent  then for each $i$: $a_i = \clauses$.
+\end{lemma}
+\begin{proof}
+For the sake of contradiction, let us assume that there exists an index $k$ such that
+$a_k \neq \clauses$. Then we can distinguish between two cases:
+either $a_k<\clauses$ or
+$a_k>\clauses$.
+
+\textbf{Case $a_k<\clauses$:} If there exists a $k$ with $a_k<\clauses$,
+due to the fact that the sequence adds up to $\clauses \cdot \variables$,
+there must also exist a $k'$ such that $a_{k'}<\clauses$ (by a simple
+pigeon hole principle). Thus, this case can
+also be reduced to the second case (\textbf{Case $a_k>\clauses$}) proved
+next.
+
+\textbf{Case $a_k>\clauses$:} Since it also holds that $a_k < 2\clauses$,
+$a_k$ must be of the form $\clauses + x$ for $x \in [1, \ldots, \clauses]$.
+Let us consider the (bandwidth) inequality:
+$$ (\clauses + x) \cdot (\clauses \cdot \variables - \clauses - x) \leq \clauses \cdot (\clauses \cdot \variables - x) $$
+
+This can be transformed to:
+
+$$ 0 \leq x(x - (\clauses \cdot (\variables - 2))) $$
+
+The equation holds for $x \leq 0$ or $x \geq \clauses \cdot (\variables - 2)$,
+and no
+positive $x \leq \clauses$ can satisfy this inequality for $\variables > 4$. Contradiction.
+\end{proof}
+
+
+\section{Replica selection is hard}\label{ap:tworep}
+
+\maciek{We need to introduce the idle machines extension, that is
+  needed for reduction to work. Motivation: We can say that idle vms are only idle in
+  mapping phase of MapReduce, but participate in shuffle phase. We can
+  call it ``Additional shuffle nodes extension''.We can also tell the reader that our
+  dynamic program works for this extension (f(T,x,idle)) . Considering
+  mixing this extension with $\MA$:
+   (1) NP-hardness
+  proofs holds with setting $idle=0$; (2) dynamic program work with
+  assumption that every VM either processes 0 chunks or processes
+  maximum number of chunks (3) our flow algorithm
+  work with contrary model assumption, that we can have arbitrary
+  number of chunks assigned to VMs. }
+
+We have seen that replica selection flexibilities can render problems computationally hard.
+In the following, we will explore the minimal requirements for rendering replica selection hard.
+In particular, we will show that already two replicas for each chunk type are sufficient to
+introduce intractability.
+
+\maciek{We need to tell the reader that our proof holds only for
+  (NP-complete) subset of 3SAT where we have more than 4
+  clauses. Otherwise the bandwidth lemma does not work!}
+
+
+In the following, we first give an alternative proof for the hardness of $\CC+\FP+\RS+\BW$.
+Subsequently, we show that the 2-replica variant $\RS(2)$ is hard.
+For our proof, we assume a model where there can be more nodes than chunk types,
+and additional nodes only participate in the inter-connect, and not the replica access network.
+
+% TODO
+%\subsection{Three replicas are hard ($\CC+\FP+\RS+\BW$)}\label{ssec:three}
+
+We first prove that $\CC+\RS+\FP+\BW$ is NP-hard by reduction from the Boolean Satisfiability Problem ($\SAT$).
+Since $\SAT$ is a decision
+problem, we transform $\CC+\RS+\FP+\BW$ into a decision problem too, by
+introducing a cost threshold $\Thr$.
+
+Let's first recall that the $\SAT$ problem asks whether a positive valuation exists
+for a formula $\Formula$ with $\clauses$ clauses and $\variables$ variables.
+In the following, we will only focus on $\SAT$ instances of at least four variables;
+this problem remains NP-hard.
+
+\textbf{Construction.}
+Given any formula $\Formula$ in Conjunctive Normal Form (CNF) with at least four variables, we produce
+a $\RS+\FP+\BW$ instance as follows. First, we construct a substrate tree $\Tree_{\Formula}$, consisting of
+a root and separate gadgets for each variable of $\Formula$, each of which
+is a child of the root.
+The gadget of variable $\variab$ has a root, $\aroot(\variab)$, and two children:
+$\positive(\variab)$ and $\negative(\variab)$. Child $\positive(\variab)$ has $\clauses$
+many children $\nu_1, \nu_2, \ldots, \nu_{\clauses}$, and child
+$\negative(\variab)$ has
+$\clauses$ many children $\neg \nu_1, \neg \nu_2, \dots, \nu_{\clauses}$. Every
+gadget has the same structure: the same height and the same number of
+leaves. This construction is illustrated in
+Figure~\ref{fig:construction_3sat}.
+
+
+\begin{figure}
+\includegraphics[width=\columnwidth]{figs/construction_3sat}
+\caption{The construction of the gadget for $\nu$. If $\nu$ appears in the
+first clause, a chunk $\achunk_1$, will be located at $\nu_1$. If $\neg \nu$
+satisfies the last clause, $\neg
+\nu_\alpha$ will host $\achunk_\alpha$.}
+\label{fig:construction_3sat}
+\end{figure}
+
+
+By default, we will set the available
+bandwidth to be the
+same everywhere, in every gadget; differences will be shown when we
+will place chunks.
+
+We set the number of virtual machines to $\Vms = \clauses \cdot \variables$.
+Moreover, we define the inter-connect communication cost to be $1$,
+and the access cost to be a sufficiently large constant $W$,
+such that nodes must always be collocated with chunks.
+(For a concrete value, see Appendix~\ref{ap:W}).
+
+We set the following bandwidth capacities in the substrate. There are three
+levels of edges in the substrate network $\Tree_{\Formula}$ given by formula
+$\Formula$: \emph{top}, \emph{middle} and \emph{bottom}.
+We do not consider any capacities at the \emph{bottom} and \emph{middle} levels.
+At a top-level edge, we set the bandwidth to $\clauses \cdot (\clauses
+\cdot \variables -
+\clauses)$.
+
+We set the number of chunks to be equal to the number of clauses, $\ChunkTypes =
+\clauses$. To finish our construction, we place data chunks at
+leaves, as follows: for the $i$-th clause we
+construct as many replicas of chunk $\achunk_i$ as there are literals in the
+clause. For each literal $\ell$ (of the form $\variab$ or $\neg \variab$) that satisfies clause $i$ we place
+replica of chunk $\achunk_i$ in the leaf labeled $\achunk_{\ell_i}$.
+
+We calculate threshold to be (\maciek{we might not want to introduce
+  those variable names, as those have no meaning here}):
+
+$$ \Thr = \variables \cdot (InnerCommunication +
+PartialOuterCommunication)$$
+
+Where $InnerCommunication = {\clauses  \choose 2} \cdot 2$ and
+$PartialOuterCommunication = cap(uplink) = \clauses \cdot (\clauses
+\cdot \variables - \clauses)$
+
+\textbf{Proof of correctness of construction.}
+With our construction completed, we need to prove that it indeed
+decides $\SAT$. We set the capacities such that in every gadget,
+at most $\clauses$ nodes can be spawned, where $\clauses$
+is the number of clauses of $\Formula$.
+We can apply the Bandwidth Lemma (Lemma~\ref{lem:bandwidth-lemma}) as follows:
+We interpret $a_i$ as the
+number of nodes that are embedded in the $i$-th gadget, $\clauses$
+as the number
+of clauses and $\variables$ as the number of variables.
+The LHS of the inequality of Lemma~\ref{lem:bandwidth-lemma}
+is a formula for the communication cost of nodes inside the $i$-th
+gadget to nodes outside the gadget. The RHS of the inequality is the
+bandwidth constraint for the gadget. This implies that
+any feasible solution must embed exactly $\clauses$ nodes in every gadget.
+
+\carlo{Imo it would be nice to have a referrence to the 4 variables here - I
+suppose the bandwidth lemma will not work otherwise.} \maciek{Great point!}
+
+
+\begin{theorem}
+The problem $\RS+\FP+\BW+\CC$ is NP-hard.
+\end{theorem}
+\begin{proof}
+We will prove that formula $\Formula$ is satisfiable iff $\RS+\FP+\BW+\CC$ has
+a solution of cost $\leq \Thr$.
+
+($\Rightarrow$) Let us take any valuation $\Val$ that satisfies $\Formula$.
+We will construct a solution to $\RS+\FP+\BW+\CC$ using $\Val$ in the following
+way.
+For each variable $\variab$ in $\Formula$, we embed $\clauses$ many nodes
+at the  leaves of the gadget of $\variab$. We need to choose $\clauses$ out of
+$2 \cdot \clauses$ leaves to embed nodes. If $\Val(\variab) = 1$, we embed
+nodes at the leaves
+of $\positive(\variab)$, else we embed all nodes at leaves $\negative(\variab)$.
+The solution constructed this way has cost exactly
+$\Thr$, because the nodes are evenly split among gadgets, and nodes are not
+distributed across $\positive(\variab)$ and $\negative(\variab)$ subtrees.
+
+We calculate the chunk-node matching $\mu$ by assigning every chunk to
+the node which is collocated with the first chunk replica. This solution is feasible
+(every chunk type is processed),
+because the given valuation satisfied $\Phi$.
+
+Now we will show that this solution has cost $\Thr$.
+Due to the Bandwidth Lemma (Lemma~\ref{lem:bandwidth-lemma}),
+we only have to consider the communication cost. We sum inner-gadget communication and communication among gadgets to get exactly $\Thr$.
+
+($\Leftarrow$) Let us take any solution to $\RS+\FP+\BW$ constructed based on $\Formula$ of cost $\leq \Thr$.
+We will construct a positive valuation $\Val$ by considering the nodes in
+the solution to $\RS+\FP+\BW$.
+
+We make the following observations. In every solution of cost
+$\leq \Thr$, every gadget has exactly $\clauses$ many nodes
+at its leaves. This is due to the Bandwidth Lemma (Lemma~\ref{lem:bandwidth-lemma}).
+Also, inside
+every gadget either all nodes are in the $\positive(\variab)$ subtree
+of variable $\variab$, or in the $\negative(\variab)$ subtree. This is true
+because the cost of a solution where at least one gadget has nodes
+distributed across subtrees is
+always greater than $\Thr$.
+
+Now we can construct our valuation $\Val$, as follows
+(for each variable $\variab$ in $\Formula$):
+If $v_1$ hosts a node then $\Val(\variab) = \top$,
+otherwise $\Val(\variab) = \bot$.
+\carlo{Terminology deviates from above}
+
+The valuation $\Val$ satisfies all clauses, and hence $\Formula$,
+as the solution to $\RS+\FP+\BW$ covers all chunks. To see this,
+consider the leaf handling any given clause chunk;
+it is a witness that the corresponding clause is true.
+\end{proof}
+
+Please notice that number of VMs to be placed might exceed the number
+of chunks to be processed. For example, if clause number 1: (x or y or z) is in
+$\Formula$, we can have x and y being true, which would result in
+placing VMs on vertices labeled $x_1$ and $y_1$, which contain the
+same chunk $c_1$.
+
+
+
+\subsection{Two replicas are hard
+  ($\RS(2)+\FP+\CC+\BW$)}\label{ssec:two}
+Our results so far indicate that dealing with replication can be challenging.
+However, all our hardness proofs concerned scenarios with three replicas,
+which raises the question whether the problems can be solved in polynomial time
+with a replication factor of two only. (Similarly to, say, the $\ZSAT$ problem
+which is tractable in contrast to $\TSAT$.)
+
+In the following, we show that this is not the case: the problem remains
+NP-hard, at least in the capacitated network.
+
+The proof is by reduction from $\TSAT$. Given a formula $\Formula$ in
+conjunctive normal form, consisting of $\clauses$ clauses and $\vars$ variables, we construct a problem instance and substrate tree
+$T_{\Formula}$ using two types of gadgets: gadgets for variables and
+gadgets for clauses. \emph{Nota bene:}
+unlike in the previous proofs, for every clause we will create three chunk types instead of just one.
+
+\textbf{Construction.}
+\carlo{TODO: Describe construction of clause gadgets, and emphazise that we use
+the same construction as in Figure~\ref{fig:construction_3sat} for the variable
+gadgets. Introduce symbols for clauses, which can be transferred to the Figure.}
+
+\includegraphics{figs/construction_2replica}
+
+\begin{enumerate}
+
+  \item (Tree construction) In addition to variable gadget, that we
+    share with previous construction, we introduce clause
+    gadget. Clause gadget (ilustrated in figure) has two inner nodes:
+    $root(c)$, $middle(c)$ and three leaves\maciek{middle node is
+      necessary in order to preserve balanced tree property}. We connect leaves to the
+    middle vertex and the middle vertex to $root(c)$. We attach the
+    gadget to the tree by linking directly global root to
+    $root(c)$. We construct our tree out of $\vars$ variable gadgets
+    and $\clauses$ clause gadgets.
+  \item (Chunk distribution)
+
+    We distribute 2 replicas of  each of $\clauses \cdot 3$ chunk types among servers as follows. First, similarly to the
+previous proofs with three replicas, we put clause chunks in variable
+gadgets; however, now we place distinct chunks $c^1_i, c^2_i, c^3_i$
+instead of three copies of the same chunk. Second, we place three
+chunks that correspond to clauses in all three leaves of their clause
+gadgets.  Thus, in total, $6 \cdot \clauses$ variable chunks are
+mapped.  We will consider a setting where $\clauses \cdot \vars +
+2\clauses$ nodes need to be mapped. Our intention is that in every
+variable gadget, there will be $\clauses$ nodes, and in every clause
+gadgets there will be two nodes.
+
+  \item (Bandwidth constraints)
+
+    The available bandwidth of the top edge of the gadget of each variable $\variab$ is set to
+$\capa(v) = 3  \cdot  3  \cdot  (3  \cdot  (\vars - 1) + 2  \cdot  \clauses) $.
+The first factor is the tree distance which is 6 divided by 2 (as
+we count each pair twice). The second factor is
+the number of nodes to be placed in every variable gadget.
+So the first term of the
+sum is three times the number of outer variable gadgets,
+and the second term is the
+number of nodes in each of the $\clauses$ clause gadgets.
+
+The available bandwidth for the top edge of each clause gadget is set to
+$\capa(\clauses) = 3  \cdot  2  \cdot  (2  \cdot  (\clauses - 1) + 3  \cdot  \vars) $.
+
+Notice that this construction spawns two replicas of each chunk type -
+one in variable gadget and one in clause gadget.
+
+  \item (Additional properties of instance) We set threshold in
+    similar fashion as in previous proof. Comparatively,
+threshold increases by inner communication in clause
+  gadgets (2 hops), outer communication among clause gadgets (4hops),
+  communication from variable gadgets to clause gadgets (4hops). We
+  set number of VMs to be spawned to $\clauses \cdot \vars + 2 \cdot
+  \clauses$. We set hosting capacity of each node to $1$. We set
+  $\CostTrans = \Thr$ to disallow transportation. We set $\CostCom = 1$.
+
+
+ \end{enumerate}
+
+\stefan{TODO Carlo: The construction is illustrated in Figure~\ref{fig:two}.}
+\textbf{Proof of correctness.}
+We first prove the following helper lemma.
+\begin{lemma}
+Every valid solution to $\FP+\RS(2)+\BW+\CC$
+with cost at most $\Thr$ has the property that
+there are exactly $\clauses$ nodes in each of the $\vars$ variable gadgets
+and exactly two nodes in each of the $\clauses$ clause gadgets.
+\end{lemma}
+\begin{proof}
+The claim is due to the bandwidth constraints. We have to take into
+consideration the following communication paths:
+communication to clause gadgets and
+communication to
+other variable gadgets.
+In every valid solution of cost at most $\Thr$ we have exactly
+$\clauses$ nodes in each variable gadget and two nodes in each clause gadget.
+\end{proof}
+
+\begin{theorem}
+$\FP+\RS(2)+\BW+\CC$ is NP-hard.
+\end{theorem}
+\begin{proof}
+We show that $\FP+\RS(2)+\BW+\CC$ has a solution of cost $\leq
+  \Thr$ if and only if $\Formula\in \TSAT$ is satisfiable.
+
+($\Rightarrow$) If we have a positive valuation of $\Formula$, we fill variable gadgets with nodes like in
+the proofs before. Then we fill $2 \cdot \clauses$ nodes as follows:
+\begin{itemize}
+\item If the first literal satisfies the clause, we map two nodes in the second and
+third leaf of the corresponding clause gadget.
+\item If the first literal does not satisfy the clause, we map two nodes to the first
+and second leaf of the clause gadget.
+\end{itemize}
+
+We then assign chunks to nodes as follows:
+\begin{itemize}
+\item Chunk $\achunk_i^1$ is matched to the node which is located in a variable gadget; there
+must be one, as the valuation satisfies the formula.
+\item Chunks $\achunk_i^2$ and $\achunk_i^3$ are matched to nodes which are
+located in clause
+gadgets
+\end{itemize}
+
+Thus, we have produced a feasible solution of cost $\Thr$.
+($\Leftarrow$)
+Let us take any solution $\Sol$ to $\RS(2)+\FP+\BW$ of cost $\leq \Thr$.
+Then we can compute a positive valuation by setting each variable $\variab$
+as follows:
+$\Val(\variab)= \top$ iff there is a node at the first leaf on the positive side of the $\variab$ gadget in $\Sol$,
+and $\Val(\variab)=\bot$ otherwise.
+
+%$\Val(\variab)$ =
+%\begin{cases}
+%\top & \mbox{iff there lies VM on first leaf on positive side of $\variab$ gadget in $\Sol$}\\
+%\bot & \mbox{otherwise}
+%\end{cases}
+
+The theorem now follows from the following two additional lemmas.
+\begin{lemma}
+For every clause there exists a node in a variable gadget that processes one of
+  three chunks that correspond to that clause.
+\end{lemma}
+\begin{proof}
+ Each of the three chunks that correspond to every clause,
+ is assigned a collocated node.
+ At least one of those three nodes is not idle in a variable gadget;
+otherwise, those two VMs in clause gadgets would not suffice in
+satisfying all chunk types.
+\end{proof}
+
+Observation. It might happen that in $\Sol$, two nodes in
+clause variables are idle, and three nodes in variable gadgets are
+processing those $3$ chunk types. In this case, we
+arbitrary nodes can be taken in the rest
+of the proof.
+
+\begin{lemma}
+$\Val$ satisfies $\Formula$.
+\end{lemma}
+\begin{proof}
+Let us consider the matching $M$ of $\Sol$, and let us consider an arbitrary clause of
+$\Formula$ as well as its $3$ chunk types: $\achunk_i^1, \achunk_i^2, \achunk_i^3$.
+We will refer to the nodes corresponding to them
+by $v_i^1, v_i^2, v_i^3$; two of them lie in clause gadgets.
+Take the chunk type that was processed in variable
+gadgets and look at where it was processed.
+In our valuation $\Val$, we set the literal of the node leaf to
+$\top$; therefore the clause is satisfied.
+\end{proof}
+\end{proof}
+
+
+\subsection{Extended SAT bandwidth lemma proof}
+
+\maciek{Formulate lemma, and proof in the same way as the one in previous section}
+
+
+\begin{lemma}[Bandwidth Lemma]\label{lem:bandwidth-lemma}
+\maciek{this lemma might be expressed more clearly if we use two
+  sequences instead of one - now $a_1, \ldots, a_{\variables}$
+  correspond to number of VMs in variable gadgets and remaining of the
+  sequence corresponds to number of VMs in clause gadgets.}
+  Let $\clauses$ and $\variables > 4$ be two arbitrary positive integers. Let $a_1, a_2, \ldots,
+  a_{\variables+\clauses}$ be a sequence of integers which adds up to
+  $\clauses \cdot \variables + \clauses \cdot 2$. Also, for
+  each $i \leq \variables$ we have $a_i \leq 2 \cdot \clauses$
+  (\maciek{variable gadget capacity}). Also,
+  for each $i >\variables$ we have $a_i \leq 3$ (\maciek{clause gadget capacity}). Then it holds that if
+  $$ \forall_{i\leq\variables}:~~ a_i \cdot (\clauses \cdot \variables
+  + 2\cdot \clauses- a_i) \leq \clauses \cdot (\clauses \cdot \variables -
+  \clauses + 2 \cdot \clauses), $$
+and
+$$ \forall_{i>\variables}:~~ a_i \cdot (\clauses \cdot \variables + 2 \cdot \clauses - a_i) \leq 2 \cdot (\clauses \cdot \variables -
+  2 \cdot \clauses - 2), $$
+
+\noindent  then for each $i\leq \variables$: $a_i = \clauses$ and for
+each $i>\variables$: $a_i = 2$.
+\end{lemma}
+
+\maciek{proof will be painful and we should skip on showing that,
+  pointing into the previous proof. Even if we did this proof, nobody
+  would read that. I can do it though.}
+
+
 \end{appendix}
 
 
