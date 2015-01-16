@@ -17,7 +17,7 @@
 \usepackage[OT4]{fontenc}
 \usepackage{comment}
 \usepackage{fancyhdr}
-\usepackage{tikz}
+\usepackage{tikz-cd}
 \usepackage{wrapfig}
 %Used Symbols
 %c_i = chunk i
@@ -788,7 +788,10 @@ it is local with respect to all all possible subtrees of the substrate network.
 
 We will see later that 
 optimal solutions to
-$\MA+\CC$ have a local assignment. This is exploited by our algorithms described in the following.
+$\MA+\CC$ have a local assignment. This is exploited by our algorithms described 
+in the following.
+
+\carlo{Observatino missing.}
 
 \textbf{Algorithm.} Our proposed algorithm for $\MA$ 
 proceeds in a bottom-up fashion, traversing the substrate network $\Tree$
@@ -829,28 +832,51 @@ We first characterize the bandwidth allocation on uplinks of subtrees.
 \begin{lemma}\label{lem:uplink-alloc}
 Given an $\MA$ problem and a subtree $\Tree'$
 containing $x$
-chunks and $y$ nodes, the bandwidth allocation of each local assignment
+chunks and $y$ nodes, the minimal bandwidth allocation of any 
+assignment
 $\VmChunkAssignment$ on the uplink of $\Tree'$ is $|x-(y\cdot\MaFactor)|\cdot
 \CostTrans$.\label{lemma:uplink}
 \end{lemma}
 \begin{proof}
-Clearly, if the number of chunks equals the number of nodes in a subtree,
-the $\CostTrans$-inflicted bandwidth allocation at the uplink is zero in a local
-assignment. 
-Otherwise, we distinguish between two cases: In case
-there are more chunks in the subtree, each
-excess chunk has to be transferred to a different subtree, which will
-inflict costs $\CostTrans$ on the uplink connecting $\Tree'$ with the
+Clearly, if the number of chunks equals the number of slots on nodes in a 
+subtree,
+the $\CostTrans$-inflicted bandwidth allocation on the uplink can be 
+zero, since all chunks can be assigned to nodes in the same subtree. 
+Otherwise, we distinguish between two cases: Recall, that in instances 
+without $\RS$, all chunks have to be processed. In case
+there are more chunks in the subtree, at least all of the excess chunks have to 
+be transferred to a different subtree, which will
+inflict costs $\CostTrans$ per excess chunk on the uplink connecting $\Tree'$ 
+with the
 remaining parts of $\Tree$. Similarly, if the processing capabilities exceed the
 amount of
-available chunks, chunks from other subtrees will have to be transferred to
+available chunks, excess chunks from other subtrees will have to be transferred 
+to
 nodes in the subtree $\Tree'$, inflicting bandwidth costs of $\CostTrans$ each.
-Hence, the bandwidth allocation for the chunk transport on the uplink is the 
-difference between the number of chunks and the processing capabilities of
-the subtree $|x-(y\cdot\MaFactor)|$ times the amount of bandwidth needed, for a
-single transfer $\CostTrans$.
+Hence, the minimum bandwidth allocation for the chunk transport on the uplink 
+is the difference between the number of chunks and the processing capabilities 
+of the subtree $|x-(y\cdot\MaFactor)|$ times the amount of bandwidth needed, 
+for a single transfer $\CostTrans$.
 \end{proof}
 
+
+\begin{theorem}
+Given an $\CC+\MA$ problem instance, a feasible assignment $\VmChunkAssignment$
+is optimal iff it is local.
+\label{thm:local_optimal}
+\end{theorem}
+
+\begin{proof}
+Local assignments generate exactly the minimal allocations described in 
+Lemma~\ref{lemma:uplink} (see the case differentiation in the proof). Hence 
+each local assignment has to be optimal. A non local assignment, has at least 
+one subtree, in which it is not local. This subtree will have a higher 
+allocation on the uplink. Since the local assignment has minimal alloations 
+on all other links, the non local assignment has a larger footprint.
+\end{proof}
+
+
+\begin{comment}
 Since each link is an uplink of one subtree,
 Lemma~\ref{lem:uplink-alloc} implies:
 \begin{corollary}
@@ -858,7 +884,15 @@ All local assignments result in the same cost, for any $\CC+\MA$ problem instanc
 \label{corollary:same_costs}
 \end{corollary}
 
-\stefan{TODO: add unbalanced tree pic}
+\begin{figure}
+\center
+\includegraphics[width = 0.6\columnwidth]{figs/unbalanced_tree}
+\caption{Unbalanced Tree}
+\label{unbalanced_tree}
+\end{figure}
+
+
+\stefan{TODO: Describe unbalanced tree pic}
 
 We can now prove optimality: 
 \begin{theorem}
@@ -893,9 +927,23 @@ distance between $\achunk_j$ and the two nodes is the same, which
 renders $\VmChunkAssignment'$ cheaper than an optimal
 solution. Contradiction.
 \end{proof}
+\end{comment}
 
 Combined with a simple postprocessing, this approach can also solve $\MA+\BW$
-(and therefore $\MA+\BW+\CC$). The central idea of this extension, is to show
+(and therefore $\MA+\BW+\CC$). The central idea of this extension, is 
+\carlo{that \emph{local} assignments allocate the minimal bandwidth of all 
+allocation on each individual edge. In consequence, each bandwidth limitations, 
+which is lower than the allocation of a local assignment on one link, renders 
+the problem infeasible. Hence it is sufficient to temporarily omit the 
+bandwidth limitations, compute an optimal assignment for an $\MA$ instance, and 
+verify that the resulting allocations do not violate any capacities. The 
+postprocessing step scales linearly with the number of edges in the substrate 
+graph. Due to the tree topology of the substrate graph, the number of 
+edges in the substrate is known to be $n_S - 1$, which does not affect the 
+asymptotic complexity of this approach.}
+
+\begin{comment}
+to show
 that if the \emph{local} assignments violates the available bandwidth on any
 link, all other assignments will also violate the bandwidth. As a consequence
 it is possible to simply compute the assignment without any bandwidth constraints, and
@@ -927,6 +975,7 @@ violates the capacity. Since $\VmChunkAssignment$ allocated the minimal
 bandwidth on this link, which has to be allocated by \emph{any} feasible
 assignment, the problem has to be infeasible.
 \end{proof}
+\end{comment}
 
 
 \begin{comment}
@@ -1119,6 +1168,17 @@ We now show that also the $\FP+\CC+\MA+\BW$ problem variant can be solved
 in polynomial time. Note that this problem variant is non-trivial,
 and that collocating nodes with chunks (i.e., embedding virtual machines
 at the servers hosting the chunks) can be bad.
+
+
+\begin{figure}
+\includegraphics[width = 0.49\columnwidth]{figs/dynamic_good}
+\hfill
+\includegraphics[width = 0.49\columnwidth]{figs/dynamic_bad}
+\caption{Two different node placements for the same substrate graph and chunk 
+locations. For $\CostTrans = \CostCom$, both solutions have an identical 
+footprint. In other cases, one solution outperforms the other.} 
+\label{fig:dynamic_motivation}
+\end{figure}
 
 \stefan{carlos figure comes here}
 
@@ -1361,7 +1421,14 @@ the hardness of four additional, more general models, as
 summarized in the following figure:
 
 \begin{figure}[htbp]
-\includegraphics[width = \columnwidth]{figs/np-hierarchy}
+\small
+%\includegraphics[width = \columnwidth]{figs/np-hierarchy}
+ \begin{tikzcd}[arrows=Rightarrow, column sep = 0.5cm, row sep = 0.5cm]
+RS+FP+NI\arrow{r}{}\arrow{d}{}& RS+FP+NI+BW\arrow{d}{}\\
+% RS+FP+NI\arrow{ur}{}\arrow{dr}\\
+RS+MA+FP+NI\arrow{r}{}&RS+MA+FP+NI+BW\\
+RS+MA+FP\arrow{r}{}\arrow{u}&RA+MA+FP+BW\arrow{u}{}\\
+\end{tikzcd}
 \end{figure}
 
 
@@ -1441,7 +1508,27 @@ We use a threshold $\Thr= 4
 %  this proof.}
 \end{itemize}
 
-The construction is illustrated in Figure~\ref{fig:fprsma}.
+\carlo{Figure~\ref{fig:fprsma} shows an example of our construction: An 
+instance $I$ of 3-DM is given: The disjoint sets $X$, $Y$ and $Z$ have a 
+cardinality $k=2$. We will refer to the two elements in $X$ as $x_1$ and $x_2$, 
+and use the same notation for the other two sets. $T$ contains the three triples 
+$(x_1, y_1, 
+z_1)$, $(x_2, y_1, z_2)$, and $(x_2, y_2, z_2)$. The goal of 3-DM is to find a 
+subset $M \subseteq T$, which contains each element in each of the three sets 
+exactly once. For this instance the only solution is $M = 
+\{(x_1,y_1,z_1),(x_2,y_2,z_2))\}$.}
+
+\carlo{To construct the corresponding instance $I'$ of $\FP+\RS+\MA$, we 
+create a gadget for each triple in $T$. The gadgets contain a chunk of the 
+type of the variable for each variable that occurs in the triple. The triple 
+$(x_2, y_1, z_2)$ for instance is represented by the middle gadget in 
+Figure~\ref{fig:fprsma}. The objective of $I'$ is to spawn $k=2$ nodes, 
+with the smallest possible footprint. If the total footprint is $\leq 
+2\cdot2\cdot k$, we can construct a solution to $I$ from the solution to $I'$. 
+The footprint consits of the costs which occur, if a node is spawned in a 
+gadget, and the three chunks of that gadget are assigned to that node: one of 
+the chunks is collocated with the node - the other two have to be transferred 
+via two hops, and inflict costs $1$ on each hop.}
 %\begin{figure}[htbp]
 %\includegraphics[width = \columnwidth]{figs/example-matching}
 %\end{figure}
