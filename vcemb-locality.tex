@@ -1120,21 +1120,23 @@ in polynomial time. Note that this problem variant is non-trivial,
 and that collocating nodes with chunks (i.e., embedding virtual machines
 at the servers hosting the chunks) can be bad.
 
-\maciek{TODO: In each of previous sections we had an example where we show
-  non-triviality of the problem. Here we also have an interesting
-  example, which show that placing VMs on chunks can be arbitrarily
-  bad. In this example optimal solution places each VM in separate
-  subtree and transports every chunk to this subtree. The subtree was
-  chosen because it was able to host all the machines, unlike the
-  subtries with chunks. The reader might wonder why we considered
-  every possible location for a VM and this is exactly the reason}
+\stefan{carlos figure comes here}
+
+%\maciek{TODO: In each of previous sections we had an example where we show
+%  non-triviality of the problem. Here we also have an interesting
+%  example, which show that placing VMs on chunks can be arbitrarily
+%  bad. In this example optimal solution places each VM in separate
+%  subtree and transports every chunk to this subtree. The subtree was
+%  chosen because it was able to host all the machines, unlike the
+%  subtries with chunks. The reader might wonder why we considered
+%  every possible location for a VM and this is exactly the reason}
 
 Our proposed approach is based on dynamic programming, and
 leverages the \emph{optimal substructure property} of $\FP+\CC+\MA+\BW$:
 as we will see, optimal solutions for subproblems (namely subtrees)
 can efficiently be combined into optimal solutions for larger problems.
 Indeed, the $\FP+\CC+\MA+\BW$ problem
-exhibits such a structure, and show how to exploit it to
+exhibits such a structure, and we show how to exploit it to
 compute efficient embeddings, even in scenarios where multiple chunks
 need to be assigned to flexibly placeable nodes.
 
@@ -1156,47 +1158,48 @@ To finally compute the actual optimal embedding,
 we traverse the computed minimal-cost path backwards.
 
 Concretely, the first argument to function $f$
-is a subtree (which contains a given set of servers \carlo{is this necessary?}
-and chunks),
+is a subtree $\Tree'$ (which contains a given set of chunks-in-the-subtree $\ChunkCount(\Tree')$),
 and the
-second argument is the number of virtual machines to be embedded in the subtree.
-\carlo{$f$ is evaluted in a bottom up manner, with the following initilization:
-For every subtree $T_l$, which consists only of a leaf $l$, we set $f(T_l,x) =
+second argument is the number of nodes to be embedded in the subtree.
+Function $f$ is evaluated in a bottom up manner. We initialize the
+function at each leaf $\ell$, by $f(T_{\ell},x) =
 \infty$ for all numbers of virtual machines $x$ which are larger than
-$\capacity(l)$ to indicate that this subtree cannot host $x$ virtual machines.
-To calculate $f(T_l, x)$, for $x \leq \capacity(l)$, we compute the
-bandwidth allocation on the uplink of $T_l$, reffered to by the function
-$bw(T_l,x)$. \begin{eqnarray*}
- bw(T_l,x)&=& |x - \CostTrans \cdot |\ChunkCount(T_l)|| \\ && +
-\CostCom \cdot (\Vms - x) \cdot x.
-\end{eqnarray*}
-which accounts for the bandwidth allocation on the uplink of $T_l$. The first
+the server capacity $\capacity(\ell)$;
+to calculate $f(T_{\ell}, x)$, for $x \leq \capacity(\ell)$, we compute the
+bandwidth allocation on the uplink of $T_{\ell}$, referred to by the function
+$bw(T_{\ell},x)$: $bw(T_l,x)=  \CostTrans \cdot |x - |\ChunkCount(T_{\ell})||$ $
++ \CostCom \cdot (\Vms - x) \cdot x$,
+which accounts for the bandwidth allocation on the uplink of $T_{\ell}$. The first
 term represents the required bandwidth for the communication between the $x$
-nodes on $l$, and the $\Vms - x$ nodes in the remaining parts of the substrate
-network. Obviously the communication $x$ among the $x$ nodes within $T_l$
-does not require bandwidth on the uplink of $T_l$. The second term represents
+nodes on $\ell$, and the $\Vms - x$ nodes in the remaining parts of the substrate
+network. 
+%Obviously the communication $x$ among the $x$ nodes within $T_l$
+%does not require bandwidth on the uplink of $T_l$. 
+The second term represents
 the bandwidth, which is necessary to transport the chunks from their location to
 the node which should process the data (see Lemma~\ref{lemma:uplink} for more
-details). Since placing nodes on servers will not require additional bandwidth
-allocations, $bw$ is equal to $f$ on all subtrees $T_l$, which consist only of
-a single leaf. If the required bandwidth $bw$ exceeds the avialble bandwidth
-$\capacity$ on the uplink, $f(T_l,x)$ is set to $\infty$, to mark the
-corresponding number of nodes in the subtree as infeasible.}
+details). 
+%Since placing nodes on servers will not require additional bandwidth
+%allocations, $bw$ is equal to $f$ on all subtrees $T_l$, which consist only of
+%a single leaf. If the required bandwidth $bw$ exceeds the avialble bandwidth
+%$\capacity$ on the uplink, $f(T_l,x)$ is set to $\infty$, to mark the
+%corresponding number of nodes in the subtree as infeasible.}
 
-\carlo{After the initilization, we proceed to compute $f(T_l,x)$ for non-leaf
-nodes in a bottom up manner: We }consider every possible split of the $x$ nodes
+%\carlo{
+After this initialization, we proceed to compute $f$ for non-leaf
+nodes in a bottom up manner: We consider every possible split of the $x$ nodes
 into two positive integer
-values: $\ell$ and $r = x - l$. That is, we take the optimal cost
-(given recursively) of placing $\ell$ nodes in
-the left subtree $\textsc{Le}(T')$ of $T'$ and $r$ nodes in right subtree $\textsc{Ri}(T')$ of
-$T'$. \carlo{Given the cheapest combination, we add the bandwidth requirements
+values: we put $r$ on the right and $x - r$ on the left subtree. 
+That is, we take the optimal cost
+(given recursively) of placing $r$ nodes in
+the right subtree $\textsc{Ri}(T')$ of $T'$ and $x-r$ nodes in left subtree $\textsc{Le}(T')$ of
+$T'$. Given the cheapest combination, we add the bandwidth requirements
 on the uplink of $T'$ to generate the overall costs for placing $x$ virtual
 machines in $T'$.
-$$f(T',x) =   \min_{\ell \in \{0, \ldots, x\}}  f(\textsc{Le}(T'), {\ell}) +
-f(\textsc{Ri}(T'), x - {\ell}) + bw(T',x)$$
-Similar to the leaves, we set $f(T',x)$ to infinity if the required bandwidth
-$bw$ exceeds the capacity $\capacity$ of the uplink of $T'$.}
-
+$$f(T',x) =   \min_{r \in \{0, \ldots, x\}}  f(\textsc{Ri}(T'), r) +
+f(\textsc{Le}(T'), x - r) + bw(T',x)$$
+Again, we set $f(T',x)$ to infinity if the required bandwidth
+$bw$ exceeds the capacity $\capacity$ of the uplink of $T'$.
 
 This allocation consists of two parts: (1) The node inter-connect
 communication is easy to compute, as we know how many
@@ -1237,21 +1240,20 @@ inside the subtree, then across subtrees, then outside $T'$).
 %
 %\maciek{Solution for subtree - how it can look like? It is ``partial matching''. Some matched VMs and chunks, but also some chunks transported out of subtree or some %VMs/slots that will have chunks transported into from outside. So we charge already those incomplete matchings.}
 
-\maciek{TODO: base cases for f that take into consideration hosting
-  multiple VMs in one node}
-
-Therefore, we have:
-\begin{eqnarray*}
-f(T', x) &=& \min_{\ell \in \{0, \ldots, x\}}  f(\textsc{Le}(T'), {\ell}) + f(\textsc{Ri}(T'), x - {\ell}) \\
-&&+ \CostTrans(\textsc{Le}(T'),{\ell},\textsc{Ri}(T'),x-l)\\ &&+ \CostCom({\ell},x-{\ell})\\
-\end{eqnarray*}
-
-\maciek{We forgot to mention how we deal with bandwidth here. Our
-  approach is to check at every placement, at every subtree whether
-  uplink edge does not exceed its capacity. If it does for any subtree, we cross out
-  this placement. We also need to show correctness of this strategy in
-  analysis - but it holds from uplink lemma.}
-
+%\maciek{TODO: base cases for f that take into consideration hosting
+%  multiple VMs in one node}%
+%
+%Therefore, we have:
+%\begin{eqnarray*}
+%f(T', x) &=& \min_{\ell \in \{0, \ldots, x\}}  f(\textsc{Le}(T'), {\ell}) + f(\textsc{Ri}(T'), x - {\ell}) \\
+%&&+ \CostTrans(\textsc{Le}(T'),{\ell},\textsc{Ri}(T'),x-l)\\ &&+ \CostCom({\ell},x-{\ell})\\
+%\end{eqnarray*}
+%
+%\maciek{We forgot to mention how we deal with bandwidth here. Our
+%  approach is to check at every placement, at every subtree whether
+%  uplink edge does not exceed its capacity. If it does for any subtree, we cross out
+%  this placement. We also need to show correctness of this strategy in
+%  analysis - but it holds from uplink lemma.}
 
 \begin{comment}
 
@@ -1300,17 +1302,15 @@ placements. Following path of minimas. Other approach is to store pointers to mi
 \textbf{Analysis.}
 The correctness and optimality of our dynamic program
 is due to the decoupling of the costs induced by the tree
-structure of $\Tree$ and the inductive substructure
+structure of $\Tree$ and the  substructure
 optimality property.
 The substructure optimality follows from the observation that
-in a partial matching (i.e., costs of transporting unmatched
-chunks out and intro the tree),
-optimality can be established greedily, and the fact
+costs can be accounted on the uplink, and the fact
  that we check each possible node distribution.
 For each substrate vertex ($n_S$ many) we have
 to check the cost of all possible splits,
-resulting in an overall complexity of $\mathcal{O}(n_S \cdot n_V^2)$.
-
+resulting in an overall complexity of $\mathcal{O}(n_S \cdot n_V)$.
+(The runtime to binarize $\Tree$ is asymptotically negligible.)
 
 %\textbf{Summary.}
 %Figure~\ref{fig:venn_dp} summarizes all problem
@@ -1736,7 +1736,7 @@ or approximation algorithms.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{appendix}
 
-\subsection{The Bandwidth Lemma}
+\section{The Bandwidth Lemma}
 
 The following lemma is useful in our NP-hardness proofs.
 
