@@ -43,8 +43,8 @@
 
 \newcommand{\variab}{\nu}
 
-\newcommand{\Source}{\ensuremath{s}}
-\newcommand{\Sink}{\ensuremath{t}}
+\newcommand{\Source}{\ensuremath{s^{+}}}
+\newcommand{\Sink}{\ensuremath{s^{-}}}
 
 \newcommand{\VmChunkAssignment}{\mu}
 \newcommand{\NodeMapping}{\pi}
@@ -103,6 +103,7 @@
 
 
 \newtheorem{defn}{Definition}
+\newtheorem{obs}{Observation}
 
 %Maciek
 
@@ -179,7 +180,7 @@ and allocate computational resources close to the data; in case of redundant sto
 
 This paper initiates the algorithmic study of data locality aware virtual cluster embeddings
 % for
-%the widely used (fat-)tree like 
+%the widely used (fat-)tree like
 on datacenter topologies.
 In particular, we
 show that
@@ -250,7 +251,7 @@ replica selection and flexible virtual machine embedding, and answer questions s
 \item Can the replica selection and virtual machine embedding be jointly optimized, in polynomial time?
 \end{enumerate}
 
-We draw an almost complete picture of the problem space: We show that 
+We draw an almost complete picture of the problem space: We show that
 even problem variants exhibiting multiple degrees of freedom (in terms of
 replica selection and embedding),
 can be solved optimally in polynomial time, and compare different
@@ -306,7 +307,7 @@ as well as to the data).
 
 \emph{The Substrate Network.} The substrate network (also known as the \emph{host graph}) represents the physical resources:
 a set $S$ of $n_S=|S|$ servers interconnected by a network consisting of a set $R$ of servers (or switches)
-and a set $E$ of (symmetric) links. (We will sometimes simply refer to the elements in $S$ and $R$ 
+and a set $E$ of (symmetric) links. (We will sometimes simply refer to the elements in $S$ and $R$
 as the \emph{vertices}.) We will assume that the inter-connecting network forms an (arbitrary, not necessarily balanced
 or regular) tree,
 where the servers are located at the tree leaves.
@@ -321,7 +322,7 @@ where each chunk type $\achunk_i$ can have $r\geq 1$ instances (or replicas) $\{
  stored at different servers. (A single server may host multiple chunks.)
 %Concretely, for each of the $r\cdot k$ replicas $\achunk_{i}^{(j)}$.
 %, we will denote by $\pi(\achunk_{i}^{(j)})$ at
-%which server it is stored \maciek{Do we use $\pi$ anywhere else in paper?}. 
+%which server it is stored \maciek{Do we use $\pi$ anywhere else in paper?}.
 It is sufficient to process one replica, and we will sometimes refer to this
 replica as the \emph{active} (or selected) replica.
 
@@ -349,7 +350,7 @@ is modeled as a complete network. Concretely, we assume that an  active chunk
 is connected to its node at a minimal bandwidth $\CostTrans$, and a node is connected to any other node
 at minimal bandwidth $\CostCom$.
 
-\stefan{TODO: clarify whether there can be multiple chunks and or nodes per server}
+%\stefan{TODO: clarify whether there can be multiple chunks and or nodes per server}
 
 %\textbf{Optimization Objective.}
 
@@ -360,7 +361,7 @@ the \emph{resource footprint}: the overall bandwidth allocation for a given embe
 only the resource allocation at the links but not at the servers depends on the replica selection or embedding.) That is,
 we aim to embed the virtual machines in a locality-aware manner, close to the input data
 (the chunks), as well as close to
-each other. Let $\dist(v,\achunk)$ denote the distance (in the underlying physical network $\Tree$) between a node $v$ and 
+each other. Let $\dist(v,\achunk)$ denote the distance (in the underlying physical network $\Tree$) between a node $v$ and
 its assigned (active) chunk replica $\achunk$, and let $\dist(v_1,v_2)$ denote the distance between the two nodes $v_1$ and $v_2$.
 We define the \emph{footprint} $\Cost(v)$ of a node $v$ as follows:
 $$
@@ -422,7 +423,7 @@ allocate sufficient resources to satisfy an embedding request.
 
 \subsection{Practical Motivation}\label{ssec:practice}
 
-We conclude our model discussion by providing the necessary practical background and motivation. 
+We conclude our model discussion by providing the necessary practical background and motivation.
 Our model is motivated by batch-processing applications such as MapReduce.
 Such applications use multiple compute units or virtual machines to
 process data, initially often redundantly stored in a distributed file system implemented
@@ -459,24 +460,34 @@ certain applications.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Polynomial-Time Algorithms}\label{sec:poly}
 
-Despite the various degrees of freedom in terms of embedding and replica selection, 
- many problem variants can be solved efficiently. 
+Despite the various degrees of freedom in terms of embedding and replica selection,
+ many problem variants can be solved efficiently.
  This section introduces three general techniques to solve different problem variants,
- which can roughly be categorized into  
- \emph{flow} (Section~\ref{ssec:flow}), \emph{matching} (Section~\ref{ssec:match}) and \emph{dynamic programming} 
- (Section~\ref{ssec:dyn}) approaches. 
- As we will see, several problems variants can be solved in different ways (but at different runtimes).
+ which can roughly be categorized into
+ \emph{flow} (Section~\ref{ssec:flow}), \emph{matching} (Section~\ref{ssec:match}) and \emph{dynamic programming}
+ (Section~\ref{ssec:dyn}) approaches.
+ As we will see, several problems variants can be solved in multiple ways (but at different runtimes),
+ and in each approach, we will indicate the solvable problem variants using a \emph{Venn diagram}.
+
+First, let us make a simplifying observation: 
+in problems without flexible placement ($\FP$), 
+the bandwidth required
+for the inter-connect network ($\CC$) can generally be allocated \emph{upfront}, as it
+does not depend on the replica
+selection and assignment.
+Accordingly, problem variants such $\RS+\MA+\CC +\BW$ or
+$\RS+\MA+\CC$ can be reduced to $\RS+\MA+\BW$ resp.~$\RS + \MA$. 
 
 \subsection{Flow Algorithms ($\RS+\MA+\CC+\BW$)}\label{ssec:flow}
 
 \begin{wrapfigure}{r}{0.5\columnwidth}
 \includegraphics[width=0.48\columnwidth]{figs/venn_flow.pdf}
-\caption{Problem variants which can be solved using our flow approach.}
+\caption{Variants solved by flow approach.}
 \label{fig:venn_flow}
 \end{wrapfigure}
 
-We first present an algorithm to solve the $\RS+\MA+\CC+\BW$ problem. 
-Recall that in this problem variant, 
+We first present an algorithm to solve the $\RS+\MA+\CC+\BW$ problem.
+Recall that in this problem variant,
 we are given a set of redundant chunks ($\RS$) and a set of virtual machines
 (the \emph{nodes})
 at fixed locations (no $\FP$). The number of chunk types is larger than the number
@@ -499,40 +510,32 @@ problem variant.
 %We allow an instance to have multiple virtual machines in single leaf.
 
 \textbf{Construction of Artificial Graph.}
-In order to solve the $\RS+\MA+\BW$ problem, 
+In order to solve the $\RS+\MA+\CC+\BW$ problem,
 we first construct
 an artificial graph $\Tree^*$, extending the substrate network $\Tree$ and
 normalizing bandwidth capacities, as follows. For $\Tree^*$,
 we normalize the bandwidth of $\Tree$ to integer multiples of $\CostTrans$,
 i.e., for each link $e\in E(\Tree)$, we set its new
 capacity in $\Tree^*$ to $\lfloor\capacity(e)/\CostTrans\rfloor$.
-\maciek{I do not understand the floor here. I strongly suggest setting
-$\CostTrans$ to $1$ in the model}
+%\maciek{I do not understand the floor here. I strongly suggest setting
+%$\CostTrans$ to $1$ in the model}
 After this normalization, we extend the $\Tree$ topology by
 introducing an artificial vertex for each chunk type. These artificial
-vertices are connected to each leaf in $\Tree$,
+vertices are connected to each leaf (i.e., server) in $\Tree$ where replicas of the respective type are located,
 connecting the replica of the respective chunk type by a link of capacity $1$. In
 addition, we create a
 \emph{super-source} $\Source$, and connect it to each of the artificial chunk
-type vertices. Moreover, we create an artificial \emph{super-sink} and
-connect it to every leaf, connecting to each node by an edge of capacity $\MaFactor$;
-concretely, if $x$ nodes are hosted at the same leaf, we use an available capacity of
-$x \cdot \MaFactor$ \maciek{I think that flow should be from chunks
-  towards virtual machines for transporting reference. The reader can
-  find the direction unnatural.}.
+type vertices (with a link of capacity 1). Moreover, we create an artificial \emph{super-sink} $\Sink$ and
+connect it to every leaf containing at least one node; the link capacity represents 
+the number of nodes $x$ hosted on this node, times the multi-assignment factor 
+$\MaFactor$: 
+$x \cdot \MaFactor$. 
 We additionally assign the following costs to edges of $\Tree^*$:
 every edge of the original substrate network costs one unit, and all other edges
 cost nothing.
 
-We start by observing that $\RS+\CC+\MA+\BW$ boils down to
-$\RS+\MA+\BW$ in the absence of $\FP$: due to the unique paths
-on $\Tree$, the bandwidth allocation for the node interconnect
-$\CC$ becomes independent of the replica selection, and can be subtracted
-from the available bandwidth capacities beforehand.
-
-\carlo{Source and Sink have been swapped. check for consistency once section is
-done (remeber Figure).}
-
+Recall that $\RS+\CC+\MA+\BW$ boils down to
+$\RS+\MA+\BW$ in the absence of $\FP$
 The $\RS+\MA+\BW$ problem can now be solved by computing
 a \emph{Min-Cost-Max-Flow} solution between super-source and super-sink on the artificial graph $\Tree^*$.
 Figure~\ref{fig:flow_construction} shows an example of the extended substrate
@@ -554,65 +557,50 @@ is indicated by the dotted lines: each line represents one unit of flow.}
 \end{figure}
 
 \textbf{Algorithm.}
-Our algorithm to solve $\RS+\MA+\CC+\BW$ consists of two parts.
-First, we construct the artificial graph described above and compute 
-an (integer) min-cost-max-flow solution on the normalized and extended graph $\Tree^*$.
-Subsequently, 
-we reconstruct the replica assignment from the flow solution.
-The idea of this path reconstruction is as follows: From the well-known min-cost-max-flow integrality
-theorem~\cite{integrality}, we know that there exists an integral optimal solution of the min-cost-max-flow on $\Tree^*$; by
-our construction, the 
-paths of this flow solutions directly yield the node-replica pairs. 
-
-Now, while a simple algorithm such as the successive shortest path algorithm~\cite{successive_shortest_path_complexity}
-would directly give us such an integral solution (in polynomial time), faster algorithms exist
-to solve the min-cost-max-flow problem~\cite{mincostmaxflow-1,mincostmaxflow-2}; however, while these algorithms provide cost-optimal solutions, 
-these solutions may not be integral yet, and hence, a rounding and path decomposition approach is needed.
-Concretely, we use the following approach 
-in order to identify a matched chunk-node pair:
-we construct an integral flow allocation by (repeatedly) picking
-two arbitrary paths of the same length and non-integral, non-zero flow,
-and assign the combined flow to only one of the two paths.
-
-%Given this solution, we need to reconstruct the replica assignment.
-%The assignment can be obtained be decomposing the flow allocated in the
-%original substrate network. In order to identify a matched chunk-node pair, we
-%pick an arbitrary replica which has a non-zero flow assigned to the link directly above it.
-%Then we follow an arbitrary path of non-zero flow, until reaching a node.
-%Having found this matching pair, we remove the flow (i.e., reduce the bandwidth allocation)
-%along the path by one unit.
-%We continue building the assignments by selecting replicas until every chunk type is processed.
+Our algorithm to solve $\RS+\MA+\CC+\BW$ consists of three parts:
+\emph{First}, we construct the normalized and extended graph $\Tree^*$ 
+described above and compute
+a min-cost-max-flow solution, e.g., using~\cite{mincostmaxflow-1,mincostmaxflow-2}.
+\emph{Second}, we have to \emph{round} the resulting, possibly fractional flow, to
+integer values. Due to the \emph{integrality theorem}~\cite{mincostmaxflow-1,mincostmaxflow-2},
+there always exists an optimal integer solution on graphs with integer capacities.
+However, while algorithm like the successive shortest path algorithm~\cite{successive_shortest_path_complexity}
+directly give us such an integral solution (in polynomial time), the state-of-the-art min-cost-max-flow algorithms (e.g., based on double-scaling
+methods~\cite{mincostmaxflow-1} or minimum mean-cost cycle algorithms~\cite{mincostmaxflow-2}), may yield fractional solutions
+which need to be rounded to integral solutions (of the same cost). 
+In order to compute integral solutions, we proceed as follows: we iteratively pick an arbitrary (loop-free) path 
+currently having a fractional allocation of size $f$ ($f\in (0,1)$), and distribute its flow $f$ 
+among all other fractional paths of the same length; due to the optimality of the fractional solution
+and due to the integrality theorem, such paths must always exist. After distributing this flow,
+the total allocation on this path will be 0, and we have increased the number of integer paths by one.
+(In addition, some paths may now have an integer allocation of 1.) We proceed inductively. 
+\emph{Third}, given an integer min-cost-max-flow solution, we need to decompose the integer flows into the paths
+representing matched chunk-node pairs:
+The assignment can be obtained be decomposing the flow allocated in the
+original substrate network. In order to identify a matched chunk-node pair, 
+we take an arbitrary (loop-free) path $p$ from $\Source$ to $\Sink$:
+the first hop represents the chosen chunk type, the second hop the chosen
+replica, and the last but one hop represents the server: we will assign
+the replica to an arbitrary unused node on this server. 
+Having found this matching pair, we remove the flow 
+along the path $p$ by one unit.
+We continue building the assignments by selecting replicas until every chunk type is processed.
 
 \textbf{Analysis.}
-The correctness of our approach relies on the fact that
-given a graph with integer capacities (in our case $\lfloor\capacity(e)/\CostTrans\rfloor$)
-and costs, due to the integer flow theorem~\cite{integrality},
-the resulting min-cost-max-flow solution will result in integer flow allocations.
-In order to see why fractional solutions are sufficient for our algorithm to work,
-let us examine our rounding strategy in more detail: 
-due to the existence of an optimal integral solution, if there is at least one fractional
-path $p_1$ left (with flow strictly larger then 0 and strictly smaller than 1), there must also be at least one other fractional path 
-$p_2$ left of the same length;
-a different length would contradict optimality, as moving flow to the shorter path
-would strictly reduce costs. 
-Now, by moving the flow of $p_1$ to $p_2$ (or vice versa), the overall cost will not be increased;
-moreover, as a result, at least one of the two paths now has an integral flow (namely the path of flow 0).
-Therefore, we have just reduced the number of non-integer paths by one, and the proof follows
-by induction.
+The correctness of our approach follows from our construction
+of $\Tree^*$, using integer capacities (in our case $\lfloor\capacity(e)/\CostTrans\rfloor$),
+and the fact that cost optimal integer solutions always exist~\cite{mincostmaxflow-1,mincostmaxflow-2}.
+The runtime of our algorithm consists of four parts: construction of $\Tree^*$,
+computation of the min-cost-max-flow, flow rounding, and decomposition. The 
+dominant terms in the asymptotic runtime is the flow computation.
+The state-of-the-art min-cost-max-flow algorithms~\cite{mincostmaxflow-1} resp.~\cite{mincostmaxflow-2}
+take time $O((n_S+\tau)^2 \log \delta \log\log U)$ resp.~$O(n_S^5 \cdot \tau^3 \log n_S)$, where $\delta$ is the 
+network diameter and where $U$ is the maximal link capacity in the substrate.
+\stefan{TODO: Carlo: actually the maximal link cost is 1, no?}
 
-The runtime of our algorithm consists of two parts: construction of $\Tree^*$ 
-and computation of the min-cost-max-flow computation. The construction of $\Tree^*$
-takes time linear in the substrate size, and this runtime is asymptotically
-dominated by the flow computation. 
-The state-of-the-art min-cost-max-flow algorithms are based on double-scaling
-methods~\cite{mincostmaxflow-1}  or minimum mean-cost cycle algorithms~\cite{mincostmaxflow-2}, 
-taking time $O(n_S^2 \log C \log\log U)$ and $O(n_S^5 \log n_S)$ respectively, where $C$ is the maximal
-link cost and where $U$ is the maximal link capacity in the substrate.
-
-
-\textbf{Summary.}
-Figure~\ref{fig:venn_flow} summarizes all problem
-variants which can be solved with our flow-based approach.
+%\textbf{Summary.}
+%Figure~\ref{fig:venn_flow} summarizes all problem
+%variants which can be solved with our flow-based approach.
 
 TODO: what about multiple nodes what about multiple replicas?
 
@@ -620,15 +608,15 @@ TODO: what about multiple nodes what about multiple replicas?
 
 \begin{wrapfigure}{r}{0.5\columnwidth}
 \includegraphics[width=0.48\columnwidth]{figs/venn_matching.pdf}
-\caption{Problem variants which can be solved using our matching approach.}
+\caption{Variants solved by matching approach.}
 \label{fig:venn_match}
 \end{wrapfigure}
 
 This section tackles the two problem variants
 $\RS+\MA+\CC$ and $\MA+\CC+\BW$. In particular, we show that
-for these problems, fast algorithms exist. 
+for these problems, fast algorithms exist.
 In general, the algorithms presented in this section can be summarized
-as matching approaches. 
+as matching approaches.
 
 \subsubsection{$\RS+\MA+\CC$}
 
@@ -647,9 +635,9 @@ it more generally holds that $\RS+\MA+\CC + \BW$ degenerates to $\RS+\MA+\BW$,
 as in the absence of node placement flexibilities (no $\FP$),
 the bandwidth required
 for the inter-connect network can be allocated \emph{upfront}, and does not depend on the replica
-selection and assignment. 
+selection and assignment.
 
-We hence focus on $\RS+\MA$ in the following. In order to solve this problem variant, 
+We hence focus on $\RS+\MA$ in the following. In order to solve this problem variant,
 we construct a bipartite
 graph between the set
 $\VirtualNodes$ of nodes and
@@ -741,24 +729,24 @@ The correctness of our algorithm follows from the construction and the optimal
 solution of the minimum matching. In terms of runtime, the complexity
 is dominated by the minimum weight perfect matching computation on
 bipartite
-graphs. There exist several algorithms to solve this problem. 
+graphs. There exist several algorithms to solve this problem.
 The state of the art algorithm uses scaling and is due to Gabow et al.~\cite{gabow_scaling_algorithm}. TODO
 Its runtime depends on the maximum link cost in the graph, which in our case,
-corresponds to the diameter $\delta$ of $\Tree$. 
-%and  TODO 
-%which is 
+corresponds to the diameter $\delta$ of $\Tree$.
+%and  TODO
+%which is
 %end on  the number of nodes in the
 %graph $n$, the number of edges in the graph $m$, and the largest magnitude of
 %an edge weight $N$. An efficient algorithm is described by Gabow et al. in
 %\cite{gabow_scaling_algorithm} and provides a runtime of $\mathcal{O}(n^{3/4}
-%\cdot m \cdot \log N)$ which translates to 
+%\cdot m \cdot \log N)$ which translates to
 %This is the
 %dominant part of the runtime, as the graph on which the matching
 %is
-%computed, can be constructed in linear time. 
+%computed, can be constructed in linear time.
 In our problem, there are $\MaFactor \cdot n_V \times \ChunkType$ many edges,
 and for each of which their distance needs to be computed (requiring time $v_S$).
-Thus, 
+Thus,
 %
 %
 %When applied to our problem, the runtime translates to $\mathcal{O}((\ChunkType)^{11/4}
@@ -803,14 +791,14 @@ We will now show that much faster algorithms exist for $\MA+\CC$, by exploiting
 locality. Moreover, we will show that
 even
 $\MA+\CC+\BW$ problem variants can be solved with our approach, by simply
-verifying feasibility and bandwidth constraints. 
+verifying feasibility and bandwidth constraints.
 Let us also recall that we can ignore $\CC$, as it is constant
 without $\FP$.
 
 We first need the following definition.
 \begin{defn}[Local Assignment (LA)]
 We define an assignment $\VmChunkAssignment$ to
-be \emph{local in a specific subtree $\Tree'$}, iff.~$\VmChunkAssignment$ 
+be \emph{local in a specific subtree $\Tree'$}, iff.~$\VmChunkAssignment$
 assigns the maximum number of chunks in the
 subtree to nodes in the same subtree (subject only to the number of available nodes
 in $\Tree'$). We define $\VmChunkAssignment$ to be \emph{local} when
@@ -820,14 +808,14 @@ it is local with respect to all all possible subtrees of the substrate network.
 \textbf{Algorithm.} Our proposed algorithm for $\MA+\CC$ leverages
 the fact that optimal solutions to
 $\MA+\CC$ have a local assignment. This property facilitates linear-time
-solutions.  
+solutions.
 Concretely, we use an iterative and FIFO queue-based approach:
 the queue determines the order in which vertices of the substrate graph are
-traversed; the queue is initialized with all leaves of $\Tree$. 
-For each subtree $\Tree'$, we additionally maintain 
+traversed; the queue is initialized with all leaves of $\Tree$.
+For each subtree $\Tree'$, we additionally maintain
 two lists: the first stores the ``over-flowing'' chunks (the unmatched
 chunks),
-and the second contains the ``over-flowing'' (unmatched) nodes. 
+and the second contains the ``over-flowing'' (unmatched) nodes.
 
 Once a leaf $\ell$ in the substrate graph is chosen for processing, we add any
 nodes or chunks which are located on $\ell$ to the corresponding lists. As long as
@@ -1154,7 +1142,7 @@ TODO: does it work for multiple chunks and VMs?
 We now show that also the $\FP+\CC+\MA+\BW$ problem variant can be solved
 in polynomial time. Note that this problem variant is non-trivial,
 and that collocating nodes with chunks (i.e., embedding virtual machines
-at the servers hosting the chunks) can be bad. 
+at the servers hosting the chunks) can be bad.
 
 \maciek{TODO: In each of previous sections we had an example where we show
   non-triviality of the problem. Here we also have an interesting
@@ -1166,7 +1154,7 @@ at the servers hosting the chunks) can be bad.
   every possible location for a VM and this is exactly the reason}
 
 Our proposed approach is based on dynamic programming, and
-leverages the \emph{optimal substructure property} of $\FP+\CC+\MA+\BW$: 
+leverages the \emph{optimal substructure property} of $\FP+\CC+\MA+\BW$:
 as we will see, optimal solutions for subproblems (namely subtrees)
 can efficiently be combined into optimal solutions for larger problems.
 Indeed, the $\FP+\CC+\MA+\BW$ problem
@@ -1348,14 +1336,14 @@ to check the cost of all possible splits,
 resulting in an overall complexity of $\mathcal{O}(n_S \cdot n_V^2)$.
 
 
-\textbf{Summary.}
-Figure~\ref{fig:venn_dp} summarizes all problem
-variants which can be solved with our dynamic programming approach.
-\begin{wrapfigure}{r}{0.5\columnwidth}
-\includegraphics[width=0.48\columnwidth]{figs/venn_dp.pdf}
-\caption{Problem variants which can be solved using our dynamic programs.}
-\label{fig:venn_dp}
-\end{wrapfigure}
+%\textbf{Summary.}
+%Figure~\ref{fig:venn_dp} summarizes all problem
+%variants which can be solved with our dynamic programming approach.
+%\begin{wrapfigure}{r}{0.5\columnwidth}
+%\includegraphics[width=0.48\columnwidth]{figs/venn_dp.pdf}
+%\caption{Variants solved by programming approach.}
+%\label{fig:venn_dp}
+%\end{wrapfigure}
 
 \subsection{Remark: Simple Problems}
 
@@ -1736,15 +1724,15 @@ more sophisticated algorithms when combined with $\CC$ or $\MA$;
 in combination with $\RS$ and $\MA$ or $\CC$, $\FP$ renders the
 problem NP-hard.
 
-\begin{figure}
-\includegraphics[width=\columnwidth]{figs/summary}
-\caption{\maciek{This figure is wrong in couple places, but I sent you an e-mail what should be redone.}Summary of results. As this paper only presented algorithms (approaches indicated in the same
-color and pattern as in the previous figures) for the most
-difficult problems and, respectively, proved NP-hardness (indicated in black) of the simplest
-problems, several additional results are simple implications. In this figure,
-we always suggest the best (simplest and fastest) approach to solve a specific problem variant.}
-\label{fig:summary}
-\end{figure}
+%\begin{figure}
+%\includegraphics[width=\columnwidth]{figs/summary}
+%\caption{\maciek{This figure is wrong in couple places, but I sent you an e-mail what should be redone.}Summary of results. As this paper only presented algorithms %(approaches indicated in the same
+%color and pattern as in the previous figures) for the most
+%difficult problems and, respectively, proved NP-hardness (indicated in black) of the simplest
+%problems, several additional results are simple implications. In this figure,
+%we always suggest the best (simplest and fastest) approach to solve a specific problem variant.}
+%\label{fig:summary}
+%\end{figure}
 
 
 %\begin{figure}[t]
@@ -1772,7 +1760,7 @@ or approximation algorithms.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{appendix}
 
-\input{two-replicas}
+%\input{two-replicas}
 \end{appendix}
 
 
