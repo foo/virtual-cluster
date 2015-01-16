@@ -786,6 +786,23 @@ We define $\VmChunkAssignment$ to be \emph{local} when
 it is local with respect to all all possible subtrees of the substrate network.
 \end{defn}
 
+\begin{figure}
+\center
+\includegraphics[width = 0.6\columnwidth]{figs/unbalanced_tree}
+\caption{The dashed lines indicate bandwidth allocations, which occur 
+independent of the chosen assignment. The dotted lines indicate bandwidth 
+allocation which occur only if $c_2$ is assigned to $v_1$.}
+\label{fig:unbalanced_tree}
+\end{figure}
+
+\carlo{Figure \ref{fig:unbalanced_tree} shows an instance with two chunks and 
+two nodes. A local assignment assigns $v_1$ to $c_1$, although $c_2$ is 
+closer to $v_1$, since a subtree $T'$ exists, such that $v_1 \in T'$ and $c_1 
+\in T'$, but $v_2 \notin T'$. The uplink of this subtree will have a higher 
+allocation if a non-local assignment is chosen.}
+
+
+
 We will see later that
 optimal solutions to
 $\MA+\CC$ have a local assignment. This is exploited by our algorithms described
@@ -884,12 +901,7 @@ All local assignments result in the same cost, for any $\CC+\MA$ problem instanc
 \label{corollary:same_costs}
 \end{corollary}
 
-\begin{figure}
-\center
-\includegraphics[width = 0.6\columnwidth]{figs/unbalanced_tree}
-\caption{Unbalanced Tree}
-\label{unbalanced_tree}
-\end{figure}
+
 
 
 \stefan{TODO: Describe unbalanced tree pic}
@@ -1169,11 +1181,34 @@ in polynomial time. Note that this problem variant is non-trivial,
 and that collocating nodes with chunks (i.e., embedding virtual machines
 at the servers hosting the chunks) can be bad.
 
+\carlo{Every problem instance with $\FP$, asks for two things: the 
+assignment of chunks to nodes $\VmChunkAssignment$, which is allready an 
+objective of the previous algorithms, and the node placement $\NodeMapping$. 
+Different strategies can be used to distribute nodes across servers: One 
+extreme, is to try to minimize the distance between the chunks and the nodes. A 
+node mapping $\NodeMapping_1$ which implements this strategy, is given in 
+Figure~\ref{fig:dynamic_motivation} \emph{(left)}: the $4$ nodes are all 
+collocated with chunks, resulting in $0$ costs on the access network. As a 
+result the pathes between the individual nodes are longer than in alternative 
+node placements: Each of the nodes has a distance of $2$ hops to one other node, 
+and $4$ hops to $2$ other nodes. Hence the resulting allocations for the 
+node interconnect require $20 \cdot \CostCom$ bandwidth allocations in total. 
+Figure~\ref{fig:dynamic_motivation} \emph{(right)} illustrates a different node 
+placment $\NodeMapping_2$, which seeks to minimize the communication costs 
+between the nodes, and places all nodes in one subtree. The distance between all 
+nodes is $2$, wich results in a total bandwidth allocation of $12\cdot\CostCom$ 
+for the interconnect. However, this reduced price comes at additional costs in 
+the access network: $c_3$ and $c_4$ have to be transported to $v_4$ and $v_4$, 
+which requires a total bandwidth allocation of $8 \cdot \CostTrans$. Depending 
+on the values of $\CostTrans$ and $\CostCom$, the optimal strategy might 
+change. Note that for some instances the two extreme strategies described 
+above, can \emph{both} be suboptimal.}
+
 
 \begin{figure}
-\includegraphics[width = 0.49\columnwidth]{figs/dynamic_good}
-\hfill
 \includegraphics[width = 0.49\columnwidth]{figs/dynamic_bad}
+\hfill
+\includegraphics[width = 0.49\columnwidth]{figs/dynamic_good}
 \caption{Two different node placements for the same substrate graph and chunk
 locations. For $\CostTrans = \CostCom$, both solutions have an identical
 footprint. In other cases, one solution outperforms the other.}
