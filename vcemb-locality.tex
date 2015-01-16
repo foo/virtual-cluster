@@ -1367,7 +1367,7 @@ summarized in the following figure:
 
 \subsection{Introduction to 3D Perfect Matching}
 
-Both the hardness of $\FP+\RS+\MA$ and $\FP+\RS+\CC$ is shown by a reduction
+Both the hardness of $\FP+\RS+\MA$ and $\FP+\RS+\CC$ are shown by a reduction
 from the NP-complete problem of \emph{3D Perfect Matching}~\cite{3dmatch},
 which
 can be seen as a generalization of bipartite matchings to 3-uniform
@@ -1388,7 +1388,7 @@ elements of $X \times Y \times Z$.
 \subsection{Multi-Assignments are hard ($\FP+\RS+\MA$)}\label{ssec:fprsma}
 
 Our proof that $\FP+\RS+\MA$ is NP-hard is based on the following main ideas.
-We encode an $\TDM$ instance as an $\FP+\RS+\MA$ instance as follows:
+We encode a $\TDM$ instance as an $\FP+\RS+\MA$ instance as follows:
 
  \begin{itemize}
  \item For every element in the universe $X\cup Y\cup
@@ -1408,10 +1408,11 @@ We encode an $\TDM$ instance as an $\FP+\RS+\MA$ instance as follows:
  A node will process the chunk which is located on the same server,
  as well as the chunks in other two leaves of the same gadget.
 
-\item We will use threshold $\Thr$  to ensure that no node
-will process
-any chunk outside its gadget.
+\item In order to turn the optimization problem into a decision problem, we will use 
+a cost threshold $\Thr$; solutions of higher costs are considered infeasible. 
 \end{itemize}
+
+We will focus on problem instances where the server capacity is one unit (one node).
 
 \textbf{Construction.}
 Given an instance $I$ of $\TDM$, we construct an instance $I'$ of
@@ -1427,27 +1428,31 @@ The gadget of each triple $t_i$ consists of an inner node (a router) and three l
 ($3 \cdot k$ in total). Every gadget
 contains three chunk replicas, corresponding to the elements of $t_i$.
 \item \emph{Other properties:} We set the number of to-be-embedded nodes to $k$,
-$\CostTrans$ to $1$, and the number of slots in each node to $m=3$ \stefan{what
-is the number of slots here?}\maciek{it is number of replicas that
-each VM can process (the MA property)}. We use a threshold $\Thr=2 \cdot 2
-\cdot k$. \maciek{If we update the model to take care of hosting
-  multiple VMs in one leaf, we should set this instance to allow only
-  one VM per leaf. However, any number of VMs per leaf will be OK for
-  this proof.}
+$\CostTrans$ to $1$, and the number of slots \stefan{what is slot here?} in each node to the multi-assignment factor
+$\MaFactor=3$.
+%\stefan{what
+%is the number of slots here?}\maciek{it is number of replicas that
+%each VM can process (the MA property)}. 
+We use a threshold $\Thr= 4
+\cdot k$.
+% \maciek{If we update the model to take care of hosting
+%  multiple VMs in one leaf, we should set this instance to allow only
+%  one VM per leaf. However, any number of VMs per leaf will be OK for
+%  this proof.}
 \end{itemize}
 
 The construction is illustrated in Figure~\ref{fig:fprsma}.
 %\begin{figure}[htbp]
 %\includegraphics[width = \columnwidth]{figs/example-matching}
 %\end{figure}
-\begin{figure}[htbp]
+\begin{figure}[t]
 \includegraphics[width = 0.3\columnwidth]{figs/np_3dm_formular}
 \hfill
 \includegraphics[width = 0.6\columnwidth]{figs/np_3dm_construction}
-\caption{\textit{(Left:)} A $\TDM$ instance with three triples:
+\caption{\textit{Left:} A $\TDM$ instance with three triples:
 $(x_1, y_1, z_1)$, $(x_2, y_1, z_2)$, and $(x_2, y_2, z_2)$. The solution is
 indicated by the grey triples; the dashed triple is not used for the
-solution. \textit{(Right:)} The corresponding problem and solution of $\FP + \MA
+solution. \textit{Right:} The corresponding problem and solution of $\FP + \MA
 + \RS$.}
 \label{fig:fprsma}
 \end{figure}
@@ -1475,8 +1480,8 @@ chunk type is processed.
 
 ($\Leftarrow$) Let us take a solution to $\FP+\RS+\MA$ of cost $\leq \Thr$. We
 choose triples that correspond to gadgets where there are nodes. Since
-all chunks are processed, very element of $X$, $Y$ and $Z$ is matched. Each
-node must processes chunks that correspond to the triple, otherwise the
+all chunks are processed, every element of $X$, $Y$ and $Z$ is matched. Each
+node must processes chunks that corresponds to the triple, otherwise the
 cost must be larger than $\Thr$ (high costs for the connection between
 nodes and chunks).
 \end{proof}
@@ -1495,21 +1500,23 @@ for $\FP+\RS+\CC$ as follows:
 \item We will construct the same tree as in previous reduction with
 chunk replicas placed in the same way.
 \item The communication cost in the inter-connect is set to $\CostCom = 1$.
-\item The number of nodes (virtual machines) is $\Vms = 3 \cdot k$.
-\item We use a threshold $\Thr =  6 \cdot k + 3 \cdot 3 \cdot 2 \cdot
-(k - 1) \cdot k$.  \maciek{If we update the model to take care of hosting
-  multiple VMs in one leaf, we should set this instance to allow only
-  one VM per leaf. In this proof it also does not matter, as it is
-  already forced by infinite transportation cost, however we need to
-  define it anyway.
-  }
+\item The number of nodes (virtual machines) is $\Vms = 3 \cdot k$, where $k$ is the set cardinality. 
+\item We use a threshold $\Thr =  6 \cdot k + 18 \cdot
+(k - 1) \cdot k$.  
+%\maciek{If we update the model to take care of hosting
+%  multiple VMs in one leaf, we should set this instance to allow only
+%  one VM per leaf. In this proof it also does not matter, as it is
+%  already forced by infinite transportation cost, however we need to
+%  define it anyway.
+%  }
 \item We set the access cost $\CostTrans$ to a chunk replica to a high value $W$. This will force
 nodes to be collocated with the replica. One example of sufficient
-(and polynomial) $W$
-is the value of threshold, defined above. \maciek{it is not minimal,
-  but clean and sufficient}
+(and polynomial but minimal) $W$
+is the value of the threshold $\Thr$ defined above. (Chunk access cost larger than max possible
+communication cost.)
 \end{itemize}
 
+We again focus on instances with unit server capacities.
 
 \textbf{Proof of correctness.}
 Intuitively, in order to minimize embedding costs,
@@ -1522,7 +1529,7 @@ $k$ gadgets have exactly
 $3$ nodes, and $n-k$ gadgets remain empty.
 \end{lemma}
 \begin{proof}
-Since $W=\infty$, nodes will always be placed
+Since $W$ is large enough, nodes will always be placed
 directly on chunks (the access network cost is zero).
 Moreover, since
 is valid, $3 \cdot k$ nodes are mapped
@@ -1573,6 +1580,8 @@ $k$ gadgets contain exactly 3 nodes. These gadgets correspond to a valid
 chunk was processed and hence every element in the $X \cup Y \cup Z$ is covered.
 \end{proof}
 
+Finally, let us conclude by remarking that all NP-hard problems discussed in this paper
+are obviously also in NP (and hence NP-complete): solutions can be verified efficiently.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Related Work}\label{sec:relwork}
@@ -1853,7 +1862,7 @@ We set the number of virtual machines to $\Vms = \clauses \cdot \variables$.
 Moreover, we define the inter-connect communication cost to be $1$,
 and the access cost to be a sufficiently large constant $W$,
 such that nodes must always be collocated with chunks.
-(For a concrete value, see Appendix~\ref{ap:W}).
+%(For a concrete value, see Appendix~\ref{ap:W}).
 
 We set the following bandwidth capacities in the substrate. There are three
 levels of edges in the substrate network $\Tree_{\Formula}$ given by formula
