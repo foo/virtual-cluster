@@ -315,7 +315,7 @@ or regular) tree,
 where the servers are located at the tree leaves.
 Each server $s\in S$ can host a certain number
 of virtual machines (available server capacity $\capacity(s)$), and each link $e\in E$ has a certain bandwidth
-capacity $\capacity(e)$. \maciek{Reader might find overloading the meaning of $\capacity(.)$ potentialy confusing. He might think that capacity for servers only exists in bandwidth model. I suggest using different name for that, like slots or cpus.}
+capacity $\capacity(e)$.
 
 \textbf{\emph{The Input Data.}} The to be processed data constitutes the input to the batch-processing application.
 The data is stored in a distributed manner; this spatial distribution is given and not subject to optimization.
@@ -400,7 +400,7 @@ is equal to the number of nodes. Otherwise, we will add the $+\MA$ property disc
 If the number of chunk types $\tau$ is larger than the number of nodes,
 each node needs to be assigned multiple chunks. We will refer to such a scenario by $\MA$,
 and will denote the number of chunks per node by the integer value $\MaFactor = \tau / n_V$.
-\maciek{We can have per-VM MA factor. When combined with FP we just generalize to per-server MA factor.}
+
 %Note that in a scenario with only $\MA$ but without $\RS$, chunk types are not redundant.
 
 \textbf{\emph{Flexible Placement ($\FP$).}} The third fundamental degree of freedom, besides replica selection and assignment,
@@ -663,7 +663,7 @@ we construct a bipartite
 graph between the set
 $\VirtualNodes$ of nodes and
 the set of chunks.
-Concretely, we clone each node $\MaFactor$ (\maciek{Shouldn't ma factor be a function of a node?}) times,
+Concretely, we clone each node $\MaFactor$ times,
 as each node needs to process
 $\MaFactor$ chunk types, and we collect all copies of a given chunk type in a
 single %$\ChunkType$
@@ -735,9 +735,9 @@ This is visualized for $\achunk_2$.}
 Figure~\ref{fig:matching} illustrates
 %the procedure for a more complex problem
 an instance where two nodes are
-cloned into $\MaFactor = 2$ \maciek{We no longer have $\MaFactor$, now we have capacities/slots/cpus in the model.} nodes each, resulting in a total of four nodes in
+cloned into $\MaFactor = 2$ nodes each, resulting in a total of four nodes in
 the matching problem representation.
-The $\RedundancyFactor = 2$ \maciek{We might not want to set global redundancy factor, we would rather say that we spawn 2 replicas of each chunk type. Redundancy can be per chunk type and setting the variable $\RedundancyFactor$ might confuse him to think otherwise.} chunks of each chunk type are
+The $\RedundancyFactor = 2$ chunks of each chunk type are
 aggregated into a single chunk type node $\achunk_j$  in the matching problem;
 this gives a total of four chunk type nodes in the matching graph. The costs
 on the links between all clones of a specific node and a chunk type are set to
@@ -750,7 +750,7 @@ The correctness of our algorithm follows from the construction and the optimal
 solution of the minimum matching.
 The runtime consists of two parts: the construction of the matching graph and
 the actual matching computation. The constructed graph consists of
-$\MaFactor \cdot n_V \cdot \ChunkType$ \maciek{Again, ma factor is per node} many edges,
+$\MaFactor \cdot n_V \cdot \ChunkType$ many edges,
 and for each edge we need to compute its cost, i.e., the shortest distance
 which in a tree can be computed in time $n_S$; thus, the overall construction time
 is
@@ -883,11 +883,10 @@ containing $x$
 chunks and $y$ nodes, the minimal bandwidth allocation of any
 assignment
 $\VmChunkAssignment$ on the uplink of $\Tree'$ is $|x-y\cdot\MaFactor|\cdot
-\CostTrans$. \maciek{Here we can generalize this lemma to different MA factors for different machines. I would suggest introducing ``processing power of the subtree function'', which would be a sum of number of cpus of VMs in the subtree.} \label{lemma:uplink}
+\CostTrans$. \label{lemma:uplink}
 \end{lemma}
 \begin{proof}
-  \maciek{I wouldn't start any proof with ``clearly''}
-Clearly, if number of chunk types equals the processing capacities of the nodes in the given subtree,
+  If number of chunk types equals the processing capacities of the nodes in the given subtree,
 the bandwidth allocation inflicted by the chunk access network on the uplink can be
 zero, since all chunks can be assigned to nodes in the same subtree.
 Otherwise, we distinguish between two cases: Recall, that in instances
@@ -973,7 +972,7 @@ solution. Contradiction.
 \end{proof}
 \end{comment}
 
-Combined with a simple postprocessing step, this approach can also solve $\MA+\BW$. The central idea of this extension \maciek{Change ``extension'' to ``problem variant''}, is
+Combined with a simple postprocessing step, this approach can also solve $\MA+\BW$. The central idea of this extension, is
 that \emph{local} assignments allocate the minimal bandwidth
 on each individual edge. In consequence, each bandwidth constraint
 which is lower than the allocation of a local assignment on one link, renders
@@ -1008,7 +1007,6 @@ infeasible.
 \label{lemma:no_bandwidth}
 \end{lemma}
 \begin{proof}
-\maciek{This proof is too slippery! Simpler way to proof that surely exists.}
 From Lemma~\ref{lemma:uplink} we know that each optimal assignment
 $\VmChunkAssignment$ to $\MA+\CC$ assigns a certain bandwidth to a link. This is
 the minimal bandwidth which has to be allocated on this link by \emph{any}
@@ -1116,7 +1114,6 @@ problem infeasible.
 \end{lemma}
 \begin{proof}
 Assume there exists a link on which the assignment $\VmChunkAssignment$
-  \maciek{This proof is too slippery! Simpler way to proof that surely exists.}
 violates the capacity. From Lemma~\ref{lemma:uplink} it is
 known that $\VmChunkAssignment$ keeps the assignment ``local''.
 Therefore, the footprint on the uplink of a specific subtree is the number of chunks
@@ -1264,7 +1261,7 @@ exhibits such a structure, and we show how to exploit it to
 compute efficient embeddings, even in scenarios where multiple chunks
 need to be assigned to flexibly placeable nodes.
 
-\textbf{Basic ideas.} For ease of presentation \maciek{I am not sure if binarization only serves the role of easing the presentation. It also allows our program to run in polynomial time -- if we tried the same approach without the binarization, we would have superpolynomial runtime.}, we will transform the substrate network $\Tree$
+\textbf{Basic ideas.} For ease of presentation, we will transform the substrate network $\Tree$
 into a binary tree, using binarization:
 we clone every higher-degree node,
 iteratively attaching additional clones as right children
@@ -1321,7 +1318,6 @@ $T'$. Given the cheapest combination, we add the bandwidth requirements
 on the uplink of $T'$ to generate the overall costs for placing $x$ nodes in $T'$.
 $$f(T',x) =   \min_{r \in \{0, \ldots, x\}}  f\left(\textsc{Ri}(T'), r\right) +
 f\left(\textsc{Le}(T'), x - r\right) + bw(T',x)$$
-\maciek{I am not sure if $bw(T',x)$ is sufficient. We charge two edges on each recursion level, therefore we should have $bw(\textsc{Le}(T'),l)+bw(\textsc{Ri}(T'),r)$}
 Again, we set $f(T',x)$ to infinity if the required bandwidth
 $bw$ exceeds the capacity $\capacity$ of the uplink of $T'$.
 
@@ -1482,8 +1478,6 @@ substrate networks (namely two- or three-level trees~\cite{fattree}).
 The hardness of $\FP+\RS+\MA$ and $\FP+\RS+\CC$ imply
 the hardness of four additional, more general models, as
 summarized in the following figure:
-
-\maciek{This figure should be redone in Venn fashion. You can start by clean Venn, add the basis NP-complete problems ($\FP+\RS+\MA$ and $\FP+\RS+\CC$ in grey, then other variants in darker grey, then the middle problem in (almost) black. Alternative formulation is arrows on Venn diagram but I doubt that those will be readable.}
 
 \begin{figure}[htbp]
 \small
