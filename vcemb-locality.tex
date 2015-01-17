@@ -313,7 +313,7 @@ or regular) tree,
 where the servers are located at the tree leaves.
 Each server $s\in S$ can host a certain number
 of virtual machines (available server capacity $\capacity(s)$), and each link $e\in E$ has a certain bandwidth
-capacity $\capacity(e)$.
+capacity $\capacity(e)$. \maciek{Reader might find overloading the meaning of $\capacity(.)$ potentialy confusing. He might think that capacity for servers only exists in bandwidth model. I suggest using different name for that, like slots or cpus.}
 
 \textbf{\emph{The Input Data.}} The to be processed data constitutes the input to the batch-processing application.
 The data is stored in a distributed manner; this spatial distribution is given and not subject to optimization.
@@ -381,7 +381,7 @@ In order to chart the landscape of the tractability and intractability of differ
 problem variants, we decompose our problem into its fundamental aspects, namely replica selection
 $\RS$, multiple chunk assignment $\MA$, flexible node placement $\FP$, virtual machine interconnect $\CC$,
 and bandwidth constraints $\BW$, as described in the following.
-In this paper, we will consider all possible $2^5-1$ problem variants, where each of these five aspects
+In this paper, we will consider all possible $2^5-1$ problem variants \maciek{(We solved the basic problem as well, so maybe $2^5$?)}, where each of these five aspects
 can either be enabled or disabled.
 
 \textbf{\emph{Replica Selection ($\RS$).}} The first fundamental problem is replica selection:
@@ -586,7 +586,7 @@ integer values. Due to the \emph{integrality theorem}~\cite{flow-book},
 there always exists an optimal integer solution on graphs with integer capacities.
 However, while algorithm like the successive shortest path algorithm~\cite{successive_shortest_path_complexity}
 directly give us such an integral solution (in polynomial time), the fastest state-of-the-art min-cost-max-flow algorithms (e.g., based on double-scaling
-methods~\cite{mincostmaxflow-1} or minimum mean-cost cycle algorithms~\cite{mincostmaxflow-2}), may yield fractional solutions
+methods~\cite{mincostmaxflow-1} or minimum mean-cost cycle algorithms~\cite{mincostmaxflow-2} \maciek{mean-cost cycle algorithm is AFAIK designed to solve specific flow problem where we have negative costs; we only have costs 0 or 1, so this algorithm might not  be the best example}), may yield fractional solutions
 which need to be rounded to integral solutions (of the same cost).
 In order to compute integral solutions, we proceed as follows: we iteratively pick an arbitrary (loop-free) path
 currently having a fractional allocation of value $f$ ($f\in ]0,1[$), and distribute its flow $f$
@@ -727,9 +727,9 @@ This is visualized for $\achunk_2$.}
 Figure~\ref{fig:matching} illustrates
 %the procedure for a more complex problem
 an instance where two nodes are
-cloned into $\MaFactor = 2$ nodes each, resulting in a total of four nodes in
+cloned into $\MaFactor = 2$ \maciek{We no longer have $\MaFactor$, now we have capacities/slots/cpus in the model.} nodes each, resulting in a total of four nodes in
 the matching problem representation.
-The $\RedundancyFactor = 2$ chunks of each chunk type are
+The $\RedundancyFactor = 2$ \maciek{We might not want to set global redundancy factor, we would rather say that we spawn 2 replicas of each chunk type. Redundancy can be per chunk type and setting the variable $\RedundancyFactor$ might confuse him to think otherwise.} chunks of each chunk type are
 aggregated into a single chunk type node $\achunk_j$  in the matching problem;
 this gives a total of four chunk type nodes in the matching graph. The costs
 on the links between all clones of a specific node and a chunk type are set to
@@ -1261,7 +1261,7 @@ exhibits such a structure, and we show how to exploit it to
 compute efficient embeddings, even in scenarios where multiple chunks
 need to be assigned to flexibly placeable nodes.
 
-\textbf{Basic ideas.} For ease of presentation, we will transform the substrate network $\Tree$
+\textbf{Basic ideas.} For ease of presentation \maciek{I am not sure if binarization only serves the role of easing the presentation. It also allows our program to run in polynomial time -- if we tried the same approach without the binarization, we would have superpolynomial runtime.}, we will transform the substrate network $\Tree$
 into a binary tree, using binarization:
 we clone every higher-degree node,
 iteratively attaching additional clones as right children
@@ -1272,14 +1272,14 @@ and original children as left descendants.
 As usual in dynamic programs, we define, over the structure of the tree, an inductive formula $f$ for
 the minimal cost solution \emph{given} any possible number of nodes 
 embedded in a given subtree. (The actual set does not matter,
-due to symmetry arguments.)
+due to symmetry arguments \maciek{and uplink lemma}.)
 Our approach is to evaluate this function in a bottom-up
 manner.
 To finally compute the actual optimal embedding,
 we traverse the computed minimal-cost path backwards.
 
 Concretely, the first argument to function $f$
-is a subtree $\Tree'$ (which contains a given set of chunks-in-the-subtree $\ChunkCount(\Tree')$),
+is a subtree $\Tree'$ (which contains a given set of chunks-in-the-subtree $\ChunkCount(\Tree')$ \maciek{We define CIS as set only to use its power later. Define it as number to avoid symbols.}),
 and the
 second argument is the number of nodes to be embedded in the subtree.
 Function $f$ is evaluated in a bottom up manner. We initialize the
@@ -1318,8 +1318,10 @@ $T'$. Given the cheapest combination, we add the bandwidth requirements
 on the uplink of $T'$ to generate the overall costs for placing $x$ nodes in $T'$.
 $$f(T',x) =   \min_{r \in \{0, \ldots, x\}}  f\left(\textsc{Ri}(T'), r\right) +
 f\left(\textsc{Le}(T'), x - r\right) + bw(T',x)$$
+\maciek{I am not sure if $bw(T',x)$ is sufficient. We charge two edges on each recursion level, therefore we should have $bw(\textsc{Le}(T'),l)+bw(\textsc{Ri}(T'),r)$}
 Again, we set $f(T',x)$ to infinity if the required bandwidth
 $bw$ exceeds the capacity $\capacity$ of the uplink of $T'$.
+\maciek{Shouldn't we define base cases for $f$? We should describe how we handle (imbalanced) MA in those base cases.}
 
 %This allocation consists of two parts: (1) The node inter-connect
 %communication is easy to compute, as we know how many
@@ -1457,7 +1459,7 @@ shows a Venn diagram of the trivial property combinations.
 \label{fig:venn_trivial}
 \end{wrapfigure}
 
-Additional NP-hardness results appear in the Appendix.
+Additional NP-hardness results appear in the Appendix.\maciek{This sentence does not belong to this section}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{NP-Hardness Results}\label{sec:np}
@@ -1510,7 +1512,7 @@ if and only if, for any two distinct triples $t_1=(x_1, y_1, z_1) \in M$
 and $t_2=(x_2, y_2, z_2) \in M$, it holds that $x_1\neq x_2$, $y_1\neq
 y_2$, and $z_1\neq z_2$. Our goal is to decide if we can construct
 a $M \subseteq T$ which is \emph{perfect}, that is, a subset which covers all
-elements of $X \times Y \times Z$.
+elements of $X \times Y \times Z$ \maciek{exactly once}.
 
 %TODO: image like this: \url{https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/3-dimensional-matching.svg/240px-3-dimensional-matching.svg.png}
 
@@ -1660,7 +1662,7 @@ chunk replicas placed in the same way.
 nodes to be collocated with the replica. One example of sufficient
 (and polynomial but minimal) $W$
 is the value of the threshold $\Thr$ defined above. (Chunk access cost larger than max possible
-communication cost.)
+communication cost. \maciek{I know what you meant - max possible CC allowed by threshold. But the reader might find this comment misleading, as the worst solution.})
 \end{itemize}
 
 We again focus on instances with unit server capacities.
@@ -1724,7 +1726,7 @@ we can exploit Lemma~\ref{lemma:helper} to construct a solution for $I$.
 We know that in any solution of cost at most $\Thr$,
 $k$ gadgets contain exactly 3 nodes. These gadgets correspond to a valid
 3D Perfect Matching: every
-chunk was processed and hence every element in the $X \cup Y \cup Z$ is covered.
+chunk was processed and hence every element in the $X \cup Y \cup Z$ is covered. \maciek{Restate: every chunk type has its (exactly) one replica processed and hence every element is covered exactly once.}
 \end{proof}
 
 Finally, let us conclude by remarking that all NP-hard problems discussed in this paper
@@ -1893,6 +1895,8 @@ or approximation algorithms.
 
 \section{The Bandwidth Lemma}
 
+\maciek{The bandwidth lemma should be the last chapter in the appendix. We should forumlate the extended bandwidth lemma here. (if we decide not to give a proof for that it should not have its separate chapter).}
+
 The following lemma will be useful for the upcoming NP-hardness proofs.
 
 \begin{lemma}[Bandwidth Lemma]\label{lem:bandwidth-lemma}
@@ -1904,6 +1908,7 @@ The following lemma will be useful for the upcoming NP-hardness proofs.
 \noindent  then for each $i$: $a_i = \clauses$.
 \end{lemma}
 \begin{proof}
+  \maciek{(By contradiction) Let us assume...}
 For the sake of contradiction, let us assume that there exists an index $k$ such that
 $a_k \neq \clauses$. Then we can distinguish between two cases:
 either $a_k<\clauses$ or
