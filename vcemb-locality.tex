@@ -2333,20 +2333,21 @@ positive $x \leq \clauses$ can satisfy this inequality for $\variables > 4$. Con
 %  correspond to number of VMs in variable gadgets and remaining of the
 %  sequence corresponds to number of VMs in clause gadgets.}
   Let $\clauses$ and $\variables > 4$ be two arbitrary positive integers. Let $a_1, a_2, \ldots,
-  a_{\variables+\clauses}$ be a sequence of integers which adds up to
-  $\clauses \cdot \variables + \clauses \cdot 2$. Also, for
-  each $i \leq \variables$ we have $a_i \leq 2 \cdot \clauses$
-  (\maciek{variable gadget capacity}). Also,
-  for each $i >\variables$ we have $a_i \leq 3$ (\maciek{clause gadget capacity}). Then it holds that if
-  $$ \forall_{i\leq\variables}:~~ a_i \cdot (\clauses \cdot \variables
-  + 2\cdot \clauses- a_i) \leq \clauses \cdot (\clauses \cdot \variables -
+  a_{\clauses}$ and $b_1, b_2, \ldots,
+  b_{\variables}$ be two sequences of integers (numbers of VMs in clause and in variable gadgets). Sum of all elements in $a$ and $b$ adds up to
+  $\clauses \cdot \variables + \clauses \cdot 2$ (number of VMs). Also
+  we have $a_i \leq 2 \cdot \clauses$
+  (variable gadget VM hosting capacity -- equal to number of leaves),
+  and $b_i \leq 3$ (clause gadget VM hosting capacity). If uplink of variable gadget does not exceed bandwidth constraints
+  $$ \forall_{i\leq\variables}:~~ b_i \cdot (\clauses \cdot \variables
+  + 2\cdot \clauses- b_i) \leq \clauses \cdot (\clauses \cdot \variables -
   \clauses + 2 \cdot \clauses), $$
-and
-$$ \forall_{i>\variables}:~~ a_i \cdot (\clauses \cdot \variables + 2 \cdot \clauses - a_i) \leq 2 \cdot (\clauses \cdot \variables -
+and uplink of clause gadget does not exceed bandwidth constraints
+$$ \forall_{i\leq\clauses}:~~ a_i \cdot (\clauses \cdot \variables + 2 \cdot \clauses - a_i) \leq 2 \cdot (\clauses \cdot \variables -
   2 \cdot \clauses - 2), $$
 
-\noindent  then for each $i\leq \variables$: $a_i = \clauses$ and for
-each $i>\variables$: $a_i = 2$.
+\noindent  then for each $i\leq \variables$: $b_i = \clauses$ and for
+each $i\leq\clauses$: $a_i = 2$ (we have expected number of VMs in variable and clause gadgets).
 \end{lemma}
 
 
