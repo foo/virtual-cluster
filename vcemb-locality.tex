@@ -660,7 +660,7 @@ we construct a bipartite
 graph between the set
 $\VirtualNodes$ of nodes and
 the set of chunks.
-Concretely, we clone each node $\MaFactor$ times,
+Concretely, we clone each node $\MaFactor$ (\maciek{Shouldn't ma factor be a function of a node?}) times,
 as each node needs to process
 $\MaFactor$ chunk types, and we collect all copies of a given chunk type in a
 single %$\ChunkType$
@@ -747,7 +747,7 @@ The correctness of our algorithm follows from the construction and the optimal
 solution of the minimum matching.
 The runtime consists of two parts: the construction of the matching graph and
 the actual matching computation. The constructed graph consists of
-$\MaFactor \cdot n_V \cdot \ChunkType$ many edges,
+$\MaFactor \cdot n_V \cdot \ChunkType$ \maciek{Again, ma factor is per node} many edges,
 and for each edge we need to compute its cost, i.e., the shortest distance
 which in a tree can be computed in time $n_S$; thus, the overall construction time
 is
@@ -879,10 +879,11 @@ Given an $\MA$ problem and a subtree $\Tree'$
 containing $x$
 chunks and $y$ nodes, the minimal bandwidth allocation of any
 assignment
-$\VmChunkAssignment$ on the uplink of $\Tree'$ is $|x-(y\cdot\MaFactor)|\cdot
-\CostTrans$.\label{lemma:uplink}
+$\VmChunkAssignment$ on the uplink of $\Tree'$ is $|x-y\cdot\MaFactor|\cdot
+\CostTrans$. \maciek{Here we can generalize this lemma to different MA factors for different machines. I would suggest introducing ``processing power of the subtree function'', which would be a sum of number of cpus of VMs in the subtree.} \label{lemma:uplink}
 \end{lemma}
 \begin{proof}
+  \maciek{I wouldn't start any proof with ``clearly''}
 Clearly, if number of chunk types equals the processing capacities of the nodes in the given subtree,
 the bandwidth allocation inflicted by the chunk access network on the uplink can be
 zero, since all chunks can be assigned to nodes in the same subtree.
@@ -969,7 +970,7 @@ solution. Contradiction.
 \end{proof}
 \end{comment}
 
-Combined with a simple postprocessing step, this approach can also solve $\MA+\BW$. The central idea of this extension, is
+Combined with a simple postprocessing step, this approach can also solve $\MA+\BW$. The central idea of this extension \maciek{Change ``extension'' to ``problem variant''}, is
 that \emph{local} assignments allocate the minimal bandwidth
 on each individual edge. In consequence, each bandwidth constraint
 which is lower than the allocation of a local assignment on one link, renders
@@ -1320,7 +1321,6 @@ f\left(\textsc{Le}(T'), x - r\right) + bw(T',x)$$
 \maciek{I am not sure if $bw(T',x)$ is sufficient. We charge two edges on each recursion level, therefore we should have $bw(\textsc{Le}(T'),l)+bw(\textsc{Ri}(T'),r)$}
 Again, we set $f(T',x)$ to infinity if the required bandwidth
 $bw$ exceeds the capacity $\capacity$ of the uplink of $T'$.
-\maciek{Shouldn't we define base cases for $f$? We should describe how we handle (imbalanced) MA in those base cases.}
 
 %This allocation consists of two parts: (1) The node inter-connect
 %communication is easy to compute, as we know how many
