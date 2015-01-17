@@ -1324,7 +1324,7 @@ f\left(\textsc{Le}(T'), x - r\right) + bw(T',x)$$
 f\left(\textsc{Le}(T'), x - r\right) \} + bw(T',x)$$}
 Again, we set $f(T',x)$ to infinity if the required bandwidth
 $bw$ exceeds the capacity $\capacity$ of the uplink of $T'$.
-
+  
 %This allocation consists of two parts: (1) The node inter-connect
 %communication is easy to compute, as we know how many
 %nodes are in the left and right subtree, and how many are
@@ -1666,6 +1666,12 @@ chunk replicas placed in the same way.
 nodes to be collocated with the replica. One example of sufficient
 (and polynomial but minimal) $W$
 is the value of the threshold $\Thr$ defined above. Every solution that does not match chunks to VMs those are sitting on top of never has cost $\leq \Thr$, because it inflicts cost of $W=\Thr$ over every link it transports the chunk.
+
+\maciek{One example of sufficient
+(and polynomial but perhaps not minimal) $W$
+is the value of the threshold $\Thr+1$ defined above. Every solution that does not match chunks to VMs those are sitting on top of never has cost $\geq \Thr$, because it inflicts cost of $W=\Thr+1$ over every link it transports the chunk.}
+
+
 \end{itemize}
 
 We again focus on instances with unit server capacities.
