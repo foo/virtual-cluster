@@ -1892,48 +1892,6 @@ or approximation algorithms.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{appendix}
 
-\section{The Bandwidth Lemma}
-
-\maciek{The bandwidth lemma should be the last chapter in the appendix. We should forumlate the extended bandwidth lemma here. (if we decide not to give a proof for that it should not have its separate chapter).}
-
-The following lemma will be useful for the upcoming NP-hardness proofs.
-
-\begin{lemma}[Bandwidth Lemma]\label{lem:bandwidth-lemma}
-  Let $\clauses$ and $\variables > 4$ be two arbitrary positive integers. Let $a_1, a_2, \ldots,
-  a_{\variables}$ be a sequence of $\variables$ integers which adds up to $\clauses \cdot \variables$. Also, for
-  each $i$ we have $a_i \leq 2 \cdot \clauses$. Then it holds that if
-  $$ \forall_i:~~ a_i \cdot (\clauses \cdot \variables - a_i) \leq \clauses \cdot (\clauses \cdot \variables -
-  \clauses), $$
-\noindent  then for each $i$: $a_i = \clauses$.
-\end{lemma}
-\begin{proof}
-  \maciek{(By contradiction) Let us assume...}
-For the sake of contradiction, let us assume that there exists an index $k$ such that
-$a_k \neq \clauses$. Then we can distinguish between two cases:
-either $a_k<\clauses$ or
-$a_k>\clauses$.
-
-\textbf{Case $a_k<\clauses$:} If there exists a $k$ with $a_k<\clauses$,
-due to the fact that the sequence adds up to $\clauses \cdot \variables$,
-there must also exist a $k'$ such that $a_{k'}<\clauses$ (by a simple
-pigeon hole principle). Thus, this case can
-also be reduced to the second case (Case $a_k>\clauses$) proved
-next.
-
-\textbf{Case $a_k>\clauses$:} Since it also holds that $a_k < 2\clauses$,
-$a_k$ must be of the form $\clauses + x$ for $x \in [1, \ldots, \clauses]$.
-Let us consider the (bandwidth) inequality:
-$$ (\clauses + x) \cdot (\clauses \cdot \variables - \clauses - x) \leq \clauses \cdot (\clauses \cdot \variables - x) $$
-
-This can be transformed to:
-
-$$ 0 \leq x(x - (\clauses \cdot (\variables - 2))) $$
-
-The equation holds for $x \leq 0$ or $x \geq \clauses \cdot (\variables - 2)$,
-and no
-positive $x \leq \clauses$ can satisfy this inequality for $\variables > 4$. Contradiction.
-\end{proof}
-
 %\begin{comment}
 
 \section{Replica selection is hard}\label{ap:tworep}
@@ -2330,6 +2288,67 @@ $1$; therefore the clause is satisfied.
 %  pointing into the previous proof. Even if we did this proof, nobody
 %  would read that. I can do it though.}
 %\end{comment}
+\section{The Bandwidth Lemmas}
+
+\maciek{Those are lemmas helpful in proving that in every bandwidth-feasible solution of cost $\leq \Thr$ there is certain amount of empty gadgets and certain amount of half-full gadgets. Bandwidth lemma is helpful in reduction from 3SAT to RS, and extended bandwidth lemma is helpful in reduction from 3SAT to RS(2).}
+  
+\begin{lemma}[Bandwidth Lemma]\label{lem:bandwidth-lemma}
+  Let $\clauses$ and $\variables > 4$ be two arbitrary positive integers. Let $a_1, a_2, \ldots,
+  a_{\variables}$ be a sequence of $\variables$ integers which adds up to $\clauses \cdot \variables$. Also, for
+  each $i$ we have $a_i \leq 2 \cdot \clauses$. Then it holds that if
+  $$ \forall_i:~~ a_i \cdot (\clauses \cdot \variables - a_i) \leq \clauses \cdot (\clauses \cdot \variables -
+  \clauses), $$
+\noindent  then for each $i$: $a_i = \clauses$.
+\end{lemma}
+\begin{proof}
+  \maciek{(By contradiction) Let us assume...}
+For the sake of contradiction, let us assume that there exists an index $k$ such that
+$a_k \neq \clauses$. Then we can distinguish between two cases:
+either $a_k<\clauses$ or
+$a_k>\clauses$.
+
+\textbf{Case $a_k<\clauses$:} If there exists a $k$ with $a_k<\clauses$,
+due to the fact that the sequence adds up to $\clauses \cdot \variables$,
+there must also exist a $k'$ such that $a_{k'}<\clauses$ (by a simple
+pigeon hole principle). Thus, this case can
+also be reduced to the second case (Case $a_k>\clauses$) proved
+next.
+
+\textbf{Case $a_k>\clauses$:} Since it also holds that $a_k < 2\clauses$,
+$a_k$ must be of the form $\clauses + x$ for $x \in [1, \ldots, \clauses]$.
+Let us consider the (bandwidth) inequality:
+$$ (\clauses + x) \cdot (\clauses \cdot \variables - \clauses - x) \leq \clauses \cdot (\clauses \cdot \variables - x) $$
+
+This can be transformed to:
+
+$$ 0 \leq x(x - (\clauses \cdot (\variables - 2))) $$
+
+The equation holds for $x \leq 0$ or $x \geq \clauses \cdot (\variables - 2)$,
+and no
+positive $x \leq \clauses$ can satisfy this inequality for $\variables > 4$. Contradiction.
+\end{proof}
+\begin{lemma}[Extended Bandwidth Lemma]\label{lem:bandwidth-lemma}
+%\maciek{this lemma might be expressed more clearly if we use two
+%  sequences instead of one - now $a_1, \ldots, a_{\variables}$
+%  correspond to number of VMs in variable gadgets and remaining of the
+%  sequence corresponds to number of VMs in clause gadgets.}
+  Let $\clauses$ and $\variables > 4$ be two arbitrary positive integers. Let $a_1, a_2, \ldots,
+  a_{\variables+\clauses}$ be a sequence of integers which adds up to
+  $\clauses \cdot \variables + \clauses \cdot 2$. Also, for
+  each $i \leq \variables$ we have $a_i \leq 2 \cdot \clauses$
+  (\maciek{variable gadget capacity}). Also,
+  for each $i >\variables$ we have $a_i \leq 3$ (\maciek{clause gadget capacity}). Then it holds that if
+  $$ \forall_{i\leq\variables}:~~ a_i \cdot (\clauses \cdot \variables
+  + 2\cdot \clauses- a_i) \leq \clauses \cdot (\clauses \cdot \variables -
+  \clauses + 2 \cdot \clauses), $$
+and
+$$ \forall_{i>\variables}:~~ a_i \cdot (\clauses \cdot \variables + 2 \cdot \clauses - a_i) \leq 2 \cdot (\clauses \cdot \variables -
+  2 \cdot \clauses - 2), $$
+
+\noindent  then for each $i\leq \variables$: $a_i = \clauses$ and for
+each $i>\variables$: $a_i = 2$.
+\end{lemma}
+
 
 
 \end{appendix}
