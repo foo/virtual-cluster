@@ -2184,7 +2184,6 @@ In every valid solution of cost at most $\Thr$, we have exactly
 $\clauses$ nodes in each variable gadget and two nodes in each clause gadget.
 \end{proof}
 
-\maciek{We need to mention that the behavior of VMs inside variable gadget remain the same - VMs stick to one side (positive or negative).}
 
 \begin{theorem}
 $\FP+\RS(2)+\BW+\CC$ is NP-hard.
@@ -2219,6 +2218,8 @@ Then we can compute a positive valuation by setting each variable $\variab$
 as follows:
 $\Val(\variab)= 1$ iff there is a node at the first leaf on the positive side of the $\variab$ gadget in $\Sol$,
 and $\Val(\variab)=0$ otherwise.
+
+\maciek{We need to mention that the behavior of VMs inside variable gadget remain the same - VMs stick to one side (positive or negative). It is crucial property for the proof.}
 
 %$\Val(\variab)$ =
 %\begin{cases}
