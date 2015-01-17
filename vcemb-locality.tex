@@ -1542,10 +1542,10 @@ We encode a $\TDM$ instance as an $\FP+\RS+\MA$ instance as follows:
  as well as the chunks in other two leaves of the same gadget.
 
 \item In order to turn the optimization problem into a decision problem, we will use
-a cost threshold $\Thr$; solutions of higher costs are considered infeasible.
+a cost threshold $\Thr$; solutions of higher costs are considered infeasible. \maciek{We would like to give the reader some intuitions about $\Thr$ value at this point. We can say that such amount is chosen so the VMs are not spread among too many gadgets.}
 \end{itemize}
 
-We will focus on problem instances where the server capacity is one unit (one node).
+We will focus on problem instances where the server capacity is one unit (one node). \maciek{This comment is wrong. We can say something like that if we are restricting the set we are reducing from. But here we just set the server capacity to one unit, so it belongs to construction section, not to the assumptions before the construction.}
 
 \textbf{Construction.}
 Given an instance $I$ of $\TDM$, we construct an instance $I'$ of
