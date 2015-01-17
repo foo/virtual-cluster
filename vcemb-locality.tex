@@ -1316,8 +1316,12 @@ That is, we take the optimal cost
 the right subtree $\textsc{Ri}(T')$ of $T'$ and $x-r$ nodes in left subtree $\textsc{Le}(T')$ of
 $T'$. Given the cheapest combination, we add the bandwidth requirements
 on the uplink of $T'$ to generate the overall costs for placing $x$ nodes in $T'$.
-$$f(T',x) =   \min_{0\leq r \leq x}  f\left(\textsc{Ri}(T'), r\right) +
+
+$$f(T',x) =   \min_{r \in \{0, \ldots, x\}}  f\left(\textsc{Ri}(T'), r\right) +
 f\left(\textsc{Le}(T'), x - r\right) + bw(T',x)$$
+
+\maciek{$$f(T',x) =   \min_{0\leq r \leq x} \{  f\left(\textsc{Ri}(T'), r\right) +
+f\left(\textsc{Le}(T'), x - r\right) \} + bw(T',x)$$}
 Again, we set $f(T',x)$ to infinity if the required bandwidth
 $bw$ exceeds the capacity $\capacity$ of the uplink of $T'$.
 
