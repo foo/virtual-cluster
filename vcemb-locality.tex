@@ -1320,8 +1320,8 @@ on the uplink of $T'$ to generate the overall costs for placing $x$ nodes in $T'
 $$f(T',x) =   \min_{r \in \{0, \ldots, x\}}  f\left(\textsc{Ri}(T'), r\right) +
 f\left(\textsc{Le}(T'), x - r\right) + bw(T',x)$$
 
-\maciek{$$f(T',x) =   \min_{0\leq r \leq x} \{  f\left(\textsc{Ri}(T'), r\right) +
-f\left(\textsc{Le}(T'), x - r\right) \} + bw(T',x)$$}
+\maciek{$$f(T',x) =   \min_{0\leq r \leq x} \{  f\left(\textsc{Le}(T'), x-r\right) +
+f\left(\textsc{Ri}(T'), r\right) \} + bw(T',x)$$}
 Again, we set $f(T',x)$ to infinity if the required bandwidth
 $bw$ exceeds the capacity $\capacity$ of the uplink of $T'$.
   
@@ -2009,6 +2009,7 @@ construct as many replicas of chunk $\achunk_i$ as there are literals in the
 clause. For each literal $\ell$ (of the form $\variab$ or $\neg \variab$) that satisfies clause $i$,
  we place
 a replica of chunk $\achunk_i$ in the leaf labeled $\ell_i$.
+
 We set the threshold $\Thr$ to:
 % (\maciek{we might not want to introduce
 %  those variable names, as those have no meaning here}):
