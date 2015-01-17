@@ -1514,7 +1514,11 @@ if and only if, for any two distinct triples $t_1=(x_1, y_1, z_1) \in M$
 and $t_2=(x_2, y_2, z_2) \in M$, it holds that $x_1\neq x_2$, $y_1\neq
 y_2$, and $z_1\neq z_2$. Our goal is to decide if we can construct
 a $M \subseteq T$ which is \emph{perfect}, that is, a subset which covers all
-elements of $X \times Y \times Z$ \maciek{exactly once}.
+elements of $X \times Y \times Z$.
+
+\maciek{Our goal is to decide if we can construct
+a $M \subseteq T$ which is \emph{perfect}, that is, a subset which covers all
+elements of $X \times Y \times Z$ exactly once. }
 
 %TODO: image like this: \url{https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/3-dimensional-matching.svg/240px-3-dimensional-matching.svg.png}
 
@@ -1542,10 +1546,10 @@ We encode a $\TDM$ instance as an $\FP+\RS+\MA$ instance as follows:
  as well as the chunks in other two leaves of the same gadget.
 
 \item In order to turn the optimization problem into a decision problem, we will use
-a cost threshold $\Thr$; solutions of higher costs are considered infeasible. \maciek{We would like to give the reader some intuitions about $\Thr$ value at this point. We can say that such amount is chosen so the VMs are not spread among too many gadgets.}
+a cost threshold $\Thr$; solutions of higher costs are considered infeasible. \maciek{Setting threshold this way prevents transportation of chunks between gadgets.}
+
 \end{itemize}
 
-We will focus on problem instances where the server capacity is one unit (one node). \maciek{This comment is wrong. We can say something like that if we are restricting the set we are reducing from. But here we just set the server capacity to one unit, so it belongs to construction section, not to the assumptions before the construction.}
 
 \textbf{Construction.}
 Given an instance $I$ of $\TDM$, we construct an instance $I'$ of
@@ -1653,7 +1657,7 @@ chunk replicas placed in the same way.
 \item The communication cost in the inter-connect is set to $\CostCom = 1$.
 \item The number of nodes (virtual machines) is $\Vms = 3 \cdot k$, where $k$ is the set cardinality.
 \item We use a threshold $\Thr =  6 \cdot k + 18 \cdot 
-(k - 1) \cdot k$.\maciek{We can simplify it even further.}
+(k - 1) \cdot k$.\maciek{$\Thr = 18 \cdot k^2 - 12 \cdot k$. The threshold is designed to be communication cost of $3\cdot k$ VMs embedded in leaves of tree consisting of $k$ gadgets (no chunks).}
 %\maciek{If we update the model to take care of hosting
 %  multiple VMs in one leaf, we should set this instance to allow only
 %  one VM per leaf. In this proof it also does not matter, as it is
@@ -1663,8 +1667,7 @@ chunk replicas placed in the same way.
 \item We set the access cost $\CostTrans$ to a chunk replica to a high value $W$. This will force
 nodes to be collocated with the replica. One example of sufficient
 (and polynomial but minimal) $W$
-is the value of the threshold $\Thr$ defined above. (Chunk access cost larger than max possible
-communication cost. \maciek{I know what you meant - max possible CC allowed by threshold. But the reader might find this comment misleading, as the worst solution.})
+is the value of the threshold $\Thr$ defined above. Every solution that does not match chunks to VMs those are sitting on top of never has cost $\leq \Thr$, because it inflicts cost of $W=\Thr$ over every link it transports the chunk.
 \end{itemize}
 
 We again focus on instances with unit server capacities.
@@ -1728,7 +1731,7 @@ we can exploit Lemma~\ref{lemma:helper} to construct a solution for $I$.
 We know that in any solution of cost at most $\Thr$,
 $k$ gadgets contain exactly 3 nodes. These gadgets correspond to a valid
 3D Perfect Matching: every
-chunk was processed and hence every element in the $X \cup Y \cup Z$ is covered. \maciek{Restate: every chunk type has its (exactly) one replica processed and hence every element is covered exactly once.}
+chunk was processed and hence every element in the $X \cup Y \cup Z$ is covered. \maciek{every chunk type has its exactly one replica processed and hence every element is covered exactly once.}
 \end{proof}
 
 Finally, let us conclude by remarking that all NP-hard problems discussed in this paper
@@ -1840,7 +1843,6 @@ and even if the the number of replicas is bounded by two.
 \end{tabular}
 \end{small}
 \caption{
-\maciek{I think that we would like to make a summary in one of two forms: (1) Venn diagram (but with sane colors) (2) list of problems groupped in circles like in my old summary.pdf. The tabular form is inferior.}
 The use cases of the proposed algorithms, expressed in property
 combinations which it can solve faster, than any other algorithm.}
 \label{tab:summary}
