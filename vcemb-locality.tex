@@ -1480,6 +1480,8 @@ The hardness of $\FP+\RS+\MA$ and $\FP+\RS+\CC$ imply
 the hardness of four additional, more general models, as
 summarized in the following figure:
 
+\maciek{This figure should be redone in Vienn fashion. You can start by clean Vienn, add the basis NP-complete problems ($\FP+\RS+\MA$ and $\FP+\RS+\CC$ in grey, then other variants in darker grey, then the middle problem in (almost) black. Alternative formulation is arrows on Vienn diagram but I doubt that those will be readable.}
+
 \begin{figure}[htbp]
 \small
 \includegraphics[width = \columnwidth]{figs/np_implications}
@@ -1647,8 +1649,8 @@ for $\FP+\RS+\CC$ as follows:
 chunk replicas placed in the same way.
 \item The communication cost in the inter-connect is set to $\CostCom = 1$.
 \item The number of nodes (virtual machines) is $\Vms = 3 \cdot k$, where $k$ is the set cardinality.
-\item We use a threshold $\Thr =  6 \cdot k + 18 \cdot
-(k - 1) \cdot k$.
+\item We use a threshold $\Thr =  6 \cdot k + 18 \cdot 
+(k - 1) \cdot k$.\maciek{We can simplify it even further.}
 %\maciek{If we update the model to take care of hosting
 %  multiple VMs in one leaf, we should set this instance to allow only
 %  one VM per leaf. In this proof it also does not matter, as it is
@@ -1791,6 +1793,8 @@ problems even in uncapacitated networks. In particular,
 we have shown that several embeddings problems are NP-hard already in two- and three-level trees
 (a practically relevant result given today's datacenter topologies~\cite{fattree}),
 and even if the the number of replicas is bounded by two.
+
+\maciek{I think that we would like to make a summary in one of two forms: (1) Vienn diagram (but with sane colors) (2) list of problems groupped in circles like in my old summary.pdf. The tabular form is inferior.}
 
 \begin{table}
 
