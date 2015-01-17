@@ -1976,6 +1976,9 @@ satisfies the last clause, $\neg
 \label{fig:construction_3sat}
 \end{figure}
 
+\maciek{Following paragraph can be replaced with one sentence: ``We set bandwidth on uplink of each variable gadget to $\clauses \cdot (\clauses
+\cdot \variables -
+\clauses)$. We set other edges bandwidth to be unlimited.}
 
 By default, we will set the available
 bandwidth to be the
@@ -1995,7 +1998,8 @@ We set the number of nodes to $\Vms = \clauses \cdot \variables$.
 Moreover, we define the inter-connect communication cost to be $1$,
 and the access cost to be a sufficiently large constant $W$,
 such that nodes must always be collocated with chunks. ($W$ in the order of
-the threshold $\Thr$ is sufficient.)
+the threshold $\Thr$ is sufficient.)\maciek{Alternatively, we can set $W=1$ and restrict the transportation by setting bandwidth on uplink of every leaf.}
+
 %(For a concrete value, see Appendix~\ref{ap:W}).
 
 We set the number of chunk types to be equal to the number of clauses, $\tau =
