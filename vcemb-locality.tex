@@ -2018,7 +2018,7 @@ At a top-level edge, we set the bandwidth to $\clauses \cdot (\clauses
 
 
 
-We set the number of nodes to $\Vms = \clauses \cdot \variables$.
+We set the number of nodes to $\Vms = \clauses \cdot \variables$ \maciek{TODO: check again, it might not be good number. Right number is number of literals in the formula. We might want to decide to solve 3SAT to express this value easier}.
 Moreover, we define the inter-connect communication cost to be $1$,
 and the access cost to be a sufficiently large constant $W$,
 such that nodes must always be collocated with chunks. ($W$ in the order of
@@ -2033,6 +2033,8 @@ construct as many replicas of chunk $\achunk_i$ as there are literals in the
 clause. For each literal $\ell$ (of the form $\variab$ or $\neg \variab$) that satisfies clause $i$,
  we place
 a replica of chunk $\achunk_i$ in the leaf labeled $\ell_i$.
+
+\maciek{We want to say here how many VMs will be idle.}
 
 We set the threshold $\Thr$ to:
 % (\maciek{we might not want to introduce
