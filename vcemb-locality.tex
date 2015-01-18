@@ -1304,8 +1304,10 @@ function at each leaf $\ell$, by $f(T_{\ell},x) =
 the server capacity $\capacity(\ell)$;
 to calculate $f(T_{\ell}, x)$, for $x \leq \capacity(\ell)$, we compute the
 bandwidth allocation on the uplink of $T_{\ell}$, referred to by the function
-$bw(T_{\ell},x)$: $bw(T_l,x)=  \CostTrans \cdot |x - |\ChunkCount(T_{\ell})||$ $
-+ \CostCom \cdot (\Vms - x) \cdot x$,
+$bw(T_{\ell},x)$:
+$$bw(T_l,x)=  \CostTrans \cdot |x - |\ChunkCount(T_{\ell})|| + \CostCom \cdot (\Vms - x) \cdot x$$
+
+\maciek{I spreaded the bw definition over whole line as it was breaking before.}
 which accounts for the bandwidth allocation on the uplink of $T_{\ell}$. The first
 term represents the required bandwidth for the communication between the $x$
 nodes on $\ell$, and the $\Vms - x$ nodes in the remaining parts of the substrate
