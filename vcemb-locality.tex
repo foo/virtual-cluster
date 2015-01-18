@@ -2166,7 +2166,7 @@ We build upon the construction for variable gadgets introduced (see also Figure~
     \emph{root}$(c)$. We construct our tree out of $\vars$ variable gadgets
     and $\clauses$ clause gadgets.
   \item \emph{Chunk Distribution:}
-    We distribute two replicas of each of $\clauses \cdot 3$ chunk types among the servers as follows.
+    We distribute two replicas of each of $\clauses \cdot 3$ \maciek{$\tau = 3 \cdot \clauses$} chunk types among the servers as follows.
     First, similarly to the
 previous proofs with three replicas, we put clause chunks into the variable
 gadgets; however, now we place distinct chunks $c^{(1)}_i, c^{(2)}_i, c^{(3)}_i$
