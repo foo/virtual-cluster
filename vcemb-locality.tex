@@ -1516,6 +1516,8 @@ summarized in the following figure: \maciek{TODO: reference the figure, add capt
 
 Additional NP-hardness results appear in the Appendix.
 
+\maciek{I don't like naming the instances I and I'. We want a name that has 3 in it for an instance of perfect matching; we can choose and consistantly use some name for instance of any VCEMB. This is general comment that applies for both proofs in this section as well as an appendix}.
+
 \subsection{Introduction to 3D Perfect Matching}
 
 Both the hardness of $\FP+\RS+\MA$ and $\FP+\RS+\CC$ are shown by a reduction
@@ -1617,7 +1619,7 @@ with the smallest possible footprint. If the total footprint is $\leq
 The footprint consists of the costs which occur when a node is embedded in a
 gadget, and the three chunks of that gadget which are assigned to that node: one of
 the chunks is collocated with the node, the other two have to be transferred
-via two hops, inflicting costs $1$ on each hop.
+via two hops, inflicting costs \maciek{unitary cost/cost 1} $1$ on each hop.
 %\begin{figure}[htbp]
 %\includegraphics[width = \columnwidth]{figs/example-matching}
 %\end{figure}
@@ -1641,8 +1643,7 @@ $\FP+\RS+\MA$ is NP-hard.
 \end{theorem}
 \begin{proof}
 Let $I$ be an instance of $\TDM$ and let $I'$ be an instance of
-$\FP+\RS+\MA$ constructed as described above.
-We prove that $I'$ has solution of cost $\leq \Thr$ if ($\Rightarrow$) and only if
+$\FP+\RS+\MA$ constructed as described above. We prove that $I'$ has solution of cost $\leq \Thr$ if ($\Rightarrow$) and only if
 ($\Leftarrow$)
 $I$ has a matching of size $k$.
 
