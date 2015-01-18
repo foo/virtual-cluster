@@ -186,7 +186,8 @@ In particular, we
 show that
 despite the multiple degrees of freedom in terms of embedding, replica selection and assignment,
 many problems can be
-solved efficiently. However, we also show the limitations of such optimizations,
+solved efficiently\maciek{Passive voice - consider rewrite.}
+. However, we also show the limitations of such optimizations,
 by presenting several NP-hardness proofs; interestingly,
 our hardness results also hold in uncapacitated networks and in networks of small diameter.
 \end{abstract}
@@ -224,7 +225,8 @@ as well as their interconnecting network. The most prominent virtual network abs
 
 Virtualized datacenters
 offer great flexibilities on where these virtual networks
-can be instantiated or \emph{embedded}.
+can be instantiated or \emph{embedded}\maciek{Passive voice - consider rewrite.}
+.
 In order to maximize the resource utilization in the datacenter, it is in principle desirable to
 map the virtual machines of a given virtual network as close as possible
 in the underlying physical network, as this minimizes communication costs (respectively, bandwidth reservations).~\cite{oktopus,proteus}
@@ -257,7 +259,8 @@ We draw a complete picture of the problem space: We show that
 even problem variants exhibiting multiple degrees of freedom in terms of
 replica selection and embedding,
 can be solved optimally in polynomial time, and present several efficient
-algorithms accordingly. However, we also prove limitations in terms of
+algorithms accordingly\maciek{Passive voice - consider rewrite.}
+. However, we also prove limitations in terms of
 computational tractability, by providing reductions from 3-D matching
 and Boolean satisfiability ($\SAT$). Interestingly,
 while it is well-known that (unsplittable) multi-commodity flow
@@ -331,7 +334,8 @@ replica as the \emph{active} (or selected) replica.
 \textbf{\emph{The Virtual Network.}} The virtual network consists of a set $\VirtualNodes$ of $n_V=|\VirtualNodes|$ virtual machines,
 henceforth often simply called \emph{nodes}.
 Each node $v \in \VirtualNodes$ can be placed (or, synonymously, \emph{embedded}) on a server; this placement can be subject
-to optimization.
+to optimization\maciek{Passive voice - consider rewrite.}
+.
 Depending on the available capacity $\capacity(s)$ of server $s$, multiple nodes may be hosted on $s$.
 We will denote the server $s$ hosting node $v$ by $\pi(v)=s$.
 Since these nodes process the input data, they need to be assigned and connected to the
@@ -482,12 +486,14 @@ it may hold that $\CostCom\ll\CostTrans$.
 
 
 Despite the various degrees of freedom in terms of embedding and replica selection,
- many problem variants can be solved efficiently.
+ many problem variants can be solved efficiently\maciek{Passive voice - consider rewrite.}
+.
  This section introduces three general techniques to solve different problem variants,
  which can roughly be categorized into
  \emph{flow} (Section~\ref{ssec:flow}), \emph{matching} (Section~\ref{ssec:match}) and \emph{dynamic programming}
  (Section~\ref{ssec:dyn}) approaches.
- As we will see, several problems variants can be solved in multiple ways (differing in their runtimes),
+ As we will see, several problems variants can be solved in multiple ways\maciek{Passive voice - consider rewrite.}
+ (differing in their runtimes),
  and in each approach, we will summarize the solvable problem variants using a \emph{Venn diagram}.
 
 First, let us make a simplifying observation:
@@ -498,7 +504,8 @@ for the inter-connect network ($\CC$) can generally be allocated \emph{upfront},
 does not depend on the replica
 selection and assignment.
 Accordingly, problem variant $\RS+\MA+\CC +\BW$ (as well as all its subproblems)
-can be reduced to $\RS+\MA+\BW$ (resp.~its subproblems).
+can be reduced to $\RS+\MA+\BW$ (resp.~its subproblems)\maciek{Passive voice - consider rewrite.}
+.
 \end{obs}
 
 \subsection{Flow Algorithms ($\RS+\MA+\CC+\BW$)}\label{ssec:flow}
@@ -521,7 +528,8 @@ Our goal is to minimize the resource footprint $\Cost$, consisting
 of the bandwidth reservations in the (chunk) access network and the (node)
 inter-connect.
 As we will see in the following, a flow approach can be used to solve this
-problem variant.
+problem variant\maciek{Passive voice - consider rewrite.}
+.
 
 %\maciek{We do not need any assumption about bandwidth. If we do not
 %  have integrality, we round down every bandwidth. If we do not have
@@ -605,7 +613,8 @@ the total allocation on this path will be 0, and we have increased the number of
 \emph{Third}, given an integer min-cost-max-flow solution, we need to decompose the integer flows into the paths
 representing matched chunk-node pairs:
 The assignment can be obtained by decomposing the flow allocated in the
-original substrate network. In order to identify a matched chunk-node pair,
+original substrate network\maciek{Passive voice - consider rewrite.}
+. In order to identify a matched chunk-node pair,
 we take an arbitrary (loop-free) path $p$ carrying a flow of value  $\geq 1$ from $\Source$ to $\Sink$:
 the first hop represents the chosen chunk type, the second hop the chosen
 replica, and the last but one hop represents the server: we will assign
@@ -647,7 +656,8 @@ This section presents faster algorithms to solve the two problem variants
 $\RS+\MA+\CC$ and $\MA+\CC+\BW$ which can also be solved with the flow approach
 introduced above.
 In general, the algorithms presented in this section can be summarized
-as matching approaches.
+as matching approaches\maciek{Passive voice - consider rewrite.}
+.
 
 \subsubsection{$\RS+\MA+\CC$}
 
@@ -755,7 +765,8 @@ The runtime consists of two parts: the construction of the matching graph and
 the actual matching computation. The constructed graph consists of
 $\MaFactor \cdot n_V \cdot \ChunkType$ many edges,
 and for each edge we need to compute its cost, i.e., the shortest distance
-which in a tree can be computed in time $n_S$; thus, the overall construction time
+which in a tree can be computed in time $n_S$\maciek{Passive voice - consider rewrite.}
+; thus, the overall construction time
 is
 %$\mathrm{O}(n_S \cdot \MaFactor \cdot n_V \cdot \ChunkType)$.
 $\mathrm{O}(n_S \cdot \tau^2)$.
@@ -802,7 +813,8 @@ We now show that we can solve $\MA+\CC$ even faster, by exploiting
 locality. Moreover, we will show that
 even
 $\MA+\CC+\BW$ problem variants can be solved with our approach, by simply
-verifying feasibility.
+verifying feasibility\maciek{Passive voice - consider rewrite.}
+.
 In the following, due to Observation~\ref{obs:nofp}, we can focus on
 the $\MA$ resp.~$\MA+\BW$ problem.
 
@@ -891,7 +903,8 @@ $\VmChunkAssignment$ on the uplink of $\Tree'$ is $|x-y\cdot\MaFactor|\cdot
 \begin{proof}
   If number of chunk types equals the processing capacities of the nodes in the given subtree,
 the bandwidth allocation inflicted by the chunk access network on the uplink can be
-zero, since all chunks can be assigned to nodes in the same subtree.
+zero, since all chunks can be assigned to nodes in the same subtree\maciek{Passive voice - consider rewrite.}
+.
 Otherwise, we distinguish between two cases: Recall, that in instances
 without $\RS$, all chunks have to be processed. In case
 there are more chunks in the subtree, at least all of the excess chunks have to
@@ -1209,7 +1222,7 @@ graph.
 \subsection{Dynamic Programming ($\FP+\CC+\MA+\BW$)}\label{ssec:dyn}
 
 We now show that also the $\FP+\CC+\MA+\BW$ problem variant can be solved
-in polynomial time.
+in polynomial time.\maciek{Passive voice - consider rewrite.}
 Note that this problem variant requires to find a
 tradeoff between the desire to place nodes as close as possible to each other
 (in order to minimize communication costs), and the desire to place nodes
@@ -1432,7 +1445,8 @@ is due to the decoupling of the costs induced by the tree
 structure of $\Tree$ and the  substructure
 optimality property.
 The substructure optimality follows from the observation that
-costs can be accounted on the uplink, and the fact
+costs can be accounted on the uplink\maciek{Passive voice - consider rewrite.}
+, and the fact
  that we check each possible node distribution.
 For each substrate vertex ($n_S$ many) we have
 to check the cost of all possible splits,
@@ -1473,7 +1487,8 @@ $\RS$ and $\BW$ (but without $\CC$ or $\MA$) can easily be solved by mapping nod
 %remaining property combinations (marked in black) are np-hard.}
 
 We have seen that even problems with multiple dimensions of
-flexibility can be solved optimally in polynomial time.
+flexibility can be solved optimally in polynomial time\maciek{Passive voice - consider rewrite.}
+.
 This section now points out fundamental
 limitations in terms of computational tractability. In particular, we
 will show that problems become NP-hard if multiple chunks have to be
@@ -1505,7 +1520,8 @@ Both the hardness of $\FP+\RS+\MA$ and $\FP+\RS+\CC$ are shown by a reduction
 from the NP-complete problem of \emph{3D Perfect Matching}~\cite{3dmatch},
 which
 can be seen as a generalization of bipartite matchings to 3-uniform
-hypergraphs. We will refer to this problem by $\TDM$, and for completeness,
+hypergraphs\maciek{Passive voice - consider rewrite.}
+. We will refer to this problem by $\TDM$, and for completeness,
 review it in the following.
 
 $\TDM$ is defined as follows. We are given three finite and disjoint
@@ -2029,7 +2045,8 @@ $ \Thr = \variables \cdot ({\clauses  \choose 2} \cdot 2 +
 We now show that our construction indeed
 decides $\SAT$. We set the capacities such that in every gadget,
 at most $\clauses$ nodes can be mapped, where $\clauses$
-is the number of clauses of $\Formula$.
+is the number of clauses of $\Formula$\maciek{Passive voice - consider rewrite.}
+.
 We can apply the Bandwidth Lemma (Lemma~\ref{lem:bandwidth-lemma}) as follows:
 We interpret $a_i$ as the
 number of nodes that are embedded in the $i$-th gadget, $\clauses$
@@ -2112,7 +2129,8 @@ same chunk $c_1$.
 Our results so far indicate that dealing with replication can be challenging.
 However, all our hardness proofs concerned scenarios with three replicas,
 which raises the question whether the problems can be solved in polynomial time
-with a replication factor of two only. (Similarly to, say, the $\ZSAT$ problem
+with a replication factor of two only\maciek{Passive voice - consider rewrite.}
+. (Similarly to, say, the $\ZSAT$ problem
 which is tractable in contrast to $\TSAT$.)
 
 In the following, we show that this is not the case: the problem remains
@@ -2267,7 +2285,8 @@ Observe that it might happen that in $\Sol$, two nodes in
 clause variables are idle, and three nodes in variable gadgets are
 processing those $3$ chunk types. In this case,
 arbitrary nodes can be taken for the rest
-of the proof.
+of the proof\maciek{Passive voice - consider rewrite.}
+.
 
 \begin{lemma}
 $\Val$ satisfies $\Formula$.
@@ -2350,7 +2369,8 @@ $a_k$ must be of the form $\clauses + x$ for $x \in [1, \ldots, \clauses]$.
 Let us consider the (bandwidth) inequality:
 $$ (\clauses + x) \cdot (\clauses \cdot \variables - \clauses - x) \leq \clauses \cdot (\clauses \cdot \variables - x) $$
 
-This can be transformed to:
+This can be transformed to\maciek{Passive voice - consider rewrite.}
+:
 
 $$ 0 \leq x(x - (\clauses \cdot (\variables - 2))) $$
 
