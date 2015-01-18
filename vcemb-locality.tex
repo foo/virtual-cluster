@@ -620,7 +620,8 @@ The runtime of our algorithm consists of four parts: construction of $\Tree^*$,
 computation of the min-cost-max-flow, flow rounding, and decomposition. The
 dominant terms in the asymptotic runtime is the flow computation.
 Using the state-of-the-art min-cost-max-flow algorithms~\cite{mincostmaxflow-1,mincostmaxflow-2}
-we get a runtime of $\mathrm{O}(n_S^2 \cdot \log\log \min \{U,\tau\})$
+we get a runtime of $\mathrm{O}(n_S^2 \cdot \log\log \min \{U,\tau\})$ 
+ \maciek{Double check that!}
 where $U$ is the maximal link capacity; note that in networks with high capacity and uncapacitated networks, we can simply
  set $U=\tau$.
 % resp.~$\mathrm{O}(n_S^5 \cdot \tau^3 \log n_S)$, where $\delta$ is the network diameter and
@@ -766,7 +767,7 @@ The runtime translates to
 %$\mathcal{O}(\tau^{11/4}*n_S)$,
 $\mathcal{O}(\tau^{5/2}\cdot \log(\tau\cdot n_S))$.
 %where $C$ is the maximal link capacity.
-(Recall that $\tau = \MaFactor\cdot n_V$.)
+(Recall that $\tau = \MaFactor\cdot n_V$.) \maciek{Double check that.}
 
 
 %\begin{comment}
