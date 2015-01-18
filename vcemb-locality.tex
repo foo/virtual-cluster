@@ -630,7 +630,7 @@ and the fact that cost optimal integral solutions always exist~\cite{flow-book}.
 The runtime of our algorithm consists of four parts: construction of $\Tree^*$,
 computation of the min-cost-max-flow, flow rounding, and decomposition. The
 dominant terms \maciek{term} in the asymptotic runtime is the flow computation.
-Using the state-of-the-art min-cost-max-flow algorithms~\cite{mincostmaxflow-1,mincostmaxflow-2}
+Using the state-of-the-art min-cost-max-flow \maciek{Consider min-cost flow algorithms} algorithms~\cite{mincostmaxflow-1,mincostmaxflow-2}
 we get a runtime of $\mathrm{O}(n_S^2 \cdot \log\log \min \{U,\tau\})$ 
  \maciek{Double check that!}
 where $U$ is the maximal link capacity; note that in networks with high capacity and uncapacitated networks (\maciek{I don't see the point of mentioning the uncapacitated networks, as we are not using flow approach there.}), we can simply
