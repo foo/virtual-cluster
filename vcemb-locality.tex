@@ -578,7 +578,9 @@ capacity due to $\CC$.
 \includegraphics[width=\columnwidth]{figs/flow_ma_cv}
 \caption{Example of flow construction: Problem instance with two nodes, four chunk
 types, and two replicas per type. The min-cost-max-flow
-is indicated by the dotted lines: each line represents one unit of flow.}
+is indicated by the dotted lines: each line represents one unit of flow.
+\maciek{Float this figure, perhaps even scale down.}
+}
 \label{fig:flow_construction}
 \end{figure}
 
@@ -804,7 +806,7 @@ verifying feasibility.
 In the following, due to Observation~\ref{obs:nofp}, we can focus on
 the $\MA$ resp.~$\MA+\BW$ problem.
 
-We first need the following definition.
+We first need the following definition \maciek{Rewrite this sentence.}.
 \begin{defn}[Local Assignment (LA)]\label{def:loc}
 We define an assignment $\VmChunkAssignment$ to
 be \emph{local in a specific subtree $\Tree'$}, iff~$\VmChunkAssignment$
@@ -1308,8 +1310,8 @@ details).
 %corresponding number of nodes in the subtree as infeasible.}
 
 %\carlo{
-After this initialization, we proceed to compute $f$ for non-leaf
-nodes in a bottom up manner: We consider every possible split of the $x$ nodes
+After this\maciek{Remove ``this''?} initialization, we proceed to compute $f$ for non-leaf
+nodes in a bottom up manner: We consider every possible split of the $x$ nodes\maciek{To split nodes into integers - rewrite.}
 into two positive integer
 values: we put $r$ on the right and $x - r$ on the left subtree.
 That is, we take the optimal cost
@@ -1524,7 +1526,7 @@ elements of $X \times Y \times Z$ exactly once. }
 \subsection{Multi-Assignments are hard ($\FP+\RS+\MA$)}\label{ssec:fprsma}
 
 Our proof that $\FP+\RS+\MA$ is NP-hard is based on the following main ideas.
-We encode a $\TDM$ instance as an $\FP+\RS+\MA$ instance as follows:
+We encode a $\TDM$ instance as an $\FP+\RS+\MA$ instance as follows:\maciek{Those basic ideas are shared between two proofs. Maybe we should put those in the intro? But it is good the way it is also.}
 
  \begin{itemize}
  \item For every element in the universe $X\cup Y\cup
@@ -1533,7 +1535,7 @@ We encode a $\TDM$ instance as an $\FP+\RS+\MA$ instance as follows:
  of $\FP+\RS+\MA$,
  that each chunk type is processed.
 
- \item We will encode each triple as three leaves in
+ \item We will encode each triple as three leaves \maciek{Gadget with three leaves instead of just three leaves} in
  a substrate tree $\Tree$. The three leaves are close to each
  other in $\Tree$, and the placement of chunk replicas in $\FP+\RS+\MA$
  corresponds to the elements of the
@@ -1541,7 +1543,7 @@ We encode a $\TDM$ instance as an $\FP+\RS+\MA$ instance as follows:
 
  \item The node placement will correspond to choice of triples,
  independently in which leaf the node is mapped.
- A node will process the chunk which is located on the same server,
+ A node will process the chunk which is located on the same server \maciek{Notation of ``the same server'' can be ambigous},
  as well as the chunks in other two leaves of the same gadget.
 
 \item In order to turn the optimization problem into a decision problem, we will use
@@ -1551,7 +1553,7 @@ a cost threshold $\Thr$; solutions of higher costs are considered infeasible. \m
 
 
 \textbf{Construction.}
-Given an instance $I$ of $\TDM$, we construct an instance $I'$ of
+Given an instance $I$ of $\TDM$ \maciek{we might want to set $k$ to be $k$ from this instance, because later we use this $k$ and the reader might have hard time finding which $k$ are we talking about}, we construct an instance $I'$ of
 $\FP+\RS+\MA$ as follows:
 \begin{itemize}
 \item \emph{Tree Construction:} We create a tree consisting of a root,
@@ -1561,7 +1563,7 @@ and has the following form:
 The gadget of each triple $t_i$ consists of an inner node (a router) and three leaves.
 \item \emph{Chunks and chunk replicas:} For each element in $X$, $Y$ and $Z$,
  we create a chunk type
-($3 \cdot k$ in total). Every gadget
+($3 \cdot k$ in total \maciek{This can be alternative place where we tell that $k$ is from the instance}). Every gadget
 contains three chunk replicas, corresponding to the elements of $t_i$.
 \item \emph{Other properties:} We set the number of to-be-embedded nodes to $k$,
 $\CostTrans$ to $1$, and the number of chunk slots in each node to the multi-assignment factor
@@ -1849,7 +1851,9 @@ and even if the the number of replicas is bounded by two.
 \end{small}
 \caption{
 The use cases of the proposed algorithms, expressed in property
-combinations which it can solve faster, than any other algorithm.}
+combinations which it can solve faster, than any other algorithm.
+\maciek{Visual side of this table - cell padding, FP+NI aligned to right; there is place for saying dynamic programming instead of DP.}
+}
 \label{tab:summary}
 \end{table}
 
