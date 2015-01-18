@@ -911,7 +911,7 @@ there are more chunks in the subtree, at least all of the excess chunks have to
 be transferred to a different subtree, which will
 inflict costs $\CostTrans$ per excess chunk on the uplink connecting $\Tree'$
 with the
-remaining parts of $\Tree$. Similarly, if the processing capabilities exceed the
+remaining parts of $\Tree$\maciek{, which will inflict costs $\CostTrans$ per excess chunk on the uplink of root of $\Tree'$}. Similarly, if the processing capabilities exceed the
 amount of
 available chunks, excess chunks from other subtrees will have to be transferred
 to
@@ -1292,7 +1292,7 @@ due to symmetry arguments \maciek{and uplink lemma}.)
 Our approach is to evaluate this function in a bottom-up
 manner.
 To finally compute the actual optimal embedding,
-we traverse the computed minimal-cost path backwards.
+we traverse the computed minimal-cost path backwards\maciek{I think that we lack detail here. We say that we traverse the path, but we do not mention that it is the path through the array of $f$ bottom-up computation}.
 
 Concretely, the first argument to function $f$
 is a subtree $\Tree'$ (which contains a given set of chunks-in-the-subtree $\ChunkCount(\Tree')$ \maciek{We define CIS as set only to use its power later. Define it as number to avoid symbols.}),
