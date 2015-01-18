@@ -315,7 +315,7 @@ or regular) tree,
 where the servers are located at the tree leaves.
 Each server $s\in S$ can host a certain number
 of virtual machines (available server capacity $\capacity(s)$), and each link $e\in E$ has a certain bandwidth
-capacity $\capacity(e)$. \maciek{Reader might find overloading the meaning of $\capacity(.)$ potentialy confusing. He might think that capacity for servers only exists in bandwidth model. I suggest using different name for that, like slots or cpus.}
+capacity $\capacity(e)$. 
 
 \textbf{\emph{The Input Data.}} The to be processed data constitutes the input to the batch-processing application.
 The data is stored in a distributed manner; this spatial distribution is given and not subject to optimization.
@@ -335,7 +335,8 @@ to optimization.
 Depending on the available capacity $\capacity(s)$ of server $s$, multiple nodes may be hosted on $s$.
 We will denote the server $s$ hosting node $v$ by $\pi(v)=s$.
 Since these nodes process the input data, they need to be assigned and connected to the
-chunks. Concretely, for each chunk type $\achunk_i$, \maciek{(exactly one)} one replica $\achunk_{i}^{(j)}$ must be processed by exactly one node $v$;
+chunks. Concretely, for each chunk type $\achunk_i$, exactly one 
+replica $\achunk_{i}^{(j)}$ must be processed by exactly one node $v$;
 which replica $\achunk_{i}^{(k)}$ is chosen is subject to optimization, and 
 we will denote by $\mu$ the assignment of nodes to chunks.
 %We will typically assume that there are $\MaFactor\geq 1$ times more chunk types to be processed than there are nodes,
@@ -400,8 +401,8 @@ is equal to the number of nodes. Otherwise, we will add the $+\MA$ property disc
 If the number of chunk types $\tau$ is larger than the number of nodes,
 each node needs to be assigned multiple chunks. We will refer to such a scenario by $\MA$,
 and will denote the number of chunks per node by the integer value $\MaFactor = \tau / n_V$.
-\maciek{We can have per-VM MA factor. When combined with FP we just generalize to per-server MA factor.}
-%Note that in a scenario with only $\MA$ but without $\RS$, chunk types are not redundant.
+%Note that in a scenario with only $\MA$ but without $\RS$, chunk types are not 
+%redundant.
 
 \textbf{\emph{Flexible Placement ($\FP$).}} The third fundamental degree of freedom, besides replica selection and assignment,
 regards the flexibility in the placement (or synonymously: \emph{embedding}) of nodes on physical servers.
@@ -592,9 +593,11 @@ integer values. Due to the \emph{integrality theorem}~\cite{flow-book},
 there always exists an optimal integer solution on graphs with integer capacities.
 However, while algorithm like the successive shortest path algorithm~\cite{successive_shortest_path_complexity}
 directly give us such an integral solution (in polynomial time), the fastest min-cost-max-flow algorithms (e.g., based on double-scaling
-methods~\cite{mincostmaxflow-1} or minimum mean-cost cycle algorithms~\cite{mincostmaxflow-2} \maciek{mean-cost cycle algorithm is AFAIK designed to solve specific flow problem where we have negative costs; we only have costs 0 or 1, so this algorithm might not  be the best example}), may yield fractional solutions
+methods~\cite{mincostmaxflow-1} or minimum mean-cost cycle 
+algorithms~\cite{mincostmaxflow-2}, may yield fractional solutions
 which need to be rounded to integral solutions (of the same cost).
-In order to compute integral solutions, we proceed as follows: we iteratively pick an arbitrary (loop-free \maciek{We will not have any loop in our flow because all edge costs are non-negative}) path
+In order to compute integral solutions, we proceed as follows: we iteratively 
+pick an arbitrary (loop-free) path
 currently having a fractional allocation of value $f$ ($f>0$), and distribute its flow $f$
 among all other fractional paths of the same length; due to the optimality of the fractional solution
 and due to the integrality theorem, such paths must always exist. After distributing this flow,
@@ -663,7 +666,7 @@ we construct a bipartite
 graph between the set
 $\VirtualNodes$ of nodes and
 the set of chunks.
-Concretely, we clone each node $\MaFactor$ (\maciek{Shouldn't ma factor be a function of a node?}) times,
+Concretely, we clone each node $\MaFactor$ times,
 as each node needs to process
 $\MaFactor$ chunk types, and we collect all copies of a given chunk type in a
 single %$\ChunkType$
@@ -735,9 +738,10 @@ This is visualized for $\achunk_2$.}
 Figure~\ref{fig:matching} illustrates
 %the procedure for a more complex problem
 an instance where two nodes are
-cloned into $\MaFactor = 2$ \maciek{We no longer have $\MaFactor$, now we have capacities/slots/cpus in the model.} nodes each, resulting in a total of four nodes in
+cloned into $\MaFactor = 2$ nodes each, 
+resulting in a total of four nodes in
 the matching problem representation.
-The $\RedundancyFactor = 2$ \maciek{We might not want to set global redundancy factor, we would rather say that we spawn 2 replicas of each chunk type. Redundancy can be per chunk type and setting the variable $\RedundancyFactor$ might confuse him to think otherwise.} chunks of each chunk type are
+The 2 replicas of each chunk type are
 aggregated into a single chunk type node $\achunk_j$  in the matching problem;
 this gives a total of four chunk type nodes in the matching graph. The costs
 on the links between all clones of a specific node and a chunk type are set to
@@ -750,7 +754,8 @@ The correctness of our algorithm follows from the construction and the optimal
 solution of the minimum matching.
 The runtime consists of two parts: the construction of the matching graph and
 the actual matching computation. The constructed graph consists of
-$\MaFactor \cdot n_V \cdot \ChunkType$ \maciek{Again, ma factor is per node} many edges,
+$\MaFactor \cdot n_V \cdot \ChunkType$ 
+many edges,
 and for each edge we need to compute its cost, i.e., the shortest distance
 which in a tree can be computed in time $n_S$; thus, the overall construction time
 is
@@ -883,11 +888,12 @@ containing $x$
 chunks and $y$ nodes, the minimal bandwidth allocation of any
 assignment
 $\VmChunkAssignment$ on the uplink of $\Tree'$ is $|x-y\cdot\MaFactor|\cdot
-\CostTrans$. \maciek{Here we can generalize this lemma to different MA factors for different machines. I would suggest introducing ``processing power of the subtree function'', which would be a sum of number of cpus of VMs in the subtree.} \label{lemma:uplink}
+\CostTrans$.
+\label{lemma:uplink}
 \end{lemma}
 \begin{proof}
-  \maciek{I wouldn't start any proof with ``clearly''}
-Clearly, if number of chunk types equals the processing capacities of the nodes in the given subtree,
+In case the number of chunk types equals the processing capacities of the 
+nodes in the given subtree,
 the bandwidth allocation inflicted by the chunk access network on the uplink can be
 zero, since all chunks can be assigned to nodes in the same subtree.
 Otherwise, we distinguish between two cases: Recall, that in instances
@@ -1244,7 +1250,6 @@ footprint. In other cases, one solution outperforms the other.}
 \label{fig:dynamic_motivation}
 \end{figure}
 
-\stefan{carlos figure comes here}
 
 %\maciek{TODO: In each of previous sections we had an example where we show
 %  non-triviality of the problem. Here we also have an interesting
@@ -1264,7 +1269,8 @@ exhibits such a structure, and we show how to exploit it to
 compute efficient embeddings, even in scenarios where multiple chunks
 need to be assigned to flexibly placeable nodes.
 
-\textbf{Basic ideas.} For ease of presentation \maciek{I am not sure if binarization only serves the role of easing the presentation. It also allows our program to run in polynomial time -- if we tried the same approach without the binarization, we would have superpolynomial runtime.}, we will transform the substrate network $\Tree$
+\textbf{Basic ideas.} For ease of presentation we will transform the 
+substrate network $\Tree$
 into a binary tree, using binarization:
 we clone every higher-degree node,
 iteratively attaching additional clones as right children
@@ -1274,15 +1280,16 @@ and original children as left descendants.
 
 As usual in dynamic programs, we define, over the structure of the tree, an inductive formula $f$ for
 the minimal cost solution \emph{given} any possible number of nodes
-embedded in a given subtree. (The actual set does not matter,
-due to symmetry arguments \maciek{and uplink lemma}.)
+embedded in a given subtree. The actual set does not matter,
+due to symmetry arguments.
 Our approach is to evaluate this function in a bottom-up
 manner.
 To finally compute the actual optimal embedding,
 we traverse the computed minimal-cost path backwards.
 
 Concretely, the first argument to function $f$
-is a subtree $\Tree'$ (which contains a given set of chunks-in-the-subtree $\ChunkCount(\Tree')$ \maciek{We define CIS as set only to use its power later. Define it as number to avoid symbols.}),
+is a subtree $\Tree'$, containing a given number of 
+chunks-in-the-subtree $\ChunkCount(\Tree')$,
 and the
 second argument is the number of nodes to be embedded in the subtree.
 Function $f$ is evaluated in a bottom up manner. We initialize the
@@ -1291,7 +1298,7 @@ function at each leaf $\ell$, by $f(T_{\ell},x) =
 the server capacity $\capacity(\ell)$;
 to calculate $f(T_{\ell}, x)$, for $x \leq \capacity(\ell)$, we compute the
 bandwidth allocation on the uplink of $T_{\ell}$, referred to by the function
-$bw(T_{\ell},x)$: $bw(T_l,x)=  \CostTrans \cdot |x - |\ChunkCount(T_{\ell})||$ $
+$bw(T_{\ell},x)$: $bw(T_l,x)=  \CostTrans \cdot |x - \ChunkCount(T_{\ell})|$ $
 + \CostCom \cdot (\Vms - x) \cdot x$,
 which accounts for the bandwidth allocation on the uplink of $T_{\ell}$. The first
 term represents the required bandwidth for the communication between the $x$
@@ -1321,7 +1328,6 @@ $T'$. Given the cheapest combination, we add the bandwidth requirements
 on the uplink of $T'$ to generate the overall costs for placing $x$ nodes in $T'$.
 $$f(T',x) =   \min_{r \in \{0, \ldots, x\}}  f\left(\textsc{Ri}(T'), r\right) +
 f\left(\textsc{Le}(T'), x - r\right) + bw(T',x)$$
-\maciek{I am not sure if $bw(T',x)$ is sufficient. We charge two edges on each recursion level, therefore we should have $bw(\textsc{Le}(T'),l)+bw(\textsc{Ri}(T'),r)$}
 Again, we set $f(T',x)$ to infinity if the required bandwidth
 $bw$ exceeds the capacity $\capacity$ of the uplink of $T'$.
 
