@@ -882,7 +882,7 @@ will also be local.
 The complexity of this
 construction is low: For each
 vertex in the substrate graph,
-we have to build the union of the children's sets,
+we have to\maciek{We build the union (no ``have to'')} build the union of the children's sets,
 and since each vertex can only be the child of one vertex,
 the amortized runtime per vertex is constant; and hence the overall
 runtime $\mathcal{O}(n_S)$. The sum of all remove operations, is equal to
@@ -996,7 +996,7 @@ the problem infeasible. Hence, it is sufficient to temporarily omit the
 bandwidth limitations, compute an optimal assignment for an $\MA$ instance, and
 verify that the resulting allocations do not violate any capacities. The
 postprocessing step scales linearly with the number of edges in the substrate
-graph.
+graph.\maciek{The postprocessing time scales linearly with respect to the number of edges in the substrate graph.}
 %Due to the tree topology of the substrate graph, the number of
 %edges in the substrate is $n_S - 1$, which does not affect the
 %asymptotic complexity of this approach.}
@@ -1595,7 +1595,7 @@ We use a threshold $\Thr= 4
 %  this proof.}
 \end{itemize}
 
-\textbf{Example} Figure~\ref{fig:fprsma} shows an example of our construction: An
+\textbf{Example.} Figure~\ref{fig:fprsma} shows an example of our construction: An
 instance $I$ of 3-DM is given: The disjoint sets $X$, $Y$ and $Z$ have a
 cardinality $k=2$. We will refer to the two elements in $X$ as $x_1$ and $x_2$,
 and use the same notation for the other two sets. $T$ contains the three triples
@@ -1605,7 +1605,7 @@ subset $M \subseteq T$, which contains each element in each of the three sets
 exactly once. For this instance the only solution is $M =
 \{(x_1,y_1,z_1),(x_2,y_2,z_2))\}$.
 
-\textbf{Example.} To construct the corresponding instance $I'$ of $\FP+\RS+\MA$, we
+To construct the corresponding instance $I'$ of $\FP+\RS+\MA$, we
 create a gadget for each triple in $T$. The gadgets contain a chunk  the
 type of the variable, for each variable that occurs in the triple. The triple
 $(x_2, y_1, z_2)$ of the instance is represented by the middle gadget in
