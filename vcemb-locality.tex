@@ -191,9 +191,9 @@ by presenting several NP-hardness proofs; interestingly,
 our hardness results also hold in uncapacitated networks and in networks of small diameter.
 \end{abstract}
 
-\begin{comment}
-we should maybe give the main algorithms a name; we should talk about the case where the number of machines is not a perfect multiple;
-\end{comment}
+%\begin{comment}
+%we should maybe give the main algorithms a name; we should talk about the case where the number of machines is not a perfect multiple;
+%\end{comment}
 
 %\section*{TODOs}%
 %
@@ -401,8 +401,7 @@ is equal to the number of nodes. Otherwise, we will add the $+\MA$ property disc
 If the number of chunk types $\tau$ is larger than the number of nodes,
 each node needs to be assigned multiple chunks. We will refer to such a scenario by $\MA$,
 and will denote the number of chunks per node by the integer value $\MaFactor = \tau / n_V$.
-%Note that in a scenario with only $\MA$ but without $\RS$, chunk types are not 
-%redundant.
+
 
 \textbf{\emph{Flexible Placement ($\FP$).}} The third fundamental degree of freedom, besides replica selection and assignment,
 regards the flexibility in the placement (or synonymously: \emph{embedding}) of nodes on physical servers.
@@ -639,7 +638,7 @@ where $U$ is the maximal link capacity; note that in networks with high capacity
 
 \begin{wrapfigure}{r}{0.5\columnwidth}
 \includegraphics[width=0.48\columnwidth]{figs/venn_matching.pdf}
-\caption{Variants solved by matching approach.\maciek{There is no $\MA+\CC+\BW$ marked in this diagram.}}
+\caption{Variants solved by matching approaches.}
 \label{fig:venn_match}
 \end{wrapfigure}
 
@@ -774,29 +773,29 @@ $\mathcal{O}(\tau^{5/2}\cdot \log(\tau\cdot n_S))$.
 (Recall that $\tau = \MaFactor\cdot n_V$.)
 
 
-\begin{comment}
-The following lemma essentially states that any non-local matching can only have higher
-costs in all subtrees.
-
-\maciek{We need to introduce what we mean by partial matching before
-  formulating this lemma.}
-\begin{lemma}\label{lemma:local}
-A local and greedy perfect matching of chunks to nodes is optimal.
-\end{lemma}
-\begin{proof}
-Proof by contradiction. Let us assume that there exists an optimal matching $M'$ of cost lower
-than the local greedy matching $M$.
-Let us consider the smallest subtree where the (partial) matching of $M$
-has a different cost than the (partial) matching of $M'$.
-This means
-that a non-local decision was made by $M'$ in this subtree (hoping for savings higher up),
-and there must exist two matched pairs in $M'$ that shares a link (one pair is transporting a chunk up, and
- the other one a chunk down). Then we can create a matching $M''$
- which uncrosses these edges of $M'$ (i.e., does the local matching on them),
-  and is cheaper than $M'$. Contradiction.
-\end{proof}
-
-\end{comment}
+%\begin{comment}
+%The following lemma essentially states that any non-local matching can only have higher
+%costs in all subtrees.
+%
+%\maciek{We need to introduce what we mean by partial matching before
+%  formulating this lemma.}
+%\begin{lemma}\label{lemma:local}
+%A local and greedy perfect matching of chunks to nodes is optimal.
+%\end{lemma}
+%\begin{proof}
+%Proof by contradiction. Let us assume that there exists an optimal matching $M'$ of cost lower
+%than the local greedy matching $M$.
+%Let us consider the smallest subtree where the (partial) matching of $M$
+%has a different cost than the (partial) matching of $M'$.
+%This means
+%that a non-local decision was made by $M'$ in this subtree (hoping for savings higher up),
+%and there must exist two matched pairs in $M'$ that shares a link (one pair is transporting a chunk up, and
+% the other one a chunk down). Then we can create a matching $M''$
+% which uncrosses these edges of $M'$ (i.e., does the local matching on them),
+%  and is cheaper than $M'$. Contradiction.
+%\end{proof}
+%
+%\end{comment}
 
 \subsubsection{Faster $\MA+\CC$ and $\MA+\CC+\BW$}
 
@@ -867,8 +866,9 @@ and remove them from the sets.
 
 \textbf{Analysis.} On a given vertex $u$, emptying one of the sets, results in a \emph{local assignment} (cf~Definition~\ref{def:loc})
 in the
-subtree rooted at $u$. Due to our bottom-up strategy, the overall assignment
-will also be local.
+subtree rooted at $u$. \carlo{The bottom-up strategy ensures, that this works 
+for every subtree in the substrate, rendering the resulting assignment
+local}.
 The complexity of this
 construction is low: For each
 vertex in the substrate graph,
@@ -894,7 +894,8 @@ $\VmChunkAssignment$ on the uplink of $\Tree'$ is $|x-y\cdot\MaFactor|\cdot
 \begin{proof}
 In case the number of chunk types equals the processing capacities of the 
 nodes in the given subtree,
-the bandwidth allocation inflicted by the chunk access network on the uplink can be
+the bandwidth allocation inflicted by the chunk access network on the uplink can 
+be
 zero, since all chunks can be assigned to nodes in the same subtree.
 Otherwise, we distinguish between two cases: Recall, that in instances
 without $\RS$, all chunks have to be processed. In case
@@ -909,7 +910,7 @@ to
 nodes in the subtree $\Tree'$, inflicting bandwidth costs of $\CostTrans$ each.
 Hence, the minimum bandwidth allocation for the chunk transport on the uplink
 is the difference between the number of chunks and the processing capabilities
-of the subtree $|x-(y\cdot\MaFactor)|$ times the amount of bandwidth needed,
+of the subtree $|x-y\cdot\MaFactor|$ times the amount of bandwidth needed,
 for a single transfer $\CostTrans$.
 \end{proof}
 
@@ -921,9 +922,11 @@ is optimal iff it is local.
 \end{theorem}
 
 \begin{proof}
-Local assignments generate exactly the minimal allocations on all links, as described in
+Local assignments generate exactly the minimal allocations on all links, as 
+\carlo{the the assignments which generate the minimal bandwidth allocations 
+described in
 the proof of
-Lemma~\ref{lemma:uplink}. Hence
+Lemma~\ref{lemma:uplink} are local in the given subtree}. Hence
 each local assignment has to be optimal. A non-local assignment, has at least
 one subtree, in which it is not local. This subtree will have a higher
 allocation on the uplink. Since the local assignment has minimal allocations
@@ -931,55 +934,55 @@ on all other links, the non local assignment has a larger footprint.
 \end{proof}
 
 
-\begin{comment}
-Since each link is an uplink of one subtree,
-Lemma~\ref{lem:uplink-alloc} implies:
-\begin{corollary}
-All local assignments result in the same cost, for any $\CC+\MA$ problem instance.
-\label{corollary:same_costs}
-\end{corollary}
+%\begin{comment}
+%Since each link is an uplink of one subtree,
+%Lemma~\ref{lem:uplink-alloc} implies:
+%\begin{corollary}
+%All local assignments result in the same cost, for any $\CC+\MA$ problem instance.
+%\label{corollary:same_costs}
+%\end{corollary}
+%
+%
+%
+%
+%\stefan{TODO: Describe unbalanced tree pic}
+%
+%We can now prove optimality:
+%\begin{theorem}
+%Given an $\CC+\MA$ problem instance, a feasible assignment $\VmChunkAssignment$
+%is optimal iff it is local.
+%\label{thm:local_optimal}
+%\end{theorem}
+%\begin{proof}
+%By contradiction. We will show, that a non-local assignment is not optimal. Combined with
+%Corollary~\ref{corollary:same_costs}, this results in the optimality of all
+%local assignments.
+%
+%Assume a non-local optimal assignment $\VmChunkAssignment$ exists.
+%This means, for at least one subtree, it assigns
+%a chunk $\achunk_i$, located in the subtree, to a node $\VirtualNode_i$ outside
+%the
+%subtree. In addition,
+%at least one node $\VirtualNode_j$ in the subtree has to process a chunk
+%$\achunk_k$ located outside the subtree. We construct an alternative
+%assignment $\VmChunkAssignment'$, by exchanging the assignments of
+%$\achunk_i$ and $\achunk_j$. Since $\achunk_i$ is located in a subtree which
+%contains $\VirtualNode_j$ but not $\VirtualNode_i$, and both nodes and chunks
+%are only located at leaves, the distance between $\achunk_i$ and its assigned
+%node is smaller in $\VmChunkAssignment'$. For the distance between $\achunk_j$
+%we make a case distinction: if there exists a subtree which
+%contains $\achunk_i$, $\achunk_j$ but not $\VirtualNode_i$, the distance
+%between $\achunk_i$ and $\VirtualNode_i$ is equal to the distance between
+%$\achunk_j$ and $\VirtualNode_i$. Since $\achunk_i$ is closer to
+%$\VirtualNode_j$ than $\achunk_j$, the overall costs of $\VmChunkAssignment'$
+%would be lower in this case. If the described subtree does not exist, the
+%distance between $\achunk_j$ and the two nodes is the same, which
+%renders $\VmChunkAssignment'$ cheaper than an optimal
+%solution. Contradiction.
+%\end{proof}
+%\end{comment}
 
-
-
-
-\stefan{TODO: Describe unbalanced tree pic}
-
-We can now prove optimality:
-\begin{theorem}
-Given an $\CC+\MA$ problem instance, a feasible assignment $\VmChunkAssignment$
-is optimal iff it is local.
-\label{thm:local_optimal}
-\end{theorem}
-\begin{proof}
-By contradiction. We will show, that a non-local assignment is not optimal. Combined with
-Corollary~\ref{corollary:same_costs}, this results in the optimality of all
-local assignments.
-
-Assume a non-local optimal assignment $\VmChunkAssignment$ exists.
-This means, for at least one subtree, it assigns
-a chunk $\achunk_i$, located in the subtree, to a node $\VirtualNode_i$ outside
-the
-subtree. In addition,
-at least one node $\VirtualNode_j$ in the subtree has to process a chunk
-$\achunk_k$ located outside the subtree. We construct an alternative
-assignment $\VmChunkAssignment'$, by exchanging the assignments of
-$\achunk_i$ and $\achunk_j$. Since $\achunk_i$ is located in a subtree which
-contains $\VirtualNode_j$ but not $\VirtualNode_i$, and both nodes and chunks
-are only located at leaves, the distance between $\achunk_i$ and its assigned
-node is smaller in $\VmChunkAssignment'$. For the distance between $\achunk_j$
-we make a case distinction: if there exists a subtree which
-contains $\achunk_i$, $\achunk_j$ but not $\VirtualNode_i$, the distance
-between $\achunk_i$ and $\VirtualNode_i$ is equal to the distance between
-$\achunk_j$ and $\VirtualNode_i$. Since $\achunk_i$ is closer to
-$\VirtualNode_j$ than $\achunk_j$, the overall costs of $\VmChunkAssignment'$
-would be lower in this case. If the described subtree does not exist, the
-distance between $\achunk_j$ and the two nodes is the same, which
-renders $\VmChunkAssignment'$ cheaper than an optimal
-solution. Contradiction.
-\end{proof}
-\end{comment}
-
-Combined with a simple postprocessing step, this approach can also solve $\MA+\BW$. The central idea of this extension \maciek{Change ``extension'' to ``problem variant''}, is
+Combined with a simple postprocessing step, this approach can also solve $\MA+\BW$. The central idea of this extension, is
 that \emph{local} assignments allocate the minimal bandwidth
 on each individual edge. In consequence, each bandwidth constraint
 which is lower than the allocation of a local assignment on one link, renders
@@ -992,224 +995,222 @@ graph.
 %edges in the substrate is $n_S - 1$, which does not affect the
 %asymptotic complexity of this approach.}
 
-\begin{comment}
-to show
-that if the \emph{local} assignments violates the available bandwidth on any
-link, all other assignments will also violate the bandwidth. As a consequence
-it is possible to simply compute the assignment without any bandwidth constraints, and
-check in a postprocessing step, whether the bandwidth on any link is exceeded.
-This postprocessing step scales with the number of edges in the substrate,
-which is lower than the number of nodes in the substrate.
-Hence the asymptotic runtime of the approach does not change.
-
-
-\stefan{fix the following! also note that the notation $F(...)$ has not been introduced!}
-
-\begin{lemma}
-Given a minimal cost assignment $\VmChunkAssignment$,
-any solution with bandwidth allocation less
-than $\Cost(\VmChunkAssignment,
-\SubstrateEdge)$ to any link renders the problem
-infeasible.
-\label{lemma:no_bandwidth}
-\end{lemma}
-\begin{proof}
-\maciek{This proof is too slippery! Simpler way to proof that surely exists.}
-From Lemma~\ref{lemma:uplink} we know that each optimal assignment
-$\VmChunkAssignment$ to $\MA+\CC$ assigns a certain bandwidth to a link. This is
-the minimal bandwidth which has to be allocated on this link by \emph{any}
-feasible assignment, since removing the locality, can only increase the number
-of chunks which have to be transported across the uplink.
-Assume there exists a link on which the assignment $\VmChunkAssignment$
-violates the capacity. Since $\VmChunkAssignment$ allocated the minimal
-bandwidth on this link, which has to be allocated by \emph{any} feasible
-assignment, the problem has to be infeasible.
-\end{proof}
-\end{comment}
-
-
-\begin{comment}
-\subsubsection{$\MA+\CC+\BW$}
-
-We can also solve the $\CC+\MA+\BW$ problem variant with our matching approach.
-The algorithm
-essentially uses
-the same construction described above for $\CC+\MA$ (but without $\RS$) to
-compute a solution
-to minimum weight perfect matching. Afterwards it is verified whether the
-resulting bandwidth allocations satisfy capacity constraints. If
-no capacities are violated, we found the cheapest assignment. We will
-now show, that the problem is infeasible if the resulting assignment
-violates capacity constraints of at least one link.
-Before we can prove the infeasibility of the instances, we will
-state the following lemma
-which gives us a better understanding of the \emph{locality} of optimal
-assignments.
-\carlo{NEW VERSION STARTS HERE:}
-
-\begin{lemma}
-\label{lemma:local}
-Given an instance of $\MA+\CC$ and an arbitrary subtree, an optimal assignment
-$\VmChunkAssignment$, assigns all chunks in the subtree to nodes in the same
-subtree (subject to the number of avialable nodes in the
-subtree).\stefan{Can this stay this way?} \maciek{Why did we restate
-  the local matching lemma (it is worse here)? And why are we rewriting working proof?}
-\end{lemma}
-
-
-\begin{proof}
-\carlo{
-By contradiction. Assume an optimal assignment $\VmChunkAssignment$ exists,
-which assigns a chunk $\achunk_i$ to a node $\VirtualNode_i$ outside the
-subtree, although there are sufficient nodes for all chunks in the subtree.
-Then
-at least one node $\VirtualNode_j$ in the subtree has to process a chunk
-$\achunk_k$ located outside the subtree. We construct an alternative
-assignment $\VmChunkAssignment'$, by exachanging the assignments of
-$\achunk_i$ and $\achunk_j$. Since $\achunk_i$ is located in a subtree which
-contains $\VirtualNode_j$ but not $\VirtualNode_i$, and both nodes and chunks
-are only located at leaves, the distance between $\achunk_i$ and it's assigned
-node is smaller in $\VmChunkAssignment'$. For the distance between $\achunk_j$
-we have to do a case differentiation: if there exists a subtree which
-contains $\achunk_i$, $\achunk_j$ but not $\VirtualNode_i$, the distance
-between $\achunk_i$ and $\VirtualNode_i$ is equal to the distance between
-$\achunk_j$ and $\VirtualNode_i$. Since $\achunk_i$ is closer to
-$\VirtualNode_j$ than $\achunk_j$ the overall costs of $\VmChunkAssignment'$
-would be lower in this case. If the described subtree does not exists, the
-distance between $\achunk_j$ and the two nodes is the same - which would also
-render $\VmChunkAssignment'$ cheaper than an optimal
-solution.}\maciek{This proof only considers complete matchings, but we
-need to show that property on partial matchings.}
-\end{proof}
-
-
-
-
-\carlo{We also need a node mapping (for both lemmas). Shall we state this here?}
-
-\begin{lemma}
-Given a $\CC+\MA$ problem instance and a subtree rooted at vertex $u$ containing $x$
-chunks and $y$ nodes, the bandwidth allocation of each optimal assignment
-$\VmChunkAssignment$ on the uplink of $u$ is $|x-(y\cdot\MaFactor)|\cdot
-\CostTrans$.\label{lemma:uplink}
-\end{lemma}
-\begin{proof}
-From the local lemma (Lemma~\ref{lemma:local}),
-the optimal bandwidth allocation is given by
-a ``local'' assignment, in which all chunks inside the
-subtree are assigned to nodes in the subtree and vice-versa. However, the
-number of chunks in the subtree may differ from the processing capacities of
-the nodes in the subtree. In case there are more chunks in the subtree, each
-excess chunk has to be transferred to a different subtree, which will
-inflict bandwidth costs of $\CostCom$ on the uplink connecting $u$ with the
-remaining parts of $\Tree$. Similarly, if the processing capabilities exceed the amount of
-available chunks, chunks from other subtrees will have to be transferred to
-nodes in the subtree of $u$, inflicting bandwidth costs of $\CostCom$ each.
-Every solution
-which does not provide this ``locality'' cannot be optimal, since a better
-solution can be constructed, by exchanging the assignments of one of the chunks
-which is transferred inside $u$'s subtree and one chunk which is transferred from
-the subtree to a node outside.
-\end{proof}
-
-The optimality then follows from the following lemma.
-\begin{lemma}
-Given a minimal cost assignment $\VmChunkAssignment$,
-any bandwidth function with a capaciy which is lower then the bandwidth
-allocation of $\VmChunkAssignment$ on any link, renders the
-problem infeasible.
-\label{lemma:no_bandwidth}
-\end{lemma}
-\begin{proof}
-Assume there exists a link on which the assignment $\VmChunkAssignment$
-  \maciek{This proof is too slippery! Simpler way to proof that surely exists.}
-violates the capacity. From Lemma~\ref{lemma:uplink} it is
-known that $\VmChunkAssignment$ keeps the assignment ``local''.
-Therefore, the footprint on the uplink of a specific subtree is the number of chunks
-(or nodes) which have to be connected to nodes (or chunks) outside the subtree,
-times the bandwidth which is necessary to transfer a chunk to a node. There
-cannot be an assignment which requires less bandwidth on the link, since all nodes
-and chunks have to be used in the assignment and removing the
-locality will increase the bandwidth requirements.
-\end{proof}
+%\begin{comment}
+%to show
+%that if the \emph{local} assignments violates the available bandwidth on any
+%link, all other assignments will also violate the bandwidth. As a consequence
+%it is possible to simply compute the assignment without any bandwidth constraints, and
+%check in a postprocessing step, whether the bandwidth on any link is exceeded.
+%This postprocessing step scales with the number of edges in the substrate,
+%which is lower than the number of nodes in the substrate.
+%Hence the asymptotic runtime of the approach does not change.
+%
+%
+%\stefan{fix the following! also note that the notation $F(...)$ has not been introduced!}
+%
 %\begin{lemma}
-%An instance of $\Problem$ is infeasible iff. algorithm returns $\infty$.
+%Given a minimal cost assignment $\VmChunkAssignment$,
+%any solution with bandwidth allocation less
+%than $\Cost(\VmChunkAssignment,
+%\SubstrateEdge)$ to any link renders the problem
+%infeasible.
+%\label{lemma:no_bandwidth}
 %\end{lemma}
 %\begin{proof}
-%  ($\rightarrow$)
+%From Lemma~\ref{lemma:uplink} we know that each optimal assignment
+%$\VmChunkAssignment$ to $\MA+\CC$ assigns a certain bandwidth to a link. This is
+%the minimal bandwidth which has to be allocated on this link by \emph{any}
+%feasible assignment, since removing the locality, can only increase the number
+%of chunks which have to be transported across the uplink.
+%Assume there exists a link on which the assignment $\VmChunkAssignment$
+%violates the capacity. Since $\VmChunkAssignment$ allocated the minimal
+%bandwidth on this link, which has to be allocated by \emph{any} feasible
+%assignment, the problem has to be infeasible.
+%\end{proof}
+%\end{comment}
+
+
+%\begin{comment}
+%\subsubsection{$\MA+\CC+\BW$}
 %
-%  ($\leftarrow$)
-%  \end{proof}
+%We can also solve the $\CC+\MA+\BW$ problem variant with our matching approach.
+%The algorithm
+%essentially uses
+%the same construction described above for $\CC+\MA$ (but without $\RS$) to
+%compute a solution
+%to minimum weight perfect matching. Afterwards it is verified whether the
+%resulting bandwidth allocations satisfy capacity constraints. If
+%no capacities are violated, we found the cheapest assignment. We will
+%now show, that the problem is infeasible if the resulting assignment
+%violates capacity constraints of at least one link.
+%Before we can prove the infeasibility of the instances, we will
+%state the following lemma
+%which gives us a better understanding of the \emph{locality} of optimal
+%assignments.
+%\carlo{NEW VERSION STARTS HERE:}
 %
-%\maciek{I think that we do not need that lemma, it might be obvious. I leave it
-%there just in case.}
 %\begin{lemma}
-%  If algorithm returns solution $\Sol$ of cost $\neq \infty$, then in $\Sol$ no
-%link exceeds its capacity limit.
-%  \end{lemma}
-
-\carlo{TODO: change notation of instance of chunk types.}
-
-\begin{figure}
- \includegraphics[width = \columnwidth]{figs/matching_no_rs}
- \caption{An example for the $\RS+\BW$ problem variant: $\achunk_{1_1}$ or $\achunk_{2_1}$ are
-located in a subtree with uplink capacity $1$. The bandwidth allocation in the right
-subtree depends on which chunk is chosen for processing in the left
-subtree.}
- \label{fig:matching_no_rs}
-\end{figure}
-
-
-\textbf{Runtime.} While \carlo{minimum weight perfect} matching problems can be
-solved in polynomial
-time~\cite{schrijver_combinatorial_optimization} using
-general algorithms, in the following, we show that for our problem
-a simple and fast greedy strategy is sufficient.
-Accordingly, we can use greedy bottom-up construction of matching.
-Its runtime is linear with respect to number of tree vertices. It is more
-efficient that more general methods of
-finding perfect matching in general bipartite graphs.
-
-\begin{corollary}
-An optimal matching of nodes to chunks can be computed greedily, by
-alternating selecting edges with the lowest cost and removing the chossen
-edge, and all edges connected to the nodes of these edge.
-\end{corollary}
-
-\begin{proof}
-Given an edge with the lowest costs, we can compute the smallest subtree, which
-contains both, the node and the chunk which are connected by the edge. Since we
-know that there is no node in a smaller subtree containing the chunk, we can
-assign the node to the chunk, and according to Lemma~\ref{lemma:local}, the
-resulting assignment will be optimal.
-\end{proof}
-
-
-
-Finally, let us observe that $\RS+\BW$ cannot be solved using this approach,
-as Lemma~\ref{lemma:uplink} does not
-hold for problem instances with $\RS$. Figure~\ref{fig:matching_no_rs}
-illustrates this problem: It shows a feasible problem instance in which, due
-to bandwidth constraints, only one chunk can be processed locally. If for
-instance $\achunk_{1_1}$ is assigned to $\VirtualNode_1$, $\achunk_{2_1}$ cannot
-be processed by $\VirtualNode_2$, since this would exceed the bandwidth
-capacity. Instead $\achunk_{2_2}$ will be processed by $\VirtualNode_2$. This
-requires bandwidth allocations on links, which would not have been utilized,
-when $\achunk_{2_1}$ would have been assigned to $\VirtualNode_1$. Hence the
-bandwidth utilization on individual links is no longer predictable in $\RS$.
-When this problem is transformed into a matching problem, the resulting
-assignment will use $\achunk_{1_1}$ and $\achunk_{2_1}$, which violates
-bandwidth constraints, although the instance itself is feasible.
-
-\textbf{Summary.}
-Figure~\ref{fig:venn_match} summarizes all problem
-variants which can be solved with our flow-based approach.
-\begin{wrapfigure}{r}{0.5\columnwidth}
-\includegraphics[width=0.48\columnwidth]{figs/venn_matching.pdf}
-\caption{Problem variants which can be solved using our matching approach.}
-\label{fig:venn_match}
-\end{wrapfigure}
-\end{comment}
+%\label{lemma:local}
+%Given an instance of $\MA+\CC$ and an arbitrary subtree, an optimal assignment
+%$\VmChunkAssignment$, assigns all chunks in the subtree to nodes in the same
+%subtree (subject to the number of avialable nodes in the
+%subtree).\stefan{Can this stay this way?} \maciek{Why did we restate
+%  the local matching lemma (it is worse here)? And why are we rewriting working proof?}
+%\end{lemma}
+%
+%
+%\begin{proof}
+%\carlo{
+%By contradiction. Assume an optimal assignment $\VmChunkAssignment$ exists,
+%which assigns a chunk $\achunk_i$ to a node $\VirtualNode_i$ outside the
+%subtree, although there are sufficient nodes for all chunks in the subtree.
+%Then
+%at least one node $\VirtualNode_j$ in the subtree has to process a chunk
+%$\achunk_k$ located outside the subtree. We construct an alternative
+%assignment $\VmChunkAssignment'$, by exachanging the assignments of
+%$\achunk_i$ and $\achunk_j$. Since $\achunk_i$ is located in a subtree which
+%contains $\VirtualNode_j$ but not $\VirtualNode_i$, and both nodes and chunks
+%are only located at leaves, the distance between $\achunk_i$ and it's assigned
+%node is smaller in $\VmChunkAssignment'$. For the distance between $\achunk_j$
+%we have to do a case differentiation: if there exists a subtree which
+%contains $\achunk_i$, $\achunk_j$ but not $\VirtualNode_i$, the distance
+%between $\achunk_i$ and $\VirtualNode_i$ is equal to the distance between
+%$\achunk_j$ and $\VirtualNode_i$. Since $\achunk_i$ is closer to
+%$\VirtualNode_j$ than $\achunk_j$ the overall costs of $\VmChunkAssignment'$
+%would be lower in this case. If the described subtree does not exists, the
+%distance between $\achunk_j$ and the two nodes is the same - which would also
+%render $\VmChunkAssignment'$ cheaper than an optimal
+%solution.}\maciek{This proof only considers complete matchings, but we
+%need to show that property on partial matchings.}
+%\end{proof}
+%
+%
+%
+%
+%\carlo{We also need a node mapping (for both lemmas). Shall we state this here?}
+%
+%\begin{lemma}
+%Given a $\CC+\MA$ problem instance and a subtree rooted at vertex $u$ containing $x$
+%chunks and $y$ nodes, the bandwidth allocation of each optimal assignment
+%$\VmChunkAssignment$ on the uplink of $u$ is $|x-(y\cdot\MaFactor)|\cdot
+%\CostTrans$.\label{lemma:uplink}
+%\end{lemma}
+%\begin{proof}
+%From the local lemma (Lemma~\ref{lemma:local}),
+%the optimal bandwidth allocation is given by
+%a ``local'' assignment, in which all chunks inside the
+%subtree are assigned to nodes in the subtree and vice-versa. However, the
+%number of chunks in the subtree may differ from the processing capacities of
+%the nodes in the subtree. In case there are more chunks in the subtree, each
+%excess chunk has to be transferred to a different subtree, which will
+%inflict bandwidth costs of $\CostCom$ on the uplink connecting $u$ with the
+%remaining parts of $\Tree$. Similarly, if the processing capabilities exceed the amount of
+%available chunks, chunks from other subtrees will have to be transferred to
+%nodes in the subtree of $u$, inflicting bandwidth costs of $\CostCom$ each.
+%Every solution
+%which does not provide this ``locality'' cannot be optimal, since a better
+%solution can be constructed, by exchanging the assignments of one of the chunks
+%which is transferred inside $u$'s subtree and one chunk which is transferred from
+%the subtree to a node outside.
+%\end{proof}
+%
+%The optimality then follows from the following lemma.
+%\begin{lemma}
+%Given a minimal cost assignment $\VmChunkAssignment$,
+%any bandwidth function with a capaciy which is lower then the bandwidth
+%allocation of $\VmChunkAssignment$ on any link, renders the
+%problem infeasible.
+%\label{lemma:no_bandwidth}
+%\end{lemma}
+%\begin{proof}
+%Assume there exists a link on which the assignment $\VmChunkAssignment$
+%violates the capacity. From Lemma~\ref{lemma:uplink} it is
+%known that $\VmChunkAssignment$ keeps the assignment ``local''.
+%Therefore, the footprint on the uplink of a specific subtree is the number of chunks
+%(or nodes) which have to be connected to nodes (or chunks) outside the subtree,
+%times the bandwidth which is necessary to transfer a chunk to a node. There
+%cannot be an assignment which requires less bandwidth on the link, since all nodes
+%and chunks have to be used in the assignment and removing the
+%locality will increase the bandwidth requirements.
+%\end{proof}
+%%\begin{lemma}
+%%An instance of $\Problem$ is infeasible iff. algorithm returns $\infty$.
+%%\end{lemma}
+%%\begin{proof}
+%%  ($\rightarrow$)
+%%
+%%  ($\leftarrow$)
+%%  \end{proof}
+%%
+%%\maciek{I think that we do not need that lemma, it might be obvious. I leave it
+%%there just in case.}
+%%\begin{lemma}
+%%  If algorithm returns solution $\Sol$ of cost $\neq \infty$, then in $\Sol$ no
+%%link exceeds its capacity limit.
+%%  \end{lemma}
+%
+%\carlo{TODO: change notation of instance of chunk types.}
+%
+%\begin{figure}
+% \includegraphics[width = \columnwidth]{figs/matching_no_rs}
+% \caption{An example for the $\RS+\BW$ problem variant: $\achunk_{1_1}$ or $\achunk_{2_1}$ are
+%located in a subtree with uplink capacity $1$. The bandwidth allocation in the right
+%subtree depends on which chunk is chosen for processing in the left
+%subtree.}
+% \label{fig:matching_no_rs}
+%\end{figure}
+%
+%
+%\textbf{Runtime.} While \carlo{minimum weight perfect} matching problems can be
+%solved in polynomial
+%time~\cite{schrijver_combinatorial_optimization} using
+%general algorithms, in the following, we show that for our problem
+%a simple and fast greedy strategy is sufficient.
+%Accordingly, we can use greedy bottom-up construction of matching.
+%Its runtime is linear with respect to number of tree vertices. It is more
+%efficient that more general methods of
+%finding perfect matching in general bipartite graphs.
+%
+%\begin{corollary}
+%An optimal matching of nodes to chunks can be computed greedily, by
+%alternating selecting edges with the lowest cost and removing the chossen
+%edge, and all edges connected to the nodes of these edge.
+%\end{corollary}
+%
+%\begin{proof}
+%Given an edge with the lowest costs, we can compute the smallest subtree, which
+%contains both, the node and the chunk which are connected by the edge. Since we
+%know that there is no node in a smaller subtree containing the chunk, we can
+%assign the node to the chunk, and according to Lemma~\ref{lemma:local}, the
+%resulting assignment will be optimal.
+%\end{proof}
+%
+%
+%
+%Finally, let us observe that $\RS+\BW$ cannot be solved using this approach,
+%as Lemma~\ref{lemma:uplink} does not
+%hold for problem instances with $\RS$. Figure~\ref{fig:matching_no_rs}
+%illustrates this problem: It shows a feasible problem instance in which, due
+%to bandwidth constraints, only one chunk can be processed locally. If for
+%instance $\achunk_{1_1}$ is assigned to $\VirtualNode_1$, $\achunk_{2_1}$ cannot
+%be processed by $\VirtualNode_2$, since this would exceed the bandwidth
+%capacity. Instead $\achunk_{2_2}$ will be processed by $\VirtualNode_2$. This
+%requires bandwidth allocations on links, which would not have been utilized,
+%when $\achunk_{2_1}$ would have been assigned to $\VirtualNode_1$. Hence the
+%bandwidth utilization on individual links is no longer predictable in $\RS$.
+%When this problem is transformed into a matching problem, the resulting
+%assignment will use $\achunk_{1_1}$ and $\achunk_{2_1}$, which violates
+%bandwidth constraints, although the instance itself is feasible.
+%
+%\textbf{Summary.}
+%Figure~\ref{fig:venn_match} summarizes all problem
+%variants which can be solved with our flow-based approach.
+%\begin{wrapfigure}{r}{0.5\columnwidth}
+%\includegraphics[width=0.48\columnwidth]{figs/venn_matching.pdf}
+%\caption{Problem variants which can be solved using our matching approach.}
+%\label{fig:venn_match}
+%\end{wrapfigure}
+%\end{comment}
 
 
 \subsection{Dynamic Programming ($\FP+\CC+\MA+\BW$)}\label{ssec:dyn}
@@ -1326,11 +1327,16 @@ That is, we take the optimal cost
 the right subtree $\textsc{Ri}(T')$ of $T'$ and $x-r$ nodes in left subtree $\textsc{Le}(T')$ of
 $T'$. Given the cheapest combination, we add the bandwidth requirements
 on the uplink of $T'$ to generate the overall costs for placing $x$ nodes in $T'$.
-$$f(T',x) =   \min_{r \in \{0, \ldots, x\}}  f\left(\textsc{Ri}(T'), r\right) +
-f\left(\textsc{Le}(T'), x - r\right) + bw(T',x)$$
+
+
+
+$$f(T',x) =   \min_{0\leq r \leq x} \{  f\left(\textsc{Le}(T'), 
+x-r\right) +
+f\left(\textsc{Ri}(T'), r\right) \} + bw(T',x)$$
+
 Again, we set $f(T',x)$ to infinity if the required bandwidth
 $bw$ exceeds the capacity $\capacity$ of the uplink of $T'$.
-
+  
 %This allocation consists of two parts: (1) The node inter-connect
 %communication is easy to compute, as we know how many
 %nodes are in the left and right subtree, and how many are
@@ -1385,48 +1391,48 @@ $bw$ exceeds the capacity $\capacity$ of the uplink of $T'$.
 %  this placement. We also need to show correctness of this strategy in
 %  analysis - but it holds from uplink lemma.}
 
-\begin{comment}
-
-
-\newcommand{\SumIndex}{\ensuremath{n}}
-\begin{algorithm}[tbhp]
-\DontPrintSemicolon % Some LaTeX compilers require you to use
-%%\dontprintsemicolon instead
-\SetAlgoNoEnd
-\KwIn{$\Opt_{\SubstrateNode_l} ,
-\Opt_{\SubstrateNode_r},
-\ChunkCount_{\SubstrateNode_l},\ChunkCount_{\SubstrateNode_r} $}
-$\ChunkCount_\SubstrateNode = \ChunkCount_{\SubstrateNode_l} +
-\ChunkCount_{\SubstrateNode_r}$\;
-\For{$\SumIndex \in \{0,\dots,\Vms\}$}{
-  \For{$i \in \{0,\dots,\SumIndex\}$}{ \If{$\Opt_\SubstrateNode[\SumIndex]
-  > \Opt_{\SubstrateNode_l}[i] +
-\Opt_{\SubstrateNode_r}[\SumIndex - i]$}{
-	$\Opt_\SubstrateNode[\SumIndex] \gets \Opt_{\SubstrateNode_l}[i]
-	+
-\Opt_{\SubstrateNode_r}[\SumIndex - i]$\;
-    } }
-
- $bw \gets (\Vms -
-\SumIndex) \cdot \SumIndex \cdot \CostCom +   |i -
-\ChunkCount_\SubstrateNode| \cdot \CostTrans$\;
-  \eIf{$bw \leq \capacity(\Uplink(v))$}{
-    $\Opt_\SubstrateNode[\SumIndex] \gets \Opt_\SubstrateNode[\SumIndex]
-    + bw$\; }{ $\Opt_\SubstrateNode[\SumIndex] \gets \infty$\; } }
+%\begin{comment}
 %
-\caption{$aggregate(\SubstrateNode \in \SubstrateNodes)$}
-\label{algo:dynAggregation}
-\end{algorithm}
-
-List all needed functions like distance, counter of number of chunks
-in subtree.
-
-Tell how to go back through the array to reconstruct the actual
-placements. Following path of minimas. Other approach is to store pointers to minimas on lower levels as those are chosen.
-
-(Base case) We fill the entire array $Opt_l$ for the leaf $l$ with zeros. It means that we allow hosting $0, 1, \ldots, n$ VMs in this leaf. We can restrict the number of VMs that are hosted in the same leaf by some constant $x$ (that can be independent for every leaf) by setting $Opt_l[x+1] = Opt_l[x+2] = \ldots = Opt_l[n] = \infty$.
-
-\end{comment}
+%
+%\newcommand{\SumIndex}{\ensuremath{n}}
+%\begin{algorithm}[tbhp]
+%\DontPrintSemicolon % Some LaTeX compilers require you to use
+%%%\dontprintsemicolon instead
+%\SetAlgoNoEnd
+%\KwIn{$\Opt_{\SubstrateNode_l} ,
+%\Opt_{\SubstrateNode_r},
+%\ChunkCount_{\SubstrateNode_l},\ChunkCount_{\SubstrateNode_r} $}
+%$\ChunkCount_\SubstrateNode = \ChunkCount_{\SubstrateNode_l} +
+%\ChunkCount_{\SubstrateNode_r}$\;
+%\For{$\SumIndex \in \{0,\dots,\Vms\}$}{
+%  \For{$i \in \{0,\dots,\SumIndex\}$}{ \If{$\Opt_\SubstrateNode[\SumIndex]
+%  > \Opt_{\SubstrateNode_l}[i] +
+%\Opt_{\SubstrateNode_r}[\SumIndex - i]$}{
+%	$\Opt_\SubstrateNode[\SumIndex] \gets \Opt_{\SubstrateNode_l}[i]
+%	+
+%\Opt_{\SubstrateNode_r}[\SumIndex - i]$\;
+%    } }
+%
+% $bw \gets (\Vms -
+%\SumIndex) \cdot \SumIndex \cdot \CostCom +   |i -
+%\ChunkCount_\SubstrateNode| \cdot \CostTrans$\;
+%  \eIf{$bw \leq \capacity(\Uplink(v))$}{
+%    $\Opt_\SubstrateNode[\SumIndex] \gets \Opt_\SubstrateNode[\SumIndex]
+%    + bw$\; }{ $\Opt_\SubstrateNode[\SumIndex] \gets \infty$\; } }
+%%
+%\caption{$aggregate(\SubstrateNode \in \SubstrateNodes)$}
+%\label{algo:dynAggregation}
+%\end{algorithm}
+%
+%List all needed functions like distance, counter of number of chunks
+%in subtree.
+%
+%Tell how to go back through the array to reconstruct the actual
+%placements. Following path of minimas. Other approach is to store pointers to minimas on lower levels as those are chosen.
+%
+%(Base case) We fill the entire array $Opt_l$ for the leaf $l$ with zeros. It means that we allow hosting $0, 1, \ldots, n$ VMs in this leaf. We can restrict the number of VMs that are hosted in the same leaf by some constant $x$ (that can be independent for every leaf) by setting $Opt_l[x+1] = Opt_l[x+2] = \ldots = Opt_l[n] = \infty$.
+%
+%\end{comment}
 
 
 \textbf{Analysis.}
@@ -1489,8 +1495,6 @@ The hardness of $\FP+\RS+\MA$ and $\FP+\RS+\CC$ imply
 the hardness of four additional, more general models, as
 summarized in the following figure:
 
-\maciek{This figure should be redone in Venn fashion. You can start by clean Venn, add the basis NP-complete problems ($\FP+\RS+\MA$ and $\FP+\RS+\CC$ in grey, then other variants in darker grey, then the middle problem in (almost) black. Alternative formulation is arrows on Venn diagram but I doubt that those will be readable.}
-
 \begin{figure}[htbp]
 \small
 \includegraphics[width = \columnwidth]{figs/np_implications}
@@ -1520,9 +1524,8 @@ if and only if, for any two distinct triples $t_1=(x_1, y_1, z_1) \in M$
 and $t_2=(x_2, y_2, z_2) \in M$, it holds that $x_1\neq x_2$, $y_1\neq
 y_2$, and $z_1\neq z_2$. Our goal is to decide if we can construct
 a $M \subseteq T$ which is \emph{perfect}, that is, a subset which covers all
-elements of $X \times Y \times Z$ \maciek{exactly once}.
+elements of $X \times Y \times Z$ exactly once.
 
-%TODO: image like this: \url{https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/3-dimensional-matching.svg/240px-3-dimensional-matching.svg.png}
 
 \subsection{Multi-Assignments are hard ($\FP+\RS+\MA$)}\label{ssec:fprsma}
 
@@ -1548,10 +1551,14 @@ We encode a $\TDM$ instance as an $\FP+\RS+\MA$ instance as follows:
  as well as the chunks in other two leaves of the same gadget.
 
 \item In order to turn the optimization problem into a decision problem, we will use
-a cost threshold $\Thr$; solutions of higher costs are considered infeasible. \maciek{We would like to give the reader some intuitions about $\Thr$ value at this point. We can say that such amount is chosen so the VMs are not spread among too many gadgets.}
+a cost threshold $\Thr$. \carlo{The cost threshold will be equal to the 
+footprint of an assignment which assigns all three chunks of each triple to a 
+node which is collocated with one of the chunks. Assignments, which transport a 
+chunk to a node in a different triple, will have a higher footprint, and are 
+considered to be infeasible.}
+
 \end{itemize}
 
-We will focus on problem instances where the server capacity is one unit (one node). \maciek{This comment is wrong. We can say something like that if we are restricting the set we are reducing from. But here we just set the server capacity to one unit, so it belongs to construction section, not to the assumptions before the construction.}
 
 \textbf{Construction.}
 Given an instance $I$ of $\TDM$, we construct an instance $I'$ of
@@ -1659,7 +1666,7 @@ chunk replicas placed in the same way.
 \item The communication cost in the inter-connect is set to $\CostCom = 1$.
 \item The number of nodes (virtual machines) is $\Vms = 3 \cdot k$, where $k$ is the set cardinality.
 \item We use a threshold $\Thr =  6 \cdot k + 18 \cdot 
-(k - 1) \cdot k$.\maciek{We can simplify it even further.}
+(k - 1) \cdot k$.\maciek{$\Thr = 18 \cdot k^2 - 12 \cdot k$. The threshold is designed to be communication cost of $3\cdot k$ VMs embedded in leaves of tree consisting of $k$ gadgets (no chunks).}
 %\maciek{If we update the model to take care of hosting
 %  multiple VMs in one leaf, we should set this instance to allow only
 %  one VM per leaf. In this proof it also does not matter, as it is
@@ -1669,8 +1676,13 @@ chunk replicas placed in the same way.
 \item We set the access cost $\CostTrans$ to a chunk replica to a high value $W$. This will force
 nodes to be collocated with the replica. One example of sufficient
 (and polynomial but minimal) $W$
-is the value of the threshold $\Thr$ defined above. (Chunk access cost larger than max possible
-communication cost. \maciek{I know what you meant - max possible CC allowed by threshold. But the reader might find this comment misleading, as the worst solution.})
+is the value of the threshold $\Thr$ defined above. Every solution that does not match chunks to VMs those are sitting on top of never has cost $\leq \Thr$, because it inflicts cost of $W=\Thr$ over every link it transports the chunk.
+
+\maciek{One example of sufficient
+(and polynomial but perhaps not minimal) $W$
+is the value of the threshold $\Thr+1$ defined above. Every solution that does not match chunks to VMs those are sitting on top of never has cost $\geq \Thr$, because it inflicts cost of $W=\Thr+1$ over every link it transports the chunk.}
+
+
 \end{itemize}
 
 We again focus on instances with unit server capacities.
@@ -1734,7 +1746,7 @@ we can exploit Lemma~\ref{lemma:helper} to construct a solution for $I$.
 We know that in any solution of cost at most $\Thr$,
 $k$ gadgets contain exactly 3 nodes. These gadgets correspond to a valid
 3D Perfect Matching: every
-chunk was processed and hence every element in the $X \cup Y \cup Z$ is covered. \maciek{Restate: every chunk type has its (exactly) one replica processed and hence every element is covered exactly once.}
+chunk was processed and hence every element in the $X \cup Y \cup Z$ is covered. \maciek{every chunk type has its exactly one replica processed and hence every element is covered exactly once.}
 \end{proof}
 
 Finally, let us conclude by remarking that all NP-hard problems discussed in this paper
@@ -1846,7 +1858,6 @@ and even if the the number of replicas is bounded by two.
 \end{tabular}
 \end{small}
 \caption{
-\maciek{I think that we would like to make a summary in one of two forms: (1) Venn diagram (but with sane colors) (2) list of problems groupped in circles like in my old summary.pdf. The tabular form is inferior.}
 The use cases of the proposed algorithms, expressed in property
 combinations which it can solve faster, than any other algorithm.}
 \label{tab:summary}
@@ -1901,48 +1912,6 @@ or approximation algorithms.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{appendix}
-
-\section{The Bandwidth Lemma}
-
-\maciek{The bandwidth lemma should be the last chapter in the appendix. We should forumlate the extended bandwidth lemma here. (if we decide not to give a proof for that it should not have its separate chapter).}
-
-The following lemma will be useful for the upcoming NP-hardness proofs.
-
-\begin{lemma}[Bandwidth Lemma]\label{lem:bandwidth-lemma}
-  Let $\clauses$ and $\variables > 4$ be two arbitrary positive integers. Let $a_1, a_2, \ldots,
-  a_{\variables}$ be a sequence of $\variables$ integers which adds up to $\clauses \cdot \variables$. Also, for
-  each $i$ we have $a_i \leq 2 \cdot \clauses$. Then it holds that if
-  $$ \forall_i:~~ a_i \cdot (\clauses \cdot \variables - a_i) \leq \clauses \cdot (\clauses \cdot \variables -
-  \clauses), $$
-\noindent  then for each $i$: $a_i = \clauses$.
-\end{lemma}
-\begin{proof}
-  \maciek{(By contradiction) Let us assume...}
-For the sake of contradiction, let us assume that there exists an index $k$ such that
-$a_k \neq \clauses$. Then we can distinguish between two cases:
-either $a_k<\clauses$ or
-$a_k>\clauses$.
-
-\textbf{Case $a_k<\clauses$:} If there exists a $k$ with $a_k<\clauses$,
-due to the fact that the sequence adds up to $\clauses \cdot \variables$,
-there must also exist a $k'$ such that $a_{k'}<\clauses$ (by a simple
-pigeon hole principle). Thus, this case can
-also be reduced to the second case (Case $a_k>\clauses$) proved
-next.
-
-\textbf{Case $a_k>\clauses$:} Since it also holds that $a_k < 2\clauses$,
-$a_k$ must be of the form $\clauses + x$ for $x \in [1, \ldots, \clauses]$.
-Let us consider the (bandwidth) inequality:
-$$ (\clauses + x) \cdot (\clauses \cdot \variables - \clauses - x) \leq \clauses \cdot (\clauses \cdot \variables - x) $$
-
-This can be transformed to:
-
-$$ 0 \leq x(x - (\clauses \cdot (\variables - 2))) $$
-
-The equation holds for $x \leq 0$ or $x \geq \clauses \cdot (\variables - 2)$,
-and no
-positive $x \leq \clauses$ can satisfy this inequality for $\variables > 4$. Contradiction.
-\end{proof}
 
 %\begin{comment}
 
@@ -2018,6 +1987,9 @@ satisfies the last clause, $\neg
 \label{fig:construction_3sat}
 \end{figure}
 
+\maciek{Following paragraph can be replaced with one sentence: ``We set bandwidth on uplink of each variable gadget to $\clauses \cdot (\clauses
+\cdot \variables -
+\clauses)$. We set other edges bandwidth to be unlimited.}
 
 By default, we will set the available
 bandwidth to be the
@@ -2037,7 +2009,8 @@ We set the number of nodes to $\Vms = \clauses \cdot \variables$.
 Moreover, we define the inter-connect communication cost to be $1$,
 and the access cost to be a sufficiently large constant $W$,
 such that nodes must always be collocated with chunks. ($W$ in the order of
-the threshold $\Thr$ is sufficient.)
+the threshold $\Thr$ is sufficient.)\maciek{Alternatively, we can set $W=1$ and restrict the transportation by setting bandwidth on uplink of every leaf.}
+
 %(For a concrete value, see Appendix~\ref{ap:W}).
 
 We set the number of chunk types to be equal to the number of clauses, $\tau =
@@ -2047,6 +2020,7 @@ construct as many replicas of chunk $\achunk_i$ as there are literals in the
 clause. For each literal $\ell$ (of the form $\variab$ or $\neg \variab$) that satisfies clause $i$,
  we place
 a replica of chunk $\achunk_i$ in the leaf labeled $\ell_i$.
+
 We set the threshold $\Thr$ to:
 % (\maciek{we might not want to introduce
 %  those variable names, as those have no meaning here}):
@@ -2206,7 +2180,7 @@ one in the variable gadget and one in the clause gadget.
     similar fashion as in previous proofs. That is,
 the threshold depends on the intra-clause communication cost (two hops),
 inter-clause communication cost (4 hops),
-  and the communication from variable gadgets to clause gadgets (4 hops). We
+  and the communication from variable gadgets to clause gadgets (4 hops) \maciek{This is wrong. Depending on 2 or 3 level clause gadget we need to modify one of number of hops)}. We
   set the number of nodes to be activated to $\clauses \cdot \vars + 2 \cdot
   \clauses$. We set the hosting capacity of each server to $1$, and set
   $\CostTrans = \Thr$ to disallow remote chunk access. We set $\CostCom = 1$.
@@ -2224,7 +2198,10 @@ there are exactly $\clauses$ nodes in each of the $\vars$ variable gadgets
 and exactly two nodes in each of the $\clauses$ clause gadgets.
 \end{lemma}
 \begin{proof}
-The claim is due to the bandwidth constraints. We have to take into
+The claim is due to the bandwidth constraints.
+
+\maciek{Following text is wrong, as it does not hold from respecting the threshold, rather that from extended bandwidth lemma and feasibility. I suggest removing the rest of the proof and only refer to ``Bandwidth lemmas'' section.}
+We have to take into
 consideration the following communication paths:
 communication to clause gadgets and
 communication to
@@ -2232,6 +2209,7 @@ other variable gadgets.
 In every valid solution of cost at most $\Thr$, we have exactly
 $\clauses$ nodes in each variable gadget and two nodes in each clause gadget.
 \end{proof}
+
 
 \begin{theorem}
 $\FP+\RS(2)+\BW+\CC$ is NP-hard.
@@ -2266,6 +2244,8 @@ Then we can compute a positive valuation by setting each variable $\variab$
 as follows:
 $\Val(\variab)= 1$ iff there is a node at the first leaf on the positive side of the $\variab$ gadget in $\Sol$,
 and $\Val(\variab)=0$ otherwise.
+
+\maciek{We need to mention that the behavior of VMs inside variable gadget remain the same - VMs stick to one side (positive or negative). It is crucial property for the proof.}
 
 %$\Val(\variab)$ =
 %\begin{cases}
@@ -2307,39 +2287,101 @@ $1$; therefore the clause is satisfied.
 \end{proof}
 \end{proof}
 
-\begin{comment}
+%\begin{comment}
+%
+%\subsection{Extended SAT bandwidth lemma proof}
+%
+%\maciek{Formulate lemma, and proof in the same way as the one in previous section}
+%
+%
+%\begin{lemma}[Bandwidth Lemma]\label{lem:bandwidth-lemma}
+%\maciek{this lemma might be expressed more clearly if we use two
+%  sequences instead of one - now $a_1, \ldots, a_{\variables}$
+%  correspond to number of VMs in variable gadgets and remaining of the
+%  sequence corresponds to number of VMs in clause gadgets.}
+%  Let $\clauses$ and $\variables > 4$ be two arbitrary positive integers. Let $a_1, a_2, \ldots,
+%  a_{\variables+\clauses}$ be a sequence of integers which adds up to
+%  $\clauses \cdot \variables + \clauses \cdot 2$. Also, for
+%  each $i \leq \variables$ we have $a_i \leq 2 \cdot \clauses$
+%  (\maciek{variable gadget capacity}). Also,
+%  for each $i >\variables$ we have $a_i \leq 3$ (\maciek{clause gadget capacity}). Then it holds that if
+%  $$ \forall_{i\leq\variables}:~~ a_i \cdot (\clauses \cdot \variables
+%  + 2\cdot \clauses- a_i) \leq \clauses \cdot (\clauses \cdot \variables -
+%  \clauses + 2 \cdot \clauses), $$
+%and
+%$$ \forall_{i>\variables}:~~ a_i \cdot (\clauses \cdot \variables + 2 \cdot \clauses - a_i) \leq 2 \cdot (\clauses \cdot \variables -
+%  2 \cdot \clauses - 2), $$
+%
+%\noindent  then for each $i\leq \variables$: $a_i = \clauses$ and for
+%each $i>\variables$: $a_i = 2$.
+%\end{lemma}
+%
+%\maciek{proof will be painful and we should skip on showing that,
+%  pointing into the previous proof. Even if we did this proof, nobody
+%  would read that. I can do it though.}
+%\end{comment}
+\section{The Bandwidth Lemmas}
 
-\subsection{Extended SAT bandwidth lemma proof}
-
-\maciek{Formulate lemma, and proof in the same way as the one in previous section}
-
-
+\maciek{Those are lemmas helpful in proving that in every bandwidth-feasible solution of cost $\leq \Thr$ there is certain amount of empty gadgets and certain amount of half-full gadgets. Bandwidth lemma is helpful in reduction from 3SAT to RS, and extended bandwidth lemma is helpful in reduction from 3SAT to RS(2). TODO: reference those lemmas in both proofs in the appendix!}
+  
 \begin{lemma}[Bandwidth Lemma]\label{lem:bandwidth-lemma}
-\maciek{this lemma might be expressed more clearly if we use two
-  sequences instead of one - now $a_1, \ldots, a_{\variables}$
-  correspond to number of VMs in variable gadgets and remaining of the
-  sequence corresponds to number of VMs in clause gadgets.}
   Let $\clauses$ and $\variables > 4$ be two arbitrary positive integers. Let $a_1, a_2, \ldots,
-  a_{\variables+\clauses}$ be a sequence of integers which adds up to
-  $\clauses \cdot \variables + \clauses \cdot 2$. Also, for
-  each $i \leq \variables$ we have $a_i \leq 2 \cdot \clauses$
-  (\maciek{variable gadget capacity}). Also,
-  for each $i >\variables$ we have $a_i \leq 3$ (\maciek{clause gadget capacity}). Then it holds that if
-  $$ \forall_{i\leq\variables}:~~ a_i \cdot (\clauses \cdot \variables
-  + 2\cdot \clauses- a_i) \leq \clauses \cdot (\clauses \cdot \variables -
+  a_{\variables}$ be a sequence of $\variables$ integers which adds up to $\clauses \cdot \variables$. Also, for
+  each $i$ we have $a_i \leq 2 \cdot \clauses$. Then it holds that if
+  $$ \forall_i:~~ a_i \cdot (\clauses \cdot \variables - a_i) \leq \clauses \cdot (\clauses \cdot \variables -
+  \clauses), $$
+\noindent  then for each $i$: $a_i = \clauses$.
+\end{lemma}
+\begin{proof}
+  \maciek{(By contradiction) Let us assume...}
+For the sake of contradiction, let us assume that there exists an index $k$ such that
+$a_k \neq \clauses$. Then we can distinguish between two cases:
+either $a_k<\clauses$ or
+$a_k>\clauses$.
+
+\textbf{Case $a_k<\clauses$:} If there exists a $k$ with $a_k<\clauses$,
+due to the fact that the sequence adds up to $\clauses \cdot \variables$,
+there must also exist a $k'$ such that $a_{k'}<\clauses$ (by a simple
+pigeon hole principle). Thus, this case can
+also be reduced to the second case (Case $a_k>\clauses$) proved
+next.
+
+\textbf{Case $a_k>\clauses$:} Since it also holds that $a_k < 2\clauses$,
+$a_k$ must be of the form $\clauses + x$ for $x \in [1, \ldots, \clauses]$.
+Let us consider the (bandwidth) inequality:
+$$ (\clauses + x) \cdot (\clauses \cdot \variables - \clauses - x) \leq \clauses \cdot (\clauses \cdot \variables - x) $$
+
+This can be transformed to:
+
+$$ 0 \leq x(x - (\clauses \cdot (\variables - 2))) $$
+
+The equation holds for $x \leq 0$ or $x \geq \clauses \cdot (\variables - 2)$,
+and no
+positive $x \leq \clauses$ can satisfy this inequality for $\variables > 4$. Contradiction.
+\end{proof}
+\begin{lemma}[Extended Bandwidth Lemma]\label{lem:bandwidth-lemma}
+%\maciek{this lemma might be expressed more clearly if we use two
+%  sequences instead of one - now $a_1, \ldots, a_{\variables}$
+%  correspond to number of VMs in variable gadgets and remaining of the
+%  sequence corresponds to number of VMs in clause gadgets.}
+  Let $\clauses$ and $\variables > 4$ be two arbitrary positive integers. Let $a_1, a_2, \ldots,
+  a_{\clauses}$ and $b_1, b_2, \ldots,
+  b_{\variables}$ be two sequences of integers (numbers of VMs in clause and in variable gadgets). Sum of all elements in $a$ and $b$ adds up to
+  $\clauses \cdot \variables + \clauses \cdot 2$ (number of VMs). Also
+  we have $a_i \leq 2 \cdot \clauses$
+  (variable gadget VM hosting capacity -- equal to number of leaves),
+  and $b_i \leq 3$ (clause gadget VM hosting capacity). If uplink of variable gadget does not exceed bandwidth constraints
+  $$ \forall_{i\leq\variables}:~~ b_i \cdot (\clauses \cdot \variables
+  + 2\cdot \clauses- b_i) \leq \clauses \cdot (\clauses \cdot \variables -
   \clauses + 2 \cdot \clauses), $$
-and
-$$ \forall_{i>\variables}:~~ a_i \cdot (\clauses \cdot \variables + 2 \cdot \clauses - a_i) \leq 2 \cdot (\clauses \cdot \variables -
+and uplink of clause gadget does not exceed bandwidth constraints
+$$ \forall_{i\leq\clauses}:~~ a_i \cdot (\clauses \cdot \variables + 2 \cdot \clauses - a_i) \leq 2 \cdot (\clauses \cdot \variables -
   2 \cdot \clauses - 2), $$
 
-\noindent  then for each $i\leq \variables$: $a_i = \clauses$ and for
-each $i>\variables$: $a_i = 2$.
+\noindent  then for each $i\leq \variables$: $b_i = \clauses$ and for
+each $i\leq\clauses$: $a_i = 2$ (we have expected number of VMs in variable and clause gadgets).
 \end{lemma}
 
-\maciek{proof will be painful and we should skip on showing that,
-  pointing into the previous proof. Even if we did this proof, nobody
-  would read that. I can do it though.}
-\end{comment}
 
 
 \end{appendix}
