@@ -570,7 +570,7 @@ cost nothing.
 %Recall that $\RS+\CC+\MA+\BW$ boils down to
 %$\RS+\MA+\BW$ in the absence of $\FP$
 The $\RS+\MA+\BW$ problem can now be solved by computing
-a \emph{Min-Cost-Max-Flow} solution between super-source $\Source$ and super-sink $\Sink$ on the artificial graph $\Tree^*$.
+a \emph{Min-Cost-Max-Flow} solution between super-source $\Source$ and super-sink $\Sink$ on the artificial graph $\Tree^*$ \maciek{Why don't we use min cost flow with setting the amount of flow upfront to number of chunk types? Min-cost-max-flow is more general problem.},.
 
 \textbf{Example.} Figure~\ref{fig:flow_construction} shows an example of the extended substrate
 network $\Tree^*$: The source $\Source$ is connected to the two leaves, which host the
@@ -596,7 +596,7 @@ is indicated by the dotted lines: each line represents one unit of flow.
 Our algorithm to solve $\RS+\MA+\CC+\BW$ consists of three parts:
 \emph{First}, we construct the normalized and extended graph $\Tree^*$
 described above and compute
-a min-cost-max-flow solution, e.g., using~\cite{mincostmaxflow-1,mincostmaxflow-2}.
+a min-cost-max-flow solution \maciek{Why don't we use min cost flow with setting the amount of flow upfront to number of chunk types? Min-cost-max-flow is more general problem.}, e.g., using~\cite{mincostmaxflow-1,mincostmaxflow-2}.
 \emph{Second}, we have to \emph{round} the resulting, possibly fractional flow, to
 integer values. Due to the \emph{integrality theorem}~\cite{flow-book},
 there always exists an optimal integer solution on graphs with integer capacities.
