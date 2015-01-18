@@ -633,7 +633,7 @@ dominant terms in the asymptotic runtime is the flow computation.
 Using the state-of-the-art min-cost-max-flow algorithms~\cite{mincostmaxflow-1,mincostmaxflow-2}
 we get a runtime of $\mathrm{O}(n_S^2 \cdot \log\log \min \{U,\tau\})$ 
  \maciek{Double check that!}
-where $U$ is the maximal link capacity; note that in networks with high capacity and uncapacitated networks, we can simply
+where $U$ is the maximal link capacity; note that in networks with high capacity and uncapacitated networks (\maciek{I don't see the point of mentioning the uncapacitated networks, as we are not using flow approach there.}), we can simply
  set $U=\tau$.
 % resp.~$\mathrm{O}(n_S^5 \cdot \tau^3 \log n_S)$, where $\delta$ is the network diameter and
 %where $U$ is the maximal link capacity in the substrate;
