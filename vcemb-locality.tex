@@ -1717,7 +1717,7 @@ directly on chunks (the access network cost is zero).
 Moreover, since
 is valid, $3 \cdot k$ nodes are mapped
 directly to the different chunk locations.
-Now, consider any pair of nodes communicating over the
+Now \maciek{I suggest removing the word ``now''}, consider any pair of nodes communicating over the
 inter-connect; due to our construction, the communication cost
 for each such pair is either
 2 hops (if they belong to the same gadget) or 4 hops (if they belong
@@ -2086,7 +2086,7 @@ distributed across $\positive(\variab)$ and $\negative(\variab)$ subtrees.
 We calculate the chunk-node matching $\mu$ by assigning every chunk to
 the node which is collocated with the first chunk replica. This solution is feasible
 (every chunk type is processed),
-because the given valuation satisfied $\Phi$.
+because the given valuation satisfied $\Phi$ \maciek{(because every clause was satisfied and chunks correspond to clauses)}.
 
 Now we will show that this solution has cost $\Thr$.
 Due to the Bandwidth Lemma (Lemma~\ref{lem:bandwidth-lemma}),
