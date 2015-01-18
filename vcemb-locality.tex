@@ -2181,7 +2181,7 @@ gadgets there will be two nodes.
   \item \emph{Bandwidth Constraints:}
     The available bandwidth of the top edge of the gadget of each variable $\variab$ is set to
 $\capa(v) = 3  \cdot  3  \cdot  (3  \cdot  (\vars - 1) + 2  \cdot  \clauses)$.
-The first factor is the distance in $\Tree$ which is 6 divided by 2 (as
+The first factor is the distance in $\Tree$ \maciek{Available bandwidth shouldn't depend on the distance, just on the number of machines that communicate. This is wrong}  which is 6 divided by 2 (as
 we count each pair twice). The second factor is
 the number of nodes to be placed in every variable gadget.
 So the first term of the
