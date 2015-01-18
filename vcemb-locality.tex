@@ -1630,7 +1630,7 @@ $I$ has a matching of size $k$.
 
 ($\Rightarrow$) Let us take a solution to $\TDM$. We place a node in every
 gadget that corresponds to the chosen triples. We match every chunk in a
-gadget to a node in this gadget (only the chosen ones). This solution has
+gadget to a node in this gadget (only the chosen ones \maciek{I do not understand ``only the chosen ones''}). This solution has
 cost exactly $\Thr$. As every element of the universe is covered, every
 chunk type is processed.
 
@@ -1639,16 +1639,19 @@ choose triples that correspond to gadgets where there are nodes. Since
 all chunks are processed, every element of $X$, $Y$ and $Z$ is matched. Each
 node must processes chunks that corresponds to the triple, otherwise the
 cost must be larger than $\Thr$ (high costs for the connection between
-nodes and chunks).
+nodes and chunks \maciek{high costs for chunk transportation}).
 \end{proof}
 
 
 \subsection{Inter-connects are hard ($\FP+\RS+\CC$)}\label{ssec:fprscc}
 
+
 Next, we prove that the joint optimization of node placement and replica selection
 is NP-hard if an inter-connect has to be established between nodes.
 In our terminology, this is the $\FP+\RS+\CC$ problem.
 
+\maciek{At least one sentence of introduction should belong here. We will modify the previous proof, we will use the ``sticking together'' property of quadratic communication function.}
+  
 \textbf{Construction.}
 Let $I$ be an instance of $\TDM$. We will create an instance $I'$
 for $\FP+\RS+\CC$ as follows:
