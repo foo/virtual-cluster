@@ -1229,7 +1229,7 @@ tradeoff between the desire to place nodes as close as possible to each other
 as close as possible to
 the chunk locations.
 
-Figure~\ref{fig:dynamic_motivation} shows an example: one
+\maciek{(Example)} Figure~\ref{fig:dynamic_motivation} shows an example: one
 extreme solution is to minimize the distance between chunks and nodes,
 see mapping $\NodeMapping_1$ in
 Figure~\ref{fig:dynamic_motivation} \emph{(left)}: the $4$ nodes are all
@@ -1610,8 +1610,8 @@ exactly once. For this instance the only solution is $M =
 \{(x_1,y_1,z_1),(x_2,y_2,z_2))\}$.
 
 To construct the corresponding instance $I'$ of $\FP+\RS+\MA$, we
-create a gadget for each triple in $T$. The gadgets contain a chunk  the
-type of the variable, for each variable that occurs in the triple. The triple
+create a gadget for each triple in $T$. The gadgets contain a chunk \maciek{of} the
+type of the variable, for each variable that occurs in the triple\maciek{Consider reversing the order of the sentence, start with ``for each variable''}. The triple
 $(x_2, y_1, z_2)$ of the instance is represented by the middle gadget in
 Figure~\ref{fig:fprsma}. The objective of $I'$ is to spawn $k=2$ nodes,
 with the smallest possible footprint. If the total footprint is $\leq
@@ -1656,7 +1656,7 @@ chunk type is processed.
 ($\Leftarrow$) Let us take a solution to $\FP+\RS+\MA$ of cost $\leq \Thr$. We
 choose triples that correspond to gadgets where there are nodes. Since
 all chunks are processed, every element of $X$, $Y$ and $Z$ is matched. Each
-node must processes chunks that corresponds\maciek{correspond} to the triple, otherwise the
+node must processes \maciek{must process} chunks that corresponds\maciek{correspond} to the triple, otherwise the
 cost must be larger than $\Thr$ (high costs for the connection between
 nodes and chunks \maciek{high costs for chunk transportation}).
 \end{proof}
