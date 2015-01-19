@@ -218,7 +218,7 @@ For instance, MapReduce consists of a network intensive shuffle phase,
 where data is transferred from the mappers to the reducers.
 In order to ensure a predictable application performance, especially in shared cloud environments,
 it is important to provide isolation and bandwidth guarantees between the virtual machines~\cite{amazonbw},
-e.g., by making explicit network reservations.~\cite{oktopus}
+e.g., by making explicit network reservations~\cite{oktopus}.
 Accordingly, modern batch-processing applications provide the abstraction of entire \emph{virtual networks}~\cite{talk-about},
 defining both the virtual machines
 as well as their interconnecting network. The most prominent virtual network abstraction is the \emph{virtual cluster}~\cite{oktopus,proteus}.
@@ -228,7 +228,7 @@ offer great flexibilities on where these virtual networks
 can be instantiated or \emph{embedded}.
 In order to maximize the resource utilization in the datacenter, it is in principle desirable to
 map the virtual machines of a given virtual network as close as possible
-in the underlying physical network, as this minimizes communication costs (respectively, bandwidth reservations).~\cite{oktopus,proteus}
+in the underlying physical network, as this minimizes communication costs (respectively, bandwidth reservations)~\cite{oktopus,proteus}.
 
 However, existing systems often ignore a crucial dimension of the virtual network embedding problem:
 the fact that the input data for a cloud application is typically distributed across different servers and stored in a distributed file system~\cite{scope,google-fs,hdfs}.
@@ -304,7 +304,7 @@ Our model is motivated by batch-processing applications such as MapReduce.
 Such applications use multiple virtual machines to
 process data, initially often redundantly stored in a distributed file system implemented
 by multiple servers.~\cite{mapreduce}
-The standard datacenter topologies today are (multi-rooted) fat-tree resp.~\emph{Clos} topologies,~\cite{fattree,vl2}
+The standard datacenter topologies today are (multi-rooted) fat-tree resp.~\emph{Clos} topologies~\cite{fattree,vl2},
 hierarchical networks  recursively made of sub-trees at each level;
 servers are located at the
 tree leaves. Given the amount of multiplexing over the mesh of links
@@ -319,7 +319,7 @@ are communicated to the reducers. Since the shuffling phase can constitute a
 non-negligible part of the overall runtime~\cite{orchestra},
 and since concurrent network transmissions can introduce interference and
 performance unpredictability~\cite{amazonbw}, it is important
-to provide explicit minimal bandwidth guarantees.~\cite{talk-about}
+to provide explicit minimal bandwidth guarantees~\cite{talk-about}.
 In particular, we model the virtual network connecting the virtual machines
 as a virtual cluster~\cite{oktopus,talk-about,proteus};
 however, we extend this model with a notion of data-locality.
@@ -731,7 +731,7 @@ and for each edge we need to compute its cost, i.e., the shortest distance
 which in a tree we can computed in time $n_S$; thus, the overall construction time
 is
 $\mathcal{O}(n_S \cdot \tau^2)$.
-The state of the art algorithm to compute matchings are based on scaling techniques.~\cite{scale-match}
+The state of the art algorithm to compute matchings are based on scaling techniques~\cite{scale-match}.
 The runtime translates to
 $\mathcal{O}(\tau^{5/2}\cdot \log(\tau\cdot n_S))$; recall that $\tau = \MaFactor\cdot n_V$.
 
@@ -1421,7 +1421,7 @@ in the sense that in virtual network embedding problems, also the embedding endp
 In this sense, the virtual network embedding problem can also be seen as a generalization of the
 classic NP-hard Minimum Linear Arrangement problem which asks for the
 embedding of guest graphs on a simple \emph{line topology} (rather than tree-like topologies as
-studied in this paper).~\cite{mla,mla-survey}
+studied in this paper)~\cite{mla,mla-survey}.
 There exist several interesting algorithms for the Minimum Linear Arrangement problem,
 e.g., providing sublogarithmic approximation ratios~\cite{mla-feige}.
 
@@ -1429,7 +1429,7 @@ However, to the best of our knowledge, we are the first to provide an algorithmi
 study of the virtual cluster embedding problem which takes into account
 data locality as well as the possibility to select replicas---aspects which so far have only
 been studied from a best-effort perspective and using coarse-grained metrics (e.g., same rack or same server), thus limiting the flexibility of the
-system.~\cite{local-schedule-1,local-schedule-2,local-schedule-3} As we have shown in this paper,
+system~\cite{local-schedule-1,local-schedule-2,local-schedule-3}. As we have shown in this paper,
 the resulting problems can be seen as interesting new variants of several classic optimization
 problems, such as 3-dimensional matching problems~\cite{3SC-hard} as well as flow problems~\cite{korte2002combinatorial}.
 
