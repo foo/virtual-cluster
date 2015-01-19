@@ -247,7 +247,7 @@ chunk assignment, replica selection, or flexible virtual machine placement, and 
 \begin{enumerate}
 \item Which chunks to assign to which virtual machine?
 
-\item How to exploit redundancy and select good replicas? 
+\item How to exploit redundancy and select good replicas?
 
 \item How to efficiently embed virtual machines and their inter-connecting network?
 
@@ -321,7 +321,7 @@ and since concurrent network transmissions can introduce interference and
 performance unpredictability~\cite{amazonbw}, it is important
 to provide explicit minimal bandwidth guarantees.~\cite{talk-about}
 In particular, we model the virtual network connecting the virtual machines
-as a virtual cluster~\cite{oktopus,talk-about,proteus}; 
+as a virtual cluster~\cite{oktopus,talk-about,proteus};
 however, we extend this model with a notion of data-locality.
 In particular, we distinguish between the bandwidth needed between assigned chunk
 and virtual machine ($\CostTrans$) and the bandwidth needed between
@@ -441,7 +441,7 @@ and will denote the number of chunks per node by the integer value $\MaFactor = 
 
 \textbf{\emph{Flexible Placement ($\FP$).}} The third fundamental degree of freedom, besides replica selection and assignment,
 regards the flexibility in the placement (or synonymously: \emph{embedding}) of nodes on physical servers.
-We will refer to this aspect by $\FP$. 
+We will refer to this aspect by $\FP$.
 %(Recall that each server $s$ can host $\capa(s)$ nodes.)
 
 \textbf{\emph{Node Interconnect ($\CC$).}} We distinguish between scenarios
@@ -874,7 +874,7 @@ the problem infeasible. Hence, it is sufficient to temporarily omit the
 bandwidth limitations, compute an optimal assignment for an $\MA$ instance, and
 verify that the resulting allocations do not violate any capacities. The
 postprocessing step scales linearly with the number of edges in the substrate
-graph. 
+graph.
 
 
 
@@ -1260,8 +1260,8 @@ Next, we prove that the joint optimization of node placement and replica selecti
 is NP-hard if an inter-connect has to be established between nodes.
 In our terminology, this is the $\FP+\RS+\CC$ problem.
 
-The proof is similar in spirit to the proof of $\FP+\RS+\MA$, however, 
-we modify the construction to account for the absence of $\MA$: 
+The proof is similar in spirit to the proof of $\FP+\RS+\MA$, however,
+we modify the construction to account for the absence of $\MA$:
 we choose
 a high value for $\CostTrans$, such that nodes will be directly collocated with
 their assigned chunks. We leverage the fact that any solution which does not
@@ -1361,6 +1361,7 @@ hence every element is covered exactly once.
 
 Finally, let us conclude by remarking that all NP-hard problems discussed in this paper
 are obviously also in NP (and hence NP-complete): solutions can be verified efficiently.
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Related Work}\label{sec:relwork}
@@ -1576,24 +1577,24 @@ problem, we
 introduce a cost threshold $\Thr$ to transform $\CC+\RS+\FP+\BW$ into a decision problem too.
 
 Let's first recall that the $\SAT$ problem asks whether a positive valuation exists
-for a formula $\Formula$ with $\clauses$ clauses and $\variables$ 
+for a formula $\Formula$ with $\clauses$ clauses and $\variables$
 variables.
 In the following, we will only focus on $\SAT$ instances of at least four variables;
 this $\SAT$ variant is still NP-hard.
 
 \textbf{Construction.}
-Given any formula $\Formula$ in \emph{Conjunctive Normal Form (CNF)} with 
+Given any formula $\Formula$ in \emph{Conjunctive Normal Form (CNF)} with
 $\clauses$ clauses and $\variables \geq 4$ variables, we produce
-a $\RS+\FP+\BW$ instance as follows: First, we construct a substrate tree 
+a $\RS+\FP+\BW$ instance as follows: First, we construct a substrate tree
 $\Tree_{\Formula}$, consisting of
 a root and separate gadgets for each variable of $\Formula$, each of which
 is a child of the root.
 The gadget of variable $\variab$ consists of $\aroot(\variab)$ and its two children:
 $\positive(\variab)$ and $\negative(\variab)$. Child $\positive(\variab)$ has $\clauses$
-many children labeled $\nu_1, \nu_2, \ldots, 
+many children labeled $\nu_1, \nu_2, \ldots,
 \nu_{\clauses}$, and child
 $\negative(\variab)$ has
-$\clauses$ many children labeled $\neg \nu_1, \neg \nu_2, \dots, 
+$\clauses$ many children labeled $\neg \nu_1, \neg \nu_2, \dots,
 \nu_{\clauses}$. Every
 gadget has the same structure: the same height and the same number of
 leaves. This construction is illustrated in
@@ -1609,18 +1610,18 @@ satisfies the last clause, $\neg
 \label{fig:construction_3sat}
 \end{figure}
 
-For all variables $\nu$, we set the bandwidth 
-on the link, connecting $root(\nu)$ to the root of 
+For all variables $\nu$, we set the bandwidth
+on the link, connecting $root(\nu)$ to the root of
 the stubstrate tree, to $\clauses \cdot (\clauses
 \cdot \variables -
-\clauses)$. The bandwidth on the other 
+\clauses)$. The bandwidth on the other
 edges is not limited.
 
 
 We set the number of nodes to $\Vms = \clauses \cdot \variables$.
 Moreover, we define the inter-connect communication cost to be $1$,
 and the access cost to be a sufficiently large constant $W$,
-such that nodes must always be collocated with chunks ($W = \Thr + 1$ is 
+such that nodes must always be collocated with chunks ($W = \Thr + 1$ is
 sufficient).
 
 %(For a concrete value, see Appendix~\ref{ap:W}).
@@ -1681,7 +1682,7 @@ distributed across $\positive(\variab)$ and $\negative(\variab)$ subtrees.
 
 We calculate the chunk-node matching $\mu$ by assigning every chunk to
 the node which is collocated with the first chunk replica. This solution is feasible
-because every clause of 
+because every clause of
 $\Phi$ was satisfied and chunks correspond to clauses.
 
 Now we will show that this solution has cost $\Thr$.
@@ -1728,7 +1729,7 @@ same chunk $c_1$.
 
 Our results so far indicate that dealing with replication can be challenging.
 However, all our hardness proofs concerned scenarios with three replicas,
-which raises the question whether the problems are solvable in polynomial 
+which raises the question whether the problems are solvable in polynomial
 time with a replication factor of $2$. (Similarly to, say, the $\ZSAT$ problem
 which is tractable in contrast to $\TSAT$.)
 
@@ -1739,7 +1740,7 @@ The proof is by reduction from $\TSAT$. Given a formula $\Formula$ in
 conjunctive normal form, consisting of $\clauses$ clauses and $\vars$ variables, we construct a problem instance and substrate tree
 $T_{\Formula}$ using two types of gadgets: gadgets for variables and
 gadgets for clauses. \emph{Nota bene:}
-unlike in the previous proof we will create three chunk types 
+unlike in the previous proof we will create three chunk types
 instead of just one, for every clause.
 
 \begin{figure}[htbp]
@@ -1758,55 +1759,55 @@ We build upon the construction for variable gadgets introduced (see also Figure~
 \begin{enumerate}
   \item \emph{Tree Construction}: In addition to the variable gadgets known from the
   previous construction, we introduce \emph{clause
-    gadgets}. The clause gadget for a clause $\mathcal{C}$ (illustrated in 
+    gadgets}. The clause gadget for a clause $\mathcal{C}$ (illustrated in
 Figure~\ref{fig:clause-gadget})
     has two inner vertices:
-    \emph{root}$(\mathcal{C})$, \emph{middle}$(\mathcal{C})$\footnote{The only 
-purpose of the middle vertex is to maintain the balanced tree property.} and 
-three leaves $\mathcal{C}_1,\mathcal{C}_2$ and $\mathcal{C}_3$ . We connect 
+    \emph{root}$(\mathcal{C})$, \emph{middle}$(\mathcal{C})$\footnote{The only
+purpose of the middle vertex is to maintain the balanced tree property.} and
+three leaves $\mathcal{C}_1,\mathcal{C}_2$ and $\mathcal{C}_3$ . We connect
 leaves to the
     middle vertex, and the middle vertex to \emph{root}$(c)$. We attach the
     gadget to the tree by linking directly the global root to
-    \emph{root}$(\mathcal{C})$. We construct our tree out of $\vars$ variable 
+    \emph{root}$(\mathcal{C})$. We construct our tree out of $\vars$ variable
 gadgets
     and $\clauses$ clause gadgets.
   \item \emph{Chunk Distribution:}
-  \carlo{For each clause $\mathcal{C}$, we generate $3$ chunks types with $2$ 
-replicas each. Each server in the 
-clause gadget of $\mathcal{C}$ holds a replica of a different chunk type. The 
-remaing replicas of chunk types, are placed in the variable gadgets of the 
+  \carlo{For each clause $\mathcal{C}$, we generate $3$ chunks types with $2$
+replicas each. Each server in the
+clause gadget of $\mathcal{C}$ holds a replica of a different chunk type. The
+remaing replicas of chunk types, are placed in the variable gadgets of the
 variables which satisfy the clause, similarly to the previous proof.}
 Thus, in total, $6 \cdot \clauses$ variable chunks are
-distributed in the substrate network.  We will consider a setting where 
+distributed in the substrate network.  We will consider a setting where
 $\clauses \cdot \vars +
 2\clauses$ nodes need to be mapped. Our intention is that in every
 variable gadget, there will be $\clauses$ nodes, and in every clause
 gadgets there will be two nodes.
 
   \item \emph{Bandwidth Constraints:}
-\carlo{The available bandwidth of the top edge of the gadget of each 
+\carlo{The available bandwidth of the top edge of the gadget of each
 variable $\variab$ is set to
-$\capa(\variab) = \clauses  (\clauses(\variables -1) + 2  \cdot 
+$\capa(\variab) = \clauses  (\clauses(\variables -1) + 2  \cdot
  \clauses)$.
-This value, results from $\clauses$ nodes in the gadget for $\variab$, 
-which each have to communicate to $\clauses \cdot (\variables -1)$ nodes in 
+This value, results from $\clauses$ nodes in the gadget for $\variab$,
+which each have to communicate to $\clauses \cdot (\variables -1)$ nodes in
 other varaible gadgets and $2\cdot \clauses$ nodes in clause gadgets.}
 
 \carlo{The available bandwidth for the top edge of each clause gadget is set to
-$\capa(\clauses) = 2 (\clauses \cdot  \variables + 2(\clauses -1)) $. This 
-value allows both of the $2$ nodes in a clause gadget, to communicate to the 
-$\clauses \cdot \variables$ nodes in variable gadgets and the the other 
+$\capa(\clauses) = 2 (\clauses \cdot  \variables + 2(\clauses -1)) $. This
+value allows both of the $2$ nodes in a clause gadget, to communicate to the
+$\clauses \cdot \variables$ nodes in variable gadgets and the the other
 $2(\clauses -1)$ nodes in clause gadgets.}
 
 
-  \item \emph{Additional Properties:} We set 
+  \item \emph{Additional Properties:} We set
 the threshold in a
     similar fashion as in previous proofs. That is,
 the threshold depends on the intra-clause communication cost ($2$ hops), and the
 inter-clause communication cost ($6$ hops). We
   set the number of nodes to be placed to $\clauses \cdot \vars + 2 \cdot
   \clauses$. We set the hosting capacity of each server to $1$, and set
-  $\CostTrans = \Thr + 1$ to disallow remote chunk access. We set $\CostCom = 
+  $\CostTrans = \Thr + 1$ to disallow remote chunk access. We set $\CostCom =
 1$.
 
 
