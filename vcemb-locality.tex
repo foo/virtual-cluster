@@ -1667,6 +1667,7 @@ any feasible solution must embed exactly $\clauses$ nodes in every gadget.
 
 \begin{theorem}
 The problem $\RS+\FP+\BW+\CC$ is NP-hard.
+\label{theorem:3sat}
 \end{theorem}
 \begin{proof}
 We will prove that formula $\Formula$ is satisfiable iff $\RS+\FP+\BW+\CC$ has
@@ -1825,18 +1826,9 @@ with cost at most $\Thr$ has the property that
 there are exactly $\clauses$ nodes in each of the $\vars$ variable gadgets
 and exactly two nodes in each of the $\clauses$ clause gadgets.
 \end{lemma}
-\begin{proof}
-The claim is due to the bandwidth constraints.
 
-\maciek{Following text is wrong, as it does not hold from respecting the threshold, rather that from extended bandwidth lemma and feasibility. I suggest removing the rest of the proof and only refer to ``Bandwidth lemmas'' section.}
-We have to take into
-consideration the following communication paths:
-communication to clause gadgets and
-communication to
-other variable gadgets.
-In every valid solution of cost at most $\Thr$, we have exactly
-$\clauses$ nodes in each variable gadget and two nodes in each clause gadget.
-\end{proof}
+Correctness follows from the extended bandwidth lemma 
+(Lemma~\ref{lem:bandwidth-lemma-extended}).
 
 
 \begin{theorem}
@@ -1847,35 +1839,33 @@ We show that $\FP+\RS(2)+\BW+\CC$ has a solution of cost $\leq
   \Thr$ if and only if $\Formula\in \TSAT$ is satisfiable.
 
 ($\Rightarrow$) If we have a positive valuation of $\Formula$, we fill variable gadgets with nodes like in
-the proofs before. Then we fill $2 \cdot \clauses$ nodes as follows:
-\begin{itemize}
-\item If the first literal satisfies the clause, we map two nodes in the second and
-third leaf of the corresponding clause gadget.
-\item If the first literal does not satisfy the clause, we map two nodes to the first
-and second leaf of the clause gadget.
-\end{itemize}
+the proofs before. Then we place $2$ nodes in each of the $\clauses$ clause 
+gadgets as follows:
+\carlo{Given a clause $\mathcal{C} = \ell_1 \lor \ell_2 \lor \ell_3$, we pick a 
+random literal which satifies the clause. Subsequently we place nodes at the 
+leaf nodes in the clause gadget, which correspond to the other two literals. 
+This strategy ensures that all chunks can be assigned to collocated nodes, 
+as the only chunk type, which cannot be assigned to a collocated node in the 
+clause gadget, has a node collocated with its second replica in the variable 
+gadget.}
 
-\maciek{We need to argue why above strategy makes sense. This is the crucial part of the proof and the whole difference between 2 replica proof and previous one.}
-
-We then assign chunks to nodes as follows:
-\begin{itemize}
-\item Chunk $\achunk_i^{(1)}$ is matched to the node which is located in a variable gadget; there
-must be one, as the valuation satisfies the formula.
-\item Chunks $\achunk_i^{(2)}$ and $\achunk_i^{(3)}$ are matched to nodes which
-are
-located in clause
-gadgets
-\end{itemize}
+\carlo{We will then assign chunks to nodes in the following way: For chunk type 
+we assign the replica in the variable gadgets to a collocated node. If this 
+node does not exist, we assign the replica in the clause gadgets, to its 
+collocated node.}
 
 Thus, we have produced a feasible solution of cost $\Thr$.
 ($\Leftarrow$)
-Let us take any solution $\Sol$ to $\RS(2)+\FP+\BW$ of cost $\leq \Thr$.
-Then we can compute a positive valuation by setting each variable $\variab$
+Let us take any solution $\Sol$ to $\RS(2)+\FP+\BW$ of cost $\leq \Thr$. 
+\carlo{Similar to the proof of 
+Theorem~\ref{theorem:3sat} and Lemma~\ref{lem:bandwidth-lemma} all nodes, which 
+are placed in a variable gadgets, will be located in either the \emph{positive} 
+or the \emph{negative} subtree.} Then we can compute a positive valuation by 
+setting each variable $\variab$
 as follows:
 $\Val(\variab)= 1$ iff there is a node at the first leaf on the positive side of the $\variab$ gadget in $\Sol$,
-and $\Val(\variab)=0$ otherwise.
+and $\Val(\variab)=0$ otherwise. 
 
-\maciek{We need to mention that the behavior of VMs inside variable gadget remain the same - VMs stick to one side (positive or negative). It is crucial property for the proof.}
 
 %$\Val(\variab)$ =
 %\begin{cases}
@@ -1900,21 +1890,20 @@ Observe that it might happen that in $\Sol$, two nodes in
 clause variables are idle, and three nodes in variable gadgets are
 processing those $3$ chunk types. In this case,
 arbitrary nodes can be taken for the rest
-of the proof\maciek{Passive voice - consider rewrite.}
-.
+of the proof.
 
 \begin{lemma}
 $\Val$ satisfies $\Formula$.
 \end{lemma}
 \begin{proof}
 Let us consider the matching $M$ of $\Sol$, and let us consider an arbitrary clause of
-$\Formula$ as well as its three chunk types: $\achunk_i^{(1)}, \achunk_i^{(2)}, \achunk_i^{(3)}$.
-We will refer to the nodes corresponding to them
-by $v_i^{(1)}, v_i^{(2)}, v_i^{(3)}$\maciek{Why naming those when we don't use the names anywhere}; two of them lie in clause gadgets.
-Take the chunk type that was processed in variable
-gadgets and look at where it was processed.
-In our valuation $\Val$, we set the literal of the node leaf to
-$1$; therefore the clause is satisfied.
+$\Formula$ as well as its three chunk types:\carlo{ Due to bandwidth 
+constraints, at most two of the chunks types, can be processed by nodes in the 
+clause gadgets. We identify any chunk type, which is not assigned to a replica 
+in the clause gadgets. The processed replica of that chunk type was located in 
+a variable gadget. Depending on whether the replica it was located in the 
+positive or the negative subtree, we set the value of the according variable to 
+$1$ (positive subtree) or $0$ (negative subtree).}
 \end{proof}
 
 \maciek{We got lemmas formulated and proved inside the proof. IDK if we can do that. Also, we would like to conclude the 2 replica proof with a sentence or two (at least that it is NP-complete, not only NP-hard).}
@@ -1955,7 +1944,6 @@ $1$; therefore the clause is satisfied.
 %\end{comment}
 \section{The Bandwidth Lemmas}
 
-\maciek{Those are lemmas helpful in proving that in every bandwidth-feasible solution of cost $\leq \Thr$ there is certain amount of empty gadgets and certain amount of half-full gadgets. Bandwidth lemma is helpful in reduction from 3SAT to RS, and extended bandwidth lemma is helpful in reduction from 3SAT to RS(2). TODO: reference those lemmas in both proofs in the appendix!}
 
 \begin{lemma}[Bandwidth Lemma]\label{lem:bandwidth-lemma}
   Let $\clauses$ and $\variables > 4$ be two arbitrary positive integers. Let $a_1, a_2, \ldots,
@@ -1966,8 +1954,8 @@ $1$; therefore the clause is satisfied.
 \noindent  then for each $i$: $a_i = \clauses$.
 \end{lemma}
 \begin{proof}
-  \maciek{(By contradiction) Let us assume...}
-For the sake of contradiction, let us assume that there exists an index $k$ such that
+  By contradiction. Let us assume 
+that there exists an index $k$ such that
 $a_k \neq \clauses$. Then we can distinguish between two cases:
 either $a_k<\clauses$ or
 $a_k>\clauses$.
@@ -1984,8 +1972,7 @@ $a_k$ must be of the form $\clauses + x$ for $x \in [1, \ldots, \clauses]$.
 Let us consider the (bandwidth) inequality:
 $$ (\clauses + x) \cdot (\clauses \cdot \variables - \clauses - x) \leq \clauses \cdot (\clauses \cdot \variables - x) $$
 
-This can be transformed to\maciek{Passive voice - consider rewrite.}
-:
+This can be transformed to:
 
 $$ 0 \leq x(x - (\clauses \cdot (\variables - 2))) $$
 
@@ -1993,7 +1980,7 @@ The equation holds for $x \leq 0$ or $x \geq \clauses \cdot (\variables - 2)$,
 and no
 positive $x \leq \clauses$ can satisfy this inequality for $\variables > 4$. Contradiction.
 \end{proof}
-\begin{lemma}[Extended Bandwidth Lemma]\label{lem:bandwidth-lemma}
+\begin{lemma}[Extended Bandwidth Lemma]\label{lem:bandwidth-lemma-extended}
 %\maciek{this lemma might be expressed more clearly if we use two
 %  sequences instead of one - now $a_1, \ldots, a_{\variables}$
 %  correspond to number of VMs in variable gadgets and remaining of the
