@@ -1008,7 +1008,7 @@ nodes in a bottom up manner: We split the $x$ nodes
 into two positive integer
 values: we put $r$ on the right and $x - r$ on the left subtree.
 That is, we take the optimal cost
-(given recursively) of placing $r$ nodes in
+(given recursively\maciek{given inductively}) of placing $r$ nodes in
 the right subtree $\textsc{Ri}(T')$ of $T'$ and $x-r$ nodes in left subtree $\textsc{Le}(T')$ of
 $T'$. Given the cheapest combination, we add the bandwidth requirements
 on the uplink of $T'$ to generate the overall costs for placing $x$ nodes in $T'$.
