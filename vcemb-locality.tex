@@ -1777,7 +1777,7 @@ gadgets
 replicas each. Each server in the
 clause gadget of $\mathcal{C}$ holds a replica of a different chunk type. The
 remaing replicas of chunk types, are placed in the variable gadgets of the
-variables which satisfy the clause, similarly to the previous proof.}
+variables which satisfy the clause, similarly to the previous proof. \maciek{emphasise that those 3 chunks are placed in place of original one chunk} }
 Thus, in total, $6 \cdot \clauses$ variable chunks are
 distributed in the substrate network.  We will consider a setting where
 $\clauses \cdot \vars +
@@ -1838,7 +1838,7 @@ We show that $\FP+\RS(2)+\BW+\CC$ has a solution of cost $\leq
 the proofs before. Then we place $2$ nodes in each of the $\clauses$ clause 
 gadgets as follows:
 \carlo{Given a clause $\mathcal{C} = \ell_1 \lor \ell_2 \lor \ell_3$, we pick a 
-random literal which satifies the clause. Subsequently we place nodes at the 
+random\maciek{any} literal which satifies the clause. Subsequently we place nodes at the 
 leaf nodes in the clause gadget, which correspond to the other two literals. 
 This strategy ensures that all chunks can be assigned to collocated nodes, 
 as the only chunk type, which cannot be assigned to a collocated node in the 
