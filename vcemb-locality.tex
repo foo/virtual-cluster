@@ -901,6 +901,13 @@ tradeoff between the desire to place nodes as close as possible to each other
 as close as possible to
 the chunk locations.
 
+
+
+
+\textbf{Example.} Figure~\ref{fig:dynamic_motivation} shows an example: one
+extreme solution is to minimize the distance between chunks and nodes,
+see mapping $\NodeMapping_1$ in
+Figure~\ref{fig:dynamic_motivation} \emph{(left)}: the four nodes are all
 \begin{wrapfigure}{r}{0.5\columnwidth}
 \vspace{-1em}
 \includegraphics[width=0.48\columnwidth]{figs/venn_dp.pdf}
@@ -908,12 +915,6 @@ the chunk locations.
 \vspace{-1em}
 \label{fig:venn_flow}
 \end{wrapfigure}
-
-
-\textbf{Example.} Figure~\ref{fig:dynamic_motivation} shows an example: one
-extreme solution is to minimize the distance between chunks and nodes,
-see mapping $\NodeMapping_1$ in
-Figure~\ref{fig:dynamic_motivation} \emph{(left)}: the four nodes are all
 collocated with chunks, resulting in a zero-cost chunk access network. As a
 result, the paths between the individual nodes are longer than in alternative
 node placements: each node has a distance of two hops to one other node,
