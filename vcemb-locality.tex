@@ -243,7 +243,7 @@ flexibilities.
 \textbf{Our Contributions.}
 This paper initiates the formal study of data-locality and replica aware virtual network embedding problems in datacenters.
 In particular, we decompose the general optimization problem into its fundamental aspects, such as
-chunk assignment, replica selection, or flexible virtual machine placement, and answer questions such as:
+assignment of chunks (the atomic data units), replica selection, and flexible virtual machine placement, and answer questions such as:
 \begin{enumerate}
 \item Which chunks to assign to which virtual machine?
 
@@ -419,7 +419,7 @@ $\Cost=\sum_{v\in V} \Cost(v)$. Recall Figure~\ref{fig:overview}.
 
 \subsection{Problem Decomposition}
 
-In order to chart the landscape of the tractability and intractability of different
+In order to chart the landscape of the computational tractability and intractability of different
 problem variants, we decompose our problem into its fundamental aspects, namely replica selection
 ($\RS$), multiple chunk assignment ($\MA$), flexible node placement ($\FP$), node interconnect ($\CC$),
 and bandwidth constraints ($\BW$), as described in the following.
@@ -478,7 +478,6 @@ we can solve many problem variants efficiently.
  As we will see, sometimes multiple approaches can be used to solve a given problem variant, however,
  runtimes can differ.
 For each approach, we will summarize the solvable problem variants using a \emph{Venn diagram}.
-
 First, let us make a simplifying observation:
 \begin{obs}\label{obs:nofp}
 In problems without flexible placement ($\FP$),
@@ -504,7 +503,7 @@ Recall that in this problem variant,
 \vspace{-1em}
 \label{fig:venn_flow}
 \end{wrapfigure}
-we are given a set of redundant chunks ($\RS$) and a set of 
+we are given a set of redundant chunks ($\RS$) and a set of
 nodes
 (the \emph{nodes})
 at fixed locations (no $\FP$). The number of chunk types is larger than the number
@@ -549,7 +548,7 @@ cost nothing.
 %Recall that $\RS+\CC+\MA+\BW$ boils down to
 %$\RS+\MA+\BW$ in the absence of $\FP$
 A solution to the $\RS+\MA+\BW$ problem can now be computed
-a from a solution to the \emph{Min-Cost-Max-Flow} problem between super-source 
+a from a solution to the \emph{Min-Cost-Max-Flow} problem between super-source
 $\Source$ and
 super-sink $\Sink$ on the artificial graph $\Tree^*$.
 
@@ -587,17 +586,17 @@ there always exists an optimal integer solution on graphs with integer capacitie
 However, while algorithms like the successive shortest path algorithm~\cite{successive_shortest_path_complexity}
 directly give us such an integral solution (in polynomial time), the fastest min-cost-max-flow algorithms (e.g., based on double-scaling
 methods~\cite{mincostmaxflow-1} or minimum mean-cost cycle
-algorithms~\cite{mincostmaxflow-2}), may yield fractional solutions
+algorithms~\cite{mincostmaxflow-2}, may yield fractional solutions
 which need to be rounded to integral solutions (of the same cost).
 In order to compute integral solutions, we proceed as follows: we iteratively
 pick an arbitrary (loop-free) path
 currently having a fractional allocation of value $f$ ($f>0$), and distribute its flow $f$
 among all other fractional paths of the same length; due to the optimality of the fractional solution
 and due to the integrality theorem, such paths must always exist. After distributing this flow,
-the total allocation on this path will be 0, and we have increased the number of 
-integer paths by at least one. We proceed until we constructed the perfect 
+the total allocation on this path will be 0, and we have increased the number of
+integer paths by at least one. We proceed until we constructed the perfect
 matching.
-\emph{Third}, given an integer min-cost-max-flow solution, we need to decompose 
+\emph{Third}, given an integer min-cost-max-flow solution, we need to decompose
 the integer flow into the paths
 representing matched chunk-node pairs:
 The assignment can be obtained by decomposing the flow allocated in the
@@ -636,7 +635,7 @@ and uncapacitated networks, we can simply set $U=\tau$.
 
 
 This section presents faster algorithms to solve the two problem variants
-$\RS+\MA+\CC$ and $\MA+\CC+\BW$ which can also be solved with 
+$\RS+\MA+\CC$ and $\MA+\CC+\BW$ which can also be solved with
 \begin{wrapfigure}{r}{0.5\columnwidth}
 \vspace{-1em}
 \includegraphics[width=0.48\columnwidth]{figs/venn_matching.pdf}
@@ -983,10 +982,9 @@ the server capacity $\capacity(\ell)$;
 to calculate $f(T_{\ell}, x)$, for $x \leq \capacity(\ell)$, we compute the
 bandwidth allocation on the uplink of $T_{\ell}$, referred to by the function
 $bw(T_{\ell},x)$:
-$$bw(T_l,x)=  \CostTrans \cdot |x - \ChunkCount(T_{\ell})| + \CostCom \cdot
-(\Vms - x) \cdot x$$
-
-\noindent which accounts for the bandwidth allocation on the uplink of $T_{\ell}$. The
+$bw(T_l,x)=  \CostTrans \cdot $ $|x - \ChunkCount(T_{\ell})| +$ $ \CostCom \cdot
+(\Vms - x) \cdot x$,
+which accounts for the bandwidth allocation on the uplink of $T_{\ell}$. The
 first
 term represents the required bandwidth for the communication between the $x$
 nodes on $\ell$, and the $\Vms - x$ nodes in the remaining parts of the substrate
@@ -1004,11 +1002,11 @@ details).
 %corresponding number of nodes in the subtree as infeasible.}
 
 After initialization, we proceed to compute $f$ for non-leaf
-nodes in a bottom up manner: We split the $x$ nodes
+nodes in a bottom-up manner: We split the $x$ nodes
 into two positive integer
-values: we put $r$ on the right and $x - r$ on the left subtree.
+values, and we put $r$ on the right and $x - r$ on the left subtree.
 That is, we take the optimal cost
-(given recursively\maciek{given inductively}) of placing $r$ nodes in
+(given recursively) of placing $r$ nodes in
 the right subtree $\textsc{Ri}(T')$ of $T'$ and $x-r$ nodes in left subtree $\textsc{Le}(T')$ of
 $T'$. Given the cheapest combination, we add the bandwidth requirements
 on the uplink of $T'$ to generate the overall costs for placing $x$ nodes in $T'$.
@@ -1103,7 +1101,7 @@ To conclude, for the sake of completeness, we also observe that there are
 several problems which
 allow for a trivial solution. Concretely, problems with $\FP$
 plus any combination of
-$\RS$ and $\BW$ (but without $\MA$ or\maciek{and} $\CC$) can easily be solved by mapping 
+$\RS$ and $\BW$ (but without $\MA$ or\maciek{and} $\CC$) can easily be solved by mapping
 nodes to chunk locations.
 %Figure~\ref{fig:venn_trivial}
 %shows a Venn diagram of the trivial property combinations.
@@ -1259,7 +1257,7 @@ $\FP+\RS+\MA$ is NP-hard.
 \end{theorem}
 \begin{proof}
 Let $I$ be an instance of $\TDM$ and let $I'$ be an instance of
-$\FP+\RS+\MA$ constructed as described above. We prove that $I'$ has solution of cost $\leq \Thr$ if ($\Rightarrow$) and only if
+$\FP+\RS+\MA$ constructed as described above. We prove that $I'$ has a solution of cost $\leq \Thr$ if ($\Rightarrow$) and only if
 ($\Leftarrow$)
 $I$ has a matching of size $k$.
 
@@ -1400,20 +1398,22 @@ from the popular open-source implementation \emph{Apache Hadoop}.
 These applications
 generate large amounts of network traffic~\cite{orchestra,talk-about,amazonbw},
 and over the last years, several systems have been proposed which provide
-a provable network performance, also in shared cloud environments, by supporting explicit
+a provable network performance, also in shared cloud environments, by supporting
 relative~\cite{faircloud,elasticswitch,seawall}
 or, as in the case of our paper, \emph{absolute}~\cite{oktopus,secondnet,drl,gatekeeper,proteus} bandwidth reservations
 between the virtual machines.
-In particular, the notion of virtual networks which combine compute and network resources has been introduced.
-For a good survey on network virtualization and in particular virtual network embeddings,
-we refer the reader to~\cite{boutaba-survey} and~\cite{fischer-survey}.
+%In particular, the notion of virtual networks which combine compute and network resources has been introduced.
+%For a good survey on network virtualization and in particular virtual network embeddings,
+%we refer the reader to~\cite{boutaba-survey} and~\cite{fischer-survey}.
 
 The most popular virtual network abstraction for batch-processing applications today is the \emph{virtual cluster},
 introduced in the Oktopus paper~\cite{oktopus}, and later studied by many others~\cite{talk-about,proteus}.
 Several heuristics have been developed to compute ``good'' embeddings of virtual clusters: embeddings
 with small footprints (minimal bandwidth reservation costs)~\cite{oktopus,talk-about,proteus}.
 The virtual network embedding problem has also been studied for more general graph abstractions
-(e.g., motivated by wide-area networks)~\cite{infocom2009,ammar,turner,simannealing,ucc12mip,zhu06}.
+(e.g., motivated by wide-area networks).~\cite{boutaba-survey,fischer-survey}
+
+%~\cite{infocom2009,ammar,turner,simannealing,zhu06}.
 
 From a theoretical perspective, the virtual network embedding problem can be seen as a generalization
 of classic VPN graph embedding problems~\cite{Goyal2008,gupta2001provisioning},
@@ -1422,41 +1422,37 @@ In this sense, the virtual network embedding problem can also be seen as a gener
 classic NP-hard Minimum Linear Arrangement problem which asks for the
 embedding of guest graphs on a simple \emph{line topology} (rather than tree-like topologies as
 studied in this paper)~\cite{mla,mla-survey}.
-There exist several interesting algorithms for the Minimum Linear Arrangement problem,
-e.g., providing sublogarithmic approximation ratios~\cite{mla-feige}.
+%There exist several interesting algorithms for the Minimum Linear Arrangement problem,
+%e.g., providing sublogarithmic approximation ratios~\cite{mla-feige}.
 
 However, to the best of our knowledge, we are the first to provide an algorithmic
 study of the virtual cluster embedding problem which takes into account
 data locality as well as the possibility to select replicas---aspects which so far have only
 been studied from a best-effort perspective and using coarse-grained metrics (e.g., same rack or same server), thus limiting the flexibility of the
-system~\cite{local-schedule-1,local-schedule-2,local-schedule-3}. As we have shown in this paper,
-the resulting problems can be seen as interesting new variants of several classic optimization
-problems, such as 3-dimensional matching problems~\cite{3SC-hard} as well as flow problems~\cite{korte2002combinatorial}.
+system~\cite{local-schedule-1,local-schedule-2,local-schedule-3}.
+%As we have shown in this paper,
+%the resulting problems can be seen as interesting new variants of several classic optimization
+%problems, such as 3-dimensional matching problems~\cite{3SC-hard} as well as flow problems~\cite{korte2002combinatorial}.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Summary and Conclusion}\label{sec:conclusion}
 
-This paper investigated data locality aware algorithms which exploit two 
-fundamental
-degrees of freedom in virtual cluster
-embedding problems: replica selection and flexible node placement. In order to
-chart the landscape of the problem complexity, we
-decomposed the problem into its fundamental aspects,
-namely $\RS$, $\MA$, $\FP$, $\CC$, and $\BW$, and studied the computational
-tractability of different combinations.
+%This paper investigated data locality aware algorithms which exploit
+%fundamental
+%degrees of freedom in virtual cluster
+%embedding problems: replica selection and flexible node placement. In order to
+%chart the landscape of the problem complexity, we
+%decomposed the problem into its fundamental aspects,
+%namely $\RS$, $\MA$, $\FP$, $\CC$, and $\BW$, and studied the computational
+%tractability of different combinations.
 
-In particular, we have shown that
-at the heart of our model lie interesting new variants of classic
-optimization problems related to matchings and flows. Interestingly, despite the
-different dimensions of flexibility (in terms of replica selection, assignment and embedding),
-many problem instances can actually be solved in polynomial time, while other 
-instances are computationally hard
-even in uncapacitated networks.
-We have also shown that several embedding problems are NP-hard already in two- 
-and three-level trees
-(a practically relevant result given today's datacenter topologies~\cite{fattree}),
-and even if the the number of replicas is bounded by two.
+At the heart of locality and replica aware virtual cluster embeddings lie fundamental algorithmic problems.
+This paper has shown that despite the
+multiple dimensions of flexibility in terms of chunk assignment and node placement,
+many problems can be solved in polynomial time. However, we have also
+shown that several embedding problems are NP-hard already in two-
+and three-level trees---a practically relevant result given today's datacenter topologies~\cite{fattree})---and even if the the number of replicas is bounded by two.
 \begin{table}
 \tiny
 \bgroup
@@ -1500,8 +1496,7 @@ and even if the the number of replicas is bounded by two.
 \end{tabular}
 \end{small}
 \caption{
-The use cases of the proposed algorithms, expressed in property
-combinations which it can solve faster, than any other algorithm.
+Fastest algorithms for different respective problem variants.
 }
 \label{tab:summary}
 \egroup
@@ -1540,13 +1535,9 @@ problem NP-hard.
 %\label{fig:summary}
 %\end{figure}
 
-
-Our paper draws a complete picture of what can and cannot be
-computed optimally in our setting, and may be of interest both to the algorithm
-and the networking community. At the same time, we understand our model and work
-as a first step, and believe that our paper opens several interesting
-questions for future research, for instance, regarding randomized
-or approximation algorithms.
+We believe that our paper opens several interesting directions for future research.
+In particular, it would be interesting to shed light on the possible approximation algorithms
+for our NP-hard problems.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1563,7 +1554,7 @@ or approximation algorithms.
 
 \section{Replica selection is hard}\label{ap:tworep}
 
-We have seen that replica selection flexibilities can render problems computationally hard.
+We have seen that replica selection flexibilities can render embeddings computationally hard.
 In the following, we will explore the minimal requirements for rendering replica selection hard.
 In particular, we will show that already two replicas for each chunk type are sufficient to
 introduce intractability.
@@ -1590,7 +1581,7 @@ In the following, we allow the number of chunk types to be smaller than the numb
 %  (NP-complete) subset of 3SAT where we have more than 4
 %  clauses. Otherwise the bandwidth lemma does not work!}
 
-In the following, we first give an alternative proof for the hardness of $\CC+\FP+\RS+\BW$.
+We first give an alternative proof for the hardness of $\CC+\FP+\RS+\BW$.
 Subsequently, we show that the 2-replica variant $\RS(2)$ is hard.
 
 %For our proof, we assume a model where there can be more nodes than chunk types,
@@ -1673,8 +1664,8 @@ $ \Thr = \variables \cdot ({\clauses  \choose 2} \cdot 2 +
 We now show that our construction indeed
 decides $\SAT$. We set the capacities such that in every gadget,
 at most $\clauses$ nodes can be mapped, where $\clauses$
-is the number of clauses of $\Formula$.
-
+is the number of clauses of $\Formula$
+.
 We can apply the Bandwidth Lemma (Lemma~\ref{lem:bandwidth-lemma}) as follows:
 We interpret $a_i$ as the
 number of nodes that are embedded in the $i$-th gadget, $\clauses$
@@ -1684,8 +1675,8 @@ The LHS of the inequality of Lemma~\ref{lem:bandwidth-lemma}
 is a formula for the communication cost of nodes inside the $i$-th
 gadget to nodes outside the gadget. The RHS of the inequality is the
 bandwidth constraint for the gadget. This implies that
-any feasible solution must embed exactly $\clauses$ nodes in every gadget
-(Recall that in our $\SAT$ instance, we have at least four variables.)
+any feasible solution must embed exactly $\clauses$ nodes in every gadget.
+Recall that in our $\SAT$ instance, we have at least four variables.
 
 \begin{theorem}
 The problem $\RS+\FP+\BW+\CC$ is NP-hard.
@@ -1710,7 +1701,7 @@ distributed across $\positive(\variab)$ and $\negative(\variab)$ subtrees.
 We calculate the chunk-node matching $\mu$ by assigning every chunk to
 the node which is collocated with the first chunk replica. This solution is feasible
 because every clause of
-$\Phi$ was satisfied and chunks correspond to clauses.
+$\Psi$ was satisfied and chunks correspond to clauses.
 
 Now we will show that this solution has cost $\Thr$.
 Due to the Bandwidth Lemma (Lemma~\ref{lem:bandwidth-lemma}),
@@ -1799,11 +1790,12 @@ leaves to the
 gadgets
     and $\clauses$ clause gadgets.
   \item \emph{Chunk Distribution:}
-  \carlo{For each clause $\mathcal{C}$, we generate $3$ chunks types with $2$
+  For each clause $\mathcal{C}$, we generate $3$ chunks types with $2$
 replicas each. Each server in the
 clause gadget of $\mathcal{C}$ holds a replica of a different chunk type. The
-remaing replicas of chunk types, are placed in the variable gadgets of the
-variables which satisfy the clause, similarly to the previous proof. \maciek{emphasise that those 3 chunks are placed in place of original one chunk} }
+remaining replicas of chunk types, are placed in the variable gadgets of the
+variables which satisfy the clause, similarly to the previous proof.
+%\maciek{emphasise that those 3 chunks are placed in place of original one chunk} }
 Thus, in total, $6 \cdot \clauses$ variable chunks are
 distributed in the substrate network.  We will consider a setting where
 $\clauses \cdot \vars +
@@ -1812,19 +1804,18 @@ variable gadget, there will be $\clauses$ nodes, and in every clause
 gadgets there will be two nodes.
 
   \item \emph{Bandwidth Constraints:}
-\carlo{The available bandwidth of the top edge of the gadget of each
+The available bandwidth of the top edge of the gadget of each
 variable $\variab$ is set to
 $\capa(\variab) = \clauses  (\clauses(\variables -1) + 2  \cdot
  \clauses)$.
 This value, results from $\clauses$ nodes in the gadget for $\variab$,
 which each have to communicate to $\clauses \cdot (\variables -1)$ nodes in
-other varaible gadgets and $2\cdot \clauses$ nodes in clause gadgets.}
-
-\carlo{The available bandwidth for the top edge of each clause gadget is set to
+other variable gadgets and $2\cdot \clauses$ nodes in clause gadgets.
+The available bandwidth for the top edge of each clause gadget is set to
 $\capa(\clauses) = 2 (\clauses \cdot  \variables + 2(\clauses -1)) $. This
 value allows both of the $2$ nodes in a clause gadget, to communicate to the
 $\clauses \cdot \variables$ nodes in variable gadgets and the the other
-$2(\clauses -1)$ nodes in clause gadgets.}
+$2(\clauses -1)$ nodes in clause gadgets.
 
 
   \item \emph{Additional Properties:} We set
@@ -1849,7 +1840,7 @@ there are exactly $\clauses$ nodes in each of the $\vars$ variable gadgets
 and exactly two nodes in each of the $\clauses$ clause gadgets.
 \end{lemma}
 
-Correctness follows from the extended bandwidth lemma 
+Correctness follows from the extended bandwidth lemma
 (Lemma~\ref{lem:bandwidth-lemma-extended}).
 
 
@@ -1861,32 +1852,31 @@ We show that $\FP+\RS(2)+\BW+\CC$ has a solution of cost $\leq
   \Thr$ if and only if $\Formula\in \TSAT$ is satisfiable.
 
 ($\Rightarrow$) If we have a positive valuation of $\Formula$, we fill variable gadgets with nodes like in
-the proofs before. Then we place $2$ nodes in each of the $\clauses$ clause 
+the proofs before. Then we place $2$ nodes in each of the $\clauses$ clause
 gadgets as follows:
-\carlo{Given a clause $\mathcal{C} = \ell_1 \lor \ell_2 \lor \ell_3$, we pick a 
-random\maciek{any} literal which satifies the clause. Subsequently we place nodes at the 
-leaf nodes in the clause gadget, which correspond to the other two literals. 
-This strategy ensures that all chunks can be assigned to collocated nodes, 
-as the only chunk type, which cannot be assigned to a collocated node in the 
-clause gadget, has a node collocated with its second replica in the variable 
-gadget.}
+Given a clause $\mathcal{C} = \ell_1 \lor \ell_2 \lor \ell_3$, we pick an arbitrary literal which satisfies the clause. Subsequently we place nodes at the
+leaf nodes in the clause gadget, which correspond to the other two literals.
+This strategy ensures that all chunks can be assigned to collocated nodes,
+as the only chunk type, which cannot be assigned to a collocated node in the
+clause gadget, has a node collocated with its second replica in the variable
+gadget.
 
-\carlo{We will then assign chunks to nodes in the following way: For chunk type 
-we assign the replica in the variable gadgets to a collocated node. If this 
-node does not exist, we assign the replica in the clause gadgets, to its 
-collocated node.}
+We will then assign chunks to nodes in the following way: For chunk type
+we assign the replica in the variable gadgets to a collocated node. If this
+node does not exist, we assign the replica in the clause gadgets, to its
+collocated node.
 
 Thus, we have produced a feasible solution of cost $\Thr$.
 ($\Leftarrow$)
-Let us take any solution $\Sol$ to $\RS(2)+\FP+\BW$ of cost $\leq \Thr$. 
-\carlo{Similar to the proof of 
-Theorem~\ref{theorem:3sat} and Lemma~\ref{lem:bandwidth-lemma} all nodes, which 
-are placed in a variable gadgets, will be located in either the \emph{positive} 
-or the \emph{negative} subtree.\maciek{Mentioned lemma does not say anything about VMs sticking to pos or neg, only about saturation of gadgets.}} Then we can compute a positive valuation by 
+Let us take any solution $\Sol$ to $\RS(2)+\FP+\BW$ of cost $\leq \Thr$.
+Similar to the proof of
+Theorem~\ref{theorem:3sat} and Lemma~\ref{lem:bandwidth-lemma} all nodes which
+are placed in a variable gadgets, will be located in either the \emph{positive}
+or the \emph{negative} subtree. Then we can compute a positive valuation by
 setting each variable $\variab$
 as follows:
 $\Val(\variab)= 1$ iff there is a node at the first leaf on the positive side of the $\variab$ gadget in $\Sol$,
-and $\Val(\variab)=0$ otherwise. 
+and $\Val(\variab)=0$ otherwise.
 
 
 %$\Val(\variab)$ =
@@ -1919,13 +1909,13 @@ $\Val$ satisfies $\Formula$.
 \end{lemma}
 \begin{proof}
 Let us consider the matching $M$ of $\Sol$, and let us consider an arbitrary clause of
-$\Formula$ as well as its three chunk types:\carlo{ Due to bandwidth 
-constraints, at most two of the chunks types, can be processed by nodes in the 
-clause gadgets. We identify any chunk type, which is not assigned to a replica 
-in the clause gadgets. The processed replica of that chunk type was located in 
-a variable gadget. Depending on whether the replica it was located in the 
-positive or the negative subtree, we set the value of the according variable to 
-$1$ (positive subtree) or $0$ (negative subtree).}
+$\Formula$ as well as its three chunk types: Due to bandwidth
+constraints, at most two of the chunks types, can be processed by nodes in the
+clause gadgets. We identify any chunk type, which is not assigned to a replica
+in the clause gadgets. The processed replica of that chunk type was located in
+a variable gadget. Depending on whether the replica was located in the
+positive or the negative subtree, we set the value of the according variable to
+$1$ (positive subtree) or $0$ (negative subtree).
 \end{proof}
 
 \maciek{We got lemmas formulated and proved inside the proof. IDK if we can do that. Also, we would like to conclude the 2 replica proof with a sentence or two (at least that it is NP-complete, not only NP-hard).}
@@ -1976,7 +1966,7 @@ $1$ (positive subtree) or $0$ (negative subtree).}
 \noindent  then for each $i$: $a_i = \clauses$.
 \end{lemma}
 \begin{proof}
-  By contradiction. Let us assume 
+  By contradiction. Let us assume
 that there exists an index $k$ such that
 $a_k \neq \clauses$. Then we can distinguish between two cases:
 either $a_k<\clauses$ or
