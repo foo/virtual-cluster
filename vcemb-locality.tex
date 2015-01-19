@@ -1198,7 +1198,7 @@ and has the following form:
 The gadget of each triple consists of an inner node (a router) and three leaves.
 \item \emph{Chunks and chunk replicas:} For each element in $X$, $Y$ and $Z$,
  we create a chunk type
-($3 \cdot k$ in total). Every gadget contains three chunk replicas,
+($3 \cdot k$ in total). Every gadget contains three chunk replicas, \maciek{we place one replica per node - we generalized chunks per nodes and we have to say that}
 corresponding to the elements of the triple.
 \item \emph{Other properties:} We set the number of to-be-embedded nodes to $k$,
 $\CostTrans$ to $1$, and the number of chunk slots in each node to the multi-assignment factor
@@ -1411,7 +1411,7 @@ we refer the reader to~\cite{boutaba-survey} and~\cite{fischer-survey}.
 The most popular virtual network abstraction for batch-processing applications today is the \emph{virtual cluster},
 introduced in the Oktopus paper~\cite{oktopus}, and later studied by many others~\cite{talk-about,proteus}.
 Several heuristics have been developed to compute ``good'' embeddings of virtual clusters: embeddings
-with small footprints (minimal bandwidth reservation costs).~\cite{oktopus,talk-about,proteus}
+with small footprints (minimal bandwidth reservation costs)~\cite{oktopus,talk-about,proteus}.
 The virtual network embedding problem has also been studied for more general graph abstractions
 (e.g., motivated by wide-area networks).~\cite{infocom2009,ammar,turner,simannealing,ucc12mip,zhu06}
 
