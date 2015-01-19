@@ -1576,20 +1576,25 @@ problem, we
 introduce a cost threshold $\Thr$ to transform $\CC+\RS+\FP+\BW$ into a decision problem too.
 
 Let's first recall that the $\SAT$ problem asks whether a positive valuation exists
-for a formula $\Formula$ with $\clauses$ clauses and $\variables$ variables\maciek{Emphasize alpha and beta definiton, it gets lost in the text}.
+for a formula $\Formula$ with $\clauses$ clauses and $\variables$ 
+variables.
 In the following, we will only focus on $\SAT$ instances of at least four variables;
 this $\SAT$ variant is still NP-hard.
 
 \textbf{Construction.}
-Given any formula $\Formula$ in \emph{Conjunctive Normal Form (CNF)} with at least four variables, we produce
-a $\RS+\FP+\BW$ instance as follows. First, we construct a substrate tree $\Tree_{\Formula}$, consisting of
+Given any formula $\Formula$ in \emph{Conjunctive Normal Form (CNF)} with 
+$\clauses$ clauses and $\variables \geq 4$ variables, we produce
+a $\RS+\FP+\BW$ instance as follows: First, we construct a substrate tree 
+$\Tree_{\Formula}$, consisting of
 a root and separate gadgets for each variable of $\Formula$, each of which
 is a child of the root.
 The gadget of variable $\variab$ consists of $\aroot(\variab)$ and its two children:
 $\positive(\variab)$ and $\negative(\variab)$. Child $\positive(\variab)$ has $\clauses$
-many children \maciek{labeled (we don't want to give the impression that there are chunks named this way)} $\nu_1, \nu_2, \ldots, \nu_{\clauses}$, and child
+many children labeled $\nu_1, \nu_2, \ldots, 
+\nu_{\clauses}$, and child
 $\negative(\variab)$ has
-$\clauses$ many children \maciek{labeled} $\neg \nu_1, \neg \nu_2, \dots, \nu_{\clauses}$. Every
+$\clauses$ many children labeled $\neg \nu_1, \neg \nu_2, \dots, 
+\nu_{\clauses}$. Every
 gadget has the same structure: the same height and the same number of
 leaves. This construction is illustrated in
 Table~\ref{fig:construction_3sat}.
@@ -1604,29 +1609,19 @@ satisfies the last clause, $\neg
 \label{fig:construction_3sat}
 \end{figure}
 
-\maciek{Following paragraph can be replaced with one sentence: ``We set bandwidth on uplink of each variable gadget to $\clauses \cdot (\clauses
+For all variables $\nu$, we set the bandwidth 
+on the link, connecting $root(\nu)$ to the root of 
+the stubstrate tree, to $\clauses \cdot (\clauses
 \cdot \variables -
-\clauses)$. We set other edges bandwidth to be unlimited.}
-
-By default, we will set the available
-bandwidth to be the
-same everywhere, in every gadget; differences will be shown when we
-will place chunks.
-We set the following bandwidth capacities in the substrate. There are three
-levels of edges in the substrate network $\Tree_{\Formula}$ given by formula
-$\Formula$: \emph{top}, \emph{middle} and \emph{bottom}.
-We do not consider any capacities at the \emph{bottom} and \emph{middle} levels.
-At a top-level edge, we set the bandwidth to $\clauses \cdot (\clauses
-\cdot \variables -
-\clauses)$.
-
+\clauses)$. The bandwidth on the other 
+edges is not limited.
 
 
 We set the number of nodes to $\Vms = \clauses \cdot \variables$.
 Moreover, we define the inter-connect communication cost to be $1$,
 and the access cost to be a sufficiently large constant $W$,
-such that nodes must always be collocated with chunks. ($W$ in the order of
-the threshold $\Thr$ is sufficient.)\maciek{Alternatively, we can set $W=1$ and restrict the transportation by setting bandwidth on uplink of every leaf.}
+such that nodes must always be collocated with chunks ($W = \Thr + 1$ is 
+sufficient).
 
 %(For a concrete value, see Appendix~\ref{ap:W}).
 
@@ -1651,7 +1646,7 @@ $ \Thr = \variables \cdot ({\clauses  \choose 2} \cdot 2 +
 We now show that our construction indeed
 decides $\SAT$. We set the capacities such that in every gadget,
 at most $\clauses$ nodes can be mapped, where $\clauses$
-is the number of clauses of $\Formula$\maciek{Passive voice - consider rewrite.}
+is the number of clauses of $\Formula$
 .
 We can apply the Bandwidth Lemma (Lemma~\ref{lem:bandwidth-lemma}) as follows:
 We interpret $a_i$ as the
@@ -1686,8 +1681,8 @@ distributed across $\positive(\variab)$ and $\negative(\variab)$ subtrees.
 
 We calculate the chunk-node matching $\mu$ by assigning every chunk to
 the node which is collocated with the first chunk replica. This solution is feasible
-(every chunk type is processed),
-because the given valuation satisfied $\Phi$ \maciek{(because every clause was satisfied and chunks correspond to clauses)}.
+because every clause of 
+$\Phi$ was satisfied and chunks correspond to clauses.
 
 Now we will show that this solution has cost $\Thr$.
 Due to the Bandwidth Lemma (Lemma~\ref{lem:bandwidth-lemma}),
@@ -1733,9 +1728,8 @@ same chunk $c_1$.
 
 Our results so far indicate that dealing with replication can be challenging.
 However, all our hardness proofs concerned scenarios with three replicas,
-which raises the question whether the problems can be solved in polynomial time
-with a replication factor of two only\maciek{Passive voice - consider rewrite.}
-. (Similarly to, say, the $\ZSAT$ problem
+which raises the question whether the problems are solvable in polynomial 
+time with a replication factor of $2$. (Similarly to, say, the $\ZSAT$ problem
 which is tractable in contrast to $\TSAT$.)
 
 In the following, we show that this is not the case: the problem remains
@@ -1745,11 +1739,15 @@ The proof is by reduction from $\TSAT$. Given a formula $\Formula$ in
 conjunctive normal form, consisting of $\clauses$ clauses and $\vars$ variables, we construct a problem instance and substrate tree
 $T_{\Formula}$ using two types of gadgets: gadgets for variables and
 gadgets for clauses. \emph{Nota bene:}
-unlike in the previous proofs, for every clause we will create three chunk types instead of just one.
+unlike in the previous proof we will create three chunk types 
+instead of just one, for every clause.
 
+\begin{figure}[htbp]
 \includegraphics{figs/construction_2replica}
+\caption{Structure of clause gadgets.}
+\label{fig:clause-gadget}
+\end{figure}
 
-\carlo{TODO: caption of figure?}
 
 \textbf{Construction.}
 %\carlo{TODO: Describe construction of clause gadgets, and emphazise that we use
@@ -1760,55 +1758,60 @@ We build upon the construction for variable gadgets introduced (see also Figure~
 \begin{enumerate}
   \item \emph{Tree Construction}: In addition to the variable gadgets known from the
   previous construction, we introduce \emph{clause
-    gadgets}. The clause gadget (illustrated in Figure~\ref{fig:clause-gadget})
-    has two inner vertices:\maciek{Remove the middle vertex?}
-    \emph{root}$(c)$, \emph{middle}$(c)$ and three leaves (we use the middle vertex mainly to
-    preserve the balanced tree property). We connect leaves to the
+    gadgets}. The clause gadget for a clause $\mathcal{C}$ (illustrated in 
+Figure~\ref{fig:clause-gadget})
+    has two inner vertices:
+    \emph{root}$(\mathcal{C})$, \emph{middle}$(\mathcal{C})$\footnote{The only 
+purpose of the middle vertex is to maintain the balanced tree property.} and 
+three leaves $\mathcal{C}_1,\mathcal{C}_2$ and $\mathcal{C}_3$ . We connect 
+leaves to the
     middle vertex, and the middle vertex to \emph{root}$(c)$. We attach the
     gadget to the tree by linking directly the global root to
-    \emph{root}$(c)$. We construct our tree out of $\vars$ variable gadgets
+    \emph{root}$(\mathcal{C})$. We construct our tree out of $\vars$ variable 
+gadgets
     and $\clauses$ clause gadgets.
   \item \emph{Chunk Distribution:}
-    We distribute two replicas of each of $\clauses \cdot 3$ \maciek{$\tau = 3 \cdot \clauses$} chunk types among the servers as follows.
-    First, similarly to the
-previous proofs with three replicas, we put clause chunks into the variable
-gadgets; however, now we place distinct chunks $c^{(1)}_i, c^{(2)}_i, c^{(3)}_i$ \maciek{This unfortunate choice of variable names. We already have this notation for replicas of chunks, we need to figure out new names for those distinct chunk types.}
-instead of three copies of the same chunk. Second, we place three
-chunks that correspond to clauses in all three leaves of their clause
-gadgets.  Thus, in total, $6 \cdot \clauses$ variable chunks are
-mapped.  We will consider a setting where $\clauses \cdot \vars +
+  \carlo{For each clause $\mathcal{C}$, we generate $3$ chunks types with $2$ 
+replicas each. Each server in the 
+clause gadget of $\mathcal{C}$ holds a replica of a different chunk type. The 
+remaing replicas of chunk types, are placed in the variable gadgets of the 
+variables which satisfy the clause, similarly to the previous proof.}
+Thus, in total, $6 \cdot \clauses$ variable chunks are
+distributed in the substrate network.  We will consider a setting where 
+$\clauses \cdot \vars +
 2\clauses$ nodes need to be mapped. Our intention is that in every
 variable gadget, there will be $\clauses$ nodes, and in every clause
 gadgets there will be two nodes.
 
   \item \emph{Bandwidth Constraints:}
-    The available bandwidth of the top edge of the gadget of each variable $\variab$ is set to
-$\capa(v) = 3  \cdot  3  \cdot  (3  \cdot  (\vars - 1) + 2  \cdot  \clauses)$.
-The first factor is the distance in $\Tree$ \maciek{Available bandwidth shouldn't depend on the distance, just on the number of machines that communicate. This is wrong}  which is 6 divided by 2 (as
-we count each pair twice). The second factor is
-the number of nodes to be placed in every variable gadget.
-So the first term of the
-sum is three times the number of outer variable gadgets,
-and the second term is the
-number of nodes in each of the $\clauses$ clause gadgets.
-The available bandwidth for the top edge of each clause gadget is set to
-$\capa(\clauses) = 3  \cdot  2  \cdot  (2  \cdot  (\clauses - 1) + 3  \cdot  \vars) $.
-Notice that this construction uses two replicas of each chunk type:
-one in the variable gadget and one in the clause gadget.
+\carlo{The available bandwidth of the top edge of the gadget of each 
+variable $\variab$ is set to
+$\capa(\variab) = \clauses  (\clauses(\variables -1) + 2  \cdot 
+ \clauses)$.
+This value, results from $\clauses$ nodes in the gadget for $\variab$, 
+which each have to communicate to $\clauses \cdot (\variables -1)$ nodes in 
+other varaible gadgets and $2\cdot \clauses$ nodes in clause gadgets.}
 
-  \item \emph{Additional Properties:} We set the threshold in a
+\carlo{The available bandwidth for the top edge of each clause gadget is set to
+$\capa(\clauses) = 2 (\clauses \cdot  \variables + 2(\clauses -1)) $. This 
+value allows both of the $2$ nodes in a clause gadget, to communicate to the 
+$\clauses \cdot \variables$ nodes in variable gadgets and the the other 
+$2(\clauses -1)$ nodes in clause gadgets.}
+
+
+  \item \emph{Additional Properties:} We set 
+the threshold in a
     similar fashion as in previous proofs. That is,
-the threshold depends on the intra-clause communication cost (two hops),
-inter-clause communication cost (4 hops),
-  and the communication from variable gadgets to clause gadgets (4 hops) \maciek{This is wrong. Depending on 2 or 3 level clause gadget we need to modify one of number of hops)}. We
-  set the number of nodes to be activated to $\clauses \cdot \vars + 2 \cdot
+the threshold depends on the intra-clause communication cost ($2$ hops), and the
+inter-clause communication cost ($6$ hops). We
+  set the number of nodes to be placed to $\clauses \cdot \vars + 2 \cdot
   \clauses$. We set the hosting capacity of each server to $1$, and set
-  $\CostTrans = \Thr$ to disallow remote chunk access. We set $\CostCom = 1$.
+  $\CostTrans = \Thr + 1$ to disallow remote chunk access. We set $\CostCom = 
+1$.
 
 
  \end{enumerate}
 
-\stefan{TODO Carlo: The construction is illustrated in Figure~\ref{fig:two}.}
 \textbf{Proof of correctness.}
 We first prove the following helper lemma.
 \begin{lemma}
