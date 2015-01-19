@@ -70,7 +70,7 @@
 %\newcommand{\Cost}{\ensuremath{\textsc{cost}}}
 
 \newcommand{\Uplink}{\ensuremath{\textsc{uplink}}}
-\newcommand{\ChunkCount}{\ensuremath{\textsc{cis}}}
+\newcommand{\ChunkCount}{\ensuremath{y}}
 \newcommand{\VmCount}{\ensuremath{\textsc{vis}}}
 \newcommand{\Right}{\ensuremath{r}}
 \newcommand{\InverseAssignment}{\ensuremath{\VmChunkAssignment^{-1}}}
@@ -951,7 +951,7 @@ the optimal values found for $f$ during the bottom-up computation).
 
 Concretely, the first argument to function $f$
 is a subtree $\Tree'$, containing a given number of
-chunks-in-the-subtree $\ChunkCount(\Tree')$,
+chunks $\ChunkCount(\Tree')$,
 and the
 second argument is the number of nodes to be embedded in the subtree.
 Function $f$ is evaluated in a bottom up manner. We initialize the
@@ -1045,48 +1045,6 @@ $bw$ exceeds the capacity $\capacity$ of the uplink of $T'$.
 %
 
 
-%\begin{comment}
-%
-%
-%\newcommand{\SumIndex}{\ensuremath{n}}
-%\begin{algorithm}[tbhp]
-%\DontPrintSemicolon % Some LaTeX compilers require you to use
-%%%\dontprintsemicolon instead
-%\SetAlgoNoEnd
-%\KwIn{$\Opt_{\SubstrateNode_l} ,
-%\Opt_{\SubstrateNode_r},
-%\ChunkCount_{\SubstrateNode_l},\ChunkCount_{\SubstrateNode_r} $}
-%$\ChunkCount_\SubstrateNode = \ChunkCount_{\SubstrateNode_l} +
-%\ChunkCount_{\SubstrateNode_r}$\;
-%\For{$\SumIndex \in \{0,\dots,\Vms\}$}{
-%  \For{$i \in \{0,\dots,\SumIndex\}$}{ \If{$\Opt_\SubstrateNode[\SumIndex]
-%  > \Opt_{\SubstrateNode_l}[i] +
-%\Opt_{\SubstrateNode_r}[\SumIndex - i]$}{
-%	$\Opt_\SubstrateNode[\SumIndex] \gets \Opt_{\SubstrateNode_l}[i]
-%	+
-%\Opt_{\SubstrateNode_r}[\SumIndex - i]$\;
-%    } }
-%
-% $bw \gets (\Vms -
-%\SumIndex) \cdot \SumIndex \cdot \CostCom +   |i -
-%\ChunkCount_\SubstrateNode| \cdot \CostTrans$\;
-%  \eIf{$bw \leq \capacity(\Uplink(v))$}{
-%    $\Opt_\SubstrateNode[\SumIndex] \gets \Opt_\SubstrateNode[\SumIndex]
-%    + bw$\; }{ $\Opt_\SubstrateNode[\SumIndex] \gets \infty$\; } }
-%%
-%\caption{$aggregate(\SubstrateNode \in \SubstrateNodes)$}
-%\label{algo:dynAggregation}
-%\end{algorithm}
-%
-%List all needed functions like distance, counter of number of chunks
-%in subtree.
-%
-%Tell how to go back through the array to reconstruct the actual
-%placements. Following path of minimas. Other approach is to store pointers to minimas on lower levels as those are chosen.
-%
-%(Base case) We fill the entire array $Opt_l$ for the leaf $l$ with zeros. It means that we allow hosting $0, 1, \ldots, n$ VMs in this leaf. We can restrict the number of VMs that are hosted in the same leaf by some constant $x$ (that can be independent for every leaf) by setting $Opt_l[x+1] = Opt_l[x+2] = \ldots = Opt_l[n] = \infty$.
-%
-%\end{comment}
 
 
 \textbf{Analysis.}
