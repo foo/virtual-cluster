@@ -166,14 +166,14 @@
 
 \begin{abstract}
 Virtualized datacenters offer great flexibilities in terms of resource allocation. In particular, by
-decoupling applications from the constraints of the underlying physical infrastructure, virtualization
+decoupling applications from the constraints of the underlying infrastructure, virtualization
 supports an optimized mapping of virtual machines as well as their interconnecting network
 % (the so-called \emph{virtual cluster})
 to their
 physical counterparts: essentially a graph embedding problem.
 
 However, existing algorithms
-in the literature often ignore a crucial dimension of the embedding problem, namely \emph{data locality}:
+often ignore a crucial dimension of the embedding problem, namely \emph{data locality}:
 the input to a cloud application such as MapReduce is typically stored in a distributed,
 and sometimes redundant, file system. Since moving
 data is costly, an embedding algorithm should be data locality aware,
@@ -183,13 +183,13 @@ This paper initiates the algorithmic study of data locality aware virtual cluste
 % for
 %the widely used (fat-)tree like
 on datacenter topologies.
-In particular, we
+We
 show that
 despite the multiple degrees of freedom in terms of embedding, replica selection and assignment,
 many problems can be
-solved efficiently. However, we also show the limitations of such optimizations,
+solved efficiently. We also highlight the limitations of such optimizations,
 by presenting several NP-hardness proofs; interestingly,
-our hardness results also hold in uncapacitated networks and in networks of small diameter.
+our hardness results also hold in uncapacitated networks of small diameter.
 \end{abstract}
 
 %\begin{comment}
@@ -336,7 +336,7 @@ it may hold that $\CostCom\ll\CostTrans$.
 
 \subsection{Fundamental Parts}
 
-Let us now introduce our model more formally. The model consists of three fundamental parts: (1) the substrate network (the servers
+Let us now introduce our model more formally. It consists of three fundamental parts: (1) the substrate network (the servers
 and the connecting physical network),
 (2) the to be processed input (the data chunks), and
 (3) the virtual network (the virtual machines and the logical network connecting the machines to each other
@@ -413,7 +413,8 @@ $$
 \Cost(v) = \sum_{\achunk\in \mu(v)} \CostTrans \cdot \dist(v,\achunk) \underbrace{+ \frac{1}{2} \cdot \sum_{v' \in \VirtualNodes\setminus\{v\}} \CostCom \cdot \dist(v,v')}_{\text{only for inter-connect}},
 $$
 \noindent where $\mu(v)$ is the set of chunks assigned to $v$. Our goal is to minimize the overall footprint
-$\Cost=\sum_{v\in V} \Cost(v)$. Recall Figure~\ref{fig:overview}.
+$\Cost=\sum_{v\in V} \Cost(v)$.
+% Recall Figure~\ref{fig:overview}.
 
 %\textbf{Problem Decomposition.}
 
@@ -607,7 +608,7 @@ replica, and the last but one hop represents the server: we will assign
 the replica to an arbitrary unused node on this server.
 Having found this pair, we reduce the flow
 along the path $p$ by one unit.
-We continue building the pairing by selecting replicas until every chunk type is processed.
+We continue the pairing process until every chunk type is assigned.
 
 \textbf{Analysis.}
 The correctness of our approach follows from our construction
@@ -672,7 +673,6 @@ $\MaFactor$ chunk types, and we collect all copies of a given chunk type in a
 single %$\ChunkType$
 ``super-node''. We connect each node to all chunk types using the
 \emph{lowest hop count} to one of the copies as the cost metric (the link weight).
-
 On the resulting bipartite graph, we can now compute a \emph{Minimum Weight
 Perfect
 Matching}~\cite{gabow_scaling_algorithm}:
