@@ -493,15 +493,19 @@ to $\RS+\MA+\BW$ (resp.~its subproblems).
 
 \subsection{Flow Algorithms ($\RS+\MA+\CC+\BW$)}\label{ssec:flow}
 
-\begin{wrapfigure}{r}{0.5\columnwidth}
-\includegraphics[width=0.48\columnwidth]{figs/venn_flow.pdf}
-\caption{Variants solved by flow approach.}
-\label{fig:venn_flow}
-\end{wrapfigure}
+
 
 We first present an algorithm to solve the $\RS+\MA+\CC+\BW$ problem.
 Recall that in this problem variant,
-we are given a set of redundant chunks ($\RS$) and a set of nodes
+\begin{wrapfigure}{r}{0.5\columnwidth}
+\vspace{-1em}
+\includegraphics[width=0.48\columnwidth]{figs/venn_flow.pdf}
+\caption{Variants solved by flow approach.}
+\vspace{-1em}
+\label{fig:venn_flow}
+\end{wrapfigure}
+we are given a set of redundant chunks ($\RS$) and a set of 
+nodes
 (the \emph{nodes})
 at fixed locations (no $\FP$). The number of chunk types is larger than the number
 of nodes ($\MA$), and each node needs to be connected
@@ -544,8 +548,9 @@ cost nothing.
 
 %Recall that $\RS+\CC+\MA+\BW$ boils down to
 %$\RS+\MA+\BW$ in the absence of $\FP$
-The $\RS+\MA+\BW$ problem can now be solved by computing
-a \emph{Min-Cost-Max-Flow} solution between super-source $\Source$ and
+A solution to the $\RS+\MA+\BW$ problem can now be computed
+a from a solution to the \emph{Min-Cost-Max-Flow} problem between super-source 
+$\Source$ and
 super-sink $\Sink$ on the artificial graph $\Tree^*$.
 
 \textbf{Example.} Figure~\ref{fig:flow_construction} shows an example of the extended substrate
@@ -561,10 +566,12 @@ capacity due to $\CC$.
 \begin{figure}
 \centering
 \includegraphics[width=0.8\columnwidth]{figs/flow_ma_cv}
+\vspace{-1em}
 \caption{Example of flow construction: Problem instance with two nodes, four chunk
 types, and two replicas per type. The min-cost-max-flow
-is indicated by the dotted lines: each line represents one unit of flow.
+is indicated by the dashed lines: each line represents one unit of flow.
 }
+\vspace{-1em}
 \label{fig:flow_construction}
 \end{figure}
 
@@ -587,9 +594,11 @@ pick an arbitrary (loop-free) path
 currently having a fractional allocation of value $f$ ($f>0$), and distribute its flow $f$
 among all other fractional paths of the same length; due to the optimality of the fractional solution
 and due to the integrality theorem, such paths must always exist. After distributing this flow,
-the total allocation on this path will be 0, and we have increased the number of integer paths by one.
-(In addition, some paths may now have an integer allocation of 1.) We proceed until we constructed the perfect matching.
-\emph{Third}, given an integer min-cost-max-flow solution, we need to decompose the integer flows into the paths
+the total allocation on this path will be 0, and we have increased the number of 
+integer paths by at least one. We proceed until we constructed the perfect 
+matching.
+\emph{Third}, given an integer min-cost-max-flow solution, we need to decompose 
+the integer flow into the paths
 representing matched chunk-node pairs:
 The assignment can be obtained by decomposing the flow allocated in the
 original substrate network. In order to identify a matched chunk-node pair,
@@ -624,14 +633,18 @@ and uncapacitated networks, we can simply set $U=\tau$.
 
 \subsection{Matching Algorithms ($\RS+\MA+\CC$ and $\MA+\CC+\BW$)}\label{ssec:match}
 
-\begin{wrapfigure}{r}{0.5\columnwidth}
-\includegraphics[width=0.48\columnwidth]{figs/venn_matching.pdf}
-\caption{Variants solved by matching approaches.}
-\label{fig:venn_match}
-\end{wrapfigure}
+
 
 This section presents faster algorithms to solve the two problem variants
-$\RS+\MA+\CC$ and $\MA+\CC+\BW$ which can also be solved with the flow approach
+$\RS+\MA+\CC$ and $\MA+\CC+\BW$ which can also be solved with 
+\begin{wrapfigure}{r}{0.5\columnwidth}
+\vspace{-1em}
+\includegraphics[width=0.48\columnwidth]{figs/venn_matching.pdf}
+\caption{Variants solved by matching approaches.}
+\vspace{-1em}
+\label{fig:venn_match}
+\end{wrapfigure}
+the flow approach
 introduced above.
 In general, we refer to the algorithms presented in this section
 as matching approaches.
@@ -684,7 +697,7 @@ the resulting matching describes the optimal assignment of chunks to nodes.
 \includegraphics[width = 0.49\columnwidth]{figs/model_ma_r_cv_boxes}
 \hfill
 \includegraphics[width =0.49\columnwidth]{figs/matching}
-\caption{The $\MA+\RS$ problem on the \emph{left} is converted into a
+\caption{The $\RS+\MA$ problem on the \emph{left} is converted into a
 matching problem on the \emph{right}. Since each node has to process two
 chunks, the
 nodes are replicated in the matching representation. The two replicas of each
@@ -847,7 +860,7 @@ for a single transfer $\CostTrans$.
 
 
 \begin{theorem}
-Given an $\CC+\MA$ problem instance, a feasible assignment $\VmChunkAssignment$
+Given an $\MA+\CC$ problem instance, a feasible assignment $\VmChunkAssignment$
 is optimal iff it is local.
 \label{thm:local_optimal}
 \end{theorem}
@@ -878,15 +891,24 @@ graph.
 
 
 
-\subsection{Dynamic Programming ($\FP+\CC+\MA+\BW$)}\label{ssec:dyn}
+\subsection{Dynamic Programming ($\MA+\FP+\CC+\BW$)}\label{ssec:dyn}
 
-We now show how to solve the $\FP+\CC+\MA+\BW$ problem variant
+We now show how to solve the $\MA+\FP+\CC+\BW$ problem variant
 in polynomial time.
 Note that this problem variant requires to find a
 tradeoff between the desire to place nodes as close as possible to each other
 (in order to minimize communication costs), and the desire to place nodes
 as close as possible to
 the chunk locations.
+
+\begin{wrapfigure}{r}{0.5\columnwidth}
+\vspace{-1em}
+\includegraphics[width=0.48\columnwidth]{figs/venn_dp.pdf}
+\caption{Variants solved by dynamic programming approach.}
+\vspace{-1em}
+\label{fig:venn_flow}
+\end{wrapfigure}
+
 
 \textbf{Example.} Figure~\ref{fig:dynamic_motivation} shows an example: one
 extreme solution is to minimize the distance between chunks and nodes,
@@ -914,15 +936,16 @@ which requires a total bandwidth allocation of $8 \cdot \CostTrans$.
 locations. For $\CostTrans = \CostCom$, both solutions have an identical
 footprint. In other cases, one solution outperforms the other.}
 \label{fig:dynamic_motivation}
+\vspace{-1em}
 \end{figure}
 
 
 
 \textbf{Basic ideas.} Our proposed approach is based on dynamic programming, and
-leverages the \emph{optimal substructure property} of $\FP+\CC+\MA+\BW$:
+leverages the \emph{optimal substructure property} of $\MA+\FP+\CC+\BW$:
 as we will see, optimal solutions for subproblems (namely subtrees)
 can efficiently be combined into optimal solutions for larger problems.
-Indeed, the $\FP+\CC+\MA+\BW$ problem
+Indeed, the $\MA+\FP+\CC+\BW$ problem
 exhibits such a structure, and we show how to exploit it to
 compute efficient embeddings, even in scenarios where multiple chunks
 need to be assigned to flexibly placeable nodes.
@@ -1068,16 +1091,19 @@ The runtime to binarize $\Tree$ is asymptotically negligible.
 %\end{wrapfigure}
 
 \begin{wrapfigure}{r}{0.5\columnwidth}
+\vspace{-1em}
 \includegraphics[width=0.48\columnwidth]{figs/venn_trivial.pdf}
 \caption{Trivially solvable problem variants.}
 \label{fig:venn_trivial}
+\vspace{-1em}
 \end{wrapfigure}
 \textbf{Remark: Simple Problems.}
 To conclude, for the sake of completeness, we also observe that there are
 several problems which
 allow for a trivial solution. Concretely, problems with $\FP$
 plus any combination of
-$\RS$ and $\BW$ (but without $\CC$ or $\MA$) can easily be solved by mapping nodes to chunk locations.
+$\RS$ and $\BW$ (but without $\MA$ or $\CC$) can easily be solved by mapping 
+nodes to chunk locations.
 %Figure~\ref{fig:venn_trivial}
 %shows a Venn diagram of the trivial property combinations.
 
@@ -1410,7 +1436,8 @@ problems, such as 3-dimensional matching problems~\cite{3SC-hard} as well as flo
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Summary and Conclusion}\label{sec:conclusion}
 
-This paper investigated data data locality aware algorithms which exploit two fundamental
+This paper investigated data locality aware algorithms which exploit two 
+fundamental
 degrees of freedom in virtual cluster
 embedding problems: replica selection and flexible node placement. In order to
 chart the landscape of the problem complexity, we
@@ -1422,14 +1449,15 @@ In particular, we have shown that
 at the heart of our model lie interesting new variants of classic
 optimization problems related to matchings and flows. Interestingly, despite the
 different dimensions of flexibility (in terms of replica selection, assignment and embedding),
-many problem instances can actually be solved in polynomial time.
-On the negative side, we have also shown that there exist computationally hard
-problems even in uncapacitated networks. In particular,
-we have shown that several embeddings problems are NP-hard already in two- and three-level trees
+many problem instances can actually be solved in polynomial time, while other 
+instances are computationally hard
+even in uncapacitated networks.
+We have also shown that several embedding problems are NP-hard already in two- 
+and three-level trees
 (a practically relevant result given today's datacenter topologies~\cite{fattree}),
 and even if the the number of replicas is bounded by two.
 \begin{table}
-
+\tiny
 \bgroup
 \def\arraystretch{1.5}
 \begin{small}
@@ -1473,7 +1501,6 @@ and even if the the number of replicas is bounded by two.
 \caption{
 The use cases of the proposed algorithms, expressed in property
 combinations which it can solve faster, than any other algorithm.
-\maciek{Visual side of this table - cell padding, FP+NI aligned to right; there is place for saying dynamic programming instead of DP.}
 }
 \label{tab:summary}
 \egroup
@@ -1484,7 +1511,7 @@ Our results are summarized in
 Figure~\ref{tab:summary}.
 One interesting takeaway from this figure regards
 the question which properties render the problem
-NP-hard. For instance, we see that interestingly, $\BW$
+NP-hard. For instance, we see that, $\BW$
 does not influence the hardness of any problem variant,
 while $\RS$ is crucial for NP-hardness.
 $\MA$ only affects hardness if combined with $\RS$.
