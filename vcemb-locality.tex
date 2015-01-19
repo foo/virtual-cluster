@@ -231,7 +231,9 @@ map the virtual machines of a given virtual network as close as possible
 in the underlying physical network, as this minimizes communication costs (respectively, bandwidth reservations)~\cite{oktopus,proteus}.
 
 However, existing systems often ignore a crucial dimension of the virtual network embedding problem:
-the fact that the input data for a cloud application is typically distributed across different servers and stored in a distributed file system~\cite{scope,google-fs,hdfs}.
+the fact that the input data for a cloud application, consisting of atomic 
+\emph{chunks}, is typically distributed across different servers and stored in 
+a distributed file system~\cite{scope,google-fs,hdfs}.
 In order to properly minimize
 communication costs, an embedding algorithm should hence also be \emph{data locality aware}~\cite{local-schedule-1,local-schedule-2,local-schedule-3},
 and allocate (or \emph{embed}) computational resources close to the to be processed data.
@@ -265,7 +267,7 @@ while it is well-known that (unsplittable) multi-commodity flow
 problems are NP-hard in capacitated networks, our hardness results also hold in \emph{uncapacitated}
 networks; moreover, we show that NP-hard problems already arise in small-diameter networks (as they are
 widely used today~\cite{fattree}),
-and even if the number of replicas \maciek{of each chunk type} is bounded by two.
+and even if the number of replicas is bounded by two.
 
 
 %\subsection{Organization}
@@ -500,7 +502,7 @@ Recall that in this problem variant,
 \begin{wrapfigure}{r}{0.5\columnwidth}
 \vspace{-1em}
 \includegraphics[width=0.48\columnwidth]{figs/venn_flow.pdf}
-\caption{Variants solved by flow approach.\maciek{We added 0 cost to this diagram. I don't know if it's bad.}}
+\caption{Variants solved by flow approach.}
 \vspace{-1em}
 \label{fig:venn_flow}
 \end{wrapfigure}
@@ -640,7 +642,7 @@ $\RS+\MA+\CC$ and $\MA+\CC+\BW$ which can also be solved with
 \begin{wrapfigure}{r}{0.5\columnwidth}
 \vspace{-1em}
 \includegraphics[width=0.48\columnwidth]{figs/venn_matching.pdf}
-\caption{Variants solved by matching approaches.\maciek{In both DP and flow we added 0 cost to the picture. Here we don't.}}
+\caption{Variants solved by matching approaches.}
 \vspace{-1em}
 \label{fig:venn_match}
 \end{wrapfigure}
@@ -894,6 +896,13 @@ graph.
 
 We now show how to solve the $\MA+\FP+\CC+\BW$ problem variant
 in polynomial time.
+\begin{wrapfigure}{r}{0.5\columnwidth}
+\vspace{-1em}
+\includegraphics[width=0.48\columnwidth]{figs/venn_dp.pdf}
+\caption{Variants solved by dynamic programming approach.}
+\vspace{-1em}
+\label{fig:venn_flow}
+\end{wrapfigure}
 Note that this problem variant requires to find a
 tradeoff between the desire to place nodes as close as possible to each other
 (in order to minimize communication costs), and the desire to place nodes
@@ -907,13 +916,6 @@ the chunk locations.
 extreme solution is to minimize the distance between chunks and nodes,
 see mapping $\NodeMapping_1$ in
 Figure~\ref{fig:dynamic_motivation} \emph{(left)}: the four nodes are all
-\begin{wrapfigure}{r}{0.5\columnwidth}
-\vspace{-1em}
-\includegraphics[width=0.48\columnwidth]{figs/venn_dp.pdf}
-\caption{Variants solved by dynamic programming approach.\maciek{Here we seletively added some 0 cost variants, but skipped on FP+RS. In its current state it really shows that limit of DP is RS, but the diagram itself is wrong.}}
-\vspace{-1em}
-\label{fig:venn_flow}
-\end{wrapfigure}
 collocated with chunks, resulting in a zero-cost chunk access network. As a
 result, the paths between the individual nodes are longer than in alternative
 node placements: each node has a distance of two hops to one other node,
@@ -959,7 +961,8 @@ and original children as left descendants.
 %Last child is placed as
 %right son of last clone.
 
-As usual in dynamic programs, we define, over the structure of the tree, an inductive \maciek{recursive formula} formula $f$ for
+As usual in dynamic programs, we define, over the structure of the tree, a 
+recursive formula formula $f$ for
 the minimal cost solution \emph{given} any possible number of nodes
 embedded in a given subtree. The actual set does not matter,
 due to symmetry arguments.
@@ -1096,7 +1099,7 @@ The runtime to binarize $\Tree$ is asymptotically negligible.
 \label{fig:venn_trivial}
 \vspace{-1em}
 \end{wrapfigure}
-\textbf{Remark: Simple Problems.}\maciek{Why did we put simple problems in dynamic programming section? We should put it into new ``summary'' section where we also sum up the runtimes.}
+\textbf{Remark: Simple Problems.}
 To conclude, for the sake of completeness, we also observe that there are
 several problems which
 allow for a trivial solution. Concretely, problems with $\FP$
@@ -1123,9 +1126,12 @@ results hold even in uncapacitated networks, and even in small-diameter
 substrate networks (namely two- or three-level trees~\cite{fattree}).
 The hardness of $\FP+\RS+\MA$ and $\FP+\RS+\CC$ imply
 the hardness of four additional, more general models, as
-summarized as follows:\maciek{Consider scaling down the figure. Also, I think that sometimes this figure is displayed wrong - arrows are missing some parts. It happens so in some compilations but I cannot find the reason for that.}\\
-\begin{figure}[h!]
+summarized in Figure~\ref{fig:np_implications}:\\
+\begin{figure}[htbp]
 \includegraphics[width = \columnwidth]{figs/np_implications}
+\caption{The NP-hardness of $2$ variants, implies that $4$ other variants are 
+also NP-hard.}
+\label{fig:np_implications}
 \end{figure}\\
 Additional NP-hardness results appear in the Appendix.
 
@@ -1196,8 +1202,9 @@ and has the following form:
 The gadget of each triple consists of an inner node (a router) and three leaves.
 \item \emph{Chunks and chunk replicas:} For each element in $X$, $Y$ and $Z$,
  we create a chunk type
-($3 \cdot k$ in total). Every gadget contains three chunk replicas, \maciek{we place one replica per node - we generalized chunks per nodes and we have to say that}
-corresponding to the elements of the triple.
+($3 \cdot k$ in total). Every gadget contains three chunk replicas, 
+corresponding to the elements of the triple. Each leave in a gadget, contains 
+exactly one replica.
 \item \emph{Other properties:} We set the number of to-be-embedded nodes to $k$,
 $\CostTrans$ to $1$, and the number of chunk slots in each node to the multi-assignment factor
 $\MaFactor=3$.
@@ -1303,7 +1310,7 @@ chunk replicas placed in the same way.
 \item Only solutions which place a node in each leaf of $k$ gadgets, can
 be converted into solutions for the 3-DM problem. We use the cost threshold
 $\Thr =  6 \cdot k + 18 \cdot
-(k - 1) \cdot k$, to verify whether a solution achieves this \maciek{achieves smaller cost}, transforming
+(k - 1) \cdot k$, to verify whether a solution achieves this, transforming
 $\FP+\RS+\CC$ into a decision problem. A detailed explanation of this value can
 be found in the proof of Theorem~\ref{theorem:fp_rs_cc}.
 %\maciek{If we update the model to take care of hosting
@@ -1622,7 +1629,8 @@ Table~\ref{fig:construction_3sat}.
 
 \begin{figure}
 \includegraphics[width=\columnwidth]{figs/construction_3sat}
-\caption{The construction of the\maciek{variable gadget.} gadget for $\nu$. If $\nu$ appears in the
+\caption{The construction of the variable gadget for $\nu$. If 
+$\nu$ appears in the
 first clause, a chunk $\achunk_1$, will be located at $\nu_1$. If $\neg \nu$
 satisfies the last clause, $\neg
 \nu_\alpha$ will host $\achunk_\alpha$.}
@@ -1651,7 +1659,9 @@ clause. For each literal $\ell$ (of the form $\variab$ or $\neg \variab$) that s
  we place
 a replica of chunk $\achunk_i$ in the leaf labeled $\ell_i$.
 
-\maciek{We want to say here how many VMs will be idle.}
+Note, that in this construction some nodes will be idle. No chunks will be 
+assigned to these nodes, but they will nevertheless participate in the node 
+interconnect.
 
 We set the threshold $\Thr$ to:
 % (\maciek{we might not want to introduce
@@ -1918,7 +1928,6 @@ positive or the negative subtree, we set the value of the according variable to
 $1$ (positive subtree) or $0$ (negative subtree).
 \end{proof}
 
-\maciek{We got lemmas formulated and proved inside the proof. IDK if we can do that. Also, we would like to conclude the 2 replica proof with a sentence or two (at least that it is NP-complete, not only NP-hard).}
 \end{proof}
 
 %\begin{comment}
@@ -1999,11 +2008,13 @@ positive $x \leq \clauses$ can satisfy this inequality for $\variables > 4$. Con
 %  sequence corresponds to number of VMs in clause gadgets.}
   Let $\clauses$ and $\variables > 4$ be two arbitrary positive integers. Let $a_1, a_2, \ldots,
   a_{\clauses}$ and $b_1, b_2, \ldots,
-  b_{\variables}$ be two sequences of integers (numbers of VMs in clause and in variable gadgets). Sum of all elements in $a$ and $b$ adds up to
-  $\clauses \cdot \variables + \clauses \cdot 2$ (number of VMs). Also
+  b_{\variables}$ be two sequences of integers (numbers of nodes in clause and 
+in variable gadgets). The sum of all elements in $a$ and $b$ adds up to
+  $\clauses \cdot \variables + \clauses \cdot 2$ (number of nodes). Also
   we have $a_i \leq 2 \cdot \clauses$
-  (variable gadget VM hosting capacity -- equal to number of leaves),
-  and $b_i \leq 3$ (clause gadget VM hosting capacity). If uplink of variable gadget does not exceed bandwidth constraints
+  (variable gadget node hosting capacity -- equal to number of leaves),
+  and $b_i \leq 3$ (clause gadget node hosting capacity). If uplink of variable 
+gadget does not exceed bandwidth constraints
   $$ \forall_{i\leq\variables}:~~ b_i \cdot (\clauses \cdot \variables
   + 2\cdot \clauses- b_i) \leq \clauses \cdot (\clauses \cdot \variables -
   \clauses + 2 \cdot \clauses), $$
@@ -2012,7 +2023,8 @@ $$ \forall_{i\leq\clauses}:~~ a_i \cdot (\clauses \cdot \variables + 2 \cdot \cl
   2 \cdot \clauses - 2), $$
 
 \noindent  then for each $i\leq \variables$: $b_i = \clauses$ and for
-each $i\leq\clauses$: $a_i = 2$ (we have expected number of VMs in variable and clause gadgets).
+each $i\leq\clauses$: $a_i = 2$ (we have expected number of nodes in variable 
+and clause gadgets).
 \end{lemma}
 
 
