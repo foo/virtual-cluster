@@ -152,11 +152,16 @@
 \title{Embedding Virtual Clusters with Data Locality and Replica Selection\\{\Large Real Algorithms for Virtual Environments}}
 
 \title{Data Locality and Replica Aware Virtual Cluster Embeddings}
-%\\{\Large Real Algorithms for Virtual Environments}}
+
+\title{How Hard Can It Be?\\Understanding the Complexity of  
+Replica Aware Virtual Cluster Embeddings}
 
 
-\author{Paolo Costa$^1$, Carlo Fuerst$^2$, Maciej Pacut$^3$, Stefan Schmid$^4$\\
-{\small $^1$ Microsoft Research, UK; $^2$ TU Berlin, Germany; $^3$ University of Wroclaw, Poland; $^4$ TU Berlin \& T-Labs, Germany}}
+
+
+%\author{Paolo Costa$^1$, Carlo Fuerst$^2$, Maciej Pacut$^3$, Stefan Schmid$^4$\\
+%{\small $^1$ Microsoft Research, UK; $^2$ TU Berlin, Germany; $^3$ University of Wroclaw, Poland; $^4$ TU Berlin \& T-Labs, Germany}}
+\author{authors}
 
 \begin{document}
 
@@ -292,12 +297,14 @@ Figure~\ref{fig:overview} gives an overview of our model.
 \centering
 %\includegraphics[width=0.99\columnwidth]{figs/overview-fig.pdf}
 \includegraphics[width=0.99\columnwidth]{figs/data_locality_no_legend.pdf}
+\vspace{-1em}
 \caption{Overview: a 9-server datacenter storing $\tau=4$ different chunk
 types $\{c_1,\ldots,c_4\}$ (depicted as \emph{circles}). The chunk replicas need to be selected and assigned to the two
  virtual machines $v_1$ and $v_2$; the virtual machines are depicted as \emph{squares}, and
  the network connecting them to chunks (at bandwidth $\CostTrans$) is \emph{dashed}. In addition, the virtual machines are inter-connected among
  each other at bandwidth $\CostCom$ (\emph{dotted}). The objective of the embedding algorithm is to minimize the overall bandwidth allocation
  (sum of \emph{dashed} and \emph{dotted} lines).}\label{fig:overview}
+\vspace{-1em}
 \end{figure}
 
 
@@ -337,7 +344,7 @@ it may hold that $\CostCom\ll\CostTrans$.
 % however, it can also make sense to have more mappers or more reducers for
 %certain applications.
 
-\subsection{Fundamental Parts}
+\subsection{Formal Model}
 
 Let us now introduce our model more formally. It consists of three fundamental parts: (1) the substrate network (the servers
 and the connecting physical network),
@@ -443,9 +450,12 @@ each node needs to be assigned multiple chunks. We will refer to such a scenario
 and will denote the number of chunks per node by the integer value $\MaFactor = \tau / n_V$ (a constant).
 
 
-\textbf{\emph{Flexible Placement ($\FP$).}} The third fundamental degree of freedom, besides replica selection and assignment,
-regards the flexibility in the placement (or synonymously: \emph{embedding}) of nodes on physical servers.
-We will refer to this aspect by $\FP$.
+\textbf{\emph{Flexible Placement ($\FP$).}} %The third fundamental degree of freedom, besides replica selection and assignment,
+%regards the flexibility in the placement (or synonymously: \emph{embedding}) of nodes on physical servers.
+%We will refer to this aspect by $\FP$.
+While the nodes are placed a priori in some cases, the node placement (or
+synonymously: \emph{embedding}) of nodes on physical servers can also be
+subject to optimization. We will refer to this degree of freedom by FP.
 %(Recall that each server $s$ can host $\capa(s)$ nodes.)
 
 \textbf{\emph{Node Interconnect ($\CC$).}} We distinguish between scenarios
@@ -486,7 +496,8 @@ First, let us make a simplifying observation:
 \begin{obs}\label{obs:nofp}
 In problems without flexible placement ($\FP$),
 the bandwidth required
-for the inter-connect network ($\CC$) can generally be allocated \emph{upfront}, as it
+for the inter-connect network ($\CC$) can be allocated \emph{upfront}, 
+as it
 does not depend on the replica
 selection and assignment.
 Accordingly, we can reduce problem variant $\RS+\MA+\CC +\BW$ (as well as all its subproblems)
@@ -638,8 +649,7 @@ and uncapacitated networks, we can simply set $U=\tau$.
 
 
 
-This section presents faster algorithms to solve the two problem variants
-$\RS+\MA+\CC$ and $\MA+\CC+\BW$ which can also be solved with
+This section presents faster algorithms to solve 
 \begin{wrapfigure}{r}{0.5\columnwidth}
 \vspace{-1em}
 \includegraphics[width=0.48\columnwidth]{figs/venn_matching.pdf}
@@ -647,7 +657,8 @@ $\RS+\MA+\CC$ and $\MA+\CC+\BW$ which can also be solved with
 \vspace{-1em}
 \label{fig:venn_match}
 \end{wrapfigure}
-the flow approach
+the two problem variants
+$\RS+\MA+\CC$ and $\MA+\CC+\BW$ which can also be solved withthe flow approach
 introduced above.
 In general, we refer to the algorithms presented in this section
 as matching approaches.
@@ -1467,7 +1478,7 @@ and three-level trees---a practically relevant result given today's datacenter t
 \bgroup
 \def\arraystretch{1.5}
 \begin{small}
-\begin{tabular}{|l|l|p{4cm}|}
+\begin{tabular}{|l|l|p{4.5cm}|}
 \hline
 \multirow{3}{*}{NP-hard} & 5 combinations & \mbox{$\RS+\MA+\FP+\CC+\BW$}\\
 \cline{2-3}
@@ -1507,13 +1518,14 @@ and three-level trees---a practically relevant result given today's datacenter t
 \caption{
 Fastest algorithms for different respective problem variants.
 }
+\vspace{-2em}
 \label{tab:summary}
 \egroup
 \end{table}
 
 
 Our results are summarized in
-Figure~\ref{tab:summary}.
+Table~\ref{tab:summary}.
 One interesting takeaway from this figure regards
 the question which properties render the problem
 NP-hard. For instance, we see that, $\BW$
@@ -1548,7 +1560,7 @@ We believe that our paper opens several interesting directions for future resear
 In particular, it would be interesting to shed light on the possible approximation algorithms
 for our NP-hard problems.
 
-\newpage
+%\newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\bibliographystyle{alpha}
 {\footnotesize \renewcommand{\baselinestretch}{.9}
