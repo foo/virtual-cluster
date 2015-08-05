@@ -285,8 +285,8 @@ Algorithms are presented in Section~\ref{sec:poly} and
 hardness results are presented in Section~\ref{sec:np}.
 After discussing related work in Section~\ref{sec:relwork},
 we conclude our work in Section~\ref{sec:conclusion}.
-Some technical details as well as additional hardness results
-appear in the Appendix.
+%Some technical details as well as additional hardness results
+%appear in the Appendix.
 
 \section{Model}\label{sec:model}
 
@@ -336,9 +336,7 @@ as a virtual cluster~\cite{oktopus,talk-about,proteus};
 however, we extend this model with a notion of data-locality.
 In particular, we distinguish between the bandwidth needed between assigned chunk
 and virtual machine ($\CostTrans$) and the bandwidth needed between
-two virtual machines ($\CostCom$); \carlo{REMOVE:}in practice, for applications with a large
-``mapping ratio'' where the mapping phase already reduces the data size significantly,
-it may hold that $\CostCom\ll\CostTrans$.
+two virtual machines ($\CostCom$). 
 %Finally, note that it is frequently assumed
 %that the nodes implementing the mapper functionality also implement the reducer functionality,
 %and vice versa.
@@ -349,7 +347,7 @@ it may hold that $\CostCom\ll\CostTrans$.
 
 Let us now introduce our model more formally. It consists of three fundamental parts: (1) the substrate network (the servers
 and the connecting physical network),
-(2) the to be processed input (\carlo{divided into data chunks}), and
+(2) the to be processed input (divided into data chunks), and
 (3) the virtual network (the virtual machines and the logical network connecting the machines to each other
 as well as to the chunks).
 
@@ -402,7 +400,7 @@ at minimal (guaranteed) bandwidth $\CostCom$.
 Note that we do not explicitly model the process of
 copying back the final results from the
 reducers to the file system: this step offers many flexibilities,
-and can be done based on the current network state;~\cite{endpoint} it does not require
+and can be done based on the current network state~\cite{endpoint}; it does not require
 explicit reservations.
 
 %\stefan{TODO: clarify whether there can be multiple chunks and or nodes per server}
@@ -411,13 +409,15 @@ explicit reservations.
 
 \subsection{Optimization Objective}
 
-\carlo{This appears broken. New attempt: Our goal is to develop algorithms to embedd virtual clusters on the substrate network. Ideally requests are not rejected, if they can be accepted without violating resouces capacities, and the algorithms minimize the \emph{resource footprint}: the amount of resources which have to be dedicated to a virtual cluster, in order to realize it's guarantees.}
-Our goal is to develop algorithms which minimize
-the \emph{resource footprint}: the guaranteed bandwidth allocation (or synonymously: \emph{reservation}) on all links of the given embedding; note that
-only the resource allocation at the links but not at the servers depends on the replica selection or embedding. Thus,
-we on the one hand aim to embed the nodes in a locality-aware manner, close to the input data
-(the chunks), but at the same time also aim to embed the nodes as close as possible to
-each other.
+Our goal is to develop algorithms which 
+accept and embed a request
+whenever this is possible, and minimize the \emph{resource footprint}: the amount of resources which have to be dedicated to a request, in order to realize its guarantees.
+%Our goal is to develop algorithms which minimize
+%the \emph{resource footprint}: the guaranteed bandwidth allocation (or synonymously: %\emph{reservation}) on all links of the given embedding; note that
+%only the resource allocation at the links but not at the servers depends on the replica selection or %embedding. Thus,
+%we on the one hand aim to embed the nodes in a locality-aware manner, close to the input data
+%(the chunks), but at the same time also aim to embed the nodes as close as possible to
+%each other.
 
 Formally, let $\dist(v,\achunk)$ denote the distance (in the underlying physical network $\Tree$) between a node $v$ and
 its assigned (active) chunk replica $\achunk$, and let $\dist(v_1,v_2)$ denote the distance between the two nodes $v_1$ and $v_2$.
@@ -436,7 +436,7 @@ $\Cost=\sum_{v\in V} \Cost(v)$.
 In order to chart the landscape of the computational tractability and intractability of different
 problem variants, we decompose our problem into its fundamental aspects, namely replica selection
 ($\RS$), multiple chunk assignment ($\MA$), flexible node placement ($\FP$), node interconnect ($\CC$),
-and bandwidth constraints ($\BW$), as described in the following. \carlo{Strong Claim - no citation. We should change this: While it is possible to extend this to additional aspects such as latency constraints, we focus on these five apsects as they can have a big impact on todays batch processing applications.}
+and bandwidth constraints ($\BW$), as described in the following. 
 In this paper, we will consider all possible 32 problem variants, where each of these five aspects
 can either be enabled or disabled. 
 
@@ -449,7 +449,9 @@ is equal to the number of nodes. Otherwise, we will add the $+\MA$ property disc
 
 \textbf{\emph{Multiple Assignment ($\MA$).}}
 If the number of chunk types $\tau$ is larger than the number of nodes,
-each node needs to be assigned multiple chunks. We will refer to such a scenario by $\MA$. \carlo{Since all nodes are identical and no additional information regarding the chunks is available at request time, we assume that each node will process an identical integer number of chunks $\MaFactor = \tau / n_V$.} %We will refer to such a scenario by $\MA$,
+each node needs to be assigned multiple chunks. We will refer to such a scenario by $\MA$. 
+Since all nodes are identical and no additional information regarding the chunks is available at request time, we assume that each node will process an identical integer number of chunks $\MaFactor = \tau / n_V$. 
+%We will refer to such a scenario by $\MA$,
 %and will denote the number of chunks per node by the integer value $\MaFactor = \tau / n_V$ (a constant).
 
 
@@ -467,9 +469,11 @@ both from each node to its assigned chunks as well as to the other nodes
 (i.e., $\CostTrans>0$ and $\CostCom>0$), and
  scenarios where only the (chunk) access network requires bandwidth reservation (i.e., $\CostTrans>0$ and $\CostCom=0$).
  We will refer to the former scenario
-where bandwidth needs to be reserved also for the inter-connect, by $\CC$. \carlo{The node interconnect is modelled as a full graph, to account for the all to all communication patterns of batch processing applications such as MapReduce.} 
-We also note that the case $\CostTrans=0$ and $\CostCom>0$ has been studied in prior work~\cite{oktopus,talk-about,proteus},
-and refer the reader to our related work section.
+where bandwidth needs to be reserved also for the inter-connect, by $\CC$. 
+The node interconnect is modelled as a complete graph, to account for the all to all communication patterns of batch processing applications such as MapReduce.
+
+%We also note that the case $\CostTrans=0$ and $\CostCom>0$ has been studied in prior %work~\cite{oktopus,talk-about,proteus},
+%and refer the reader to our related work section.
 
 
 \textbf{\emph{Bandwidth Capacities ($\BW$).}}
@@ -492,9 +496,9 @@ we can solve many problem variants efficiently.
  which can roughly be categorized into
  \emph{flow} (Section~\ref{ssec:flow}), \emph{matching} (Section~\ref{ssec:match}) and \emph{dynamic programming}
  (Section~\ref{ssec:dyn}) approaches.
- As we will see, sometimes multiple approaches can be used to solve a given problem variant, however,
- runtimes can differ.
-For each approach, we will summarize the solvable problem variants using a \emph{Venn diagram}.
+% As we will see, sometimes multiple approaches can be used to solve a given problem variant, %however,
+ %runtimes can differ.
+%For each approach, we will summarize the solvable problem variants using a \emph{Venn diagram}.
 First, let us make a simplifying observation:
 \begin{obs}\label{obs:nofp}
 In problems without flexible placement ($\FP$),
@@ -557,8 +561,7 @@ addition, we create a
 type vertices (with a link of capacity 1). Moreover, we create an artificial \emph{super-sink} $\Sink$ and
 connect it to every leaf containing at least one node; the link capacity represents
 the number of nodes $x$ hosted on this server, times the multi-assignment factor
-$\MaFactor$\carlo{REMOVE:
-$x \cdot \MaFactor$}.
+$\MaFactor$.
 We additionally assign the following costs to edges of $\Tree^*$:
 every edge of the original substrate network costs one unit, and all other artificial edges
 cost nothing.
@@ -1107,13 +1110,13 @@ The runtime to binarize $\Tree$ is asymptotically negligible.
 %\label{fig:venn_dp}
 %\end{wrapfigure}
 
-\begin{wrapfigure}{r}{0.5\columnwidth}
-\vspace{-1em}
-\includegraphics[width=0.48\columnwidth]{figs/venn_trivial.pdf}
-\caption{Trivially solvable problem variants.}
-\label{fig:venn_trivial}
-\vspace{-1em}
-\end{wrapfigure}
+%\begin{wrapfigure}{r}{0.5\columnwidth}
+%\vspace{-1em}
+%\includegraphics[width=0.48\columnwidth]{figs/venn_trivial.pdf}
+%\caption{Trivially solvable problem variants.}
+%\label{fig:venn_trivial}
+%\vspace{-1em}
+%\end{wrapfigure}
 \textbf{Remark: Simple Problems.}
 To conclude, for the sake of completeness, we also observe that there are
 several problems which
@@ -1133,13 +1136,14 @@ nodes to chunk locations.
 We have seen that even problems with multiple dimensions of
 flexibility can be solved optimally in polynomial time.
 This section now points out fundamental
-limitations in terms of computational tractability. In particular, we
-will show that problems become NP-hard if multiple chunks have to be
-assigned to a flexibly placeable node ($\FP+\RS+\MA$ is proved NP-hard in
-Section~\ref{ssec:fprsma}), and if inter-connects have to be established
-between flexible nodes ($\FP+\RS+\CC$ is proved NP-hard in Section~\ref{ssec:fprscc});
-\carlo{Previous was inprecise - New Attempt: In particular, we
-will show that problems become NP-hard if flexibly placeable nodes ($\FP$) have to be assigned to one of multiple replicas ($RS$), either with multiple chunks per node ($\MA$ in Section~\ref{ssec:fprsma}) or with communication among nodes ($\CC$ in Section~\ref{ssec:fprscc}).}
+limitations in terms of computational tractability.
+% In particular, we
+%will show that problems become NP-hard if multiple chunks have to be
+%assigned to a flexibly placeable node ($\FP+\RS+\MA$ is proved NP-hard in
+%Section~\ref{ssec:fprsma}), and if inter-connects have to be established
+%between flexible nodes ($\FP+\RS+\CC$ is proved NP-hard in Section~\ref{ssec:fprscc});
+In particular, we
+will show that problems become NP-hard if flexibly placeable nodes ($\FP$) have to be assigned to one of multiple replicas ($RS$), either with multiple chunks per node ($\MA$ in Section~\ref{ssec:fprsma}) or with communication among nodes ($\CC$ in Section~\ref{ssec:fprscc}).
 both results hold even in uncapacitated networks, and even in small-diameter
 substrate networks (namely two- or three-level trees~\cite{fattree}).
 The hardness of $\FP+\RS+\MA$ and $\FP+\RS+\CC$ imply
@@ -1150,8 +1154,8 @@ summarized in Figure~\ref{fig:np_implications}:\\
 \caption{The NP-hardness of $2$ variants, implies that $4$ other variants are
 also NP-hard.}
 \label{fig:np_implications}
-\end{figure}\\
-Additional NP-hardness results appear in the Appendix.
+\end{figure}
+%Additional NP-hardness results appear in the Appendix.
 
 % Stefan: I agree, but let's do that later, little time right now :-)
 %\maciek{I don't like naming the instances I and I'. We want a name that has 3 in it for an instance of perfect matching; we can choose and consistantly use some name for %instance of any VCEMB. This is general comment that applies for both proofs in this section as well as an appendix}.
@@ -1432,9 +1436,9 @@ between the virtual machines.
 %we refer the reader to~\cite{boutaba-survey} and~\cite{fischer-survey}.
 
 The most popular virtual network abstraction for batch-processing applications today is the \emph{virtual cluster},
-introduced in the Oktopus paper~\cite{oktopus}, and later studied by many others~\cite{talk-about,proteus}.
+introduced in the Oktopus paper~\cite{oktopus}, and later studied by many others~\cite{talk-about,ccr15emb,proteus}.
 Several heuristics have been developed to compute ``good'' embeddings of virtual clusters: embeddings
-with small footprints (minimal bandwidth reservation costs)~\cite{oktopus,talk-about,proteus}.
+with small footprints (minimal bandwidth reservation costs)~\cite{oktopus,talk-about,ccr15emb,proteus}.
 The virtual network embedding problem has also been studied for more general graph abstractions
 (e.g., motivated by wide-area networks).~\cite{boutaba-survey,fischer-survey}
 
@@ -1442,8 +1446,7 @@ The virtual network embedding problem has also been studied for more general gra
 
 From a theoretical perspective, the virtual network embedding problem can be seen as a generalization
 of classic VPN graph embedding problems~\cite{Goyal2008,gupta2001provisioning},
-in the sense that in virtual network embedding problems, also the embedding endpoints are flexible and subject to optimization.
-In this sense, the virtual network embedding problem can also be seen as a generalization of the
+in the sense that in virtual network embedding problems, also the embedding endpoints are flexible. In this sense, the virtual network embedding problem can also be seen as a generalization of the
 classic NP-hard Minimum Linear Arrangement problem which asks for the
 embedding of guest graphs on a simple \emph{line topology} (rather than tree-like topologies as
 studied in this paper)~\cite{mla,mla-survey}.
@@ -1561,11 +1564,12 @@ problem NP-hard.
 %\label{fig:summary}
 %\end{figure}
 
-We believe that our paper opens several interesting directions for future research.
-In particular, it would be interesting to shed light on the possible approximation algorithms
-for our NP-hard problems.
+%We believe that our paper opens several interesting directions for future research.
+%In particular, it would be interesting to shed light on the possible approximation algorithms
+%for our NP-hard problems.
 
 \textbf{Acknowledgments.} We would like to thank our shepherd Kihong Park.
+Research supported by Polish National Science Centre grant DEC-2013/09/B/ST6/01538.
 
 %\newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1575,10 +1579,11 @@ for our NP-hard problems.
 \bibliography{references}
 }
 
-\begin{comment}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{appendix}
+
+\begin{comment}
 
 %\begin{comment}
 
@@ -1986,6 +1991,9 @@ $1$ (positive subtree) or $0$ (negative subtree).
 %  pointing into the previous proof. Even if we did this proof, nobody
 %  would read that. I can do it though.}
 %\end{comment}
+
+\end{comment}
+
 \section{The Bandwidth Lemmas}
 
 
@@ -1997,6 +2005,9 @@ $1$ (positive subtree) or $0$ (negative subtree).
   \clauses), $$
   then for each $i$: $a_i = \clauses$.
 \end{lemma}
+
+\begin{comment}
+
 \begin{proof}
   By contradiction. Let us assume
 that there exists an index $k$ such that
@@ -2024,6 +2035,9 @@ The equation holds for $x \leq 0$ or $x \geq \clauses \cdot (\variables - 2)$,
 and no
 positive $x \leq \clauses$ can satisfy this inequality for $\variables > 4$. Contradiction.
 \end{proof}
+
+\end{comment}
+
 \begin{lemma}[Extended Bandwidth Lemma]\label{lem:bandwidth-lemma-extended}
 %\maciek{this lemma might be expressed more clearly if we use two
 %  sequences instead of one - now $a_1, \ldots, a_{\variables}$
@@ -2052,7 +2066,6 @@ and clause gadgets).
 
 \end{appendix}
 
-\end{comment}
 
 
 \end{document}
