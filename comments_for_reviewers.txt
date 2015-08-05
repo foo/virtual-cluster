@@ -1,0 +1,81 @@
+This file contains weakness + comments to the authors of our ICNP reviews.
+
+Reviewer A
+
+The paper does not go beyond theoretical analysis. It abstracts out many details, such as disk I/O bandwidth. It does not show the actual run time of the algorithms, scalability of the algorithm, and treat all assignment problem as a batch process that happens all at once. In sum, it is purely theoretic and have very little systems implication.
+
+Carlo: I don't get the stuff with the batch processing...
+
+The problem is not also very new. There are many heuristics proposed. So I'm not sur e if listing many variants add much.
+
+Carlo: We can state that our variants are FASTER and BETTER / NOT WORSE then the propsed heuristics.
+
+The paper formulates many resource allocation problems and presents algorithms for them. One interesting thing (perhaps a new finding) is that bandwidth assignment problem (or admission control) can be solved in polynomial time. The paper presents a few variants to the resource/VM assignment problem by introducing/removing some more constraints.
+
+Carlo: Cite CCR?
+
+ The shortcomings of this paper is that it's purely theoretic.  It does not show the actual run time of the algorithms, scalability of the algorithm, and treat all assignment problem as a batch process that happens all at once. In sum, it is purely theoretic and have very little systems implication.
+
+Carlo: Runtimes - possible with effort - we will need space (min 0.5 columns, more likely 1 col.) for this.
+
+ What's the size of the problem that you are targeting? In large data centers there can be 10s to 100s of thousands of VMs. Also often online algorithms are used to deal with a constant stream of requests. Without measuring the runtime of the algorithm and evaluation of implementations of the algorithm, it's very difficult to see what the real problem might be. I do not believe analyzing the time complexity is important. NP or P is probably the most important implication, but other than that in real life, the size of the problem and the scalability and the run time of the algorithm is most important.
+
+Carlo: Could be done with the Simulations above. Size <= 99 percentile Runtimerequirement or similar.
+
+ Also many studies, including Oktopus and many other following work, use heuristics for some of the problems discussed in the paper. It would be good to see how the heuristics compare against the optimal design. In this sense, the algorithms described in the paper would be useful to other researchers who might want to come up with online heuristics to the problem. 
+
+Carlo: State worst cases?
+
+ I think it would be better to state up front the usefulness of pure theoretic analysis, if you are solely focusing on this. Otherwise, please consider expanding the paper to include the performance evaluation of the algorithm.
+
+Carlo: I think we should do that (if we can find the space). To me this is the best review (and the only one who wanted to reject us :D).
+
+
+
+Reviewer B
+
+It is not clear that the formulation advanced with the 5 structural features is practically relevant. For example, delay is an important concern of many applications which is influenced by network traffic. The latter need not be of the constant-bit rate, i.e., fixed bandwidth reservation type, considered in the paper. And this is but one among several features which may be more relevant than the 5 chosen.
+
+This paper considers data locality aware embedding of virtual clusters in tree based network substrates. The paper considers 5 structural features that affect optimal placement: replica selection, multiple assignment, flexible placement, node interconnect, bandwidth capacities. Based on different combinations, the paper identifies which types are poly-time solvable and which are NP-hard.
+
+Although the selection of the five structural optimization features is a reasonable start, future work may benefit from further interaction/discussion with practitioners of resource allocation virtual machine based data centers.
+
+Carlo: Added a sentence in Section II D. 
+
+
+Reviewer C
+
+Authors should have provided more insights about how different components contribute to the hardness of the problem, and how to develop good approximation algorithms.
+
+Carlo: Is this even possible? I thought we did a good job on this, as we show exactly what is NP hard. If anyone has an idea here... 
+
+Authors presented a set of algorithms and complexity analysis for different combinations of the virtual cluster embedding problem along several dimensions: replica selection, multiple assignment, flexible placement, node interconnect, and bandwidth capacity. Virtual cluster embedding is an important problem in data center networking. A comprehensive study of algorithm complexity is timely. The models and algorithms presentation is clear. The Polynomial-time algorithms are well constructed. The NP-hardness study also provides good insights on the complexity nature of the problem. 
+Since this is a algorithmic study paper. More analysis and discussion on how different components contribute to computation complexity will make the paper more insightful. Also, as listed as future work by the authors, guidelines for developing  approximation algorithms will further increase the value of algorithmic study,
+
+Carlo: Sounds like nothing to do here.
+
+
+
+Reviewer D
+
+Direct connection to networking protocols is weak, and the paper could be borderline in terms of scope for this conference. The paper reads entirely like a theory paper, and does not contain any simulation study or numerical evaluations. Some of the modeling assumptions are also not clearly justified (see below).
+
+Of the polynomially solvable variants, the case discussed in Section III-C (Dynamic program) is interesting; most of the other polynomial-time cases are easy to see.
+
+Why is the spatial distribution of the data (chunks) assumed to given (not a decision parameter)?
+
+Carlo: This is in the text. Intro / Model section.
+
+Also, why should the VM interconnect graph need be complete (clique)?
+
+Carlo: Added a sentence to the NI description
+
+For the MA case, why do the chunks per node need to be a constant?
+
+Carlo: Added a sentence to the MA description
+
+
+While the problem motivation and basic system model is clearly presented, and the paper is generally clearly written, the consideration of so many variants leaves the reader confused on the overall message of the paper, despite the authors' discussion in that regard in the "Summary and Conclusions" section.
+
+Carlo: We should state something like: Our results imply NP-> Approx / Heurisitics, optimal -> Faster algorithms. 
+
