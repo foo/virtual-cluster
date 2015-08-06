@@ -273,13 +273,13 @@ and Boolean satisfiability ($\SAT$). Interestingly,
 while it is well-known that (unsplittable) multi-commodity flow
 problems are NP-hard in capacitated networks, our hardness results also hold in \emph{uncapacitated}
 networks; moreover, we show that NP-hard problems already arise in small-diameter networks (as they are
-widely used today~\cite{fattree}),
-and even if the number of replicas is bounded by two.
+widely used today~\cite{fattree}).
+%and even if the number of replicas is bounded by two.
 
 
 %\subsection{Organization}
 \textbf{Organization.}
-The remainder of this paper is organized as follows.
+%The remainder of this paper is organized as follows.
 Section~\ref{sec:model} introduces our formal model in detail.
 Algorithms are presented in Section~\ref{sec:poly} and
 hardness results are presented in Section~\ref{sec:np}.
@@ -397,11 +397,11 @@ is modeled as a complete network (a \emph{clique}). Concretely, we assume that a
 is connected to its node at a minimal (guaranteed) bandwidth $\CostTrans$, and a node is connected to any other node
 at minimal (guaranteed) bandwidth $\CostCom$.
 
-Note that we do not explicitly model the process of
-copying back the final results from the
-reducers to the file system: this step offers many flexibilities,
-and can be done based on the current network state~\cite{endpoint}; it does not require
-explicit reservations.
+%Note that we do not explicitly model the process of
+%copying back the final results from the
+%reducers to the file system: this step offers many flexibilities,
+%and can be done based on the current network state~\cite{endpoint}; it does not require
+%explicit reservations.
 
 %\stefan{TODO: clarify whether there can be multiple chunks and or nodes per server}
 
@@ -1413,8 +1413,8 @@ $k$ gadgets contain exactly 3 nodes. These gadgets correspond to a valid
 hence every element is covered exactly once.
 \end{proof}
 
-Finally, let us conclude by remarking that all NP-hard problems discussed in this paper
-are obviously also in NP (and hence NP-complete): solutions can be verified efficiently.
+%Finally, let us conclude by remarking that all NP-hard problems discussed in this paper
+%are obviously also in NP (and hence NP-complete): solutions can be verified efficiently.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1480,7 +1480,8 @@ This paper has shown that despite the
 multiple dimensions of flexibility in terms of chunk assignment and node placement,
 many problems can be solved in polynomial time. However, we have also
 shown that several embedding problems are NP-hard already in two-
-and three-level trees---a practically relevant result given today's datacenter topologies~\cite{fattree})---and even if the the number of replicas is bounded by two.
+and three-level trees---a practically relevant result given today's datacenter topologies~\cite{fattree})-.
+%--and even if the the number of replicas is bounded by two.
 \begin{table}
 \tiny
 \bgroup
@@ -1569,7 +1570,7 @@ problem NP-hard.
 %for our NP-hard problems.
 
 \textbf{Acknowledgments.} We would like to thank our shepherd Kihong Park.
-Research supported by Polish National Science Centre grant DEC-2013/09/B/ST6/01538.
+Research in part supported by Polish National Science Centre grant DEC-2013/09/B/ST6/01538.
 
 %\newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
