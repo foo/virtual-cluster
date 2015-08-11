@@ -160,7 +160,7 @@ Replica Aware Virtual Cluster Embeddings}}
 
 
 \author{Carlo Fuerst$^{1,*}$ \quad Maciej Pacut$^{2,*}$ \quad Paolo Costa$^3$ \quad Stefan Schmid$^4$\\
-{\small $^1$ TU Berlin, Germany \quad $^2$ University of Wroclaw, Poland \quad $^3$ TU Berlin \& T-Labs, Germany \quad $^1$ Microsoft Research, UK} \\ {\small $^*$ authors contributed equally to this work}}
+{\small $^1$ TU Berlin, Germany \quad $^2$ University of Wroclaw, Poland \quad $^3$ Microsoft Research, UK \quad $^4$ TU Berlin \& T-Labs, Germany} \\ {\small $^*$ authors contributed equally to this work}}
 
 %\author{authors}
 
@@ -178,7 +178,7 @@ supports an optimized mapping of virtual machines as well as their interconnecti
 to their
 physical counterparts: essentially a graph embedding problem.
 
-However, existing algorithms
+However, existing embedding algorithms such as Oktopus and Proteus
 often ignore a crucial dimension of the embedding problem, namely \emph{data locality}:
 the input to a cloud application such as MapReduce is typically stored in a distributed,
 and sometimes redundant, file system. Since moving
@@ -313,8 +313,8 @@ types $\{c_1,\ldots,c_4\}$ (depicted as \emph{circles}). The chunk replicas need
 
 Our model is motivated by batch-processing applications such as MapReduce.
 Such applications use multiple virtual machines to
-process data, initially often redundantly stored in a distributed file system implemented
-by multiple servers.~\cite{mapreduce}
+process data, often redundantly stored in a distributed file system implemented
+by multiple servers.~\cite{local-schedule-1,mapreduce}
 The standard datacenter topologies today are (multi-rooted) fat-tree resp.~\emph{Clos} topologies~\cite{fattree,vl2},
 hierarchical networks  recursively made of sub-trees at each level;
 servers are located at the
@@ -324,7 +324,7 @@ links can be considered as a single aggregate link for bandwidth
 reservations~\cite{oktopus,proteus}.
 
 During execution, batch-processing applications typically cycle through different phases,
-most prominently, a mapping phase and a reducing phase; between the two phases,
+most prominently, a map phase and a reduce phase; between the two phases,
 a shuffling operation is performed, a phase where the results from the mappers
 are communicated to the reducers. Since the shuffling phase can constitute a
 non-negligible part of the overall runtime~\cite{orchestra},
@@ -334,7 +334,7 @@ to provide explicit minimal bandwidth guarantees~\cite{talk-about}.
 In particular, we model the virtual network connecting the virtual machines
 as a virtual cluster~\cite{oktopus,talk-about,proteus};
 however, we extend this model with a notion of data-locality.
-In particular, we distinguish between the bandwidth needed between assigned chunk
+In particular, we distinguish between the bandwidth needed between the assigned chunk
 and virtual machine ($\CostTrans$) and the bandwidth needed between
 two virtual machines ($\CostCom$). 
 %Finally, note that it is frequently assumed
@@ -347,7 +347,7 @@ two virtual machines ($\CostCom$).
 
 Let us now introduce our model more formally. It consists of three fundamental parts: (1) the substrate network (the servers
 and the connecting physical network),
-(2) the to be processed input (divided into data chunks), and
+(2) the input which needs to be processed (divided into data chunks), and
 (3) the virtual network (the virtual machines and the logical network connecting the machines to each other
 as well as to the chunks).
 
@@ -914,13 +914,6 @@ graph.
 
 We now show how to solve the $\MA+\FP+\CC+\BW$ problem variant
 in polynomial time.
-\begin{wrapfigure}{r}{0.5\columnwidth}
-\vspace{-1em}
-\includegraphics[width=0.48\columnwidth]{figs/venn_dp.pdf}
-\caption{Variants solved by dynamic programming approach.}
-\vspace{-1em}
-\label{fig:venn_flow}
-\end{wrapfigure}
 Note that this problem variant requires to find a
 tradeoff between the desire to place nodes as close as possible to each other
 (in order to minimize communication costs), and the desire to place nodes
@@ -939,6 +932,13 @@ result, the paths between the individual nodes are longer than in alternative
 node placements: each node has a distance of two hops to one other node,
 and four hops to two other nodes. Hence the resulting allocations for the
 node interconnect sum up to $20 \cdot \CostCom$ .
+\begin{wrapfigure}{r}{0.5\columnwidth}
+\vspace{-1em}
+\includegraphics[width=0.48\columnwidth]{figs/venn_dp.pdf}
+\caption{Variants solved by dynamic programming approach.}
+\vspace{-1em}
+\label{fig:venn_flow}
+\end{wrapfigure}
 Figure~\ref{fig:dynamic_motivation} \emph{(right)} shows a different node
 mapping $\NodeMapping_2$, which seeks to minimize the communication costs
 between the nodes, and places all nodes in one subtree. The distance between all
