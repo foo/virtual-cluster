@@ -13,7 +13,7 @@ public class Node {
     public Collection<Edge> edges;
     public String id;
     public int capacity;
-    public double[] dpCosts;
+    public int[] dpCosts;
     public int[][] dpAssignment;
     public List<Integer> chunks;
     public Edge uplink;

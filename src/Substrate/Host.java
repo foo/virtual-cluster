@@ -26,7 +26,7 @@ public class Host extends Node {
         this.hostId = hostId;
 
         // Assuming uniform distribution
-        this.capacity = + Parameters.minHostRes - 1 + (int)Math.ceil(Parameters.random.nextDouble() * (Parameters.maxHostRes + 1 - Parameters.minHostRes));
+        this.capacity = + Parameters.minHostRes + (int)Math.ceil(Parameters.random.nextInt(Parameters.maxHostRes - Parameters.minHostRes + 1));
         if (this.capacity < 0 ) this.capacity = 0;
     }
 

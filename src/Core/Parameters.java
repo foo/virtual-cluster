@@ -16,21 +16,23 @@ public class Parameters {
     public static boolean MA = true;
     public static boolean RS = false;
 
-    public static int pods = 10;
-    public static int racksPerPod = 48;
-    public static int hostsPerRack = 48;
+    public static int pods = 16;
+    public static int racksPerPod = 32;
+    public static int hostsPerRack = 256;
+
+    public static int iterations = 100;
 
     public static int maxHostRes = 4;
     public static int minHostRes = 0;
 
-    public static double maxEdgeRes = 1000;
-    public static double minEdgeRes = 0;
+    public static int maxEdgeRes = 1500;
+    public static int minEdgeRes = 0;
 
     public static int minMaFactor = 2;
     public static int maxMaFactor = 10;
 
-    public static double TOR_TO_AGG_OVERSUBSCRIPTION = 2;
-    public static double AGG_TO_CORE_OVERSUBSCRIPTION = 2;
+    public static int TOR_TO_AGG_OVERSUBSCRIPTION = 2;
+    public static int AGG_TO_CORE_OVERSUBSCRIPTION = 2;
 
     public static int getMaFactor(){
         if(MA)
@@ -39,7 +41,7 @@ public class Parameters {
             return 1;
     }
 
-    public static boolean printDistribution = true;
+    public static boolean printDistribution = false;
 
     public static int minRsFactor = 2;
     public static int maxRsFactor = 10;
@@ -51,16 +53,21 @@ public class Parameters {
             return 1;
     }
 
+    private static int n = 1024;
 
-    public static int getN(){
-        return 100;
+    public static void setN(int n){
+        Parameters.n = n;
     }
 
-    public static double getB1(){
+    public static int getN(){
+        return n;
+    }
+
+    public static int getB1(){
         return 1;
     }
 
-    public static double getB2(){
+    public static int getB2(){
         return 1;
     }
 

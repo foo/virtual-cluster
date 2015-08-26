@@ -8,7 +8,7 @@ import Core.Parameters;
  */
 public class Edge {
     private Node[] nodes;
-    public double capacity;
+    public int capacity;
 
 
     public Edge(Node n1, Node n2){
@@ -19,6 +19,6 @@ public class Edge {
         n2.uplink = this;
 
 
-        this.capacity = Parameters.minEdgeRes + Parameters.random.nextDouble() * (Parameters.maxEdgeRes - Parameters.minEdgeRes);
+        this.capacity = Parameters.minEdgeRes + Parameters.random.nextInt(Parameters.maxEdgeRes - Parameters.minEdgeRes + 1);
     }
 }
