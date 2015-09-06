@@ -1086,6 +1086,11 @@ $bw$ exceeds the capacity $\capacity$ of the uplink of $T'$.
 %\end{eqnarray*}
 %
 
+\begin{figure}
+\includegraphics[width=\columnwidth]{figs/heatmap}
+\caption{Empirical runtimes for the dynamic pogram \textit{(left)} and the flow algorithm \textit{(right)}.} 
+\label{fig:heatmap}
+\end{figure}
 
 
 
@@ -1159,12 +1164,6 @@ and plot the average in our figures.
 All runtime measurements were performed using 
 a single threaded implementation on an Intel(R) Xeon(R) CPU L5420  @ 2.50GHz, 
 with Debian 4.6.3-14 utilizing openjdk-7.
-
-\begin{figure}
-\includegraphics[width=\columnwidth]{figs/heatmap}
-\caption{Empirical runtimes for the dynamic pogram \textit{(left)} and the flow algorithm \textit{(right)}.} 
-\label{fig:heatmap}
-\end{figure}
 
 Figure~\ref{fig:heatmap}~\textit{(left)} shows the runtime of the dynamic program. 
 The results indicate that even a single threaded implementation 
@@ -1528,8 +1527,9 @@ system~\cite{local-schedule-1,local-schedule-2,local-schedule-3}.
 
 At the heart of locality and replica aware virtual cluster embeddings lie fundamental algorithmic problems.
 This paper has shown that despite the
-multiple dimensions of flexibility in terms of chunk assignment and node placement, \carlo{on the scale of a modern datacenter}
-many problems can be solved \carlo{efficiently}. However, we have also
+multiple dimensions of flexibility in terms of chunk assignment and node placement, 
+and despite the large scale of modern datacenters, 
+many problems can be solved efficiently. However, we have also
 shown that several embedding problems are NP-hard already in two-
 and three-level trees---a practically relevant result given today's datacenter topologies~\cite{fattree}).
 %--and even if the the number of replicas is bounded by two.
