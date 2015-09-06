@@ -17,7 +17,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -242,8 +241,6 @@ public class DP_MA_FP_NI_BW {
             // Allocate the Chunk Transport
             for(Map.Entry<Host,Integer> entry : hostsWithNodes.entrySet()){
                 Host host = entry.getKey();
-                if(host.rackId == 14 && host.podId == 15)
-                    System.out.println("DBG");
                 host.matchingFlag = true;
                 if(host.chunks.size() != entry.getValue()){
                     host.uplink.capacity -= Math.abs(host.chunks.size() - entry.getValue()) * chunkBW;
@@ -267,8 +264,6 @@ public class DP_MA_FP_NI_BW {
                 }
             }
             for(int chunkType = 0; chunkType < n; chunkType++){
-                if(chunkType == 119)
-                    System.out.println("DBG");
                 int podId = dist[chunkType][0][0];
                 int rackId = dist[chunkType][0][1];
                 int hostId = dist[chunkType][0][2];
@@ -307,7 +302,7 @@ public class DP_MA_FP_NI_BW {
                 System.out.println("[Error] Cannot append to logfile: dp.log");
                 e.printStackTrace();
             }
-            System.out.println(n + "\t" + Parameters.hostsPerRack + "\t" + time);
+            //System.out.println(n + "\t" + Parameters.hostsPerRack + "\t" + time);
             return true;
         }else{
             time = System.currentTimeMillis() - time;

@@ -764,7 +764,6 @@ locality. Moreover, we will show that we can
 even solve
 $\MA+\CC+\BW$ problem variants by simply
 verifying feasibility.
-.
 In the following, due to Observation~\ref{obs:nofp}, we can focus on
 the $\MA$ resp.~$\MA+\BW$ problem.
 
@@ -1117,6 +1116,20 @@ The runtime to binarize $\Tree$ is asymptotically negligible.
 %\label{fig:venn_trivial}
 %\vspace{-1em}
 %\end{wrapfigure}
+
+\subsection{Practical Implications}
+
+\carlo{To shed some light on the absolute runtimes of the propsed algorithms, we implemented the algorithms in Java. We measure the runtime of our algorithms on a three layer substrate tree, with $2^11$ to $2^20$ servers, which can host up to 4 VMs. For the dynamic program we generate a random utilization of the substrate, while we ensure feasible solutions for the other algorithms, as their runtime drops significantly in case the problem is infeasible. The size $n$ of the requested virtual cluster is also a parameter in our simulation study and varies between $8$ and $1024$. Chunks (and in the absence of $\FP$ nodes) are distributed randomly acorss servers. For each parameter setting we executed the algorithms $100$ times. All runtime measurements were generated with a single threaded implementation on an Intel(R) Xeon(R) CPU L5420  @ 2.50GHz, on Debian 4.6.3-14 utilizing openjdk-7.}
+
+\begin{figure}
+\includegraphics[width=\columnwidth]{figs/heatmap}
+\caption{Empirical runtimes for the dynamic pogram \textit{(left)} and the flow algorithm \textit{right}.} 
+\label{fig:heatmap}
+\end{figure}
+
+
+\carlo{Figure~\ref{fig:heatmap}~\textit{(left)} shows the runtime of the dynamic program. While even the single threaded implementation of the dynamic program can solve instance with $128$ nodes within a second runtime on todays datacenters scales ($32k hosts$), the dynamic program can be parallelized almost perfectly, as all computations on one aggregation level of the substrate tree can happen in parallel, if fast results on larger scales are required. The runtimes for the flow algorithm, which are shown in Figure~\ref{fig:heatmap}~\textit{(right)}, are higher - but witin one order of magnitude of the runtimes of the dynamic program. However, the flow algorithm cannot easily be parallelized. We also implemented the matching algorithm for $\MA + \CC + \BW$, which runs within one milisecond for all described parameter combinations.}
+
 \textbf{Remark: Simple Problems.}
 To conclude, for the sake of completeness, we also observe that there are
 several problems which

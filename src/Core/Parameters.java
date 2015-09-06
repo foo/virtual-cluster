@@ -26,7 +26,7 @@ public class Parameters {
     public static int minHostRes = 0;
 
     public static int maxEdgeRes = 1500;
-    public static int minEdgeRes = 0;
+    public static int minEdgeRes = 1500;
 
     public static int minMaFactor = 2;
     public static int maxMaFactor = 10;
