@@ -247,8 +247,9 @@ Moreover, in case of redundant storage (batch processing
 applications often provide a 3-fold redundancy~\cite{hdfs}), an algorithm should also be aware of, and exploit, \emph{replica selection}
 flexibilities.
 
-%\subsection{Our Contributions}
-\textbf{Our Contributions.}
+\subsection{Our Contributions}
+%\textbf{Our Contributions.}
+
 This paper initiates the formal study of data-locality and replica aware virtual network embedding problems in datacenters.
 In particular, we decompose the general optimization problem into its fundamental aspects, such as
 assignment of chunks, replica selection, and flexible virtual machine
@@ -277,9 +278,10 @@ widely used today~\cite{fattree}).
 %and even if the number of replicas is bounded by two.
 
 
-%\subsection{Organization}
-\textbf{Organization.}
+\subsection{Organization}
+%\textbf{Organization.}
 %The remainder of this paper is organized as follows.
+
 Section~\ref{sec:model} introduces our formal model in detail.
 Algorithms are presented in Section~\ref{sec:poly} and
 hardness results are presented in Section~\ref{sec:np}.
@@ -1109,39 +1111,75 @@ The runtime to binarize $\Tree$ is asymptotically negligible.
 %\label{fig:venn_dp}
 %\end{wrapfigure}
 
-%\begin{wrapfigure}{r}{0.5\columnwidth}
-%\vspace{-1em}
-%\includegraphics[width=0.48\columnwidth]{figs/venn_trivial.pdf}
-%\caption{Trivially solvable problem variants.}
-%\label{fig:venn_trivial}
-%\vspace{-1em}
-%\end{wrapfigure}
-
-\subsection{Simulation Study}
-
-\carlo{To shed some light on absolute runtimes, we implemented the proposed algorithms in Java. We measured the runtime of our algorithms on a three layer substrate tree, with $2^11$ to $2^20$ servers, which can host up to $4$ nodes each. For the dynamic program we generate a random utilization of the substrate, while we ensure feasible solutions for the other algorithms, as their runtime drops significantly in case the problem is infeasible. The size $n$ of the requested virtual cluster is also a parameter in our simulation study and varies between $8$ and $1024$. Chunks (and in the absence of $\FP$ nodes) are distributed randomly acorss servers. For each parameter setting we executed the algorithms $100$ times and plot the average . All runtime measurements were generated with a single threaded implementation on an Intel(R) Xeon(R) CPU L5420  @ 2.50GHz, on Debian 4.6.3-14 utilizing openjdk-7.}
-
-\begin{figure}
-\includegraphics[width=\columnwidth]{figs/heatmap}
-\caption{Empirical runtimes for the dynamic pogram \textit{(left)} and the flow algorithm \textit{right}.} 
-\label{fig:heatmap}
-\end{figure}
 
 
-\carlo{Figure~\ref{fig:heatmap}~\textit{(left)} shows the runtime of the dynamic program. While even the single threaded implementation of the dynamic program can solve instance with $128$ nodes within a second runtime on todays datacenters' scales ($32k hosts$), the dynamic program can be parallelized almost perfectly, as all computations on one aggregation level of the substrate tree can happen in parallel, if fast results for a larger scale are required. The runtimes for the flow algorithm, which are shown in Figure~\ref{fig:heatmap}~\textit{(right)}, are higher - but witin one order of magnitude of the runtimes of the dynamic program. However, the flow algorithm cannot easily be parallelized. We also implemented the matching algorithm for $\MA + \CC + \BW$, which runs within one milisecond for all described parameter combinations.}
+\subsection{Simple Problems}
 
-\textbf{Remark: Simple Problems.}
-To conclude, for the sake of completeness, we also observe that there are
+\begin{wrapfigure}{r}{0.5\columnwidth}
+\vspace{-1em}
+\includegraphics[width=0.48\columnwidth]{figs/venn_trivial.pdf}
+\caption{Trivially solvable problem variants.}
+\label{fig:venn_trivial}
+\vspace{-1em}
+\end{wrapfigure}
+For the sake of completeness, we also observe that there are
 several problems which
 allow for a trivial solution. Concretely, problems with $\FP$
 plus any combination of
 $\RS$ and $\BW$ (but without $\MA$ and $\CC$) can easily be solved by
 mapping
 nodes to chunk locations.
-%Figure~\ref{fig:venn_trivial}
-%shows a Venn diagram of the trivial property combinations.
+Figure~\ref{fig:venn_trivial}
+shows a Venn diagram of the trivial property combinations.
 
 
+
+\subsection{Simulation Study: Runtime}
+
+In order to complement our formal worst-case analysis,
+and to shed some light on the actual runtimes of
+our algorithms, 
+we implemented a simple simulator in Java. 
+We consider a three-layer substrate tree-topology,
+where core switches have degree 16 and
+pod switches 32. We vary the number
+of servers from $2^{11}$ to $2^{20}\approx 1048k$.
+We assume that each server can host  
+up to $4$ for virtual machines each. 
+
+For the dynamic program, we initialize the substrate by generating a
+random utilization pattern. In general, we ensure
+that a feasible embedding exists. 
+We vary the size $n$ of the 
+requested virtual clusters from 
+$8$ to $1024$. Chunks are distributed uniform at random acorss servers;
+the same holds for nodes in scenarios without $\FP$. 
+For each parameter setting, we repeated $100$ experiments,
+and plot the average in our figures. 
+All runtime measurements were performed using 
+a single threaded implementation on an Intel(R) Xeon(R) CPU L5420  @ 2.50GHz, 
+with Debian 4.6.3-14 utilizing openjdk-7.
+
+\begin{figure}
+\includegraphics[width=\columnwidth]{figs/heatmap}
+\caption{Empirical runtimes for the dynamic pogram \textit{(left)} and the flow algorithm \textit{(right)}.} 
+\label{fig:heatmap}
+\end{figure}
+
+Figure~\ref{fig:heatmap}~\textit{(left)} shows the runtime of the dynamic program. 
+The results indicate that even a single threaded implementation 
+is sufficient to solve instances with $128$ nodes in realistic datacenter scales
+ ($32k$ servers) within seconds. 
+ Moreover, note that the dynamic program can be parallelized almost perfectly, 
+ as all computations on one aggregation level of the substrate tree can happen in parallel.
+ This renders the algorithm also attractive for larger scales. 
+ The runtimes for the flow algorithm, which are shown in Figure~\ref{fig:heatmap}~\textit{(right)}, are higher, but still within an order of magnitude of the runtimes of the dynamic program. 
+ However, unlike the dynamic program, the flow algorithm cannot easily be parallelized,
+ and may hence face limitations. 
+ We also implemented the matching algorithm for $\MA + \CC + \BW$:
+ as expected, this algorithm is the fastest, and completes 
+ within one milisecond for all described parameter combinations. Accordingly,
+ we do not show it in the figure.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{NP-Hardness Results}\label{sec:np}
@@ -1589,10 +1627,215 @@ as well as by the German BMBF Software Campus grant 01IS12056.
 %\newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\bibliographystyle{alpha}
-{\footnotesize \renewcommand{\baselinestretch}{.9}
-\bibliographystyle{abbrv}
-\bibliography{references}
-}
+
+\begin{thebibliography}{10}
+
+\bibitem{flow-book}
+R.~K. Ahuja, T.~L. Magnanti, and J.~B. Orlin.
+\newblock {\em Network Flows: Theory, Algorithms, and Applications}.
+\newblock Prentice-Hall, Inc., 1993.
+
+\bibitem{fattree}
+M.~Al-Fares, A.~Loukissas, and A.~Vahdat.
+\newblock A scalable, commodity data center network architecture.
+\newblock In {\em Proc. ACM SIGCOMM}, pages 63--74, 2008.
+
+\bibitem{nodb}
+I.~Alagiannis, R.~Borovica, M.~Branco, S.~Idreos, and A.~Ailamaki.
+\newblock Nodb: Efficient query execution on raw data files.
+\newblock In {\em Proc. ACM SIGMOD}, pages 241--252, 2012.
+
+\bibitem{local-schedule-1}
+G.~Ananthanarayanan, S.~Agarwal, S.~Kandula, A.~Greenberg, I.~Stoica,
+  D.~Harlan, and E.~Harris.
+\newblock Scarlett: Coping with skewed content popularity in mapreduce
+  clusters.
+\newblock In {\em Proc. EuroSys}, pages 287--300, 2011.
+
+\bibitem{oktopus}
+H.~Ballani, P.~Costa, T.~Karagiannis, and A.~Rowstron.
+\newblock Towards predictable datacenter networks.
+\newblock In {\em Proc. ACM SIGCOMM}, 2011.
+
+\bibitem{scope}
+R.~Chaiken, B.~Jenkins, P.-A. Larson, B.~Ramsey, D.~Shakib, S.~Weaver, and
+  J.~Zhou.
+\newblock Scope: Easy and efficient parallel processing of massive data sets.
+\newblock {\em Proc. VLDB Endow.}, 1(2), 2008.
+
+\bibitem{endpoint}
+M.~Chowdhury, S.~Kandula, and I.~Stoica.
+\newblock Leveraging endpoint flexibility in data-intensive clusters.
+\newblock In {\em Proc. SIGCOMM}, pages 231--242, 2013.
+
+\bibitem{orchestra}
+M.~Chowdhury, M.~Zaharia, J.~Ma, M.~I. Jordan, and I.~Stoica.
+\newblock {Managing Data Transfers in Computer Clusters with Orchestra}.
+\newblock In {\em Proc. ACM SIGCOMM}, 2011.
+
+\bibitem{boutaba-survey}
+N.~M.~K. Chowdhury and R.~Boutaba.
+\newblock A survey of network virtualization.
+\newblock {\em Comput. Netw.}, 54(5):862--876, 2010.
+
+\bibitem{3dmatch}
+P.~Crescenzi, V.~Kann, M.~Halldorsson, M.~Karpinski, and G.~Woeginger.
+\newblock Maximum 3-dimensional matching.
+\newblock {\em A Compendium of NP Optimization Problems}, 2000.
+
+\bibitem{mapreduce}
+J.~Dean and S.~Ghemawat.
+\newblock Mapreduce: Simplified data processing on large clusters.
+\newblock In {\em Proc. USENIX OSDI}, pages 137--150, 2004.
+
+\bibitem{mla}
+N.~R. Devanur, S.~A. Khot, R.~Saket, and N.~K. Vishnoi.
+\newblock Integrality gaps for sparsest cut and minimum linear arrangement
+  problems.
+\newblock In {\em Proc. ACM STOC}, 2006.
+
+\bibitem{mla-survey}
+J.~D\'{\i}az, J.~Petit, and M.~Serna.
+\newblock A survey of graph layout problems.
+\newblock {\em ACM Comput. Surv.}, 34(3):313--356, 2002.
+
+\bibitem{scale-match}
+R.~Duan and H.-H. Su.
+\newblock A scaling algorithm for maximum weight matching in bipartite graphs.
+\newblock In {\em Proc. 23rd Annual ACM-SIAM Symposium on Discrete Algorithms
+  (SODA)}, pages 1413--1424, 2012.
+
+\bibitem{fischer-survey}
+A.~Fischer, J.~Botero, M.~Beck, H.~DeMeer, and X.~Hesselbach.
+\newblock Virtual network embedding: A survey.
+\newblock 2013.
+
+\bibitem{gabow_scaling_algorithm}
+H.~Gabow.
+\newblock A scaling algorithm for weighted matching on general graphs.
+\newblock In {\em Proc. IEEE FOCS}, 1985.
+
+\bibitem{google-fs}
+S.~Ghemawat, H.~Gobioff, and S.-T. Leung.
+\newblock The google file system.
+\newblock In {\em Proc. ACM SOSP}, pages 29--43, 2003.
+
+\bibitem{mincostmaxflow-1}
+A.~V. Goldberg and R.~E. Tarjan.
+\newblock Finding minimum-cost circulations by canceling negative cycles.
+\newblock {\em J. ACM}, 36(4):873--886, 1989.
+
+\bibitem{Goyal2008}
+N.~Goyal, N.~Olver, and F.~B. Shepherd.
+\newblock {The VPN conjecture is true}.
+\newblock {\em Proc. ACM STOC}, 2008.
+
+\bibitem{vl2}
+A.~Greenberg, J.~R. Hamilton, N.~Jain, S.~Kandula, C.~Kim, P.~Lahiri, D.~A.
+  Maltz, P.~Patel, and S.~Sengupta.
+\newblock {VL2:} a scalable and flexible data center network.
+\newblock In {\em Proc. ACM SIGCOMM}, 2009.
+
+\bibitem{secondnet}
+C.~Guo, G.~Lu, H.~J. Wang, S.~Yang, C.~Kong, P.~Sun, W.~Wu, and Y.~Zhang.
+\newblock {SecondNet}: {A} data center network virtualization architecture with
+  bandwidth guarantees.
+\newblock In {\em Proc. 6th CoNEXT}, 2010.
+
+\bibitem{gupta2001provisioning}
+A.~Gupta, J.~Kleinberg, A.~Kumar, R.~Rastogi, and B.~Yener.
+\newblock {Provisioning a virtual private network}.
+\newblock In {\em Proc. ACM STOC}, New York, New York, USA, 2001.
+
+\bibitem{local-schedule-2}
+M.~Isard, V.~Prabhakaran, J.~Currey, U.~Wieder, K.~Talwar, and A.~Goldberg.
+\newblock Quincy: Fair scheduling for distributed computing clusters.
+\newblock In {\em Proc. ACM SOSP}, pages 261--276, 2009.
+
+\bibitem{successive_shortest_path_complexity}
+Z.~Kiraly and P.~Kovacs.
+\newblock Efficient implementations of minimum-cost flow algorithms.
+\newblock In {\em {ArXiv} Technical Report 1207.6381}, 2012.
+
+\bibitem{talk-about}
+J.~C. Mogul and L.~Popa.
+\newblock What we talk about when we talk about cloud network performance.
+\newblock {\em ACM SIGCOMM CCR}, 2012.
+
+\newpage
+
+\bibitem{faircloud}
+L.~Popa, A.~Krishnamurthy, S.~Ratnasamy, and I.~Stoica.
+\newblock Faircloud: Sharing the network in cloud computing.
+\newblock In {\em Proc. HotNets-X}, 2011.
+
+\bibitem{elasticswitch}
+L.~Popa, P.~Yalagandula, S.~Banerjee, J.~C. Mogul, Y.~Turner, and J.~R. Santos.
+\newblock Elasticswitch: Practical work-conserving bandwidth guarantees for
+  cloud computing.
+\newblock In {\em Proc. ACM SIGCOMM}, pages 351--362, 2013.
+
+\bibitem{drl}
+B.~Raghavan, K.~Vishwanath, S.~Ramabhadran, K.~Yocum, and A.~C. Snoeren.
+\newblock Cloud control with distributed rate limiting.
+\newblock In {\em Proc. SIGCOMM}, 2007.
+
+\bibitem{gatekeeper}
+H.~Rodrigues, J.~R. Santos, Y.~Turner, P.~Soares, and D.~Guedes.
+\newblock Gatekeeper: Supporting bandwidth guarantees for multi-tenant
+  datacenter networks.
+\newblock In {\em Proc. 3rd Conference on I/O Virtualization (WIOV)}, 2011.
+
+\bibitem{ccr15emb}
+M.~Rost, C.~Fuerst, and S.~Schmid.
+\newblock Beyond the stars: Revisiting virtual cluster embeddings.
+\newblock In {\em Proc. ACM SIGCOMM Computer Communication Review (CCR)}, 2015.
+
+\bibitem{seawall}
+A.~Shieh, S.~Kandula, A.~Greenberg, and C.~Kim.
+\newblock Seawall: Performance isolation for cloud datacenter networks.
+\newblock In {\em Proc. USENIX HotCloud}, 2010.
+
+\bibitem{hdfs}
+K.~Shvachko, H.~Kuang, S.~Radia, and R.~Chansler.
+\newblock The hadoop distributed file system.
+\newblock In {\em Proc. IEEE 26th Symposium on Mass Storage Systems and
+  Technologies (MSST)}, pages 1--10, 2010.
+
+\bibitem{mincostmaxflow-2}
+E.~Tardos.
+\newblock A strongly polynomial minimum cost circulation algorithm.
+\newblock {\em Combinatorica}, 5(3):247--255, July 1985.
+
+\bibitem{proteus}
+D.~Xie, N.~Ding, Y.~C. Hu, and R.~Kompella.
+\newblock The only constant is change: incorporating time-varying network
+  reservations in data centers.
+\newblock {\em ACM SIGCOMM Computer Communication Review (CCR)}, 2012.
+
+\bibitem{shark}
+R.~S. Xin, J.~Rosen, M.~Zaharia, M.~J. Franklin, S.~Shenker, and I.~Stoica.
+\newblock Shark: Sql and rich analytics at scale.
+\newblock In {\em Proce. ACM SIGMOD}, pages 13--24, 2013.
+
+\bibitem{local-schedule-3}
+M.~Zaharia, D.~Borthakur, J.~Sen~Sarma, K.~Elmeleegy, S.~Shenker, and
+  I.~Stoica.
+\newblock Delay scheduling: A simple technique for achieving locality and
+  fairness in cluster scheduling.
+\newblock In {\em Proc. EuroSys}, pages 265--278, 2010.
+
+\bibitem{amazonbw}
+{Measuring EC2 system performance}.
+\newblock \url{http://goo.gl/V5zhEd}.
+
+\end{thebibliography}
+
+
+%{\footnotesize \renewcommand{\baselinestretch}{.9}
+%\bibliographystyle{abbrv}
+%\bibliography{references}
+%}
 
 \begin{comment}
 
