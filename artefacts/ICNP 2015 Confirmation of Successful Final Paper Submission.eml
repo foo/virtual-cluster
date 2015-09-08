@@ -1,0 +1,48 @@
+Return-Path: <ICNP2015@ieeeconfpublishing.org>
+Delivered-To: cfuerst@inet.tu-berlin.de
+Received: from mail.tu-berlin.de (mail.tu-berlin.de [130.149.7.33])
+	by mail.net.t-labs.tu-berlin.de (Postfix) with ESMTPS id BB51A82D
+	for <carlo@inet.tu-berlin.de>; Sun,  6 Sep 2015 23:58:00 +0200 (CEST)
+X-tubIT-Incoming-IP: 140.98.193.225
+Received: from hormel2.ieee.org ([140.98.193.225])
+	by mail.tu-berlin.de (exim-4.76/mailfrontend-7) with esmtps [UNKNOWN:AES256-GCM-SHA384:256]
+	for <carlo@inet.tu-berlin.de>
+	id 1ZYhwl-0004pi-0I; Sun, 06 Sep 2015 23:58:00 +0200
+Received: from jacquard.ca.compso.org (skywalker-ext.ieee.org [140.98.210.253])
+	by hormel2.ieee.org (8.14.4/8.14.4/Debian-4) with ESMTP id t86LusKI019351
+	for <carlo@inet.tu-berlin.de>; Sun, 6 Sep 2015 17:57:14 -0400
+Received: from computer.org ([63.84.221.72]) by jacquard.ca.compso.org with Microsoft SMTPSVC(6.0.3790.4675);
+	 Sun, 6 Sep 2015 14:08:22 -0700
+From: "Conference Publishing Services" <ICNP2015@ieeeconfpublishing.org>
+To: carlo@inet.tu-berlin.de
+Cc: ICNP2015@ieeeconfpublishing.org
+Subject: ICNP 2015 Confirmation of Successful Final Paper Submission
+Date: Sun, 6 Sep 2015 21:08:22 GMT
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+Message-ID: <JACQUARDXvpFVjCRGry000001cb@jacquard.ca.compso.org>
+X-OriginalArrivalTime: 06 Sep 2015 21:08:22.0593 (UTC) FILETIME=[29D9A310:01D0E8E8]
+X-Spam-Score: 0.00 () [Tag at 5.25] 
+X-CanIt-Geo: ip=140.98.210.253; country=US; region=New Jersey; city=Piscataway; latitude=40.4993; longitude=-74.3990; http://maps.google.com/maps?q=40.4993,-74.3990&z=6
+X-CanItPRO-Stream: default
+Received-SPF: temperror (hormel2.ieee.org: error in processing during
+	lookup of ICNP2015@ieeeconfpublishing.org)
+	receiver=hormel2.ieee.org; client-ip=140.98.210.253;
+	envelope-from=<ICNP2015@ieeeconfpublishing.org>; helo=jacquard.ca.compso.org;
+	identity=mailfrom
+X-Scanned-By: CanIt (www . roaringpenguin . com) on 140.98.193.225
+X-PMX-Version: 6.0.0.2142326, Antispam-Engine: 2.7.2.2107409, Antispam-Data: 2015.9.6.215418
+X-PMX-Spam: Gauge=IIIIIIII, Probability=8%, Report='
+  HTML_00_01 0.05, HTML_00_10 0.05, MSGID_ADDED_BY_MTA 0.05, BODYTEXTP_SIZE_3000_LESS 0, BODY_SIZE_1000_LESS 0, BODY_SIZE_2000_LESS 0, BODY_SIZE_400_499 0, BODY_SIZE_5000_LESS 0, BODY_SIZE_7000_LESS 0, FROM_NAME_PHRASE 0, NO_URI_HTTPS 0, __ANY_URI 0, __CP_URI_IN_BODY 0, __CT 0, __CTE 0, __CT_TEXT_PLAIN 0, __HAS_FROM 0, __HAS_MSGID 0, __HAS_XOAT 0, __MIME_TEXT_ONLY 0, __SANE_MSGID 0, __SPEAR_FROM_NAME_A 0, __SUBJ_ALPHA_END 0, __TO_MALFORMED_2 0, __TO_NO_NAME 0, __URI_NO_PATH 0, __URI_NS '
+
+Dear Carlo Lukas Fuerst,
+
+Your paper, entitled How Hard Can It Be? Understanding the Complexity of Replica Aware Virtual Cluster Embeddings, has been successfully submitted to the CPS Online system for ICNP 2015. Thank you!
+
+I will contact you if there are any problems.
+
+Best regards,
+Juan Guerrero
+CPS Editor, Conference Publishing Services (CPS)
+IEEE Computer Societyhttp://www.computer.org/cpsE-Mail: ICNP2015@ieeeconfpublishing.org
+
