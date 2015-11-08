@@ -1,0 +1,71 @@
+\section{(Journal version) NP-completeness of 2-replica variant}
+
+\subsection{Intro}
+
+\begin{enumerate}
+  \item Needed properties: FP, RS(2), MA(4)
+  \item Eliminated any need for bandwidth constraints, node interconnect and idle machines
+\end{enumerate}
+
+\subsection{Notation}
+
+(3DPM) We call $deg(e)$ the number of triples that contain element
+$e\in A\cup B\cup C$. We call $n=|A|$; please note that $n=|A|=|B|=|C|$.
+
+\subsection{The construction}
+
+Let's take any instance $I$ of 3D Perfect Matching and create a VCEMB
+instance $I'$ in the following way:
+
+\begin{enumerate}
+  \item (core chunk types) for each element $e \in A\cup B\cup C$ we create
+  $deg(e)+a$ chunk types, where $a\in{0,1,2}$ is to make $deg(e)-1+a$
+  divisible by 3. We those chunk types $core(e)$ (both corresponding to
+  degree and those additional).
+  \item (unique chunk types) We create additional chunk types which
+  will have only one replica. We create $n$ chunk types and we call
+  this set $mtch$. For each element $e\in A\cup B\cup C$ we create $core(e)/3$
+  chunk types called $unqCore(e)$.
+  \item (convention for core chunk types naming) Let's say that $e$ is in triples
+  $t_1,t_2,\ldots,t_{deg(e)}$; then $core(e) = \{ e^{t_1}, e^{t_2},
+  \ldots, e^{t_{deg(e)}} \} \cup ADDITIONAL$, where $ADDITIONAL$ are
+  the chunk types that were added to make $deg(e)-1+a$ divisible by
+  3.
+  \item (tree) physical network consists of two parts: Matching Subtree
+  and Cover Subtree. Matching Subtree consists of two parts: Triples
+  Subtree and Unique Subtree. Cover Subtree consists of $|A\cup B\cup
+  C|$ Element Subtries.
+  \item (Triples Subtree) For each triple we create a subtree consisisting of
+  4 vertices: three leaves and one root of the triple. We attach the
+  root of the triple to root of Matching Subtree.
+  \item (Unique Subtree) We create $n$ leaves and $n$ middle nodes and
+  connect them to root of Matching Subtree. Note that we create middle
+  nodes not only to keep the tree balanced, but also to keep 
+  leaves of Unique Subtree far from other leaves of Unique Subtree.
+  \item (chunks in Triples Subtree) For each triple
+  $t = \langle a_i, b_j, c_k \rangle$ we put three chunks in leaves of
+  the corresponding gadget: $a_i^{t}, b_j^{t}, c_k^{t}$. This
+  way there are no two replicas of the same chunk type in the triples
+  subtree.
+  \item (chunks in Unique Subtree) We put chunks $mtch$ in leaves of
+  Unique Subtree.
+  \item (Element Subtree) For each element $e \in A\cup B\cup C$ we construct the
+  subtree consisting of a root of the element (attached to the root of
+  Cover Subtree), and with $|core(e)| + |unqCore(e)|$ leaves. We
+  \item (chunks in Element Subtree) We place chunks $core(e) \cup
+  unqCore(e)$ in leaves of each Element Subtree.
+  Please note that no two replicas of the same chunk
+  is placed in Cover Subtree.
+  \item (multiple assignment) We set the number of processed chunks by
+  each machine to 4.
+  \item (number of machines) We allow to spawn $n + \sum_{e\in A\cup
+    B\cup C}|core(e)|/3$ machines.
+  \item (threshold) We set threshold to $n\cdot (2 + 2 + 4) + \sum_{e\in A\cup
+    B\cup C}|core(e)|/3 \cdot (2 + 2 + 2)$
+\end{enumerate}
+
+\subsection{Properties of the construction}
+
+\begin{enumerate}
+  \item 
+\end{enumerate}
