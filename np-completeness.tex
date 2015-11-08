@@ -81,15 +81,36 @@ instance $I'$ in the following way:
   \item Each chunk type was covered
 \end{enumerate}
 
-\subsection{The reduction -- constructing 3DPM solution from VCEMB solution}
+\subsection{The reduction -- constructing 3DPM solution from VCEMB
+  solution}
 
-The properties of every solution of cost $\leq Thr$:
-\begin{enumerate}
-  \item (easy) No VM can spawn in Unique Subtree
-  \item (harder) Exactly $\sum_{e\in A\cup B\cup C}|core(e)|/3$ VMs
-  spawn in Cover Subtree and remaining $n$ VMs spawn in Matching
-  Subtree
-\end{enumerate}
+\begin{theorem}
+  Let's take any feasible solution $S$ to the instance $I$ of VCEMB
+  (as constructed above). If cost of $S$ is at most $Thr$, then no VM
+  is spawned in Unique Subtree.
+  \label{th:no-unique}
+\end{theorem}
+
+\begin{proof}
+  Let's assume the contrary, that is at least one VM spawned in Unique
+  Subtree. TODO.
+\end{proof}
+
+\begin{theorem}
+  Let's take any feasible solution $S$ to the instance $I$ of VCEMB
+  (as constructed above). If cost of $S$ is at most $Thr$, then
+  exactly $\sum_{e\in A\cup B\cup C}|core(e)|/3$ VMs spawn in Cover
+  Subtree and remaining $n$ VMs spawn in Matching Subtree
+\end{theorem}
+
+\begin{proof}
+  Let's assume the contrary. First, we use the theorem
+  \ref{th:no-unique}. Then we consider cases:
+  \begin{enumerate}
+    \item Less than $n$ VMs spawned in Matching Subtree. TODO.
+    \item More than $n$ VMs spawned in Matching Subtree. TODO.
+  \end{enumerate}
+\end{proof}
 
 Using above properties, we construct the 3DPM solution by taking each
 triple that has one VM in its corresponding Triple Subtree.
