@@ -10,7 +10,8 @@
 \subsection{Notation}
 
 (3DPM) We call $deg(e)$ the number of triples that contain element
-$e\in A\cup B\cup C$. We call $n=|A|$; please note that $n=|A|=|B|=|C|$.
+$e\in A\cup B\cup C$. We call $n=|A|$; please note that
+$n=|A|=|B|=|C|$. We call $t$ the number of triples.
 
 \subsection{The construction}
 
@@ -32,10 +33,10 @@ instance $I'$ in the following way:
   the chunk types that were added to make $deg(e)-1+a$ divisible by
   3.
   \item (tree) physical network consists of two parts: Matching Subtree
-  and Cover Subtree. Matching Subtree consists of two parts: Triples
-  Subtree and Unique Subtree. Cover Subtree consists of $|A\cup B\cup
+  and Cover Subtree. Matching Subtree consists of two parts: $t$ Triple
+  Subtries and Unique Subtree. Cover Subtree consists of $|A\cup B\cup
   C|$ Element Subtries.
-  \item (Triples Subtree) For each triple we create a subtree consisisting of
+  \item (Triple Subtree) For each triple we create a subtree consisisting of
   4 vertices: three leaves and one root of the triple. We attach the
   root of the triple to root of Matching Subtree.
   \item (Unique Subtree) We create $n$ leaves and $n$ middle nodes and
@@ -60,12 +61,35 @@ instance $I'$ in the following way:
   each machine to 4.
   \item (number of machines) We allow to spawn $n + \sum_{e\in A\cup
     B\cup C}|core(e)|/3$ machines.
-  \item (threshold) We set threshold to $n\cdot (2 + 2 + 4) + \sum_{e\in A\cup
-    B\cup C}|core(e)|/3 \cdot (2 + 2 + 2)$
+  \item (threshold) $Thr := n\cdot (0 + 2 + 2 + 4) + \sum_{e\in A\cup
+    B\cup C}|core(e)|/3 \cdot (0 + 2 + 2 + 2)$
 \end{enumerate}
 
-\subsection{Properties of the construction}
+\subsection{The reduction -- constructing VCEMB solution from 3DPM
+  solution}
 
 \begin{enumerate}
-  \item 
+  \item We put $n$ VMs in any leaf of such Triple Subtries that were
+  chosen in 3DPM solution. For each such VM we match to it 3 chunks
+  that are put in its Triple Subtree (it is sitting on one of them),
+  and we match it to any unmatched chunk in Unique Subtree.
+  \item We put $|core(e)|/3$ VMs in each Element Subtree. We match all remaining
+  chunks from this Element Subtree to those VMs in any possible
+  way.
+  \item Such a solution has cost $\leq Thr$ (easy to see by
+  summing costs of transporting chunks to each VM)
+  \item Each chunk type was covered
 \end{enumerate}
+
+\subsection{The reduction -- constructing 3DPM solution from VCEMB solution}
+
+The properties of every solution of cost $\leq Thr$:
+\begin{enumerate}
+  \item (easy) No VM can spawn in Unique Subtree
+  \item (harder) Exactly $\sum_{e\in A\cup B\cup C}|core(e)|/3$ VMs
+  spawn in Cover Subtree and remaining $n$ VMs spawn in Matching
+  Subtree
+\end{enumerate}
+
+Using above properties, we construct the 3DPM solution by taking each
+triple that has one VM in its corresponding Triple Subtree.
