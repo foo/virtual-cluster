@@ -117,9 +117,9 @@ In $S$ we have exactly
 Summing the total cost, we have:
 
 $cost(S) \geq costEstim(l) = 0 \cdot numVMs + l \cdot 12 + (t-l)\cdot 4 +
-(3\cdot numVMs - numVMs - 4\cdot l - (t-l))\cdot 2$
+(4\cdot numVMs - numVMs - 4\cdot l - (t-l))\cdot 2$
 
-It can be verified that for each $l$ we have that $cost(S) > Thr$. To
+It can be verified that for each $l$ we have that $costEstim(l) > Thr$. To
 do so, we first show that $costEstim(l+1) \geq costEstim(l)$, for
 $1\leq l \leq t-1$. Then we show that $costEstim(1) \geq Thr$.
 \end{proof}
@@ -132,11 +132,29 @@ $1\leq l \leq t-1$. Then we show that $costEstim(1) \geq Thr$.
 \end{theorem}
 
 \begin{proof}
-  Let's assume the contrary. First, we use the theorem
-  \ref{th:no-unique}. Then we consider cases:
+  Let's assume the contrary, that is that the number of VMs $M_{VM}$ spawned in
+  the Matching Subtree, and $|M_{VM}| \neq n$. We denote
+  $l=|M_{VM}|$. First, we use the theorem
+  \ref{th:no-unique} to restrict the placement of VMs in Unique Subtree. Then we consider cases:
   \begin{enumerate}
-    \item Less than $n$ VMs spawned in Matching Subtree. TODO.
-    \item More than $n$ VMs spawned in Matching Subtree. TODO.
+    \item $l \leq n$. In this case there are at least $u := 4 \cdot (n-l)$
+      chunks in the Matching Subtree that are not processed in the
+      Matching Subtree, each incurring transportation cost of $6$. We
+      lower-bound the cost of $S$ in the following way:
+
+$cost(S) \geq costEstim2(u) = 0\cdot numVMs + 4\cdot t + (4\cdot
+numVms - numVMs - t)\cdot 2$. 
+
+It can be verified that for each $u$ we have that $costEstim2(S) > Thr$. To
+do so, we first show that $costEstim2(u+1) \geq costEstim2(u)$, for
+$1\leq u \leq n-1$. Then we show that $costEstim2(1) \geq Thr$.
+
+    \item More than $n$ VMs spawned in Matching Subtree. Sketch of the
+      proof: the same as in previous enumerate: we count how many
+      chunks from Elements Subtree has to be processed outside of it
+      (incurring cost $6$);
+      we lower-bound the cost of remaining transportations as: $4$
+      cost of $t$ chunks in Unique Subtree, and $2$ for the rest of them.
   \end{enumerate}
 \end{proof}
 
