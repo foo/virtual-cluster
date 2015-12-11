@@ -59,7 +59,7 @@ instance $I'$ in the following way:
   is placed in Cover Subtree.
   \item (multiple assignment) We set the number of processed chunks by
   each machine to 4.
-  \item (number of machines) We allow to spawn $n + \sum_{e\in A\cup
+  \item (number of machines) We allow to spawn $numVMs := n + \sum_{e\in A\cup
     B\cup C}|core(e)|/3$ machines.
   \item (threshold) $Thr := n\cdot (0 + 2 + 2 + 4) + \sum_{e\in A\cup
     B\cup C}|core(e)|/3 \cdot (0 + 2 + 2 + 2)$
@@ -78,7 +78,7 @@ instance $I'$ in the following way:
   way.
   \item Such a solution has cost $\leq Thr$ (easy to see by
   summing costs of transporting chunks to each VM)
-  \item Each chunk type was covered
+  \item Feasibility of the constructed solution. Each chunk type was covered
 \end{enumerate}
 
 \subsection{The reduction -- constructing 3DPM solution from VCEMB
@@ -92,8 +92,36 @@ instance $I'$ in the following way:
 \end{theorem}
 
 \begin{proof}
-  Let's assume the contrary, that is at least one VM spawned in Unique
-  Subtree. TODO.
+  Let's assume the contrary, that in feasible solution $S$ at least
+  one VM spawned in Unique
+  Subtree. We show that in this case, the cost of solution $S$ is
+  greater than $Thr$. 
+
+  Let's name $l$ the number of VMs that was spawned in $S$ in Unique
+  Subtree. We know that $1 \leq l \leq t$. We denote the set of VMs
+  spawned in Unique Subtree as $U_{VM}$.
+
+In $S$ we have exactly
+  $4 \cdot numVMs$ chunk transportations, some incurring cost $0, 2,
+  4$ or $6$ (tree has edge-height of $3$). At most $numVMs$
+  transportations are of cost $0$. Note that leaves of Unique Subtree
+  are separated from other leaves of the tree by at least $4$ edges. 
+
+  Cost of chunk transportation to VM $v \in U_{VM}$ is at least $0 + 4
+  + 4 + 4$. The chunks in Unique Subtree are unique, therefore we need
+  to transport $t - l$ chunks to machines outside of the Unique
+  Subtree, incurring cost $4$ for each of the chunk.
+
+  We lower-bound the cost of each of remaining transportations as $2$.
+
+Summing the total cost, we have:
+
+$cost(S) \geq costEstim(l) = 0 \cdot numVMs + l \cdot 12 + (t-l)\cdot 4 +
+(3\cdot numVMs - numVMs - 4\cdot l - (t-l))\cdot 2$
+
+It can be verified that for each $l$ we have that $cost(S) > Thr$. To
+do so, we first show that $costEstim(l+1) \geq costEstim(l)$, for
+$1\leq l \leq t-1$. Then we show that $costEstim(1) \geq Thr$.
 \end{proof}
 
 \begin{theorem}
