@@ -1,4 +1,4 @@
-\section{(Journal version) NP-completeness of 2-replica variant}
+\section{(Journal version) NP-completeness of RS(2)+MA(4)+FP}
 
 \subsection{Intro}
 
@@ -11,59 +11,97 @@
 
 (3DPM) We call $deg(e)$ the number of triples that contain element
 $e\in A\cup B\cup C$. We call $n=|A|$; please note that
-$n=|A|=|B|=|C|$. We call $t$ the number of triples.
+$n=|A|=|B|=|C|$. We call $t$ the number of triples. We call $t(e)$ the
+set of triples containing element $e$. We call
+$\lbrace e_1(t), e_2(t), e_3(t) \rbrace$ the elements of triple $t$.
 
 \subsection{The construction}
 
 Let's take any instance $I$ of 3D Perfect Matching and create a VCEMB
 instance $I'$ in the following way:
 
+(chunk types) We construct the following chunk types:
+\begin{itemize}
+\item for each element $e\in A\cup B\cup C$ we construct $deg(e)$
+  chunk types. We will refer to such chunk types in two ways: either
+  the element of set $t(e)$ for some element $e$, or $e_i(t)$ for some
+  triple $t$ and index $i \in \{1,2,3\}$
+\item we construct $n$ chunk types named $u_1, \ldots, u_n$ (intuitions: we want to choose $n$ triples to our solution)
+\item (unique chunks) again, for each element $e\in A\cup B\cup C$ we construct additional $3\cdot(deg(e) - 1)$ chunks. We call this set $U(e)$.
+\end{itemize}
+
+(tree) 
+
 \begin{enumerate}
-  \item (core chunk types) for each element $e \in A\cup B\cup C$ we create
-  $deg(e)+a$ chunk types, where $a\in{0,1,2}$ is to make $deg(e)-1+a$
-  divisible by 3. We those chunk types $core(e)$ (both corresponding to
-  degree and those additional).
-  \item (unique chunk types) We create additional chunk types which
-  will have only one replica. We create $n$ chunk types and we call
-  this set $mtch$. For each element $e\in A\cup B\cup C$ we create $core(e)/3$
-  chunk types called $unqCore(e)$.
-  \item (convention for core chunk types naming) Let's say that $e$ is in triples
-  $t_1,t_2,\ldots,t_{deg(e)}$; then $core(e) = \{ e^{t_1}, e^{t_2},
-  \ldots, e^{t_{deg(e)}} \} \cup ADDITIONAL$, where $ADDITIONAL$ are
-  the chunk types that were added to make $deg(e)-1+a$ divisible by
-  3.
-  \item (tree) physical network consists of two parts: Matching Subtree
-  and Cover Subtree. Matching Subtree consists of two parts: $t$ Triple
-  Subtries and Unique Subtree. Cover Subtree consists of $|A\cup B\cup
-  C|$ Element Subtries.
-  \item (Triple Subtree) For each triple we create a subtree consisisting of
-  4 vertices: three leaves and one root of the triple. We attach the
-  root of the triple to root of Matching Subtree.
-  \item (Unique Subtree) We create $n$ leaves and $n$ middle nodes and
-  connect them to root of Matching Subtree. Note that we create middle
-  nodes not only to keep the tree balanced, but also to keep 
-  leaves of Unique Subtree far from other leaves of Unique Subtree.
-  \item (chunks in Triples Subtree) For each triple
-  $t = \langle a_i, b_j, c_k \rangle$ we put three chunks in leaves of
-  the corresponding gadget: $a_i^{t}, b_j^{t}, c_k^{t}$. This
-  way there are no two replicas of the same chunk type in the triples
-  subtree.
-  \item (chunks in Unique Subtree) We put chunks $mtch$ in leaves of
-  Unique Subtree.
-  \item (Element Subtree) For each element $e \in A\cup B\cup C$ we construct the
-  subtree consisting of a root of the element (attached to the root of
-  Cover Subtree), and with $|core(e)| + |unqCore(e)|$ leaves. We
-  \item (chunks in Element Subtree) We place chunks $core(e) \cup
-  unqCore(e)$ in leaves of each Element Subtree.
-  Please note that no two replicas of the same chunk
-  is placed in Cover Subtree.
-  \item (multiple assignment) We set the number of processed chunks by
-  each machine to 4.
-  \item (number of machines) We allow to spawn $numVMs := n + \sum_{e\in A\cup
-    B\cup C}|core(e)|/3$ machines.
-  \item (threshold) $Thr := n\cdot (0 + 2 + 2 + 4) + \sum_{e\in A\cup
-    B\cup C}|core(e)|/3 \cdot (0 + 2 + 2 + 2)$
+%\item (chunk types) There are the following chunk types: (1) For each
+%  element $e \in A\cup B\cup C$ we create $4\cdot deg(e)$ chunk types,
+%  where $a\in{0,1,2}$ is to make $deg(e)-1+a$ divisible by 3. We those
+%  chunk types $core(e)$ (both corresponding to degree and those
+%  additional).
+%\item (unique chunk types) We create additional chunk types which will
+%  have only one replica. We create $n$ chunk types and we call this
+%  set $mtch$. For each element $e\in A\cup B\cup C$ we create
+%  $core(e)/3$ chunk types called $unqCore(e)$.
+%\item (convention for core chunk types naming) Let's say that $e$ is
+%  in triples $t_1,t_2,\ldots,t_{deg(e)}$; then
+%  $core(e) = \{ e^{t_1}, e^{t_2}, \ldots, e^{t_{deg(e)}} \} \cup
+%  ADDITIONAL$,
+%  where $ADDITIONAL$ are the chunk types that were added to make
+%  $deg(e)-1+a$ divisible by 3.
+\item (tree) physical network consists of two parts: Matching Subtree
+  and Cover Subtree. Matching Subtree consists of two parts: $t$
+  Triple Gadgets and Unique Gadgets. Cover Subtree consists of
+  $n$ Element Gadgets.
+\item (Triple Gadget) For each triple we create a subtree
+  consisisting of 4 vertices: three leaves and one root of the
+  triple. We attach the root of the triple to root of Matching
+  Subtree.
+\item (Unique Gadget) We create $1$ leaf and $1$ middle node and
+  connect it to the root of Matching Subtree. Note that we create middle
+  nodes not only to keep the tree balanced, but also to keep leaves of
+  Unique Gadgets far from leaves of other Unique Gadgets.
+\item (Element Gadget) For each element $e \in A\cup B\cup C$ we
+  construct the subtree consisting of a root of the element (attached
+  to the root of Cover Subtree), and with $4\cdot(t(e)-1)+1$
+  leaves.
+
 \end{enumerate}
+
+(chunk placement)
+\begin{enumerate}
+\item (chunks in Triples Subtree) For each triple
+  $t$ we put three chunks in leaves of
+  the corresponding Triple Gadget: $e_1(t), e_2(t), e_3(t)$.
+\item (chunks in Unique Subtree) We put chunks $u_1,\ldots, u_n$ in leaves of
+  Unique Gadgets.
+\item (chunks in Element Gadget) For each element $e\in A\cup B\cup C$ we place chunks
+  $t(e)\cup U(e)$ in leaves of each Element Subtree.
+\end{enumerate}
+
+(other properties of the instance)
+\begin{enumerate}
+\item (multiple assignment) We set the number of processed chunks by
+  each machine to 4.
+\item (number of machines) We allow to spawn
+  $numVMs := n + \sum_{e}(deg(e)-1)$ machines.
+\item (threshold)
+  $Thr := n\cdot (0 + 2 + 2 + 4) + \sum_{e}(deg(e)-1)\cdot (0 + 2 + 2 + 2)$
+\end{enumerate}
+
+This ends the construction. The instance produced such way uses two replicas of each chunk type.
+
+\begin{obs}
+We have one instance of each chunk type in Matching Subtree.
+\end{obs}
+
+\begin{obs}
+We have one instance of each chunk type in Elements Subtree.
+\end{obs}
+
+\begin{corollary}
+We have at most two replicas of each chunk type in the substrate network.
+\end{corollary}
+
 
 \subsection{The reduction -- constructing VCEMB solution from 3DPM
   solution}
@@ -71,14 +109,14 @@ instance $I'$ in the following way:
 \begin{enumerate}
   \item We put $n$ VMs in any leaf of such Triple Subtries that were
   chosen in 3DPM solution. For each such VM we match to it 3 chunks
-  that are put in its Triple Subtree (it is sitting on one of them),
-  and we match it to any unmatched chunk in Unique Subtree.
-  \item We put $|core(e)|/3$ VMs in each Element Subtree. We match all remaining
+  that are put in its Triple Gadget (it is sitting on one of them),
+  and we match it to any unmatched chunk in any Unique Gadget
+  \item We put $deg(e)-1$ VMs in each Element Subtree. We match all remaining
   chunks from this Element Subtree to those VMs in any possible
   way.
   \item Such a solution has cost $\leq Thr$ (easy to see by
   summing costs of transporting chunks to each VM)
-  \item Feasibility of the constructed solution. Each chunk type was covered
+  \item Feasibility of the constructed solution: each chunk type was covered.
 \end{enumerate}
 
 \subsection{The reduction -- constructing 3DPM solution from VCEMB
@@ -149,22 +187,27 @@ It can be verified that for each $u$ we have that $costEstim2(S) > Thr$. To
 do so, we first show that $costEstim2(u+1) \geq costEstim2(u)$, for
 $1\leq u \leq n-1$. Then we show that $costEstim2(1) \geq Thr$.
 
-    \item More than $n$ VMs spawned in Matching Subtree. Sketch of the
-      proof: the same as in previous enumerate: we count how many
-      chunks from Elements Subtree has to be processed outside of it
-      (incurring cost $6$);
-      we lower-bound the cost of remaining transportations as: $4$
-      cost of $t$ chunks in Unique Subtree, and $2$ for the rest of them.
+    \item More than $n$ VMs spawned in Matching Subtree. In this case we use the fact that there are not enough VMs in Elements Subtree.
+
   \end{enumerate}
 \end{proof}
 
 Using above properties, we construct the 3DPM solution by taking each
 triple that has one VM in its corresponding Triple Subtree.
 
+TODO: pictures!
+
+\section{(Journal version) NP-completeness of RS(2)+NI+BW+FP}
+
+\subsection{The construction}
+
 \begin{enumerate}
-\item TODO: Pictures of the network graph in MA proof
-\item TODO: Pictures of the network graph in NI proof
+\item the network is reduced network from previous proof (no Unique Subtree, no unique chunks in Elements Subtree)
+\item Chunks are placed the same way, with an exception that we have no unique chunk types
+\item Set the bandwidth: at most 3 machines i
 \item TODO: Description of the construction in NI proof
 \item TODO: Proof the lemmas in MA proof
 \item TODO: Formulate and proof the bandwidth lemma in NI proof
 \end{enumerate}
+
+\subsection{Properties of the construction}
