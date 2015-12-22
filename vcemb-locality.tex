@@ -2320,7 +2320,7 @@ active \TripleGadgets.
 \section{Two replicas without multiple assignment}
 
 
-\subsection{The construction}
+\subsection{The substrate network}
 
 The network is reduced network from previous proof (no \UnqSubtree, no unique chunks in Elements Subtree).
 Chunks are placed the same way, with an exception that we have no unique chunk types.
@@ -2330,7 +2330,7 @@ We use bandwidth constraints of form: $\Band(k) := k\cdot(\numNodes - k)$. Namel
 
 We set $\CostTrans = \infty$, and $\CostCom = 1$, and we host only one node per machine.
 
-\subsection{Properties of the construction}
+\subsection{Properties of the substrate network}
 
 \begin{lemma}
 Assume we have a VCEMB instance with a subtree $T$ with $l$ leaves and the bandwidth capacity on uplink of $T$ is $\Band(k)$. Then in any feasible solution the number of nodes spawned in $T$ (we name it $s$) satisfies:
@@ -2345,9 +2345,30 @@ Let's define the remaining bandwidth on uplink of T: $\remainBw(s) := \Band(k)-u
 Every feasible solution has $\remainBw(s) \geq 0$, which is true for $s \leq k \vee n-s\leq k$.
 \end{proof}
 
+Next, we show how to precisely control the number of nodes in any subtree.
+
 \begin{lemma}
 (work in progress)
+\begin{enumerate}
+\item on top level: we know that we place $\numNodes$ nodes in the subtree
+\item we have $k$ children of root, each having bandwidth of $\Band(a_i)$
+\item sum of $a_i$ is $n$
+\item generalize to lower parts of the tree, where we have $l \leq \numNodes$ nodes to spawn (but still we control the total number of nodes, and $a_i$'s sum to $l$)
+\end{enumerate}
 \end{lemma}
 
+\begin{proof}
+\begin{enumerate}
+\item show that only one solution to $\remainBw(s)$ exist
+\end{enumerate}
+\end{proof}
+
+\subsection{The reduction}
+
+\begin{enumerate}
+\item calculate $\Thr$
+\item constructing VCEMB solution from the matching solution. Show that the cost is indeed $\Thr$.
+\item constructing matching solution from VCEMB instance. Feasibility of the matching: every chunk type processed by machine that sits on top of it. One chunk type processed in Matching Subtree. We choose at most $\numNodes$ triple gadgets to be active
+\end{enumerate}
 
 \end{document}
