@@ -2070,7 +2070,7 @@ We now show that the 2-replica selection problem is even NP-hard without
 capacity constraints. 
 In particular, we consider the problem variant $\FP+\RS(2)+\MA(4)$
 with two replicas and assignment factor four.
-There are not capacity constraints on links, and no extra, idling nodes.
+There are not capacity constraints on links, and no extra, idling nodes. \maciek{no idle nodes were introduced earlier.}
 
 The reduction is from 
  \emph{3D Perfect Matching}~\cite{3dmatch},
@@ -2103,6 +2103,8 @@ We call $m$ the number of triples.
 
 \subsubsection{The Construction}
 
+\maciek{Picture of how chunks are used twice?}
+
 Let's take any instance $I$ of $\TDM$ and create a $\FP+\RS(2)+\MA(4)$
 instance $I'$ in the following way:
 
@@ -2110,14 +2112,13 @@ instance $I'$ in the following way:
 We construct the following chunk types:
 \begin{itemize}
 \item For each element $e\in X\cup Y\cup Z$, we construct $\deg(e)$
-  chunk types. We will refer to such chunk types in two ways: either
+  chunk types with two replicas. We refer to such chunk types in two ways: either
   the element of set $t(e)$ for some element $e$, or $e_i(t)$ for some
   triple $t$ and index $i \in \{1,2,3\}$.
-\item We construct $n$ chunk types named $u_1, \ldots, u_n$. 
-Intuitively, these will be used to 
-choose the $n$ triples of our solution.
+\item We construct $n$ chunk types named $u_1, \ldots, u_n$.
+  Intuitively, we want some $n$ nodes to process one of these chunks and $3$ chunks from \TripleGadget
 \item \emph{Unique Chunks:} For each element $e\in X\cup Y\cup Z$, we 
-will construct additional $3\cdot(\deg(e) - 1)$ \emph{unique chunks}. 
+ construct additional $3\cdot(\deg(e) - 1)$ \emph{unique chunks}. 
 We call this set $U(e)$.
 \end{itemize}
 
@@ -2319,7 +2320,6 @@ active \TripleGadgets.
 
 \section{Two replicas without multiple assignment}
 
-
 \subsection{The substrate network}
 
 The network is reduced network from previous proof (no \UnqSubtree, no unique chunks in Elements Subtree).
@@ -2368,6 +2368,19 @@ Notice that this assumption holds for the whole tree with $k := \numNodes$. Coro
 \item In every feasible solution there are $\sum_e (\deg(e)-1)$ nodes spawned in {\CoverSubtree}.
 \item In every feasible solution there are $\deg(e)-1$ nodes spawned in {\ElGadget} of element $e$.
 \end{enumerate}
+
+\subsection{The Construction}
+
+\textbf{Chunk Types.} 
+We construct the following chunk types:
+\begin{itemize}
+\item For each element $e\in X\cup Y\cup Z$, we construct $\deg(e)$
+  chunk types with two replicas. We refer to such chunk types in two ways: either
+  the element of set $t(e)$ for some element $e$, or $e_i(t)$ for some
+  triple $t$ and index $i \in \{1,2,3\}$.
+\end{itemize}
+
+
 
 \subsection{The reduction}
 
