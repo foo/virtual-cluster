@@ -108,10 +108,19 @@
 \newcommand{\CostEstimOne}{\textit{costEstim}}
 \newcommand{\CostEstimTwo}{\textit{costEstim2}}
 \newcommand{\numNodes}{\textit{nodes}}
-\newcommand{\UnqSubtree}{\textit{Unique Subtree}}
-\newcommand{\MatchSubtree}{\textit{Matching Subtree}}
-\newcommand{\SpawnedUnqSubtree}{\textit{nodes(\UnqSubtree)}}
-\newcommand{\SpawnedMatchSubtree}{\textit{nodes(\MatchSubtree)}}
+
+\newcommand{\UnqSubtree}{{{\emph Unique Subtree}}}
+\newcommand{\MatchSubtree}{{\emph{Matching Subtree}}}
+\newcommand{\CoverSubtree}{{\emph{Cover Subtree}}}
+\newcommand{\TripleGadget}{{\emph{Triple Gadget}}}
+\newcommand{\TripleGadgets}{{\emph{Triple Gadgets}}}
+\newcommand{\UnqGadget}{{\emph{Unique Gadget}}}
+\newcommand{\UnqGadgets}{{\emph{Unique Gadgets}}}
+\newcommand{\ElGadget}{{\emph{Element Gadget}}}
+\newcommand{\ElGadgets}{{\emph{Element Gadgets}}}
+
+\newcommand{\SpawnedUnqSubtree}{\textit{nodesInUniqueSub}}
+\newcommand{\SpawnedMatchSubtree}{\textit{nodesInMatchingSub}}
 
 \newtheorem{defn}{Definition}
 \newtheorem{obs}{Observation}
@@ -2132,17 +2141,17 @@ A matching subtree
   of two parts: $t$
   triple gadgets and unique gadgets. Cover subtrees consist of
   $n$ element gadgets.
-\item \emph{Triple Gadget:} For each triple, we create a subtree
+\item \TripleGadget: For each triple, we create a subtree
   consisisting of four vertices: three leaves and one triple root. 
   We attach the root of the triple to the root of matching
   subtree.
-\item \emph{Unique Gadget:} We create one leaf and one 
+\item \UnqGadget: We create one leaf and one 
 middle node and
   connect it to the root of the matching subtree. 
   Note that we create middle
   nodes not only to keep the tree balanced, but also to keep leaves of
   unique gadgets far from leaves of other unique gadgets.
-\item \emph{Element Gadget:} For each element $e \in X\cup Y\cup Z$, we
+\item \ElGadget: For each element $e \in X\cup Y\cup Z$, we
   construct the subtree consisting of a root of the element (attached
   to the root of cover subtree), and with $4\cdot(t(e)-1)+1$
   leaves.
@@ -2153,9 +2162,9 @@ The chunks are placed as follows:
 \begin{enumerate}
 \item \emph{Chunks in triples subtree:} For each triple
   $t$ we put three chunks in leaves of
-  the corresponding Triple Gadget: $e_1(t), e_2(t), e_3(t)$.
+  the corresponding \TripleGadget: $e_1(t), e_2(t), e_3(t)$.
 \item \emph{Chunks in unique subtree:} We put chunks $u_1,\ldots, u_n$ in leaves of
-  Unique Gadgets.
+  \UnqGadgets.
 \item \emph{Chunks in element gadget:} For each element $e\in X\cup Y\cup Z$, 
 we place chunks
   $t(e)\cup U(e)$ in leaves of each element subtree.
@@ -2174,7 +2183,7 @@ we place chunks
 This ends the construction. The instance produced such way uses two replicas of each chunk type.
 
 \begin{obs}
-We have one instance of each chunk type in Matching Subtree.
+We have one instance of each chunk type in \MatchSubtree.
 \end{obs}
 
 \begin{obs}
@@ -2190,8 +2199,8 @@ We have at most two replicas of each chunk type in the substrate network.
 \begin{enumerate}
   \item We put $n$  nodes in any leaf of such Triple Subtries that were
   chosen in 3DPM solution. For each such node we match to it 3 chunks
-  that are put in its Triple Gadget (it is sitting on one of them),
-  and we match it to any unmatched chunk in any Unique Gadget
+  that are put in its \TripleGadget (it is sitting on one of them),
+  and we match it to any unmatched chunk in any \UnqGadget
   \item We put $\deg(e)-1$ nodes in each Element Subtree. We match all remaining
   chunks from this Element Subtree to those nodes in any possible
   way.
@@ -2206,29 +2215,29 @@ We have at most two replicas of each chunk type in the substrate network.
 \begin{theorem}
   Let's take any feasible solution $\Solution$ to the instance $I$ of VCEMB
   (as constructed above). If cost of $\Solution$ is at most $\Thr$, then no node
-  is spawned in Unique Subtree.
+  is spawned in \UnqSubtree.
   \label{th:no-unique}
 \end{theorem}
 
 \begin{proof}
   Let's assume the contrary, that in feasible solution $\Solution$ at least
-  one node spawned in Unique Subtree. We show that in this case, the
+  one node spawned in \UnqSubtree. We show that in this case, the
   cost of solution $\Solution$ is greater than $\Thr$.
 
   Let's name $l$ the number of node that was spawned in $\Solution$ in Unique
   Subtree. We know that $1 \leq l \leq t$. We denote the set of nodes
-  spawned in Unique Subtree as $\SpawnedUnqSubtree$.
+  spawned in {\UnqSubtree} as $\SpawnedUnqSubtree$.
 
   In $\Solution$ we have exactly $4 \cdot \numNodes$ chunk transportations, some
   incurring cost $0, 2, 4$ or $6$ (tree has edge-height of $3$). At
   most $\numNodes$ transportations are of cost $0$. Note that leaves of
-  Unique Subtree are separated from other leaves of the tree by at
+  \UnqSubtree are separated from other leaves of the tree by at
   least $4$ edges.
 
   Cost of chunk transportation to nodes $v \in \SpawnedUnqSubtree$ is at least
-  $0 + 4 + 4 + 4$. The chunks in Unique Subtree are unique, therefore
+  $0 + 4 + 4 + 4$. The chunks in \UnqSubtree are unique, therefore
   we need to transport $t - l$ chunks to machines outside of the
-  Unique Subtree, incurring cost $4$ for each of the chunk.
+  \UnqSubtree, incurring cost $4$ for each of the chunk.
 
   We lower-bound the cost of each of remaining transportations as $2$.
 
@@ -2246,20 +2255,20 @@ We have at most two replicas of each chunk type in the substrate network.
 \begin{theorem}
   Let's take any feasible solution $\Solution$ to the instance $I$ of VCEMB
   (as constructed above). If cost of $\Solution$ is at most $\Thr$, then
-  exactly $n$ nodes spawn in Matching Subtree.
+  exactly $n$ nodes spawn in \MatchSubtree.
   \label{th:np-balance}
 \end{theorem}
 
 \begin{proof}
   Let's assume the contrary, that is that the number of nodes $\SpawnedMatchSubtree$
-  spawned in the Matching Subtree, and $|\SpawnedMatchSubtree| \neq n$. We denote
+  spawned in the \MatchSubtree, and $|\SpawnedMatchSubtree| \neq n$. We denote
   $l=|\SpawnedMatchSubtree|$. First, we use the theorem \ref{th:no-unique} to
-  restrict the placement of nodes in Unique Subtree. Then we consider
+  restrict the placement of nodes in \UnqSubtree. Then we consider
   cases:
   \begin{enumerate}
   \item $l \leq n$. In this case there are at least
-    $u := 4 \cdot (n-l)$ chunks in the Matching Subtree that are not
-    processed in the Matching Subtree, each incurring transportation
+    $u := 4 \cdot (n-l)$ chunks in the {\MatchSubtree} that are not
+    processed in the {\MatchSubtree}, each incurring transportation
     cost of $6$. We lower-bound the cost of $\Solution$ in the following way:
 
     $\CostSol(S) \geq \CostEstimTwo(u) = 0\cdot \numNodes + 4\cdot t + (4\cdot
@@ -2270,8 +2279,8 @@ We have at most two replicas of each chunk type in the substrate network.
     $\CostEstimTwo(u+1) \geq \CostEstimTwo(u)$, for $1\leq u \leq n-1$. Then
     we show that $\CostEstimTwo(1) \geq \Thr$.
 
-  \item More than $n$ nodes spawned in Matching Subtree. In this case we
-    use the fact that there are not enough nodess in Cover Subtree, and
+  \item More than $n$ nodes spawned in \MatchSubtree. In this case we
+    use the fact that there are not enough nodess in {\CoverSubtree}, and
     we need to transport over $6$ hops at least 3 unique chunks for
     each node missing.
 
@@ -2281,22 +2290,22 @@ We have at most two replicas of each chunk type in the substrate network.
 (construction of the matching problem solution)
 
 Let's take any feasible solution $\Solution$ to the instance described
-above. We call the Triple Gadget \textit{active}, if we have a node spawned in
-any leaf of it. We call nodes in active Triple Gadgets the \ActiveNodes. We
+above. We call the {\TripleGadget} \textit{active}, if we have a node spawned in
+any leaf of it. We call nodes in active {\TripleGadgets} the \ActiveNodes. We
 construct our matching solution $M_S$ from triples that correspond to
-active Triple Gadgets.
+active \TripleGadgets.
 
 \begin{lemma}
   If $\Solution$ is feasible, then $M_S$ is feasible.
 \end{lemma}
 
 \begin{proof}
-\item Exactly $n$ Triple Gadgets are active (\ref{np-balance}).
-\item Note that in $\Solution$ only one node is spawned in Active Triple Gadget.
-\item Each \ActiveNode $v$ processes the 3 chunks that are placed in
-  $v$'s Triple Gadget, as well as one chunk in Unique Gadget.
+\item Exactly $n$ {\TripleGadgets} are active (\ref{np-balance}).
+\item Note that in $\Solution$ only one node is spawned in Active \TripleGadget.
+\item Each {\ActiveNode} $v$ processes the 3 chunks that are placed in
+  $v$'s \TripleGadget, as well as one chunk in \UnqGadget.
 \item Every chunk type was covered
-\item In each Element Gadget for element $e$, one chunk instance of
+\item In each {\ElGadget} for element $e$, one chunk instance of
   set $t(e)$ was not processed. Let's call this chunk instance
   $\Unmatched(e)$. Let's call $\Unmatched = \cup_e \Unmatched(e)$. We have that $|\Unmatched| = n$
 \item Set $\Unmatched$ was covered by \ActiveNodes
@@ -2308,7 +2317,7 @@ active Triple Gadgets.
 \subsection{The construction}
 
 \begin{enumerate}
-\item the network is reduced network from previous proof (no Unique Subtree, no unique chunks in Elements Subtree)
+\item the network is reduced network from previous proof (no \UnqSubtree, no unique chunks in Elements Subtree)
 \item Chunks are placed the same way, with an exception that we have no unique chunk types
 \item Set the bandwidth: at most 3 machines i
 \item TODO: Description of the construction in NI proof
