@@ -160,9 +160,9 @@ Replica Aware Virtual Cluster Embeddings}}
 \title{Data Locality and Replica Aware\\Virtual Cluster Embeddings}
 
 
-\author{Carlo Fuerst$^{1,*}$ \quad Maciej Pacut$^{2,*}$ \quad Stefan Schmid$^3$\\
+\author{Carlo Fuerst$^{1}$ \quad Maciej Pacut$^{2}$ \quad Stefan Schmid$^3$\\
 {\small $^1$ TU Berlin, Germany \quad $^2$ University of Wroclaw, Poland \quad $^3$ 
-Aalborg University, Denmark} \\ {\small $^*$ authors contributed equally to this work}}
+Aalborg University, Denmark}}
 
 %\author{authors}
 
@@ -1034,13 +1034,9 @@ That is, we take the optimal cost
 the right subtree $\textsc{Ri}(T')$ of $T'$ and $x-r$ nodes in left subtree $\textsc{Le}(T')$ of
 $T'$. Given the cheapest combination, we add the bandwidth requirements
 on the uplink of $T'$ to generate the overall costs for placing $x$ nodes in $T'$.
-
-
-
-$$f(T',x) =   \min_{0\leq r \leq x} \{  f\left(\textsc{Le}(T'),
-x-r\right) +
-f\left(\textsc{Ri}(T'), r\right) \} + bw(T',x)$$
-
+Therefore, $f(T',x) =   \min_{0\leq r \leq x}$ $ \{  f\left(\textsc{Le}(T'),
+x-r\right) +$ $
+f\left(\textsc{Ri}(T'), r\right) \} + bw(T',x)$.
 Again, we set $f(T',x)$ to infinity if the required bandwidth
 $bw$ exceeds the capacity $\capacity$ of the uplink of $T'$.
 
@@ -1622,8 +1618,9 @@ problem NP-hard.
 %In particular, it would be interesting to shed light on the possible approximation algorithms
 %for our NP-hard problems.
 
-\textbf{Acknowledgments.} We would like to thank the anonymous reviewers and our shepherd Kihong Park.
-Research in part supported by Polish National Science Centre grant DEC-2013/09/B/ST6/01538, the EU project Bigfoot FP7-ICT-317858,
+\textbf{Acknowledgments.} We would like to thank 
+Paolo Costa for many discussions. 
+This research is in part supported by Polish National Science Centre grant DEC-2013/09/B/ST6/01538, the EU project Bigfoot FP7-ICT-317858,
 as well as by the German BMBF Software Campus grant 01IS12056.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1636,10 +1633,11 @@ as well as by the German BMBF Software Campus grant 01IS12056.
 %\begin{appendix}
 
 
-\section{Replica selection is hard}\label{ap:tworep}
+\section{Excursion: A Detailed Study of\\Replica Selection Hardness}\label{ap:tworep}
 
 We have seen that replica selection flexibilities can render embeddings computationally hard.
-In the following, we will explore the minimal requirements for rendering replica selection hard.
+We will now have a more detailed look at this hardness result
+and explore the minimal requirements for rendering replica selection hard.
 In particular, we will show that already two replicas for each chunk type are sufficient to
 introduce intractability.
 
@@ -1673,6 +1671,8 @@ Subsequently, we show that the 2-replica variant $\RS(2)$ is hard.
 
 % TODO
 %\subsection{Three replicas are hard ($\CC+\FP+\RS+\BW$)}\label{ssec:three}
+
+\subsection{An Alternative Hardness Proof}
 
 We prove that $\CC+\RS+\FP+\BW$ is NP-hard by reduction from the \emph{Boolean Satisfiability Problem} ($\SAT$).
 Since $\SAT$ is a decision
@@ -1829,8 +1829,7 @@ mapping of nodes on vertices labeled $x_1$ and $y_1$, and which contain the
 same chunk $c_1$.
 
 
-\subsection{Two replicas are hard
-  ($\RS(2)+\FP+\CC+\BW$)}\label{ssec:two}
+\subsection{Hardness for 2 Replicas}\label{ssec:two}
 
 Our results so far indicate that dealing with replication can be challenging.
 However, all our hardness proofs concerned scenarios with three replicas,
@@ -2040,88 +2039,34 @@ $1$ (positive subtree) or $0$ (negative subtree).
 %  pointing into the previous proof. Even if we did this proof, nobody
 %  would read that. I can do it though.}
 %\end{comment}
-\section{The Bandwidth Lemmas}
 
+\subsection{Two Replicas without Bandwidth Constraints}
 
-\begin{lemma}[Bandwidth Lemma]\label{lem:bandwidth-lemma}
-  Let $\clauses$ and $\variables > 4$ be two arbitrary positive integers. Let $a_1, a_2, \ldots,
-  a_{\variables}$ be a sequence of $\variables$ integers which adds up to $\clauses \cdot \variables$. Also, for
-  each $i$ we have $a_i \leq 2 \cdot \clauses$. Then it holds that if
-  $$ \forall_i:~~ a_i \cdot (\clauses \cdot \variables - a_i) \leq \clauses \cdot (\clauses \cdot \variables -
-  \clauses), $$
-\noindent  then for each $i$: $a_i = \clauses$.
-\end{lemma}
-\begin{proof}
-  By contradiction. Let us assume
-that there exists an index $k$ such that
-$a_k \neq \clauses$. Then we can distinguish between two cases:
-either $a_k<\clauses$ or
-$a_k>\clauses$.
+We now show that the 2-replica selection problem is even NP-hard without
+capacity constraints. 
+In particular, we consider the problem variant $\FP+\RS(2)+\MA(4)$
+with two replicas and assignment factor four.
+There are not capacity constraints on links, and no extra, idling nodes.
 
-\textbf{Case $a_k<\clauses$:} If there exists a $k$ with $a_k<\clauses$,
-due to the fact that the sequence adds up to $\clauses \cdot \variables$,
-there must also exist a $k'$ such that $a_{k'}<\clauses$ (by a simple
-pigeon hole principle). Thus, this case can
-also be reduced to the second case (Case $a_k>\clauses$) proved
-next.
+The reduction is from 
+ \emph{3D Perfect Matching}~\cite{3dmatch},
+ short $\TDM$. 
+Recall that in
+$\TDM$, we are given three finite and disjoint
+sets $X$, $Y$, and $Z$ of cardinality $k$, as well as a subset of triples $T\subset
+X \times Y \times Z$.  Set $M \subseteq T$ is a 3-dimensional matching
+if and only if, for any two distinct triples $t_1=(x_1, y_1, z_1) \in M$
+and $t_2=(x_2, y_2, z_2) \in M$, it holds that $x_1\neq x_2$, $y_1\neq
+y_2$, and $z_1\neq z_2$. Our goal is to decide if we can construct
+a $M \subseteq T$ which is \emph{perfect}, that is, a subset which covers all
+elements of $X \times Y \times Z$ exactly once.
 
-\textbf{Case $a_k>\clauses$:} Since it also holds that $a_k < 2\clauses$,
-$a_k$ must be of the form $\clauses + x$ for $x \in [1, \ldots, \clauses]$.
-Let us consider the (bandwidth) inequality:
-$$ (\clauses + x) \cdot (\clauses \cdot \variables - \clauses - x) \leq \clauses \cdot (\clauses \cdot \variables - x) $$
-
-This can be transformed to:
-
-$$ 0 \leq x(x - (\clauses \cdot (\variables - 2))) $$
-
-The equation holds for $x \leq 0$ or $x \geq \clauses \cdot (\variables - 2)$,
-and no
-positive $x \leq \clauses$ can satisfy this inequality for $\variables > 4$. Contradiction.
-\end{proof}
-\begin{lemma}[Extended Bandwidth Lemma]\label{lem:bandwidth-lemma-extended}
-%\maciek{this lemma might be expressed more clearly if we use two
-%  sequences instead of one - now $a_1, \ldots, a_{\variables}$
-%  correspond to number of VMs in variable gadgets and remaining of the
-%  sequence corresponds to number of VMs in clause gadgets.}
-  Let $\clauses$ and $\variables > 4$ be two arbitrary positive integers. Let $a_1, a_2, \ldots,
-  a_{\clauses}$ and $b_1, b_2, \ldots,
-  b_{\variables}$ be two sequences of integers (numbers of nodes in clause and 
-in variable gadgets). The sum of all elements in $a$ and $b$ adds up to
-  $\clauses \cdot \variables + \clauses \cdot 2$ (number of nodes). Also
-  we have $a_i \leq 2 \cdot \clauses$
-  (variable gadget node hosting capacity -- equal to number of leaves),
-  and $b_i \leq 3$ (clause gadget node hosting capacity). If uplink of variable 
-gadget does not exceed bandwidth constraints
-  $$ \forall_{i\leq\variables}:~~ b_i \cdot (\clauses \cdot \variables
-  + 2\cdot \clauses- b_i) \leq \clauses \cdot (\clauses \cdot \variables -
-  \clauses + 2 \cdot \clauses), $$
-and uplink of clause gadget does not exceed bandwidth constraints
-$$ \forall_{i\leq\clauses}:~~ a_i \cdot (\clauses \cdot \variables + 2 \cdot \clauses - a_i) \leq 2 \cdot (\clauses \cdot \variables -
-  2 \cdot \clauses - 2), $$
-
-\noindent  then for each $i\leq \variables$: $b_i = \clauses$ and for
-each $i\leq\clauses$: $a_i = 2$ (we have expected number of nodes in variable 
-and clause gadgets).
-\end{lemma}
-
-\section{(Journal version) NP-completeness of RS(2)+MA(4)+FP}
-
-\subsection{Intro}
-
-\begin{enumerate}
-  \item Needed properties: FP, RS(2), MA(4)
-  \item Eliminated any need for bandwidth constraints, node interconnect and idle machines
-\end{enumerate}
-
-\subsection{Notation}
-
-(3DPM) We call $deg(e)$ the number of triples that contain element
-$e\in A\cup B\cup C$. We call $n=|A|$; please note that
-$n=|A|=|B|=|C|$. We call $t$ the number of triples. We call $t(e)$ the
+We use $\deg(e)$ to refer to the number of triples that contain element
+$e\in X\cup Y\cup Z$. We define $n=|X|=|Y|=|Z|$. 
+We use $t$ for the number of triples. We call $t(e)$ the
 set of triples containing element $e$. We call
-$\lbrace e_1(t), e_2(t), e_3(t) \rbrace$ the elements of triple $t$. We call $m$ the number of triples.
-
-\subsection{The construction}
+$\lbrace e_1(t), e_2(t), e_3(t) \rbrace$ the elements of triple $t$. 
+We call $m$ the number of triples.
 
 \begin{figure}[t]
 \centering
@@ -2132,21 +2077,28 @@ $\lbrace e_1(t), e_2(t), e_3(t) \rbrace$ the elements of triple $t$. We call $m$
 \end{figure}
 
 
-Let's take any instance $I$ of 3D Perfect Matching and create a VCEMB
+\subsubsection{The Construction}
+
+Let's take any instance $I$ of $\TDM$ and create a $\FP+\RS(2)+\MA(4)$
 instance $I'$ in the following way:
 
-(chunk types) We construct the following chunk types:
+\textbf{Chunk Types.} 
+We construct the following chunk types:
 \begin{itemize}
-\item for each element $e\in A\cup B\cup C$ we construct $deg(e)$
+\item For each element $e\in X\cup Y\cup Z$, we construct $\deg(e)$
   chunk types. We will refer to such chunk types in two ways: either
   the element of set $t(e)$ for some element $e$, or $e_i(t)$ for some
-  triple $t$ and index $i \in \{1,2,3\}$
-\item we construct $n$ chunk types named $u_1, \ldots, u_n$ (intuitions: we want to choose $n$ triples to our solution)
-\item (unique chunks) again, for each element $e\in A\cup B\cup C$ we construct additional $3\cdot(deg(e) - 1)$ chunks. We call this set $U(e)$.
+  triple $t$ and index $i \in \{1,2,3\}$.
+\item We construct $n$ chunk types named $u_1, \ldots, u_n$. 
+Intuitively, these will be used to 
+choose the $n$ triples of our solution.
+\item \emph{Unique Chunks:} For each element $e\in X\cup Y\cup Z$, we 
+will construct additional $3\cdot(\deg(e) - 1)$ \emph{unique chunks}. 
+We call this set $U(e)$.
 \end{itemize}
 
-(tree) 
-
+\textbf{Tree.} 
+We consider the following tree.
 \begin{enumerate}
 %\item (chunk types) There are the following chunk types: (1) For each
 %  element $e \in A\cup B\cup C$ we create $4\cdot deg(e)$ chunk types,
@@ -2163,44 +2115,49 @@ instance $I'$ in the following way:
 %  ADDITIONAL$,
 %  where $ADDITIONAL$ are the chunk types that were added to make
 %  $deg(e)-1+a$ divisible by 3.
-\item (tree) physical network consists of two parts: Matching Subtree
-  and Cover Subtree. Matching Subtree consists of two parts: $t$
-  Triple Gadgets and Unique Gadgets. Cover Subtree consists of
-  $n$ Element Gadgets.
-\item (Triple Gadget) For each triple we create a subtree
-  consisisting of 4 vertices: three leaves and one root of the
-  triple. We attach the root of the triple to root of Matching
-  Subtree.
-\item (Unique Gadget) We create $1$ leaf and $1$ middle node and
-  connect it to the root of Matching Subtree. Note that we create middle
+\item The physical network consists of two parts: 
+A matching subtree
+  and a cover subtree. Matching subtrees consist 
+  of two parts: $t$
+  triple gadgets and unique gadgets. Cover subtrees consist of
+  $n$ element gadgets.
+\item \emph{Triple Gadget:} For each triple, we create a subtree
+  consisisting of four vertices: three leaves and one triple root. 
+  We attach the root of the triple to the root of matching
+  subtree.
+\item \emph{Unique Gadget:} We create one leaf and one 
+middle node and
+  connect it to the root of the matching subtree. 
+  Note that we create middle
   nodes not only to keep the tree balanced, but also to keep leaves of
-  Unique Gadgets far from leaves of other Unique Gadgets.
-\item (Element Gadget) For each element $e \in A\cup B\cup C$ we
+  unique gadgets far from leaves of other unique gadgets.
+\item \emph{Element Gadget:} For each element $e \in X\cup Y\cup Z$, we
   construct the subtree consisting of a root of the element (attached
-  to the root of Cover Subtree), and with $4\cdot(t(e)-1)+1$
+  to the root of cover subtree), and with $4\cdot(t(e)-1)+1$
   leaves.
-
 \end{enumerate}
 
-(chunk placement)
+\textbf{Chunk Placement}.
+The chunks are placed as follows:
 \begin{enumerate}
-\item (chunks in Triples Subtree) For each triple
+\item \emph{Chunks in triples subtree:} For each triple
   $t$ we put three chunks in leaves of
   the corresponding Triple Gadget: $e_1(t), e_2(t), e_3(t)$.
-\item (chunks in Unique Subtree) We put chunks $u_1,\ldots, u_n$ in leaves of
+\item \emph{Chunks in unique subtree:} We put chunks $u_1,\ldots, u_n$ in leaves of
   Unique Gadgets.
-\item (chunks in Element Gadget) For each element $e\in A\cup B\cup C$ we place chunks
-  $t(e)\cup U(e)$ in leaves of each Element Subtree.
+\item \emph{Chunks in element gadget:} For each element $e\in X\cup Y\cup Z$, 
+we place chunks
+  $t(e)\cup U(e)$ in leaves of each element subtree.
 \end{enumerate}
 
-(other properties of the instance)
+\textbf{Other properties of the instance.}
 \begin{enumerate}
-\item (multiple assignment) We set the number of processed chunks by
+\item \emph{Multiple assignment:} We set the number of processed chunks by
   each machine to 4.
-\item (number of machines) We allow to spawn
-  $numVMs := n + \sum_{e}(deg(e)-1)$ machines.
-\item (threshold)
-  $Thr := n\cdot (0 + 2 + 2 + 4) + \sum_{e}(deg(e)-1)\cdot (0 + 2 + 2 + 2)$
+\item \emph{Number of machines:} We allow to spawn
+  $numVMs := n + \sum_{e}(\deg(e)-1)$ machines.
+\item \emph{Threshold:}
+  $Thr := n\cdot (0 + 2 + 2 + 4) + \sum_{e}(\deg(e)-1)\cdot (0 + 2 + 2 + 2)$
 \end{enumerate}
 
 This ends the construction. The instance produced such way uses two replicas of each chunk type.
@@ -2218,15 +2175,13 @@ We have at most two replicas of each chunk type in the substrate network.
 \end{corollary}
 
 
-\subsection{The reduction -- constructing VCEMB solution from 3DPM
-  solution}
-
+\textbf{The Reduction.}
 \begin{enumerate}
-  \item We put $n$ VMs in any leaf of such Triple Subtries that were
+  \item We put $n$  nodes in any leaf of such Triple Subtries that were
   chosen in 3DPM solution. For each such VM we match to it 3 chunks
   that are put in its Triple Gadget (it is sitting on one of them),
   and we match it to any unmatched chunk in any Unique Gadget
-  \item We put $deg(e)-1$ VMs in each Element Subtree. We match all remaining
+  \item We put $\deg(e)-1$ VMs in each Element Subtree. We match all remaining
   chunks from this Element Subtree to those VMs in any possible
   way.
   \item Such a solution has cost $\leq Thr$ (easy to see by
@@ -2351,6 +2306,70 @@ active Triple Gadgets.
 \end{enumerate}
 
 \subsection{Properties of the construction}
+
+\section{The Bandwidth Lemmas}
+
+
+\begin{lemma}[Bandwidth Lemma]\label{lem:bandwidth-lemma}
+  Let $\clauses$ and $\variables > 4$ be two arbitrary positive integers. Let $a_1, a_2, \ldots,
+  a_{\variables}$ be a sequence of $\variables$ integers which adds up to $\clauses \cdot \variables$. Also, for
+  each $i$ we have $a_i \leq 2 \cdot \clauses$. Then it holds that if
+  $$ \forall_i:~~ a_i \cdot (\clauses \cdot \variables - a_i) \leq \clauses \cdot (\clauses \cdot \variables -
+  \clauses), $$
+\noindent  then for each $i$: $a_i = \clauses$.
+\end{lemma}
+\begin{proof}
+  By contradiction. Let us assume
+that there exists an index $k$ such that
+$a_k \neq \clauses$. Then we can distinguish between two cases:
+either $a_k<\clauses$ or
+$a_k>\clauses$.
+
+\textbf{Case $a_k<\clauses$:} If there exists a $k$ with $a_k<\clauses$,
+due to the fact that the sequence adds up to $\clauses \cdot \variables$,
+there must also exist a $k'$ such that $a_{k'}<\clauses$ (by a simple
+pigeon hole principle). Thus, this case can
+also be reduced to the second case (Case $a_k>\clauses$) proved
+next.
+
+\textbf{Case $a_k>\clauses$:} Since it also holds that $a_k < 2\clauses$,
+$a_k$ must be of the form $\clauses + x$ for $x \in [1, \ldots, \clauses]$.
+Let us consider the (bandwidth) inequality:
+$$ (\clauses + x) \cdot (\clauses \cdot \variables - \clauses - x) \leq \clauses \cdot (\clauses \cdot \variables - x) $$
+
+This can be transformed to:
+
+$$ 0 \leq x(x - (\clauses \cdot (\variables - 2))) $$
+
+The equation holds for $x \leq 0$ or $x \geq \clauses \cdot (\variables - 2)$,
+and no
+positive $x \leq \clauses$ can satisfy this inequality for $\variables > 4$. Contradiction.
+\end{proof}
+\begin{lemma}[Extended Bandwidth Lemma]\label{lem:bandwidth-lemma-extended}
+%\maciek{this lemma might be expressed more clearly if we use two
+%  sequences instead of one - now $a_1, \ldots, a_{\variables}$
+%  correspond to number of VMs in variable gadgets and remaining of the
+%  sequence corresponds to number of VMs in clause gadgets.}
+  Let $\clauses$ and $\variables > 4$ be two arbitrary positive integers. Let $a_1, a_2, \ldots,
+  a_{\clauses}$ and $b_1, b_2, \ldots,
+  b_{\variables}$ be two sequences of integers (numbers of nodes in clause and 
+in variable gadgets). The sum of all elements in $a$ and $b$ adds up to
+  $\clauses \cdot \variables + \clauses \cdot 2$ (number of nodes). Also
+  we have $a_i \leq 2 \cdot \clauses$
+  (variable gadget node hosting capacity -- equal to number of leaves),
+  and $b_i \leq 3$ (clause gadget node hosting capacity). If uplink of variable 
+gadget does not exceed bandwidth constraints
+  $$ \forall_{i\leq\variables}:~~ b_i \cdot (\clauses \cdot \variables
+  + 2\cdot \clauses- b_i) \leq \clauses \cdot (\clauses \cdot \variables -
+  \clauses + 2 \cdot \clauses), $$
+and uplink of clause gadget does not exceed bandwidth constraints
+$$ \forall_{i\leq\clauses}:~~ a_i \cdot (\clauses \cdot \variables + 2 \cdot \clauses - a_i) \leq 2 \cdot (\clauses \cdot \variables -
+  2 \cdot \clauses - 2), $$
+
+\noindent  then for each $i\leq \variables$: $b_i = \clauses$ and for
+each $i\leq\clauses$: $a_i = 2$ (we have expected number of nodes in variable 
+and clause gadgets).
+\end{lemma}
 
 
 %\end{appendix}
