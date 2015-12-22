@@ -121,6 +121,9 @@
 
 \newcommand{\SpawnedUnqSubtree}{\textit{nodesInUniqueSub}}
 \newcommand{\SpawnedMatchSubtree}{\textit{nodesInMatchingSub}}
+\newcommand{\SpawnedSubtree}{\textit{nodesInT}}
+
+\newcommand{\Band}{\textsc{bw}}
 
 \newtheorem{defn}{Definition}
 \newtheorem{obs}{Observation}
@@ -2300,7 +2303,8 @@ active \TripleGadgets.
 \end{lemma}
 
 \begin{proof}
-\item Exactly $n$ {\TripleGadgets} are active (\ref{np-balance}).
+\begin{enumerate}
+\item Exactly $n$ {\TripleGadgets} are \emph{active}.
 \item Note that in $\Solution$ only one node is spawned in Active \TripleGadget.
 \item Each {\ActiveNode} $v$ processes the 3 chunks that are placed in
   $v$'s \TripleGadget, as well as one chunk in \UnqGadget.
@@ -2309,23 +2313,38 @@ active \TripleGadgets.
   set $t(e)$ was not processed. Let's call this chunk instance
   $\Unmatched(e)$. Let's call $\Unmatched = \cup_e \Unmatched(e)$. We have that $|\Unmatched| = n$
 \item Set $\Unmatched$ was covered by \ActiveNodes
-\item
+\end{enumerate}
 \end{proof}
 
 \section{Two replicas without multiple assignment}
 
+
 \subsection{The construction}
 
-\begin{enumerate}
-\item the network is reduced network from previous proof (no \UnqSubtree, no unique chunks in Elements Subtree)
-\item Chunks are placed the same way, with an exception that we have no unique chunk types
-\item Set the bandwidth: at most 3 machines i
-\item TODO: Description of the construction in NI proof
-\item TODO: Proof the lemmas in MA proof
-\item TODO: Formulate and proof the bandwidth lemma in NI proof
-\end{enumerate}
+The network is reduced network from previous proof (no \UnqSubtree, no unique chunks in Elements Subtree).
+Chunks are placed the same way, with an exception that we have no unique chunk types.
+
+We use bandwidth constraints of form: $\Band(k) := k\cdot(\numNodes - k)$. Namely, we set bandwidth constraints of uplink of {\TripleGadgets} to be $\Band(3)$, and of uplink of {\ElGadget} for each element $e$ to be $\Band(\deg(e)-1)$. We also set the bandwidth on uplink of $\MatchSubtree$ to be $\Band(n)$ and on uplink of $\CoverSubtree$ to be $\Band(\sum_e (\deg(e)-1)$.
+
+
+We set $\CostTrans = \infty$, and $\CostCom = 1$, and we host only one node per machine.
 
 \subsection{Properties of the construction}
+
+\begin{lemma}
+Assume we have a VCEMB instance with a subtree $T$ with $l$ leaves and the bandwidth capacity on uplink of $T$ is $\Band(k)$. Then in any feasible solution the number of nodes spawned in $T$ (we name it $s$) satisfies:
+
+$s \leq k \vee n-s\leq k$, and $s \leq l$.
+\end{lemma}
+
+\begin{proof}
+$s\leq l$ is trivial, as we cannot spawn more nodes than leaves.
+Bandwidth allocation on uplink of $T$ is $uplink(T) := s\cdot (\numNodes - s)$, as no chunk transportation is allowed, and every node in $T$ has to communicate over $T$'s uplink with nodes spawned outside of $T$. Therefore, in every feasible solution we have: $uplink(T) \leq Band(k)$, which gives the desired property.
+\end{proof}
+
+\begin{lemma}
+
+\end{lemma}
 
 \section{The Bandwidth Lemmas}
 
