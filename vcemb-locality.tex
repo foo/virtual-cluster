@@ -2325,7 +2325,7 @@ active \TripleGadgets.
 The network is reduced network from previous proof (no \UnqSubtree, no unique chunks in Elements Subtree).
 Chunks are placed the same way, with an exception that we have no unique chunk types.
 
-We use bandwidth constraints of form: $\Band(k) := k\cdot(\numNodes - k)$. Namely, we set bandwidth constraints of uplink of {\TripleGadgets} to be $\Band(3)$, and of uplink of {\ElGadget} for each element $e$ to be $\Band(\deg(e)-1)$. We also set the bandwidth on uplink of $\MatchSubtree$ to be $\Band(n)$ and on uplink of $\CoverSubtree$ to be $\Band(\sum_e (\deg(e)-1)$.
+We use bandwidth constraints of form: $\Band(k) := k\cdot(\numNodes - k)$. Namely, we set bandwidth constraints of uplink of {\ElGadget} for each element $e$ to be $\Band(\deg(e)-1)$, the bandwidth on uplink of $\MatchSubtree$ to be $\Band(n)$ and on uplink of $\CoverSubtree$ to be $\Band(\sum_e (\deg(e)-1)$.
 
 
 We set $\CostTrans = \infty$, and $\CostCom = 1$, and we host only one node per machine.
@@ -2359,7 +2359,7 @@ Next, we show how to precisely control the number of nodes in any subtree.
 
 \begin{proof}
 \begin{enumerate}
-\item show that only one solution to $\remainBw(s)$ exist
+\item show that only one solution to $\remainBw(s)$ exist at each level
 \end{enumerate}
 \end{proof}
 
@@ -2369,6 +2369,7 @@ Next, we show how to precisely control the number of nodes in any subtree.
 \item calculate $\Thr$
 \item constructing VCEMB solution from the matching solution. Show that the cost is indeed $\Thr$.
 \item constructing matching solution from VCEMB instance. Feasibility of the matching: every chunk type processed by machine that sits on top of it. One chunk type processed in Matching Subtree. We choose at most $\numNodes$ triple gadgets to be active
+\item no feasible solution places one or two nodes in a Triple Gadget. We use the same lower-bound of the cost argument of other nodes as in previous proof.
 \end{enumerate}
 
 \end{document}
