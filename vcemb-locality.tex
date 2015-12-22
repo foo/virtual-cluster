@@ -2328,7 +2328,7 @@ Chunks are placed the same way, with an exception that we have no unique chunk t
 We use bandwidth constraints of form: $\Band(k) := k\cdot(\numNodes - k)$. Namely, we set bandwidth constraints of uplink of {\ElGadget} for each element $e$ to be $\Band(\deg(e)-1)$, the bandwidth on uplink of $\MatchSubtree$ to be $\Band(n)$ and on uplink of $\CoverSubtree$ to be $\Band(\sum_e (\deg(e)-1)$.
 
 
-We set $\CostTrans = \infty$, and $\CostCom = 1$, and we host only one node per machine.
+We set $\CostTrans = \infty$, and $\CostCom = 1$, and we host only one node per machine. We set the number of machines to spawn to: $\numNodes := 3\cdot n + \sum_e (\deg(e)-1)$.
 
 \subsection{Properties of the substrate network}
 
@@ -2348,12 +2348,10 @@ Every feasible solution has $\remainBw(s) \geq 0$, which is true for $s \leq k \
 Next, we show how to precisely control the number of nodes in any subtree.
 
 \begin{lemma}
-(work in progress)
 \begin{enumerate}
-\item on top level: we know that we place $\numNodes$ nodes in the subtree
-\item we have $k$ children of root, each having bandwidth of $\Band(a_i)$
-\item sum of $a_i$ is $n$
-\item generalize to lower parts of the tree, where we have $l \leq \numNodes$ nodes to spawn (but still we control the total number of nodes, and $a_i$'s sum to $l$)
+\item Assumption: we are given a subtree $T$, and we assume that exactly $k$ nodes are placed there in any feasible solution. 
+\item Assumption: we have $c$ children of root of $T$, each having bandwidth of $\Band(a_i)$. Sum of $a_i$ is $k$
+\item Then exactly $a_i$ nodes are placed in subtree of $i$-th children of root of $T$
 \end{enumerate}
 \end{lemma}
 
@@ -2362,6 +2360,14 @@ Next, we show how to precisely control the number of nodes in any subtree.
 \item show that only one solution to $\remainBw(s)$ exist at each level
 \end{enumerate}
 \end{proof}
+
+Notice that this assumption holds for the whole tree with $k := \numNodes$. Corollaries:
+
+\begin{enumerate}
+\item In every feasible solution there are $3\cdot \numNodes$ nodes spawned in {\MatchSubtree}.
+\item In every feasible solution there are $\sum_e (\deg(e)-1)$ nodes spawned in {\CoverSubtree}.
+\item In every feasible solution there are $\deg(e)-1$ nodes spawned in {\ElGadget} of element $e$.
+\end{enumerate}
 
 \subsection{The reduction}
 
