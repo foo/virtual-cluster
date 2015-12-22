@@ -100,7 +100,18 @@
 \newcommand{\MatchCost}{\textsc{MCost}}
 \newcommand{\chunkOf}{\textsc{chunkOf}}
 
-
+\newcommand{\Unmatched}{\textit{unmatched}}
+\newcommand{\ActiveNode}{\textit{active node}}
+\newcommand{\ActiveNodes}{\textit{active nodes}}
+\newcommand{\Solution}{S}
+\newcommand{\CostSol}{\textit{cost}(\Solution)}
+\newcommand{\CostEstimOne}{\textit{costEstim}}
+\newcommand{\CostEstimTwo}{\textit{costEstim2}}
+\newcommand{\numNodes}{\textit{nodes}}
+\newcommand{\UnqSubtree}{\textit{Unique Subtree}}
+\newcommand{\MatchSubtree}{\textit{Matching Subtree}}
+\newcommand{\SpawnedUnqSubtree}{\textit{nodes(\UnqSubtree)}}
+\newcommand{\SpawnedMatchSubtree}{\textit{nodes(\MatchSubtree)}}
 
 \newtheorem{defn}{Definition}
 \newtheorem{obs}{Observation}
@@ -2155,9 +2166,9 @@ we place chunks
 \item \emph{Multiple assignment:} We set the number of processed chunks by
   each machine to 4.
 \item \emph{Number of machines:} We allow to spawn
-  $numVMs := n + \sum_{e}(\deg(e)-1)$ machines.
+  $\numNodes := n + \sum_{e}(\deg(e)-1)$ machines.
 \item \emph{Threshold:}
-  $Thr := n\cdot (0 + 2 + 2 + 4) + \sum_{e}(\deg(e)-1)\cdot (0 + 2 + 2 + 2)$
+  $\Thr := n\cdot (0 + 2 + 2 + 4) + \sum_{e}(\deg(e)-1)\cdot (0 + 2 + 2 + 2)$
 \end{enumerate}
 
 This ends the construction. The instance produced such way uses two replicas of each chunk type.
@@ -2178,43 +2189,43 @@ We have at most two replicas of each chunk type in the substrate network.
 \textbf{The Reduction.}
 \begin{enumerate}
   \item We put $n$  nodes in any leaf of such Triple Subtries that were
-  chosen in 3DPM solution. For each such VM we match to it 3 chunks
+  chosen in 3DPM solution. For each such node we match to it 3 chunks
   that are put in its Triple Gadget (it is sitting on one of them),
   and we match it to any unmatched chunk in any Unique Gadget
-  \item We put $\deg(e)-1$ VMs in each Element Subtree. We match all remaining
-  chunks from this Element Subtree to those VMs in any possible
+  \item We put $\deg(e)-1$ nodes in each Element Subtree. We match all remaining
+  chunks from this Element Subtree to those nodes in any possible
   way.
-  \item Such a solution has cost $\leq Thr$ (easy to see by
-  summing costs of transporting chunks to each VM)
-  \item Feasibility of the constructed solution: each chunk type was processed. Each VM processes 4 chunks.
+  \item Such a solution has cost $\leq \Thr$ (easy to see by
+  summing costs of transporting chunks to each node)
+  \item Feasibility of the constructed solution: each chunk type was processed. Each node processes 4 chunks.
 \end{enumerate}
 
 \subsection{The reduction -- constructing 3DPM solution from VCEMB
   solution}
 
 \begin{theorem}
-  Let's take any feasible solution $S$ to the instance $I$ of VCEMB
-  (as constructed above). If cost of $S$ is at most $Thr$, then no VM
+  Let's take any feasible solution $\Solution$ to the instance $I$ of VCEMB
+  (as constructed above). If cost of $\Solution$ is at most $\Thr$, then no node
   is spawned in Unique Subtree.
   \label{th:no-unique}
 \end{theorem}
 
 \begin{proof}
-  Let's assume the contrary, that in feasible solution $S$ at least
-  one VM spawned in Unique Subtree. We show that in this case, the
-  cost of solution $S$ is greater than $Thr$.
+  Let's assume the contrary, that in feasible solution $\Solution$ at least
+  one node spawned in Unique Subtree. We show that in this case, the
+  cost of solution $\Solution$ is greater than $\Thr$.
 
-  Let's name $l$ the number of VMs that was spawned in $S$ in Unique
-  Subtree. We know that $1 \leq l \leq t$. We denote the set of VMs
-  spawned in Unique Subtree as $U_{VM}$.
+  Let's name $l$ the number of node that was spawned in $\Solution$ in Unique
+  Subtree. We know that $1 \leq l \leq t$. We denote the set of nodes
+  spawned in Unique Subtree as $\SpawnedUnqSubtree$.
 
-  In $S$ we have exactly $4 \cdot numVMs$ chunk transportations, some
+  In $\Solution$ we have exactly $4 \cdot \numNodes$ chunk transportations, some
   incurring cost $0, 2, 4$ or $6$ (tree has edge-height of $3$). At
-  most $numVMs$ transportations are of cost $0$. Note that leaves of
+  most $\numNodes$ transportations are of cost $0$. Note that leaves of
   Unique Subtree are separated from other leaves of the tree by at
   least $4$ edges.
 
-  Cost of chunk transportation to VM $v \in U_{VM}$ is at least
+  Cost of chunk transportation to nodes $v \in \SpawnedUnqSubtree$ is at least
   $0 + 4 + 4 + 4$. The chunks in Unique Subtree are unique, therefore
   we need to transport $t - l$ chunks to machines outside of the
   Unique Subtree, incurring cost $4$ for each of the chunk.
@@ -2223,72 +2234,72 @@ We have at most two replicas of each chunk type in the substrate network.
 
   Summing the total cost, we have:
 
-  $cost(S) \geq costEstim(l) = 0 \cdot numVMs + l \cdot 12 +
-  (t-l)\cdot 4 + (4\cdot numVMs - numVMs - 4\cdot l - (t-l))\cdot 2$
+  $\CostSol(S) \geq \CostEstimOne(l)) = 0 \cdot \numNodes + l \cdot 12 +
+  (t-l)\cdot 4 + (4\cdot \numNodes - \numNodes - 4\cdot l - (t-l))\cdot 2$
 
   It can be verified that for each $l$ we have that
-  $costEstim(l) > Thr$. To do so, we first show that
-  $costEstim(l+1) \geq costEstim(l)$, for $1\leq l \leq t-1$. We have
-  that $cost(S) \geq costEstim(1) \geq Thr$.
+  $\CostEstimOne(l)) > \Thr$. To do so, we first show that
+  $\CostEstimOne(l+1)) \geq \CostEstimOne(l))$, for $1\leq l \leq t-1$. We have
+  that $\CostSol(S) \geq \CostEstimOne(1)) \geq \Thr$.
 \end{proof}
 
 \begin{theorem}
-  Let's take any feasible solution $S$ to the instance $I$ of VCEMB
-  (as constructed above). If cost of $S$ is at most $Thr$, then
-  exactly $n$ VMs spawn in Matching Subtree.
+  Let's take any feasible solution $\Solution$ to the instance $I$ of VCEMB
+  (as constructed above). If cost of $\Solution$ is at most $\Thr$, then
+  exactly $n$ nodes spawn in Matching Subtree.
   \label{th:np-balance}
 \end{theorem}
 
 \begin{proof}
-  Let's assume the contrary, that is that the number of VMs $M_{VM}$
-  spawned in the Matching Subtree, and $|M_{VM}| \neq n$. We denote
-  $l=|M_{VM}|$. First, we use the theorem \ref{th:no-unique} to
-  restrict the placement of VMs in Unique Subtree. Then we consider
+  Let's assume the contrary, that is that the number of nodes $\SpawnedMatchSubtree$
+  spawned in the Matching Subtree, and $|\SpawnedMatchSubtree| \neq n$. We denote
+  $l=|\SpawnedMatchSubtree|$. First, we use the theorem \ref{th:no-unique} to
+  restrict the placement of nodes in Unique Subtree. Then we consider
   cases:
   \begin{enumerate}
   \item $l \leq n$. In this case there are at least
     $u := 4 \cdot (n-l)$ chunks in the Matching Subtree that are not
     processed in the Matching Subtree, each incurring transportation
-    cost of $6$. We lower-bound the cost of $S$ in the following way:
+    cost of $6$. We lower-bound the cost of $\Solution$ in the following way:
 
-    $cost(S) \geq costEstim2(u) = 0\cdot numVMs + 4\cdot t + (4\cdot
-    numVms - numVMs - t)\cdot 2$.
+    $\CostSol(S) \geq \CostEstimTwo(u) = 0\cdot \numNodes + 4\cdot t + (4\cdot
+    \numNodes - \numNodes - t)\cdot 2$.
 
     It can be verified that for each $u$ we have that
-    $costEstim2(S) > Thr$. To do so, we first show that
-    $costEstim2(u+1) \geq costEstim2(u)$, for $1\leq u \leq n-1$. Then
-    we show that $costEstim2(1) \geq Thr$.
+    $\CostEstimTwo(S) > \Thr$. To do so, we first show that
+    $\CostEstimTwo(u+1) \geq \CostEstimTwo(u)$, for $1\leq u \leq n-1$. Then
+    we show that $\CostEstimTwo(1) \geq \Thr$.
 
-  \item More than $n$ VMs spawned in Matching Subtree. In this case we
-    use the fact that there are not enough VMs in Cover Subtree, and
+  \item More than $n$ nodes spawned in Matching Subtree. In this case we
+    use the fact that there are not enough nodess in Cover Subtree, and
     we need to transport over $6$ hops at least 3 unique chunks for
-    each VM missing.
+    each node missing.
 
   \end{enumerate}
 \end{proof}
 
 (construction of the matching problem solution)
 
-Let's take any feasible solution $S$ to the instance described
-above. We call the Triple Gadget active, if we have a VM spawned in
-any leaf of it. We call VMs in active Triple Gadgets the Active VMs We
+Let's take any feasible solution $\Solution$ to the instance described
+above. We call the Triple Gadget \textit{active}, if we have a node spawned in
+any leaf of it. We call nodes in active Triple Gadgets the \ActiveNodes. We
 construct our matching solution $M_S$ from triples that correspond to
 active Triple Gadgets.
 
 \begin{lemma}
-  If $S$ is feasible, then $M_S$ is feasible.
+  If $\Solution$ is feasible, then $M_S$ is feasible.
 \end{lemma}
 
 \begin{proof}
 \item Exactly $n$ Triple Gadgets are active (\ref{np-balance}).
-\item Note that in $S$ only one VM is spawned in Active Triple Gadget.
-\item Each Active VM $v$ processes the 3 chunks that are placed in
+\item Note that in $\Solution$ only one node is spawned in Active Triple Gadget.
+\item Each \ActiveNode $v$ processes the 3 chunks that are placed in
   $v$'s Triple Gadget, as well as one chunk in Unique Gadget.
 \item Every chunk type was covered
 \item In each Element Gadget for element $e$, one chunk instance of
   set $t(e)$ was not processed. Let's call this chunk instance
-  $np(e)$. Let's call $np = \cup_e np(e)$. We have that $|np| = n$
-\item Set $np$ was covered by Active VMs
+  $\Unmatched(e)$. Let's call $\Unmatched = \cup_e \Unmatched(e)$. We have that $|\Unmatched| = n$
+\item Set $\Unmatched$ was covered by \ActiveNodes
 \item
 \end{proof}
 
