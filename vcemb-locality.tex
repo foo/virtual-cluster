@@ -122,6 +122,7 @@
 \newcommand{\SpawnedUnqSubtree}{\textit{nodesInUniqueSub}}
 \newcommand{\SpawnedMatchSubtree}{\textit{nodesInMatchingSub}}
 \newcommand{\SpawnedSubtree}{\textit{nodesInT}}
+\newcommand{\remainBw}{\textit{remainBw}}
 
 \newcommand{\Band}{\textsc{bw}}
 
@@ -2339,79 +2340,14 @@ $s \leq k \vee n-s\leq k$, and $s \leq l$.
 
 \begin{proof}
 $s\leq l$ is trivial, as we cannot spawn more nodes than leaves.
-Bandwidth allocation on uplink of $T$ is $uplink(T) := s\cdot (\numNodes - s)$, as no chunk transportation is allowed, and every node in $T$ has to communicate over $T$'s uplink with nodes spawned outside of $T$. Therefore, in every feasible solution we have: $uplink(T) \leq Band(k)$, which gives the desired property.
+Bandwidth allocation on uplink of $T$ is $uplink(s,T) := s\cdot (\numNodes - s)$, as no chunk transportation is allowed, and every node in $T$ has to communicate over $T$'s uplink with nodes spawned outside of $T$. Therefore, in every feasible solution we have: $uplink(s, T) \leq \Band(k)$.
+Let's define the remaining bandwidth on uplink of T: $\remainBw(s) := \Band(k)-uplink(s, T) = s^2 - s\cdot n - k^2+k\cdot n $.
+Every feasible solution has $\remainBw(s) \geq 0$, which is true for $s \leq k \vee n-s\leq k$.
 \end{proof}
 
 \begin{lemma}
-
+(work in progress)
 \end{lemma}
-
-\section{The Bandwidth Lemmas}
-
-
-\begin{lemma}[Bandwidth Lemma]\label{lem:bandwidth-lemma}
-  Let $\clauses$ and $\variables > 4$ be two arbitrary positive integers. Let $a_1, a_2, \ldots,
-  a_{\variables}$ be a sequence of $\variables$ integers which adds up to $\clauses \cdot \variables$. Also, for
-  each $i$ we have $a_i \leq 2 \cdot \clauses$. Then it holds that if
-  $$ \forall_i:~~ a_i \cdot (\clauses \cdot \variables - a_i) \leq \clauses \cdot (\clauses \cdot \variables -
-  \clauses), $$
-\noindent  then for each $i$: $a_i = \clauses$.
-\end{lemma}
-\begin{proof}
-  By contradiction. Let us assume
-that there exists an index $k$ such that
-$a_k \neq \clauses$. Then we can distinguish between two cases:
-either $a_k<\clauses$ or
-$a_k>\clauses$.
-
-\textbf{Case $a_k<\clauses$:} If there exists a $k$ with $a_k<\clauses$,
-due to the fact that the sequence adds up to $\clauses \cdot \variables$,
-there must also exist a $k'$ such that $a_{k'}<\clauses$ (by a simple
-pigeon hole principle). Thus, this case can
-also be reduced to the second case (Case $a_k>\clauses$) proved
-next.
-
-\textbf{Case $a_k>\clauses$:} Since it also holds that $a_k < 2\clauses$,
-$a_k$ must be of the form $\clauses + x$ for $x \in [1, \ldots, \clauses]$.
-Let us consider the (bandwidth) inequality:
-$$ (\clauses + x) \cdot (\clauses \cdot \variables - \clauses - x) \leq \clauses \cdot (\clauses \cdot \variables - x) $$
-
-This can be transformed to:
-
-$$ 0 \leq x(x - (\clauses \cdot (\variables - 2))) $$
-
-The equation holds for $x \leq 0$ or $x \geq \clauses \cdot (\variables - 2)$,
-and no
-positive $x \leq \clauses$ can satisfy this inequality for $\variables > 4$. Contradiction.
-\end{proof}
-\begin{lemma}[Extended Bandwidth Lemma]\label{lem:bandwidth-lemma-extended}
-%\maciek{this lemma might be expressed more clearly if we use two
-%  sequences instead of one - now $a_1, \ldots, a_{\variables}$
-%  correspond to number of VMs in variable gadgets and remaining of the
-%  sequence corresponds to number of VMs in clause gadgets.}
-  Let $\clauses$ and $\variables > 4$ be two arbitrary positive integers. Let $a_1, a_2, \ldots,
-  a_{\clauses}$ and $b_1, b_2, \ldots,
-  b_{\variables}$ be two sequences of integers (numbers of nodes in clause and 
-in variable gadgets). The sum of all elements in $a$ and $b$ adds up to
-  $\clauses \cdot \variables + \clauses \cdot 2$ (number of nodes). Also
-  we have $a_i \leq 2 \cdot \clauses$
-  (variable gadget node hosting capacity -- equal to number of leaves),
-  and $b_i \leq 3$ (clause gadget node hosting capacity). If uplink of variable 
-gadget does not exceed bandwidth constraints
-  $$ \forall_{i\leq\variables}:~~ b_i \cdot (\clauses \cdot \variables
-  + 2\cdot \clauses- b_i) \leq \clauses \cdot (\clauses \cdot \variables -
-  \clauses + 2 \cdot \clauses), $$
-and uplink of clause gadget does not exceed bandwidth constraints
-$$ \forall_{i\leq\clauses}:~~ a_i \cdot (\clauses \cdot \variables + 2 \cdot \clauses - a_i) \leq 2 \cdot (\clauses \cdot \variables -
-  2 \cdot \clauses - 2), $$
-
-\noindent  then for each $i\leq \variables$: $b_i = \clauses$ and for
-each $i\leq\clauses$: $a_i = 2$ (we have expected number of nodes in variable 
-and clause gadgets).
-\end{lemma}
-
-
-%\end{appendix}
 
 
 \end{document}
