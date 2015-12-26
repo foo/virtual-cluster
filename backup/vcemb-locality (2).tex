@@ -319,8 +319,6 @@ widely used today~\cite{fattree}).
 Section~\ref{sec:model} introduces our formal model in detail.
 Algorithms are presented in Section~\ref{sec:poly} and
 hardness results are presented in Section~\ref{sec:np}.
-Section~\ref{ap:tworep} takes a deeper look
-at the NP-hardness variants.
 After discussing related work in Section~\ref{sec:relwork},
 we conclude our work in Section~\ref{sec:conclusion}.
 %Some technical details as well as additional hardness results
@@ -1498,10 +1496,178 @@ hence every element is covered exactly once.
 %are obviously also in NP (and hence NP-complete): solutions can be verified efficiently.
 
 
-\section{A Detailed Study of\\Replica Selection Hardness}\label{ap:tworep}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Related Work}\label{sec:relwork}
+
+There has recently been much interest in programming models and distributed
+system architectures for the processing and analysis of big data (e.g.~\cite{nodb,mapreduce,shark}). The model studied in
+this paper is motivated by MapReduce~\cite{mapreduce} like batch-processing applications, also known
+from the popular open-source implementation \emph{Apache Hadoop}.
+These applications
+generate large amounts of network traffic~\cite{orchestra,talk-about,amazonbw},
+and over the last years, several systems have been proposed which provide
+a provable network performance, also in shared cloud environments, by supporting
+relative~\cite{faircloud,elasticswitch,seawall}
+or, as in the case of our paper, \emph{absolute}~\cite{oktopus,secondnet,drl,gatekeeper,proteus} bandwidth reservations
+between the virtual machines.
+%In particular, the notion of virtual networks which combine compute and network resources has been introduced.
+%For a good survey on network virtualization and in particular virtual network embeddings,
+%we refer the reader to~\cite{boutaba-survey} and~\cite{fischer-survey}.
+
+The most popular virtual network abstraction for batch-processing applications today is the \emph{virtual cluster},
+introduced in the Oktopus paper~\cite{oktopus}, and later studied by many others~\cite{talk-about,ccr15emb,proteus}.
+Several heuristics have been developed to compute ``good'' embeddings of virtual clusters: embeddings
+with small footprints (minimal bandwidth reservation costs)~\cite{oktopus,talk-about,ccr15emb,proteus}.
+The virtual network embedding problem has also been studied for more general graph abstractions
+(e.g., motivated by wide-area networks).~\cite{boutaba-survey,fischer-survey}
+
+%~\cite{infocom2009,ammar,turner,simannealing,zhu06}.
+
+From a theoretical perspective, the virtual network embedding problem can be seen as a generalization
+of classic VPN graph embedding problems~\cite{Goyal2008,gupta2001provisioning},
+in the sense that in virtual network embedding problems, also the embedding endpoints are flexible. In this sense, the virtual network embedding problem can also be seen as a generalization of the
+classic NP-hard Minimum Linear Arrangement problem which asks for the
+embedding of guest graphs on a simple \emph{line topology} (rather than tree-like topologies as
+studied in this paper)~\cite{mla,mla-survey}.
+%There exist several interesting algorithms for the Minimum Linear Arrangement problem,
+%e.g., providing sublogarithmic approximation ratios~\cite{mla-feige}.
+
+However, to the best of our knowledge, we are the first to provide an algorithmic
+study of the virtual cluster embedding problem which takes into account
+data locality as well as the possibility to select replicas---aspects which so far have only
+been studied from a best-effort perspective and using coarse-grained metrics (e.g., same rack or same server), thus limiting the flexibility of the
+system~\cite{local-schedule-1,local-schedule-2,local-schedule-3}.
+%As we have shown in this paper,
+%the resulting problems can be seen as interesting new variants of several classic optimization
+%problems, such as 3-dimensional matching problems~\cite{3SC-hard} as well as flow problems~\cite{korte2002combinatorial}.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary and Conclusion}\label{sec:conclusion}
+
+%This paper investigated data locality aware algorithms which exploit
+%fundamental
+%degrees of freedom in virtual cluster
+%embedding problems: replica selection and flexible node placement. In order to
+%chart the landscape of the problem complexity, we
+%decomposed the problem into its fundamental aspects,
+%namely $\RS$, $\MA$, $\FP$, $\CC$, and $\BW$, and studied the computational
+%tractability of different combinations.
+
+At the heart of locality and replica aware virtual cluster embeddings lie fundamental algorithmic problems.
+This paper has shown that despite the
+multiple dimensions of flexibility in terms of chunk assignment and node placement, 
+and despite the large scale of modern datacenters, 
+many problems can be solved efficiently. However, we have also
+shown that several embedding problems are NP-hard already in two-
+and three-level trees---a practically relevant result given today's datacenter topologies~\cite{fattree}).
+%--and even if the the number of replicas is bounded by two.
+\begin{table}
+\tiny
+\bgroup
+\def\arraystretch{1.5}
+\begin{small}
+\begin{tabular}{|l|l|p{4.5cm}|}
+\hline
+\multirow{3}{*}{NP-hard} & 5 combinations & \mbox{$\RS+\MA+\FP+\CC+\BW$}\\
+\cline{2-3}
+ & 4 combinations &  \mbox{$\RS+\MA+\FP+\CC$}; \mbox{$\RS+\MA+\FP+\BW$};
+\mbox{$\RS+\FP+\CC+\BW$} \\ \cline{2-3}
+ & 3 combinations &\mbox{$\RS+\MA+\FP$};~\mbox{$\RS+\FP+\CC$} \\
+ \hline
+ \hline
+\multirow{3}{*}{Flow} & 4 combinations & \mbox{$\RS+\MA+\CC+\BW$} \\ \cline{2-3}
+ & 3 combinations & \mbox{$\RS+\CC+\BW$}; \mbox{$\RS+\MA+\BW$}    \\ \cline{2-3}
+ & 2 combinations &$\RS+\BW$ \\
+ \hline
+ \hline
+\multirow{3}{*}{DP} & 4 combinations & \mbox{$\MA+\FP+\CC+\BW$} \\ \cline{2-3}
+ & 3 combinations &   \mbox{$\MA+\FP+\CC$};
+\mbox{$\MA+\FP+\BW$}; \mbox{$\FP+\CC+\BW$} \\ \cline{2-3}
+ & 2 combinations & \mbox{$\MA+\FP$};~\mbox{$\FP+\CC$}; \\
+ \hline
+ \hline
+\multirow{3}{*}{Matching} &3 combinations&
+\mbox{$\RS+\MA+\CC$};~\mbox{$\MA+\CC+\BW$}  \\
+\cline{2-3}
+ & 2 combinations & \mbox{$\RS+\MA$};
+\mbox{$\RS+\CC$}; \mbox{$\MA+\CC$};
+\mbox{$\MA+\BW$}; \mbox{$\CC+\BW$} \\ \cline{2-3}
+& 1 combinations & \mbox{$\RS$}; \mbox{$\MA$};
+\mbox{$\CC$}; \mbox{$\BW$}\\
+ \hline
+ \hline
+ \multirow{3}{*}{0 Cost} & 3 combinations & \mbox{$\RS+\FP+\BW$}\\
+\cline{2-3}
+ & 2 combinations & \mbox{$\RS+\FP$}; \mbox{$\FP+\BW$}\\ \cline{2-3}
+ & 1 combinations & \mbox{$\FP$}\\
+ \hline
+\end{tabular}
+\end{small}
+\caption{
+Fastest algorithms for different respective problem variants.
+}
+\vspace{-2em}
+\label{tab:summary}
+\egroup
+\end{table}
+
+
+Our results are summarized in
+Table~\ref{tab:summary}.
+One interesting takeaway from this figure regards
+the question which properties render the problem
+NP-hard. For instance, we see that, $\BW$
+does not influence the hardness of any problem variant,
+while $\RS$ is crucial for NP-hardness.
+$\MA$ only affects hardness if combined with $\RS$.
+$\CC$ is trivial without $\FP$, and $\FP$ requires
+more sophisticated algorithms when combined with $\CC$ or $\MA$;
+in combination with $\RS$ and $\MA$ or $\CC$, $\FP$ renders the
+problem NP-hard.
+
+%\begin{figure}
+%\includegraphics[width=\columnwidth]{figs/summary}
+%\caption{\maciek{This figure is wrong in couple places, but I sent you an e-mail what should be redone.}Summary of results. As this paper only presented algorithms %(approaches indicated in the same
+%color and pattern as in the previous figures) for the most
+%difficult problems and, respectively, proved NP-hardness (indicated in black) of the simplest
+%problems, several additional results are simple implications. In this figure,
+%we always suggest the best (simplest and fastest) approach to solve a specific problem variant.}
+%\label{fig:summary}
+%\end{figure}
+
+
+%\begin{figure}[t]
+%\includegraphics[width = \columnwidth]{figs/summary}
+%\caption{Summary of results. As this paper only presented algorithms for the most
+%difficult problems and, respectively, proved NP-hardness of the simplest
+%problems, several additional results are simple implications (indicated by arrows).}
+%\label{fig:summary}
+%\end{figure}
+
+%We believe that our paper opens several interesting directions for future research.
+%In particular, it would be interesting to shed light on the possible approximation algorithms
+%for our NP-hard problems.
+
+\textbf{Acknowledgments.} We would like to thank 
+Paolo Costa for many discussions. 
+This research is in part supported by Polish National Science Centre grant DEC-2013/09/B/ST6/01538, the EU project Bigfoot FP7-ICT-317858,
+as well as by the German BMBF Software Campus grant 01IS12056.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\bibliographystyle{alpha}
+{\footnotesize \renewcommand{\baselinestretch}{.9}
+\bibliographystyle{abbrv}
+\bibliography{references}
+}
+
+%\begin{appendix}
+
+
+\section{Excursion: A Detailed Study of\\Replica Selection Hardness}\label{ap:tworep}
 
 We have seen that replica selection flexibilities can render embeddings computationally hard.
-We will now provide a more detailed look at this hardness result
+We will now have a more detailed look at this hardness result
 and explore the minimal requirements for rendering replica selection hard.
 In particular, we will show that already two replicas for each chunk type are sufficient to
 introduce intractability.
@@ -1713,8 +1879,7 @@ unlike in the previous proof we will create three chunk types
 instead of just one, for every clause.
 
 \begin{figure}[htbp]
-\centering
-\includegraphics[width=0.99\columnwidth]{figs/construction_2replica}
+\includegraphics{figs/construction_2replica}
 \caption{Structure of clause gadgets.}
 \label{fig:clause-gadget}
 \end{figure}
@@ -1724,7 +1889,7 @@ instead of just one, for every clause.
 %\carlo{TODO: Describe construction of clause gadgets, and emphazise that we use
 %the same construction as in Figure~\ref{fig:construction_3sat} for the variable
 %gadgets. Introduce symbols for clauses, which can be transferred to the Figure.}
-We build upon the construction for variable gadgets introduced above (see also Figure~\ref{fig:construction_3sat}).
+We build upon the construction for variable gadgets introduced (see also Figure~\ref{fig:construction_3sat}).
 
 \begin{enumerate}
   \item \emph{Tree Construction}: In addition to the variable gadgets known from the
@@ -1943,7 +2108,8 @@ We call $m$ the number of triples.
 \end{figure}
 
 
-\textbf{Construction.}
+\subsubsection{The Construction}
+
 \maciek{Picture of how chunks are used twice?}\stefan{that would be great}
 
 Let's take any instance $I$ of $\TDM$ and create a $\FP+\RS(2)+\MA(4)$
@@ -1951,7 +2117,7 @@ instance $I'$ as follows.
 
 \paragraph{Chunk Types} 
 We construct the following chunk types:
-\begin{enumerate}
+\begin{itemize}
 \item For each element $e\in X\cup Y\cup Z$, we construct $\deg(e)$
   chunk types with two replicas each. 
   We refer to the chunk types
@@ -1964,7 +2130,7 @@ We construct the following chunk types:
 \item \emph{Unique Chunks:} For each element $e\in X\cup Y\cup Z$, we 
  construct additional $3\cdot(\deg(e) - 1)$ \emph{unique chunks}. 
 We call this set $U(e)$.
-\end{enumerate}
+\end{itemize}
 
 \paragraph{Tree} 
 We construct the following tree.
@@ -2020,7 +2186,7 @@ we place the chunks
   $t(e)\cup U(e)$ at the leaves of each element subtree.
 \end{enumerate}
 
-\paragraph{Other properties of the instance}
+\paragraph{Other properties of the instance.}
 \begin{enumerate}
 \item \emph{Multiple assignment:} We set the number of processed chunks by
   each node to four.
@@ -2033,8 +2199,6 @@ we place the chunks
 This ends the construction. 
 The constructed instance 
 uses two replicas for each chunk type.
-
-\textbf{Reduction.}
 We can make the following observations.
 
 \begin{obs}
@@ -2048,7 +2212,8 @@ The construction fulfills the following properties:
 \end{enumerate}
 \end{obs}
 
-For the reduction we proceed as follows:
+
+\paragraph{The Reduction}
 \begin{enumerate}
   \item We put $n$  nodes in any leaf of the {\TripleGadgets} that were
   chosen for the $\TDM$ solution. We match each such node 
@@ -2065,7 +2230,7 @@ For the reduction we proceed as follows:
   each chunk type was processed. Each node processes four chunks.
 \end{enumerate}
 
-\textbf{Proof of correctness.}
+
 \begin{theorem}
   Take any feasible solution $\Solution$ to the instance $I$ of  $\FP+\RS(2)+\MA(4)$
   (as constructed above). If cost of $\Solution$ is at most $\Thr$, then no node
@@ -2074,29 +2239,35 @@ For the reduction we proceed as follows:
 \end{theorem}
 
 \begin{proof}
-  For the sake of contradiction, let us assume a feasible solution $\Solution$ 
-  with at least
+  Let's assume the contrary: a feasible solution $\Solution$ 
+  has at least
   one node spawned in \UnqSubtree. We show that in this case, the
   cost of solution $\Solution$ is greater than $\Thr$.
-  Let $\ell$ denote the number of nodes that were spawned in $\Solution$ in 
+
+  Let $\ell$ denote the number of nodes that was spawned in $\Solution$ in 
   the Unique
   Subtree. We know that $1 \leq \ell \leq t$. We denote the set of nodes
   spawned in {\UnqSubtree} by $\SpawnedUnqSubtree$.
+
   In $\Solution$ we have exactly $4 \cdot \numNodes$ chunk transportations, some
   incurring cost $0, 2, 4$ or $6$ (the tree has an edge-height of $3$). At
   most $\numNodes$ transportations are of cost $0$. Note that
   the leaves of
   \UnqSubtree are separated from other leaves of the tree by at
   least $4$ edges.
+
   The cost of chunk transportation to nodes $v \in \SpawnedUnqSubtree$ is at least
   $0 + 4 + 4 + 4$. The chunks in \UnqSubtree are unique, therefore
   we need to transport $t - \ell$ chunks to nodes outside the
   \UnqSubtree, incurring cost $4$ for each of the chunk.
-  
+
   We lower-bound the cost of each of the remaining transportations by $2$.
-Summing up the costs, we have:
+
+  Summing the total cost, we have:
+
   $\CostSol(S) \geq \CostEstimOne(\ell)) = 0 \cdot \numNodes + \ell \cdot 12 +
   (t-\ell)\cdot 4 + (4\cdot \numNodes - \numNodes - 4\cdot \ell - (t-\ell))\cdot 2$
+
   It can be verified that for each $\ell$ we have that
   $\CostEstimOne(\ell)) > \Thr$. To do so, we first show that
   $\CostEstimOne(\ell+1)) \geq \CostEstimOne(\ell))$, for $1\leq \ell \leq t-1$. We have
@@ -2104,15 +2275,16 @@ Summing up the costs, we have:
 \end{proof}
 
 \begin{theorem}
-  Given any feasible solution $\Solution$ to the instance $I$ of $\FP+\RS(2)+\MA(4)$
+  Let's take any feasible solution $\Solution$ to the instance $I$ of $\FP+\RS(2)+\MA(4)$
   (as constructed above). If the cost of $\Solution$ is at most $\Thr$, then
   exactly $n$ nodes spawn in \MatchSubtree.
   \label{th:np-balance}
 \end{theorem}
+
 \begin{proof}
-  Let us assume the contrary, namely that 
-  $\ell:=|\SpawnedMatchSubtree| \neq n$ in the \MatchSubtree.
-  First, we use the Theorem~\ref{th:no-unique} to
+  Let's assume the contrary, that the number of nodes $\SpawnedMatchSubtree$
+  spawned in the \MatchSubtree, and $|\SpawnedMatchSubtree| \neq n$. We denote
+  $\ell=|\SpawnedMatchSubtree|$. First, we use the Theorem~\ref{th:no-unique} to
   restrict the placement of nodes in \UnqSubtree. Then we consider
   cases:
   \begin{enumerate}
@@ -2120,6 +2292,7 @@ Summing up the costs, we have:
     $u := 4 \cdot (n-\ell)$ chunks in the {\MatchSubtree} that are not
     processed in the {\MatchSubtree}, each incurring transportation
     cost of $6$. We lower-bound the cost of $\Solution$ in the following way:
+
     $\CostSol(S) \geq \CostEstimTwo(u) = 0\cdot \numNodes + 4\cdot t + (4\cdot
     \numNodes - \numNodes - t)\cdot 2$.
 
@@ -2135,7 +2308,8 @@ Summing up the costs, we have:
   \end{enumerate}
 \end{proof}
 
-\noindent \textbf{Construction of the matching problem solution.}
+\textbf{Construction of the matching problem solution.}
+
 Let's take any feasible solution $\Solution$ to the instance described
 above. We call the {\TripleGadget} \textit{active}, if we have a node spawned in
 any leaf of it. We refer to the active nodes in {\TripleGadgets} by \ActiveNodes. We
@@ -2160,12 +2334,10 @@ The proof follows from the following observations:
 \end{enumerate}
 \end{proof}
 
-\subsection{Two replicas without multiple assignment}
+\section{Two replicas without multiple assignment}
 
-We now show that the problem is even NP-hard
-without multiple assignment.
+\subsection{The substrate network}
 
-\noindent \textbf{The substrate network.}
 The network is reduced network from previous proof (no \UnqSubtree, no unique chunks in Elements Subtree).
 Chunks are placed the same way, with an exception that we have no unique chunk types.
 
@@ -2174,7 +2346,7 @@ We use bandwidth constraints of form: $\Band(k) := k\cdot(\numNodes - k)$. Namel
 
 We set $\CostTrans = \infty$, and $\CostCom = 1$, and we host only one node per machine. We set the number of machines to spawn to: $\numNodes := 3\cdot n + \sum_e (\deg(e)-1)$.
 
-\noindent \textbf{Properties of the substrate network.}
+\subsection{Properties of the substrate network}
 
 \begin{lemma}
 Assume we have a VCEMB instance with a subtree $T$ with $l$ leaves and the bandwidth capacity on uplink of $T$ is $\Band(k)$. Then in any feasible solution the number of nodes spawned in $T$ (we name it $s$) satisfies:
@@ -2213,16 +2385,20 @@ Notice that this assumption holds for the whole tree with $k := \numNodes$. Coro
 \item In every feasible solution there are $\deg(e)-1$ nodes spawned in {\ElGadget} of element $e$.
 \end{enumerate}
 
-\noindent \textbf{Construction.}
+\subsection{The Construction}
 
-\emph{Chunk Types.} 
+\textbf{Chunk Types.} 
 We construct the following chunk types:
-For each element $e\in X\cup Y\cup Z$, we construct $\deg(e)$
+\begin{itemize}
+\item For each element $e\in X\cup Y\cup Z$, we construct $\deg(e)$
   chunk types with two replicas. We refer to such chunk types in two ways: either
   the element of set $t(e)$ for some element $e$, or $e_i(t)$ for some
   triple $t$ and index $i \in \{1,2,3\}$.
+\end{itemize}
 
-\noindent \textbf{Reduction.}
+
+
+\subsection{The reduction}
 
 \begin{enumerate}
 \item calculate $\Thr$
@@ -2230,176 +2406,5 @@ For each element $e\in X\cup Y\cup Z$, we construct $\deg(e)$
 \item constructing matching solution from VCEMB instance. Feasibility of the matching: every chunk type processed by machine that sits on top of it. One chunk type processed in Matching Subtree. We choose at most $\numNodes$ triple gadgets to be active
 \item no feasible solution places one or two nodes in a Triple Gadget. We use the same lower-bound of the cost argument of other nodes as in previous proof.
 \end{enumerate}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Related Work}\label{sec:relwork}
-
-There has recently been much interest in programming models and distributed
-system architectures for the processing and analysis of big data (e.g.~\cite{nodb,mapreduce,shark}). The model studied in
-this paper is motivated by MapReduce~\cite{mapreduce} like batch-processing applications, also known
-from the popular open-source implementation \emph{Apache Hadoop}.
-These applications
-generate large amounts of network traffic~\cite{orchestra,talk-about,amazonbw},
-and over the last years, several systems have been proposed which provide
-a provable network performance, also in shared cloud environments, by supporting
-relative~\cite{faircloud,elasticswitch,seawall}
-or, as in the case of our paper, \emph{absolute}~\cite{oktopus,secondnet,drl,gatekeeper,proteus} bandwidth reservations
-between the virtual machines.
-%In particular, the notion of virtual networks which combine compute and network resources has been introduced.
-%For a good survey on network virtualization and in particular virtual network embeddings,
-%we refer the reader to~\cite{boutaba-survey} and~\cite{fischer-survey}.
-
-The most popular virtual network abstraction for batch-processing applications today is the \emph{virtual cluster},
-introduced in the Oktopus paper~\cite{oktopus}, and later studied by many others~\cite{talk-about,ccr15emb,proteus}.
-Several heuristics have been developed to compute ``good'' embeddings of virtual clusters: embeddings
-with small footprints (minimal bandwidth reservation costs)~\cite{oktopus,talk-about,ccr15emb,proteus}.
-The virtual network embedding problem has also been studied for more general graph abstractions
-(e.g., motivated by wide-area networks).~\cite{boutaba-survey,fischer-survey}
-
-%~\cite{infocom2009,ammar,turner,simannealing,zhu06}.
-
-From a theoretical perspective, the virtual network embedding problem can be seen as a generalization
-of classic VPN graph embedding problems~\cite{Goyal2008,gupta2001provisioning},
-in the sense that in virtual network embedding problems, also the embedding endpoints are flexible. In this sense, the virtual network embedding problem can also be seen as a generalization of the
-classic NP-hard Minimum Linear Arrangement problem which asks for the
-embedding of guest graphs on a simple \emph{line topology} (rather than tree-like topologies as
-studied in this paper)~\cite{mla,mla-survey}.
-%There exist several interesting algorithms for the Minimum Linear Arrangement problem,
-%e.g., providing sublogarithmic approximation ratios~\cite{mla-feige}.
-
-However, to the best of our knowledge, we are the first to provide an algorithmic
-study of the virtual cluster embedding problem which takes into account
-data locality as well as the possibility to select replicas---aspects which so far have only
-been studied from a best-effort perspective and using coarse-grained metrics (e.g., same rack or same server), thus limiting the flexibility of the
-system~\cite{local-schedule-1,local-schedule-2,local-schedule-3}.
-%As we have shown in this paper,
-%the resulting problems can be seen as interesting new variants of several classic optimization
-%problems, such as 3-dimensional matching problems~\cite{3SC-hard} as well as flow problems~\cite{korte2002combinatorial}.
-
-\noindent \textbf{Bibliographic Note.} A preliminary version of this paper appeared
-at the 23rd IEEE International Conference on Network Protocols (ICNP), 2015.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Summary and Conclusion}\label{sec:conclusion}
-
-%This paper investigated data locality aware algorithms which exploit
-%fundamental
-%degrees of freedom in virtual cluster
-%embedding problems: replica selection and flexible node placement. In order to
-%chart the landscape of the problem complexity, we
-%decomposed the problem into its fundamental aspects,
-%namely $\RS$, $\MA$, $\FP$, $\CC$, and $\BW$, and studied the computational
-%tractability of different combinations.
-
-At the heart of locality and replica aware virtual cluster embeddings lie fundamental algorithmic problems.
-This paper has shown that despite the
-multiple dimensions of flexibility in terms of chunk assignment and node placement, 
-and despite the large scale of modern datacenters, 
-many problems can be solved efficiently. However, we have also
-shown that several embedding problems are NP-hard already in two-
-and three-level trees---a practically relevant result given today's datacenter topologies~\cite{fattree}).
-%--and even if the the number of replicas is bounded by two.
-\begin{table}
-\tiny
-\bgroup
-\def\arraystretch{1.5}
-\begin{small}
-\begin{tabular}{|l|l|p{4.5cm}|}
-\hline
-\multirow{3}{*}{NP-hard} & 5 combinations & \mbox{$\RS+\MA+\FP+\CC+\BW$}\\
-\cline{2-3}
- & 4 combinations &  \mbox{$\RS+\MA+\FP+\CC$}; \mbox{$\RS+\MA+\FP+\BW$};
-\mbox{$\RS+\FP+\CC+\BW$} \\ \cline{2-3}
- & 3 combinations &\mbox{$\RS+\MA+\FP$};~\mbox{$\RS+\FP+\CC$} \\
- \hline
- \hline
-\multirow{3}{*}{Flow} & 4 combinations & \mbox{$\RS+\MA+\CC+\BW$} \\ \cline{2-3}
- & 3 combinations & \mbox{$\RS+\CC+\BW$}; \mbox{$\RS+\MA+\BW$}    \\ \cline{2-3}
- & 2 combinations &$\RS+\BW$ \\
- \hline
- \hline
-\multirow{3}{*}{DP} & 4 combinations & \mbox{$\MA+\FP+\CC+\BW$} \\ \cline{2-3}
- & 3 combinations &   \mbox{$\MA+\FP+\CC$};
-\mbox{$\MA+\FP+\BW$}; \mbox{$\FP+\CC+\BW$} \\ \cline{2-3}
- & 2 combinations & \mbox{$\MA+\FP$};~\mbox{$\FP+\CC$}; \\
- \hline
- \hline
-\multirow{3}{*}{Matching} &3 combinations&
-\mbox{$\RS+\MA+\CC$};~\mbox{$\MA+\CC+\BW$}  \\
-\cline{2-3}
- & 2 combinations & \mbox{$\RS+\MA$};
-\mbox{$\RS+\CC$}; \mbox{$\MA+\CC$};
-\mbox{$\MA+\BW$}; \mbox{$\CC+\BW$} \\ \cline{2-3}
-& 1 combinations & \mbox{$\RS$}; \mbox{$\MA$};
-\mbox{$\CC$}; \mbox{$\BW$}\\
- \hline
- \hline
- \multirow{3}{*}{0 Cost} & 3 combinations & \mbox{$\RS+\FP+\BW$}\\
-\cline{2-3}
- & 2 combinations & \mbox{$\RS+\FP$}; \mbox{$\FP+\BW$}\\ \cline{2-3}
- & 1 combinations & \mbox{$\FP$}\\
- \hline
-\end{tabular}
-\end{small}
-\caption{
-Fastest algorithms for different respective problem variants.
-}
-\vspace{-2em}
-\label{tab:summary}
-\egroup
-\end{table}
-
-
-Our results are summarized in
-Table~\ref{tab:summary}.
-One interesting takeaway from this figure regards
-the question which properties render the problem
-NP-hard. For instance, we see that, $\BW$
-does not influence the hardness of any problem variant,
-while $\RS$ is crucial for NP-hardness.
-$\MA$ only affects hardness if combined with $\RS$.
-$\CC$ is trivial without $\FP$, and $\FP$ requires
-more sophisticated algorithms when combined with $\CC$ or $\MA$;
-in combination with $\RS$ and $\MA$ or $\CC$, $\FP$ renders the
-problem NP-hard.
-
-%\begin{figure}
-%\includegraphics[width=\columnwidth]{figs/summary}
-%\caption{\maciek{This figure is wrong in couple places, but I sent you an e-mail what should be redone.}Summary of results. As this paper only presented algorithms %(approaches indicated in the same
-%color and pattern as in the previous figures) for the most
-%difficult problems and, respectively, proved NP-hardness (indicated in black) of the simplest
-%problems, several additional results are simple implications. In this figure,
-%we always suggest the best (simplest and fastest) approach to solve a specific problem variant.}
-%\label{fig:summary}
-%\end{figure}
-
-
-%\begin{figure}[t]
-%\includegraphics[width = \columnwidth]{figs/summary}
-%\caption{Summary of results. As this paper only presented algorithms for the most
-%difficult problems and, respectively, proved NP-hardness of the simplest
-%problems, several additional results are simple implications (indicated by arrows).}
-%\label{fig:summary}
-%\end{figure}
-
-%We believe that our paper opens several interesting directions for future research.
-%In particular, it would be interesting to shed light on the possible approximation algorithms
-%for our NP-hard problems.
-
-\textbf{Acknowledgments.} We would like to thank 
-Paolo Costa for many discussions. 
-This research is in part supported by Polish National Science Centre grant DEC-2013/09/B/ST6/01538, the EU project Bigfoot FP7-ICT-317858,
-as well as by the German BMBF Software Campus grant 01IS12056.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\bibliographystyle{alpha}
-{\footnotesize \renewcommand{\baselinestretch}{.9}
-\bibliographystyle{abbrv}
-\bibliography{references}
-}
-
-%\begin{appendix}
-
 
 \end{document}
