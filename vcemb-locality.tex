@@ -335,8 +335,7 @@ Figure~\ref{fig:overview} gives an overview of our model.
 \begin{figure}[t]
 \centering
 %\includegraphics[width=0.99\columnwidth]{figs/overview-fig.pdf}
-\includegraphics[width=0.99\columnwidth]{figs/data_locality_no_legend.pdf}
-\vspace{-1em}
+\includegraphics[width=0.79\columnwidth]{figs/data_locality_no_legend.pdf}
 \caption{Overview: a 9-server datacenter storing $\tau=4$ different chunk
 types $\{c_1,\ldots,c_4\}$ (depicted as \emph{circles}). The chunk replicas need to be selected and assigned to the two
  virtual machines $v_1$ and $v_2$; the virtual machines are depicted as \emph{squares}, and
@@ -622,8 +621,7 @@ capacity due to $\CC$.
 
 \begin{figure}
 \centering
-\includegraphics[width=0.8\columnwidth]{figs/flow_ma_cv}
-\vspace{-1em}
+\includegraphics[width=0.65\columnwidth]{figs/flow_ma_cv}
 \caption{Example of flow construction: Problem instance with two nodes, four chunk
 types, and two replicas per type. The min-cost-max-flow
 is indicated by the dashed lines: each line represents one unit of flow.
@@ -818,7 +816,7 @@ it is local with respect to all possible subtrees of the substrate network.
 
 \begin{figure}
 \center
-\includegraphics[width = 0.6\columnwidth]{figs/unbalanced_tree}
+\includegraphics[width = 0.45\columnwidth]{figs/unbalanced_tree}
 \caption{Illustration of local assignment: The dashed lines indicate bandwidth allocations, which occur
 independently of the chosen assignment. The dotted lines indicate bandwidth
 allocation which occur only if $c_2$ is assigned to $v_1$.}
@@ -1498,7 +1496,7 @@ hence every element is covered exactly once.
 %are obviously also in NP (and hence NP-complete): solutions can be verified efficiently.
 
 
-\section{A Detailed Study of\\Replica Selection Hardness}\label{ap:tworep}
+\section{A Detailed Study of Replica Selection Hardness}\label{ap:tworep}
 
 We have seen that replica selection flexibilities can render embeddings computationally hard.
 We will now provide a more detailed look at this hardness result
@@ -1528,18 +1526,10 @@ In the following, we allow the number of chunk types to be smaller than the numb
 %  (NP-complete) subset of 3SAT where we have more than 4
 %  clauses. Otherwise the bandwidth lemma does not work!}
 
-We first give an alternative proof for the hardness of $\CC+\FP+\RS+\BW$.
-Subsequently, we show that the 2-replica variant $\RS(2)$ is hard.
-
-%For our proof, we assume a model where there can be more nodes than chunk types,
-%and additional nodes only participate in the inter-connect, and not the replica access network.
-
-% TODO
-%\subsection{Three replicas are hard ($\CC+\FP+\RS+\BW$)}\label{ssec:three}
-
 \subsection{An Alternative Hardness Proof}
 
-We prove that $\CC+\RS+\FP+\BW$ is NP-hard by reduction from the \emph{Boolean Satisfiability Problem} ($\SAT$).
+We first give an alternative proof for the hardness of $\CC+\FP+\RS+\BW$,
+by reduction from the \emph{Boolean Satisfiability Problem} ($\SAT$).
 Since $\SAT$ is a decision
 problem, we
 introduce a cost threshold $\Thr$ to transform $\CC+\RS+\FP+\BW$ into a decision problem too.
@@ -2278,7 +2268,7 @@ system~\cite{local-schedule-1,local-schedule-2,local-schedule-3}.
 %problems, such as 3-dimensional matching problems~\cite{3SC-hard} as well as flow problems~\cite{korte2002combinatorial}.
 
 \noindent \textbf{Bibliographic Note.} A preliminary version of this paper appeared
-at the 23rd IEEE International Conference on Network Protocols (ICNP), 2015.
+at the 23rd IEEE International Conference on Network Protocols (ICNP), 2015~\cite{icnp15loc}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Summary and Conclusion}\label{sec:conclusion}
