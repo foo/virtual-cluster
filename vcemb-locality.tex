@@ -102,7 +102,9 @@
 \newcommand{\MatchCost}{\textsc{MCost}}
 \newcommand{\chunkOf}{\textsc{chunkOf}}
 
-%Maciek 3DM
+% Maciek 3DM
+
+\newcommand{\TDPM}{\textsc{3DPM}}
 
 \newcommand{\Unmatched}{\textit{unmatched}}
 \newcommand{\ActiveNode}{\textit{active node}}
@@ -1903,9 +1905,9 @@ $1$ (positive subtree) or $0$ (negative subtree).
 \subsection{Two Replicas without Bandwidth Constraints}
 
 \maciek{TODO: picture of two chunk replicas}
-\maciek{TODO: rename variables}
-\maciek{TODO: chapter about notation}
+\maciek{TODO: rename variables and introduce it: $nodesInUnique$}
 \maciek{TODO: read the whole thing and check consistency}
+\maciek{TODO: lemma that the problem is NP-hard}
 
 We now show that the 2-replica selection problem is even NP-hard without
 capacity constraints. 
@@ -1984,10 +1986,8 @@ We construct the following tree.
 %  where $ADDITIONAL$ are the chunk types that were added to make
 %  $deg(e)-1+a$ divisible by 3.
 \item The physical network consists of two parts: 
-A \emph{matching subtree}
-  and a \emph{cover subtree}. Matching subtrees consist 
-  of two parts: $t$
-  \TripleGadgets and \UnqGadgets. Cover subtrees consist of
+A {\MatchSubtree}
+  and a {\CoverSubtree}. In the {\MatchSubtree} we put $2t$ gadgets: $t$ {\TripleGadgets} and $t$ {\UnqGadgets} (remember that $t$ is the number of triples in {\TDPM} instance). Cover subtrees consist of
   $n$ element gadgets.
 \item \TripleGadget: For each triple, we create a subtree
   consisisting of four vertices: three leaves and one triple root. 
@@ -2010,7 +2010,7 @@ The chunks are placed as follows:
 \begin{enumerate}
 \item \emph{Chunks in triples subtree:} For each triple
   $t$ we put three chunks at the leaves of
-  the corresponding \TripleGadget: $e_1(t), e_2(t), e_3(t)$.
+  the corresponding \TripleGadget, $e_1(t), e_2(t), e_3(t)$.
 \item \emph{Chunks in unique subtree:} We place chunks $u_1,\ldots, u_n$ 
 at the leaves of
   \UnqGadgets.
@@ -2024,14 +2024,12 @@ we place the chunks
 \item \emph{Multiple assignment:} We set the number of processed chunks by
   each node to four.
 \item \emph{Number of nodes:} We allow to spawn
-  $\numNodes := n + \sum_{e}(\deg(e)-1)$ nodes.
+  $\numNodes = n + \sum_{e}(\deg(e)-1)$ nodes.
 \item \emph{Threshold:}
-  $\Thr := n\cdot (0 + 2 + 2 + 4) + \sum_{e}(\deg(e)-1)\cdot (0 + 2 + 2 + 2)$
+  $\Thr := 8\cdot n + 6\cdot\sum_{e}(\deg(e)-1)$
 \end{enumerate}
 
-This ends the construction. 
-The constructed instance 
-uses two replicas for each chunk type.
+Thus, the constructed instance uses two replicas of each chunk type.
 
 \textbf{Reduction.}
 We can make the following observations.
@@ -2039,9 +2037,9 @@ We can make the following observations.
 \begin{obs}
 The construction fulfills the following properties:
 \begin{enumerate}
-\item There is one instance of each chunk type in \MatchSubtree.
+\item There is one instance of each chunk type in the \MatchSubtree.
 
-\item There is one instance of each chunk type in the elements subtree.
+\item There is one instance of each chunk type in the \CoverSubtree.
 
 \item There are at most two replicas of each chunk type in the substrate network.
 \end{enumerate}
@@ -2049,13 +2047,13 @@ The construction fulfills the following properties:
 
 For the reduction we proceed as follows:
 \begin{enumerate}
-  \item We put $n$  nodes in any leaf of the {\TripleGadgets} that were
+  \item We put $n$ (remember that $n=|X|=|Y|=|Z|$) nodes in any leaf of the {\TripleGadgets} that were
   chosen for the $\TDM$ solution. We match each such node 
   to three chunks
-  that are put in its \TripleGadget (it is sitting on one of them),
+  that are put in its {\TripleGadget} (it is sitting on one of them),
   and we match it to any unmatched chunk in any \UnqGadget.
   \item We put $\deg(e)-1$ nodes in each Element Subtree. We match all remaining
-  chunks from this Element Subtree to those nodes in any possible
+  chunks from this Element Subtree to those nodes in arbitrary
   way.
   \item This solution has cost $\leq \Thr$ (easy to see by
   summing the costs of transporting chunks to each node).
@@ -2067,15 +2065,15 @@ For the reduction we proceed as follows:
 \textbf{Proof of correctness.}
 \begin{theorem}
   Take any feasible solution $\Solution$ to the instance $I$ of  $\FP+\RS(2)+\MA(4)$
-  (as constructed above). If cost of $\Solution$ is at most $\Thr$, then no node
-  is spawned in \UnqSubtree.
+  (as constructed above). If the cost of $\Solution$ is at most $\Thr$, then no node
+  is spawned in Unique Subtree.
   \label{th:no-unique}
 \end{theorem}
 
 \begin{proof}
   For the sake of contradiction, let us assume a feasible solution $\Solution$ 
   with at least
-  one node spawned in \UnqSubtree. We show that in this case, the
+  one node spawned in {\UnqSubtree}. We show that in this case, the
   cost of solution $\Solution$ is greater than $\Thr$.
   Let $\ell$ denote the number of nodes that were spawned in $\Solution$ in 
   the Unique
