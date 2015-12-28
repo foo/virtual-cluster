@@ -102,6 +102,8 @@
 \newcommand{\MatchCost}{\textsc{MCost}}
 \newcommand{\chunkOf}{\textsc{chunkOf}}
 
+%Maciek 3DM
+
 \newcommand{\Unmatched}{\textit{unmatched}}
 \newcommand{\ActiveNode}{\textit{active node}}
 \newcommand{\ActiveNodes}{\textit{active nodes}}
@@ -109,7 +111,7 @@
 \newcommand{\CostSol}{\textit{cost}(\Solution)}
 \newcommand{\CostEstimOne}{\textit{costEstim}}
 \newcommand{\CostEstimTwo}{\textit{costEstim2}}
-\newcommand{\numNodes}{\textit{nodes}}
+\newcommand{\numNodes}{\ensuremath{|V|}}
 
 \newcommand{\UnqSubtree}{{{\emph Unique Subtree}}}
 \newcommand{\MatchSubtree}{{\emph{Matching Subtree}}}
@@ -121,6 +123,8 @@
 \newcommand{\ElGadget}{{\emph{Element Gadget}}}
 \newcommand{\ElGadgets}{{\emph{Element Gadgets}}}
 
+\newcommand{\UniqueE}{{\ensuremath{\mathcal{U}_e}}}
+
 \newcommand{\SpawnedUnqSubtree}{\textit{nodesInUniqueSub}}
 \newcommand{\SpawnedMatchSubtree}{\textit{nodesInMatchingSub}}
 \newcommand{\SpawnedSubtree}{\textit{nodesInT}}
@@ -131,7 +135,7 @@
 \newtheorem{defn}{Definition}
 \newtheorem{obs}{Observation}
 
-%Maciek
+%Maciek SAT
 
 \newcommand{\Bandwidth}{\ensuremath{bw}}
 \newcommand{\Tree}{\ensuremath{T}}
@@ -1898,18 +1902,23 @@ $1$ (positive subtree) or $0$ (negative subtree).
 
 \subsection{Two Replicas without Bandwidth Constraints}
 
+\maciek{TODO: picture of two chunk replicas}
+\maciek{TODO: rename variables}
+\maciek{TODO: chapter about notation}
+\maciek{TODO: read the whole thing and check consistency}
+
 We now show that the 2-replica selection problem is even NP-hard without
 capacity constraints. 
 In particular, we consider the problem variant $\FP+\RS(2)+\MA(4)$
 with two replicas and assignment factor four.
-There are not capacity constraints on links, and no extra, idling nodes. \maciek{no idle nodes were introduced earlier.}
+There are no capacity constraints on links.
 
 The reduction is from 
  \emph{3D Perfect Matching}~\cite{3dmatch},
  short $\TDM$. 
 Recall that in
 $\TDM$, we are given three finite and disjoint
-sets $X$, $Y$, and $Z$ of cardinality $k$, as well as a subset of triples $T\subset
+sets $X$, $Y$, and $Z$ of cardinality $n$, as well as a subset of triples $T\subset
 X \times Y \times Z$.  Set $M \subseteq T$ is a 3-dimensional matching
 if and only if, for any two distinct triples $t_1=(x_1, y_1, z_1) \in M$
 and $t_2=(x_2, y_2, z_2) \in M$, it holds that $x_1\neq x_2$, $y_1\neq
@@ -1918,7 +1927,7 @@ a $M \subseteq T$ which is \emph{perfect}, that is, a subset which covers all
 elements of $X \times Y \times Z$ exactly once.
 
 We use $\deg(e)$ to refer to the number of triples that contain element
-$e\in X\cup Y\cup Z$. We define $n=|X|=|Y|=|Z|$. 
+$e\in X\cup Y\cup Z$. 
 We use $t$ for the number of triples. We call $t(e)$ the
 set of triples containing element $e$. We call
 $\lbrace e_1(t), e_2(t), e_3(t) \rbrace$ the elements of triple $t$. 
@@ -1949,11 +1958,11 @@ We construct the following chunk types:
   and will also use the notation $e_i(t)$ for 
   triple $t$ and index $i \in \{1,2,3\}$.
 \item We construct $n$ additional chunk types named $u_1, \ldots, u_n$.
-  Intuitively, we want $n$ nodes to process one of these chunks each
+  Intuitively, we want $n$ (remember that $n=|X|=|Y|=|Z|$) nodes to process one of these chunks each
   as well as $3$ chunks from \TripleGadget.
 \item \emph{Unique Chunks:} For each element $e\in X\cup Y\cup Z$, we 
  construct additional $3\cdot(\deg(e) - 1)$ \emph{unique chunks}. 
-We call this set $U(e)$.
+We call this set $\UniqueE$.
 \end{enumerate}
 
 \paragraph{Tree} 
@@ -1978,7 +1987,7 @@ We construct the following tree.
 A \emph{matching subtree}
   and a \emph{cover subtree}. Matching subtrees consist 
   of two parts: $t$
-  triple gadgets and unique gadgets. Cover subtrees consist of
+  \TripleGadgets and \UnqGadgets. Cover subtrees consist of
   $n$ element gadgets.
 \item \TripleGadget: For each triple, we create a subtree
   consisisting of four vertices: three leaves and one triple root. 
@@ -1989,7 +1998,7 @@ middle node and
   connect it to the root of the matching subtree. 
   Note that we create middle
   nodes not only to keep the tree balanced, but also to keep leaves of
-  unique gadgets far from leaves of other unique gadgets.
+  \UnqGadgets far from leaves of other \UnqGadgets.
 \item \ElGadget: For each element $e \in X\cup Y\cup Z$, we
   construct a subtree consisting of the root of the element (attached
   to the root of the cover subtree), and $4\cdot(t(e)-1)+1$
@@ -2007,7 +2016,7 @@ at the leaves of
   \UnqGadgets.
 \item \emph{Chunks in element gadget:} For each element $e\in X\cup Y\cup Z$, 
 we place the chunks
-  $t(e)\cup U(e)$ at the leaves of each element subtree.
+  $t(e)\cup \UniqueE$ at the leaves of each element subtree.
 \end{enumerate}
 
 \paragraph{Other properties of the instance}
@@ -2217,8 +2226,8 @@ For each element $e\in X\cup Y\cup Z$, we construct $\deg(e)$
 \begin{enumerate}
 \item calculate $\Thr$
 \item constructing VCEMB solution from the matching solution. Show that the cost is indeed $\Thr$.
-\item constructing matching solution from VCEMB instance. Feasibility of the matching: every chunk type processed by machine that sits on top of it. One chunk type processed in Matching Subtree. We choose at most $\numNodes$ triple gadgets to be active
-\item no feasible solution places one or two nodes in a Triple Gadget. We use the same lower-bound of the cost argument of other nodes as in previous proof.
+\item constructing matching solution from VCEMB instance. Feasibility of the matching: every chunk type processed by machine that sits on top of it. One chunk type processed in Matching Subtree. We choose at most $\numNodes$ \TripleGadgets to be active
+\item no feasible solution places one or two nodes in a \TripleGadget. We use the same lower-bound of the cost argument of other nodes as in previous proof.
 \end{enumerate}
 
 
