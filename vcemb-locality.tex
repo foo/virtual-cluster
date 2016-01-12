@@ -106,7 +106,7 @@
 
 \newcommand{\TDPM}{\textsc{3DPM}}
 
-\newcommand{\Unmatched}{\textit{unmatched}}
+\newcommand{\Unmatched}{\gamma}
 \newcommand{\ActiveNode}{\textit{active node}}
 \newcommand{\ActiveNodes}{\textit{active nodes}}
 \newcommand{\Solution}{S}
@@ -1904,10 +1904,6 @@ $1$ (positive subtree) or $0$ (negative subtree).
 
 \subsection{Two Replicas without Bandwidth Constraints}
 
-\maciek{TODO: picture of two chunk replicas}
-\maciek{TODO: read the whole thing and check consistency}
-\maciek{TODO: lemma that the problem is NP-hard}
-
 We now show that the 2-replica selection problem is even NP-hard without
 capacity constraints. 
 In particular, we consider the problem variant $\FP+\RS(2)+\MA(4)$
@@ -2074,10 +2070,8 @@ For the reduction we proceed as follows:
   with at least
   one node spawned in {\UnqSubtree}. We show that in this case, the
   cost of solution $\Solution$ is greater than $\Thr$.
-  Let $\ell$ denote the number of nodes that were spawned in $\Solution$ in 
-  the Unique
-  Subtree. We know that $1 \leq \ell \leq t$. We denote the set of nodes
-  spawned in {\UnqSubtree} by $\SpawnedUnqSubtree$.
+  We denote the set of nodes
+  spawned in {\UnqSubtree} by $\SpawnedUnqSubtree$. Let $\ell := |\SpawnedUnqSubtree$. We know that $1 \leq \ell \leq t$. 
   In $\Solution$ we have exactly $4 \cdot \numNodes$ chunk transportations, some
   incurring cost $0, 2, 4$ or $6$ (the tree has an edge-height of $3$). At
   most $\numNodes$ transportations are of cost $0$. Note that
@@ -2089,16 +2083,17 @@ For the reduction we proceed as follows:
   we need to transport $t - \ell$ chunks to nodes outside the
   \UnqSubtree, incurring cost $4$ for each chunk.
 
-  \maciek{TODO: introduce $\CostEstimOne$}
-  
-  We lower-bound the cost of each of the remaining transportations by $2$.
-Summing up the costs, we have:
-  $\CostSol \geq \CostEstimOne(\ell) = 0 \cdot \numNodes + \ell \cdot 12 +
-  (t-\ell)\cdot 4 + (4\cdot \numNodes - \numNodes - 4\cdot \ell - (t-\ell))\cdot 2$
+ 
+    Let $\CostEstimOne(u) = u \cdot 12 +
+    (t-u)\cdot 4 + (4\cdot \numNodes - \numNodes - 4\cdot u - (t-u))\cdot 2$.
+
+    
+    From the structure of the substrate network and placement of chunks we know that $\CostSol \geq \CostEstimOne(\ell)$.
+
   It can be verified that for each $\ell$ we have that
   $\CostEstimOne(\ell)) > \Thr$. To do so, we first show that
   $\CostEstimOne(\ell+1)) \geq \CostEstimOne(\ell))$, for $1\leq \ell \leq t-1$. We have
-  that $\CostSol \geq \CostEstimOne(1)) \geq \Thr$.
+  that $\CostEstimOne(1)) > \Thr$, and thus $\CostSol > \Thr$.
 \end{proof}
 
 \begin{lemma}
@@ -2108,9 +2103,9 @@ Summing up the costs, we have:
   \label{th:np-balance}
 \end{lemma}
 \begin{proof}
-  \maciek{TODO: introduce $\SpawnedMatchSubtree$. Why use $l$?}
+  Let $\SpawnedMatchSubtree$ be the set of nodes spawned in {\MatchSubtree}.
   Let us assume the contrary, namely that 
-  $\ell:=|\SpawnedMatchSubtree| \neq n$.
+  $|\SpawnedMatchSubtree| \neq n$.
   First, we use Theorem~\ref{th:no-unique} to
   restrict the placement of nodes in \UnqSubtree. Then we consider
   cases:
@@ -2121,11 +2116,10 @@ Summing up the costs, we have:
     processed in the {\MatchSubtree}, each incurring transportation
     cost of $6$.
 
-    \maciek{TODO: introduce $\CostEstimTwo$}
-
-    We lower-bound the cost of $\Solution$ in the following way:
-    $\CostSol \geq \CostEstimTwo(u) = 0\cdot \numNodes + 4\cdot t + (4\cdot
+    Let $\CostEstimTwo(u) = 0\cdot \numNodes + 4\cdot t + (4\cdot
     \numNodes - \numNodes - t)\cdot 2$.
+
+    From the structure of the substrate network and placement of chunks we know that $\CostSol \geq \CostEstimTwo(u)$.
 
     It can be verified that for each $u$ we have that
     $\CostEstimTwo(S) > \Thr$. To do so, we first show that
@@ -2139,19 +2133,18 @@ Summing up the costs, we have:
   \end{enumerate}
 \end{proof}
 
-\maciek{TODO: say what to do to finish the proof}
+\begin{theorem}
+  \maciek{TODO: problem is np-hard}
+\end{theorem}
 
+\begin{proof}
 \noindent \textbf{Construction of the matching problem solution.}
 Let's take any feasible solution $\Solution$ to the instance described
 above. We call the {\TripleGadget} \textit{active}, if we have a node spawned in
 any leaf of it. We refer to the active nodes in {\TripleGadgets} by \ActiveNodes. We
-construct our matching solution $M_S$ from triples that correspond to
+construct 3D-matching solution $M_S$ from triples that correspond to
 active \TripleGadgets.
 
-\begin{lemma}
-  If $\Solution$ is feasible, then $M_S$ is feasible.
-\end{lemma}
-\begin{proof}
 The proof follows from the following observations:
 \begin{enumerate}
 \item Exactly $n$ {\TripleGadgets} are \emph{active}.
