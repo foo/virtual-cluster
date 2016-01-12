@@ -111,11 +111,11 @@
 \newcommand{\ActiveNodes}{\textit{active nodes}}
 \newcommand{\Solution}{S}
 \newcommand{\CostSol}{\textit{cost}(\Solution)}
-\newcommand{\CostEstimOne}{\textit{costEstim}}
-\newcommand{\CostEstimTwo}{\textit{costEstim2}}
+\newcommand{\CostEstimOne}{\widehat{cost}}
+\newcommand{\CostEstimTwo}{\widehat{cost'}}
 \newcommand{\numNodes}{\ensuremath{|V|}}
 
-\newcommand{\UnqSubtree}{{{\emph Unique Subtree}}}
+\newcommand{\UnqSubtree}{{{\emph{Unique Subtree}}}}
 \newcommand{\MatchSubtree}{{\emph{Matching Subtree}}}
 \newcommand{\CoverSubtree}{{\emph{Cover Subtree}}}
 \newcommand{\TripleGadget}{{\emph{Triple Gadget}}}
@@ -127,8 +127,8 @@
 
 \newcommand{\UniqueE}{{\ensuremath{\mathcal{U}_e}}}
 
-\newcommand{\SpawnedUnqSubtree}{\textit{nodesInUniqueSub}}
-\newcommand{\SpawnedMatchSubtree}{\textit{nodesInMatchingSub}}
+\newcommand{\SpawnedUnqSubtree}{\sigma}
+\newcommand{\SpawnedMatchSubtree}{\delta}
 \newcommand{\SpawnedSubtree}{\textit{nodesInT}}
 \newcommand{\remainBw}{\textit{remainBw}}
 
@@ -1905,7 +1905,6 @@ $1$ (positive subtree) or $0$ (negative subtree).
 \subsection{Two Replicas without Bandwidth Constraints}
 
 \maciek{TODO: picture of two chunk replicas}
-\maciek{TODO: rename variables and introduce it: $nodesInUnique$}
 \maciek{TODO: read the whole thing and check consistency}
 \maciek{TODO: lemma that the problem is NP-hard}
 
@@ -1998,7 +1997,7 @@ middle node and
   connect it to the root of the matching subtree. 
   Note that we create middle
   nodes not only to keep the tree balanced, but also to keep leaves of
-  \UnqGadgets far from leaves of other \UnqGadgets.
+  {\UnqGadgets} far from leaves of other \UnqGadgets.
 \item \ElGadget: For each element $e \in X\cup Y\cup Z$, we
   construct a subtree consisting of the root of the element (attached
   to the root of the cover subtree), and $4\cdot(t(e)-1)+1$
@@ -2063,12 +2062,12 @@ For the reduction we proceed as follows:
 \end{enumerate}
 
 \textbf{Proof of correctness.}
-\begin{theorem}
+\begin{lemma}
   Take any feasible solution $\Solution$ to the instance $I$ of  $\FP+\RS(2)+\MA(4)$
   (as constructed above). If the cost of $\Solution$ is at most $\Thr$, then no node
   is spawned in Unique Subtree.
   \label{th:no-unique}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
   For the sake of contradiction, let us assume a feasible solution $\Solution$ 
@@ -2083,41 +2082,49 @@ For the reduction we proceed as follows:
   incurring cost $0, 2, 4$ or $6$ (the tree has an edge-height of $3$). At
   most $\numNodes$ transportations are of cost $0$. Note that
   the leaves of
-  \UnqSubtree are separated from other leaves of the tree by at
+  {\UnqSubtree} are separated from other leaves of the tree by at
   least $4$ edges.
   The cost of chunk transportation to nodes $v \in \SpawnedUnqSubtree$ is at least
-  $0 + 4 + 4 + 4$. The chunks in \UnqSubtree are unique, therefore
+  $12$. The chunks in {\UnqSubtree} are unique, therefore
   we need to transport $t - \ell$ chunks to nodes outside the
-  \UnqSubtree, incurring cost $4$ for each of the chunk.
+  \UnqSubtree, incurring cost $4$ for each chunk.
+
+  \maciek{TODO: introduce $\CostEstimOne$}
   
   We lower-bound the cost of each of the remaining transportations by $2$.
 Summing up the costs, we have:
-  $\CostSol(S) \geq \CostEstimOne(\ell)) = 0 \cdot \numNodes + \ell \cdot 12 +
+  $\CostSol \geq \CostEstimOne(\ell) = 0 \cdot \numNodes + \ell \cdot 12 +
   (t-\ell)\cdot 4 + (4\cdot \numNodes - \numNodes - 4\cdot \ell - (t-\ell))\cdot 2$
   It can be verified that for each $\ell$ we have that
   $\CostEstimOne(\ell)) > \Thr$. To do so, we first show that
   $\CostEstimOne(\ell+1)) \geq \CostEstimOne(\ell))$, for $1\leq \ell \leq t-1$. We have
-  that $\CostSol(S) \geq \CostEstimOne(1)) \geq \Thr$.
+  that $\CostSol \geq \CostEstimOne(1)) \geq \Thr$.
 \end{proof}
 
-\begin{theorem}
-  Given any feasible solution $\Solution$ to the instance $I$ of $\FP+\RS(2)+\MA(4)$
+\begin{lemma}
+  Given any feasible solution $\Solution$ to a given instance $I$ of $\FP+\RS(2)+\MA(4)$
   (as constructed above). If the cost of $\Solution$ is at most $\Thr$, then
   exactly $n$ nodes spawn in \MatchSubtree.
   \label{th:np-balance}
-\end{theorem}
+\end{lemma}
 \begin{proof}
+  \maciek{TODO: introduce $\SpawnedMatchSubtree$. Why use $l$?}
   Let us assume the contrary, namely that 
-  $\ell:=|\SpawnedMatchSubtree| \neq n$ in the \MatchSubtree.
-  First, we use the Theorem~\ref{th:no-unique} to
+  $\ell:=|\SpawnedMatchSubtree| \neq n$.
+  First, we use Theorem~\ref{th:no-unique} to
   restrict the placement of nodes in \UnqSubtree. Then we consider
   cases:
   \begin{enumerate}
+    
   \item $\ell \leq n$. In this case there are at least
     $u := 4 \cdot (n-\ell)$ chunks in the {\MatchSubtree} that are not
     processed in the {\MatchSubtree}, each incurring transportation
-    cost of $6$. We lower-bound the cost of $\Solution$ in the following way:
-    $\CostSol(S) \geq \CostEstimTwo(u) = 0\cdot \numNodes + 4\cdot t + (4\cdot
+    cost of $6$.
+
+    \maciek{TODO: introduce $\CostEstimTwo$}
+
+    We lower-bound the cost of $\Solution$ in the following way:
+    $\CostSol \geq \CostEstimTwo(u) = 0\cdot \numNodes + 4\cdot t + (4\cdot
     \numNodes - \numNodes - t)\cdot 2$.
 
     It can be verified that for each $u$ we have that
@@ -2131,6 +2138,8 @@ Summing up the costs, we have:
     each node missing.
   \end{enumerate}
 \end{proof}
+
+\maciek{TODO: say what to do to finish the proof}
 
 \noindent \textbf{Construction of the matching problem solution.}
 Let's take any feasible solution $\Solution$ to the instance described
@@ -2159,7 +2168,7 @@ The proof follows from the following observations:
 
 \subsection{Two replicas without multiple assignment}
 
-We now show that the problem is even NP-hard
+We now show that $\RS(2)+\FP+\CC+\BW$ is even NP-hard
 without multiple assignment.
 
 \noindent \textbf{The substrate network.}
@@ -2174,7 +2183,7 @@ We set $\CostTrans = \infty$, and $\CostCom = 1$, and we host only one node per 
 \noindent \textbf{Properties of the substrate network.}
 
 \begin{lemma}
-Assume we have a VCEMB instance with a subtree $T$ with $l$ leaves and the bandwidth capacity on uplink of $T$ is $\Band(k)$. Then in any feasible solution the number of nodes spawned in $T$ (we name it $s$) satisfies:
+Assume we have a $\RS(2)+\FP+\CC+\BW$ instance $I$ with a subtree $T$ with $l$ leaves and the bandwidth capacity on uplink of $T$ is $\Band(k)$. Then in any feasible solution the number of nodes spawned in $T$ (we name it $s$) satisfies:
 
 $s \leq k \vee n-s\leq k$, and $s \leq l$.
 \end{lemma}
