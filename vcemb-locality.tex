@@ -2146,17 +2146,18 @@ For the reduction we proceed as follows:
 \end{theorem}
 
 \begin{proof}
-  \noindent \textbf{Construction of the matching problem solution.}
-  Let's take any feasible solution $\Solution$ to the instance
-  described above. We call the {\TripleGadget} \textit{active}, if we
+  Let's take any $\TDPM$ instance $I_M$ and construct the corresponding $\RS(2)+\MA+\FP$ instance $I_{I_M}$ as described above.
+  Let's take any feasible solution $\Solution$ to $I_{I_M}$. We show that we can construct solution to $I_M$ from $\Solution$ in polynomial time.
+
+  We call the {\TripleGadget} \textit{active}, if we
   have a node spawned in any leaf of it. We refer to the active nodes
-  in {\TripleGadgets} by \ActiveNodes. We construct 3D-matching
-  solution $M_S$ from triples that correspond to active
+  in {\TripleGadgets} by \ActiveNodes. We construct $\TDPM$
+  solution from triples that correspond to active
   \TripleGadgets.
 
-  The proof follows from the following observations:
+  We observe the following properties of $\Solution$:
   \begin{enumerate}
-    \item Exactly $n$ {\TripleGadgets} are \emph{active}.
+    \item From lemmas \ref{th:no-unique} and \ref{th:np-balance} we know that exactly $n$ {\TripleGadgets} are \emph{active}.
     \item In $\Solution$ only one node is spawned in Active
     \TripleGadget.
     \item Each {\ActiveNode} $v$ processes the 3 chunks that are
@@ -2169,6 +2170,8 @@ For the reduction we proceed as follows:
     $|\Unmatched| = n$
     \item Set $\Unmatched$ is covered by \ActiveNodes
   \end{enumerate}
+
+  From above observations we conclude that $M_S$ is indeed feasible.
 \end{proof}
 
 \subsection{Two replicas without multiple assignment}
