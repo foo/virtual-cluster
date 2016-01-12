@@ -2016,120 +2016,128 @@ we place the chunks
 
 \paragraph{Other properties of the instance}
 \begin{enumerate}
-\item \emph{Multiple assignment:} We set the number of processed chunks by
-  each node to four.
-\item \emph{Number of nodes:} We allow to spawn
+  \item \emph{Multiple assignment:} We set the number of processed
+  chunks by each node to four.
+  \item \emph{Number of nodes:} We allow to spawn
   $\numNodes = n + \sum_{e}(\deg(e)-1)$ nodes.
-\item \emph{Threshold:}
+  \item \emph{Threshold:}
   $\Thr := 8\cdot n + 6\cdot\sum_{e}(\deg(e)-1)$
 \end{enumerate}
 
 Thus, the constructed instance uses two replicas of each chunk type.
 
-\textbf{Reduction.}
-We can make the following observations.
+\textbf{Reduction.}  We can make the following observations.
 
 \begin{obs}
-The construction fulfills the following properties:
-\begin{enumerate}
-\item There is one instance of each chunk type in the \MatchSubtree.
+  The construction fulfills the following properties:
+  \begin{enumerate}
+    \item There is one instance of each chunk type in the
+    \MatchSubtree.
 
-\item There is one instance of each chunk type in the \CoverSubtree.
+    \item There is one instance of each chunk type in the
+    \CoverSubtree.
 
-\item There are at most two replicas of each chunk type in the substrate network.
-\end{enumerate}
+    \item There are at most two replicas of each chunk type in the
+    substrate network.
+  \end{enumerate}
 \end{obs}
 
 For the reduction we proceed as follows:
 \begin{enumerate}
-  \item We put $n$ (remember that $n=|X|=|Y|=|Z|$) nodes in any leaf of the {\TripleGadgets} that were
-  chosen for the $\TDM$ solution. We match each such node 
-  to three chunks
-  that are put in its {\TripleGadget} (it is sitting on one of them),
-  and we match it to any unmatched chunk in any \UnqGadget.
-  \item We put $\deg(e)-1$ nodes in each Element Subtree. We match all remaining
-  chunks from this Element Subtree to those nodes in arbitrary
-  way.
-  \item This solution has cost $\leq \Thr$ (easy to see by
-  summing the costs of transporting chunks to each node).
-  \item The feasibility of the constructed solution follows
-  from the fact that  
-  each chunk type was processed. Each node processes four chunks.
+  \item We put $n$ (remember that $n=|X|=|Y|=|Z|$) nodes in any leaf
+  of the {\TripleGadgets} that were chosen for the $\TDM$ solution. We
+  match each such node to three chunks that are put in its
+  {\TripleGadget} (it is sitting on one of them), and we match it to
+  any unmatched chunk in any \UnqGadget.
+  \item We put $\deg(e)-1$ nodes in each Element Subtree. We match all
+  remaining chunks from this Element Subtree to those nodes in
+  arbitrary way.
+  \item This solution has cost $\leq \Thr$ (easy to see by summing the
+  costs of transporting chunks to each node).
+  \item The feasibility of the constructed solution follows from the
+  fact that each chunk type was processed. Each node processes four
+  chunks.
 \end{enumerate}
 
 \textbf{Proof of correctness.}
 \begin{lemma}
-  Take any feasible solution $\Solution$ to the instance $I$ of  $\FP+\RS(2)+\MA(4)$
-  (as constructed above). If the cost of $\Solution$ is at most $\Thr$, then no node
-  is spawned in Unique Subtree.
+  Take any feasible solution $\Solution$ to the instance $I$ of
+  $\FP+\RS(2)+\MA(4)$ (as constructed above). If the cost of
+  $\Solution$ is at most $\Thr$, then no node is spawned in Unique
+  Subtree.
   \label{th:no-unique}
 \end{lemma}
 
 \begin{proof}
-  For the sake of contradiction, let us assume a feasible solution $\Solution$ 
-  with at least
-  one node spawned in {\UnqSubtree}. We show that in this case, the
-  cost of solution $\Solution$ is greater than $\Thr$.
-  We denote the set of nodes
-  spawned in {\UnqSubtree} by $\SpawnedUnqSubtree$. Let $\ell := |\SpawnedUnqSubtree$. We know that $1 \leq \ell \leq t$. 
-  In $\Solution$ we have exactly $4 \cdot \numNodes$ chunk transportations, some
-  incurring cost $0, 2, 4$ or $6$ (the tree has an edge-height of $3$). At
-  most $\numNodes$ transportations are of cost $0$. Note that
-  the leaves of
+  For the sake of contradiction, let us assume a feasible solution
+  $\Solution$ with at least one node spawned in {\UnqSubtree}. We show
+  that in this case, the cost of solution $\Solution$ is greater than
+  $\Thr$.  We denote the set of nodes spawned in {\UnqSubtree} by
+  $\SpawnedUnqSubtree$. Let $\ell := |\SpawnedUnqSubtree|$. We know
+  that $1 \leq \ell \leq t$.  In $\Solution$ we have exactly
+  $4 \cdot \numNodes$ chunk transportations, some incurring cost
+  $0, 2, 4$ or $6$ (the tree has an edge-height of $3$). At most
+  $\numNodes$ transportations are of cost $0$. Note that the leaves of
   {\UnqSubtree} are separated from other leaves of the tree by at
-  least $4$ edges.
-  The cost of chunk transportation to nodes $v \in \SpawnedUnqSubtree$ is at least
-  $12$. The chunks in {\UnqSubtree} are unique, therefore
-  we need to transport $t - \ell$ chunks to nodes outside the
-  \UnqSubtree, incurring cost $4$ for each chunk.
+  least $4$ edges.  The cost of chunk transportation to nodes
+  $v \in \SpawnedUnqSubtree$ is at least $12$. The chunks in
+  {\UnqSubtree} are unique, therefore we need to transport $t - \ell$
+  chunks to nodes outside the \UnqSubtree, incurring cost $4$ for each
+  chunk.
 
  
-    Let $\CostEstimOne(u) = u \cdot 12 +
-    (t-u)\cdot 4 + (4\cdot \numNodes - \numNodes - 4\cdot u - (t-u))\cdot 2$.
+  Let
+  $\CostEstimOne(u) = u \cdot 12 + (t-u)\cdot 4 + (4\cdot \numNodes -
+  \numNodes - 4\cdot u - (t-u))\cdot 2$.
 
     
-    From the structure of the substrate network and placement of chunks we know that $\CostSol \geq \CostEstimOne(\ell)$.
+  From the structure of the substrate network and placement of chunks
+  we know that $\CostSol \geq \CostEstimOne(\ell)$.
 
   It can be verified that for each $\ell$ we have that
   $\CostEstimOne(\ell)) > \Thr$. To do so, we first show that
-  $\CostEstimOne(\ell+1)) \geq \CostEstimOne(\ell))$, for $1\leq \ell \leq t-1$. We have
-  that $\CostEstimOne(1)) > \Thr$, and thus $\CostSol > \Thr$.
+  $\CostEstimOne(\ell+1)) \geq \CostEstimOne(\ell))$, for
+  $1\leq \ell \leq t-1$. We have that $\CostEstimOne(1)) > \Thr$, and
+  thus $\CostSol > \Thr$.
 \end{proof}
 
 \begin{lemma}
-  Given any feasible solution $\Solution$ to a given instance $I$ of $\FP+\RS(2)+\MA(4)$
-  (as constructed above). If the cost of $\Solution$ is at most $\Thr$, then
-  exactly $n$ nodes spawn in \MatchSubtree.
+  Given any feasible solution $\Solution$ to a given instance $I$ of
+  $\FP+\RS(2)+\MA(4)$ (as constructed above). If the cost of
+  $\Solution$ is at most $\Thr$, then exactly $n$ nodes spawn in
+  \MatchSubtree.
   \label{th:np-balance}
 \end{lemma}
 \begin{proof}
-  Let $\SpawnedMatchSubtree$ be the set of nodes spawned in {\MatchSubtree}.
-  Let us assume the contrary, namely that 
-  $|\SpawnedMatchSubtree| \neq n$.
-  First, we use Theorem~\ref{th:no-unique} to
-  restrict the placement of nodes in \UnqSubtree. Then we consider
-  cases:
+  Let $\SpawnedMatchSubtree$ be the set of nodes spawned in
+  {\MatchSubtree}.  Let us assume the contrary, namely that
+  $|\SpawnedMatchSubtree| \neq n$.  First, we use
+  Theorem~\ref{th:no-unique} to restrict the placement of nodes in
+  \UnqSubtree. Then we consider cases:
   \begin{enumerate}
     
-  \item $\ell \leq n$. In this case there are at least
+    \item $\ell \leq n$. In this case there are at least
     $u := 4 \cdot (n-\ell)$ chunks in the {\MatchSubtree} that are not
     processed in the {\MatchSubtree}, each incurring transportation
     cost of $6$.
 
-    Let $\CostEstimTwo(u) = 0\cdot \numNodes + 4\cdot t + (4\cdot
+    Let
+    $\CostEstimTwo(u) = 0\cdot \numNodes + 4\cdot t + (4\cdot
     \numNodes - \numNodes - t)\cdot 2$.
 
-    From the structure of the substrate network and placement of chunks we know that $\CostSol \geq \CostEstimTwo(u)$.
+    From the structure of the substrate network and placement of
+    chunks we know that $\CostSol \geq \CostEstimTwo(\ell)$.
 
     It can be verified that for each $u$ we have that
-    $\CostEstimTwo(S) > \Thr$. To do so, we first show that
-    $\CostEstimTwo(u+1) \geq \CostEstimTwo(u)$, for $1\leq u \leq n-1$. Then
-    we show that $\CostEstimTwo(1) \geq \Thr$.
+    $\CostEstimTwo(u) > \Thr$. To do so, we first show that
+    $\CostEstimTwo(u+1) \geq \CostEstimTwo(u)$, for
+    $1\leq u \leq n-1$. Then we show that
+    $\CostEstimTwo(1) \geq \Thr$.
 
-  \item More than $n$ nodes spawned in \MatchSubtree. In this case we
-    use the fact that there are not enough nodes in {\CoverSubtree}, and
-    we need to transport over $6$ hops at least 3 unique chunks for
-    each node missing.
+    \item More than $n$ nodes spawned in \MatchSubtree. In this case
+    we use the fact that there are not enough nodes in
+    {\CoverSubtree}, and we need to transport over $6$ hops at least 3
+    unique chunks for each node missing.
   \end{enumerate}
 \end{proof}
 
@@ -2138,25 +2146,29 @@ For the reduction we proceed as follows:
 \end{theorem}
 
 \begin{proof}
-\noindent \textbf{Construction of the matching problem solution.}
-Let's take any feasible solution $\Solution$ to the instance described
-above. We call the {\TripleGadget} \textit{active}, if we have a node spawned in
-any leaf of it. We refer to the active nodes in {\TripleGadgets} by \ActiveNodes. We
-construct 3D-matching solution $M_S$ from triples that correspond to
-active \TripleGadgets.
+  \noindent \textbf{Construction of the matching problem solution.}
+  Let's take any feasible solution $\Solution$ to the instance
+  described above. We call the {\TripleGadget} \textit{active}, if we
+  have a node spawned in any leaf of it. We refer to the active nodes
+  in {\TripleGadgets} by \ActiveNodes. We construct 3D-matching
+  solution $M_S$ from triples that correspond to active
+  \TripleGadgets.
 
-The proof follows from the following observations:
-\begin{enumerate}
-\item Exactly $n$ {\TripleGadgets} are \emph{active}.
-\item In $\Solution$ only one node is spawned in Active \TripleGadget.
-\item Each {\ActiveNode} $v$ processes the 3 chunks that are placed in
-  $v$'s \TripleGadget, as well as one chunk in \UnqGadget.
-\item Every chunk type is covered.
-\item In each {\ElGadget} for element $e$, one chunk instance of
-  set $t(e)$ is not processed. Let's call this chunk instance
-  $\Unmatched(e)$, and let's call $\Unmatched = \cup_e \Unmatched(e)$. We have that $|\Unmatched| = n$
-\item Set $\Unmatched$ is covered by \ActiveNodes
-\end{enumerate}
+  The proof follows from the following observations:
+  \begin{enumerate}
+    \item Exactly $n$ {\TripleGadgets} are \emph{active}.
+    \item In $\Solution$ only one node is spawned in Active
+    \TripleGadget.
+    \item Each {\ActiveNode} $v$ processes the 3 chunks that are
+    placed in $v$'s \TripleGadget, as well as one chunk in \UnqGadget.
+    \item Every chunk type is covered.
+    \item In each {\ElGadget} for element $e$, one chunk instance of
+    set $t(e)$ is not processed. Let's call this chunk instance
+    $\Unmatched(e)$, and let's call
+    $\Unmatched = \cup_e \Unmatched(e)$. We have that
+    $|\Unmatched| = n$
+    \item Set $\Unmatched$ is covered by \ActiveNodes
+  \end{enumerate}
 \end{proof}
 
 \subsection{Two replicas without multiple assignment}
