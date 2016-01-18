@@ -2211,22 +2211,33 @@ Next, we show how to precisely control the number of nodes in any subtree.
   Assume that no chunk transportation is allowed, and $\CostCom = 1$.
 
   Assume that we have a subtree $T$ with subtries $S_1, S_2, \ldots S_a$ attached to the root of $T$. Assume that in every feasible solution we have exactly $Q$ machines in $T$ (and the rest $\numNodes - Q$ machines outside of $T$). The bandwidth capacity on uplink of $S_i$ is set to $\Band(x_i)$, where $\sum_i x_i = Q$. Then, in every feasible solution the number of nodes spawned in $S_i$ is $x_i$.
+
+  \label{lem:bandwidth2}
 \end{lemma}
 
 \begin{proof}
 
-  Let's take any feasible solution to $I$ and call $y_i$ the number of nodes spawned in $S_i$.
+  \maciek{Sketch only!}
+
+  Let's assume by contrary that we feasible solution $\Sol$ to $I$ and call $y_i$ the number of nodes spawned in $S_i$. We know that $\sum_i y_i = Q$.
+
+  Let's take any $i$ such that $y_i \neq x_i$.
   From lemma \ref{lem:bandwidth1} we know that $y_i \leq x_i \vee y_i \geq \numNodes - x_i$.
-  
+
 \end{proof}
 
-Notice that this assumption holds for the whole tree with $k := \numNodes$. Corollaries:
+\begin{observation}
+  Using lemma \ref{lem:bandwidth2} with $T$ being the whole tree and $Q = \numNodes$ we conclude that 
+
 
 \begin{enumerate}
 \item In every feasible solution there are $3\cdot \numNodes$ nodes spawned in {\MatchSubtree}.
 \item In every feasible solution there are $\sum_e (\deg(e)-1)$ nodes spawned in {\CoverSubtree}.
-\item In every feasible solution there are $\deg(e)-1$ nodes spawned in {\ElGadget} of element $e$.
 \end{enumerate}
+
+Using lemma \ref{lem:bandwidth2} with $T$ being the {\CoverSubtree} and $Q = \sum_e (\deg(e)-1)$ we conclude that
+in every feasible solution there are $\deg(e)-1$ nodes spawned in {\ElGadget} of element $e$.
+\end{observation}
 
 \noindent \textbf{Construction.}
 
