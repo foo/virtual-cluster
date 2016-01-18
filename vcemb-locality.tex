@@ -2179,14 +2179,28 @@ For the reduction we proceed as follows:
 We now show that $\RS(2)+\FP+\CC+\BW$ is even NP-hard
 without multiple assignment.
 
+\noindent \textbf{Construction.}
+
+\emph{Chunk Types.} 
+We construct the following chunk types:
+For each element $e\in X\cup Y\cup Z$, we construct $\deg(e)$
+  chunk types with two replicas.
+
 \noindent \textbf{The substrate network.}
 The network is reduced network from previous proof (no \UnqSubtree, no unique chunks in Elements Subtree).
 Chunks are placed the same way, with an exception that we have no unique chunk types.
 
 We use bandwidth constraints of form: $\Band(k) := k\cdot(\numNodes - k)$. Namely, we set bandwidth constraints of uplink of {\ElGadget} for each element $e$ to be $\Band(\deg(e)-1)$, the bandwidth on uplink of $\MatchSubtree$ to be $\Band(n)$ and on uplink of $\CoverSubtree$ to be $\Band(\sum_e (\deg(e)-1)$.
 
+\emph{The threshold value and other properties of the instance.}
+We set $\CostTrans = \infty$ \maciek{or some big constant, e.g. sum of all the pairwise node communication, times 6 hops}, and $\CostCom = 1$, and we host only one node per machine. We set the number of machines to spawn to: $\numNodes := 3\cdot n + \sum_e (\deg(e)-1)$. We set the threshold to:
+\begin{align*}
+  \Thr  & = 2\cdot (3\cdot \numNodes + \sum_e (\deg(e) - 1)) & \mbox{(over 2 hops)}\\
+         & + 4\cdot (n\cdot (3 \cdot (3\cdot \numNodes - 3)) / 2) & \mbox{(over 4 hops in {\MatchSubtree})}\\
+         & + 4\cdot (\sum_e((\deg(e) - 1)\cdot (\sum_{f\neq e} \deg(f) - 1)/2)) & \mbox{(over 4 hops in {\CoverSubtree})}\\
+         & + 6\cdot (3\cdot \numNodes \cdot \sum_e(\deg(e) - 1)) & \mbox{(between {\MatchSubtree} and {\CoverSubtree})} \\
+\end{align*}
 
-We set $\CostTrans = \infty$ \maciek{or some big constant, e.g. sum of all the pairwise node communication, times 6 hops}, and $\CostCom = 1$, and we host only one node per machine. We set the number of machines to spawn to: $\numNodes := 3\cdot n + \sum_e (\deg(e)-1)$.
 
 \noindent \textbf{Properties of the substrate network.}
 
@@ -2226,7 +2240,7 @@ Next, we show how to precisely control the number of nodes in any subtree.
 
 \end{proof}
 
-\begin{observation}
+\begin{obs}
   Using lemma \ref{lem:bandwidth2} with $T$ being the whole tree and $Q = \numNodes$ we conclude that 
 
 
@@ -2237,16 +2251,7 @@ Next, we show how to precisely control the number of nodes in any subtree.
 
 Using lemma \ref{lem:bandwidth2} with $T$ being the {\CoverSubtree} and $Q = \sum_e (\deg(e)-1)$ we conclude that
 in every feasible solution there are $\deg(e)-1$ nodes spawned in {\ElGadget} of element $e$.
-\end{observation}
-
-\noindent \textbf{Construction.}
-
-\emph{Chunk Types.} 
-We construct the following chunk types:
-For each element $e\in X\cup Y\cup Z$, we construct $\deg(e)$
-  chunk types with two replicas. We refer to such chunk types in two ways: either
-  the element of set $t(e)$ for some element $e$, or $e_i(t)$ for some
-  triple $t$ and index $i \in \{1,2,3\}$.
+\end{obs}
 
 \noindent \textbf{Reduction.}
 
