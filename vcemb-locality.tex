@@ -2186,37 +2186,38 @@ Chunks are placed the same way, with an exception that we have no unique chunk t
 We use bandwidth constraints of form: $\Band(k) := k\cdot(\numNodes - k)$. Namely, we set bandwidth constraints of uplink of {\ElGadget} for each element $e$ to be $\Band(\deg(e)-1)$, the bandwidth on uplink of $\MatchSubtree$ to be $\Band(n)$ and on uplink of $\CoverSubtree$ to be $\Band(\sum_e (\deg(e)-1)$.
 
 
-We set $\CostTrans = \infty$, and $\CostCom = 1$, and we host only one node per machine. We set the number of machines to spawn to: $\numNodes := 3\cdot n + \sum_e (\deg(e)-1)$.
+We set $\CostTrans = \infty$ \maciek{or some big constant, e.g. sum of all the pairwise node communication, times 6 hops}, and $\CostCom = 1$, and we host only one node per machine. We set the number of machines to spawn to: $\numNodes := 3\cdot n + \sum_e (\deg(e)-1)$.
 
 \noindent \textbf{Properties of the substrate network.}
 
 \begin{lemma}
-Assume we have a $\RS(2)+\FP+\CC+\BW$ instance $I$ with a subtree $T$ with $l$ leaves and the bandwidth capacity on uplink of $T$ is $\Band(k)$. Then in any feasible solution the number of nodes spawned in $T$ (we name it $s$) satisfies:
+Assume we have a $\RS(2)+\FP+\CC+\BW$ instance $I$ with a subtree $T$ with $l$ leaves and the bandwidth capacity on uplink of $T$ is $\Band(k)$. Assume that no chunk transportation is allowed (every node must be colocated with the chunk it processes), and $\CostCom = 1$. Then in any feasible solution the number of nodes spawned in $T$ (we name it $s$) satisfies:
 
 $s \leq k \vee n-s\leq k$, and $s \leq l$.
+\label{lem:bandwidth1}
 \end{lemma}
 
 \begin{proof}
 $s\leq l$ is trivial, as we cannot spawn more nodes than leaves.
 Bandwidth allocation on uplink of $T$ is $uplink(s,T) := s\cdot (\numNodes - s)$, as no chunk transportation is allowed, and every node in $T$ has to communicate over $T$'s uplink with nodes spawned outside of $T$. Therefore, in every feasible solution we have: $uplink(s, T) \leq \Band(k)$.
-Let's define the remaining bandwidth on uplink of T: $\remainBw(s) := \Band(k)-uplink(s, T) = s^2 - s\cdot n - k^2+k\cdot n $.
-Every feasible solution has $\remainBw(s) \geq 0$, which is true for $s \leq k \vee n-s\leq k$.
+Let's define the remaining bandwidth on uplink of T: $\remainBw(s) := \Band(k)-uplink(s, T) = s^2 - s\cdot \numNodes - k^2+k\cdot \numNodes $.
+Every feasible solution has $\remainBw(s) \geq 0$, which is true for $s \leq k \vee \numNodes-s\leq k$ (follows from the properties of quadratic function).
 \end{proof}
 
 Next, we show how to precisely control the number of nodes in any subtree.
 
 \begin{lemma}
-\begin{enumerate}
-\item Assumption: we are given a subtree $T$, and we assume that exactly $k$ nodes are placed there in any feasible solution. 
-\item Assumption: we have $c$ children of root of $T$, each having bandwidth of $\Band(a_i)$. Sum of $a_i$ is $k$
-\item Then exactly $a_i$ nodes are placed in subtree of $i$-th children of root of $T$
-\end{enumerate}
+  Assume we have a $\RS(2)+\FP+\CC+\BW$ instance $I$.
+  Assume that no chunk transportation is allowed, and $\CostCom = 1$.
+
+  Assume that we have a subtree $T$ with subtries $S_1, S_2, \ldots S_a$ attached to the root of $T$. Assume that in every feasible solution we have exactly $Q$ machines in $T$ (and the rest $\numNodes - Q$ machines outside of $T$). The bandwidth capacity on uplink of $S_i$ is set to $\Band(x_i)$, where $\sum_i x_i = Q$. Then, in every feasible solution the number of nodes spawned in $S_i$ is $x_i$.
 \end{lemma}
 
 \begin{proof}
-\begin{enumerate}
-\item show that only one solution to $\remainBw(s)$ exist at each level
-\end{enumerate}
+
+  Let's take any feasible solution to $I$ and call $y_i$ the number of nodes spawned in $S_i$.
+  From lemma \ref{lem:bandwidth1} we know that $y_i \leq x_i \vee y_i \geq \numNodes - x_i$.
+  
 \end{proof}
 
 Notice that this assumption holds for the whole tree with $k := \numNodes$. Corollaries:
