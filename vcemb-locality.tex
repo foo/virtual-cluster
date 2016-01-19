@@ -2255,13 +2255,23 @@ in every feasible solution there are $\deg(e)-1$ nodes spawned in {\ElGadget} of
 
 \noindent \textbf{Reduction.}
 
-\begin{enumerate}
-\item calculate $\Thr$
-\item constructing VCEMB solution from the matching solution. Show that the cost is indeed $\Thr$.
-\item constructing matching solution from VCEMB instance. Feasibility of the matching: every chunk type processed by machine that sits on top of it. One chunk type processed in Matching Subtree. We choose at most $\numNodes$ \TripleGadgets to be active
-\item no feasible solution places one or two nodes in a \TripleGadget. We use the same lower-bound of the cost argument of other nodes as in previous proof.
-\end{enumerate}
+Let's take an instance $I$ of $\TDPM$ and construct an instance $I'$ of $\RS(2)+\FP+\CC+\BW$ in the way described above.
+We show that $I'$ has solution of cost $\leq \Thr$ if and only if $I \in \TDPM$ (there exists a perfect 3D matching).
 
+($\leftarrow$)
+Let's take any feasible solution $\Sol$ to $I$ and produce a solution $\Sol'$ to $I'$. We show that cost of $\Sol'$ is indeed $\leq \Thr$.
+
+For each triple $t_1,\ldots, t_n$ in $\Sol$ we put $3$ nodes in leaves of triple gadgets corresponding to those triples.
+In each element gadget (that corresponds to element $e$) we put $\deg(e)-1$ nodes. In each element gadget there is only one leaf without the node placed in it: this node contains the chunk replica that is processed in {\MatchSubtree}.
+
+It is easy to see that $\Sol'$ has cost exactly $\Thr$ and no bandwidth constraint was violated. Each chunk type was processed.
+ 
+
+
+($\rightarrow$)
+Let's take any feasible solution $\Sol'$ to $I'$ and produce a solution $\Sol$ to $\I$. From lemma \ref{lem:bandwidth2} we know that: 
+
+Feasibility of the matching: every chunk type processed by machine that sits on top of it. One chunk type processed in Matching Subtree. We choose at most $\numNodes$ \TripleGadgets to be active
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Related Work}\label{sec:relwork}
