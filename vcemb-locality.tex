@@ -2249,6 +2249,10 @@ Next, we show how to precisely control the number of nodes in any subtree.
 \item In every feasible solution there are $\sum_e (\deg(e)-1)$ nodes spawned in {\CoverSubtree}.
 \end{enumerate}
 
+\maciek{TODO: the second observation does not follow from this lemma! The sum of $x_i$ is strictly less than the number of machines to spawn!}
+
+\maciek{TODO: lemma that each triple gadget is either full or empty of nodes.}
+
 Using lemma \ref{lem:bandwidth2} with $T$ being the {\CoverSubtree} and $Q = \sum_e (\deg(e)-1)$ we conclude that
 in every feasible solution there are $\deg(e)-1$ nodes spawned in {\ElGadget} of element $e$.
 \end{obs}
