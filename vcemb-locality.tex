@@ -2146,10 +2146,25 @@ For the reduction we proceed as follows:
 \end{theorem}
 
 \begin{proof}
-  Let's take any $\TDPM$ instance $I_M$ and construct the corresponding $\RS(2)+\MA+\FP$ instance $I_{I_M}$ as described above.
-  Let's take any feasible solution $\Solution$ to $I_{I_M}$. We show that we can construct solution to $I_M$ from $\Solution$ in polynomial time.
+  
+Let's take an instance $I$ of $\TDPM$ and construct an instance $I'$
+of $\RS(2)+\MA+\FP$ in the way described above.  We show that $I'$
+has solution of cost $\leq \Thr$ if and only if $I \in \TDPM$ (there
+exists a perfect 3D matching).
 
-  We call the {\TripleGadget} \textit{active}, if we
+($\leftarrow$) Let's take any feasible solution $\Sol$ to $I$. We construct a solution $\Sol'$ to $I'$ in the following way:
+\begin{enumerate}
+  \item We place $n$ nodes in $n$ {\TripleGadgets} (one per gadget) that correspond to triples in $\Sol$. We match each of such nodes to chunks in the gadget it is placed, as well as one arbitrary chunk in {\UnqSubtree}.
+  \item In each {\ElGadget} that correspond to element $e$, we place $\deg(e) - 1$ nodes and match them to arbitrary chunks in this gadget, which is not yet matched in any {\TripleGadget}
+\end{enumerate}
+
+We can observe that every chunk type was processed. By simple calculations we see that $\Sol'$ indeed has cost $\leq \Thr$.
+
+($\rightarrow$)
+Let's take any feasible solution $\Sol'$ to $I'$.
+We construct the solution $\Sol$ to $I$ in the following way:
+
+We call the {\TripleGadget} \textit{active}, if we
   have a node spawned in any leaf of it. We refer to the active nodes
   in {\TripleGadgets} by \ActiveNodes. We construct $\TDPM$
   solution from triples that correspond to active
@@ -2331,6 +2346,11 @@ nodes spawned in it.
 
 \noindent \textbf{Reduction.}
 
+\begin{theorem}
+  $\RS(2)+\FP+\CC+\BW$ is NP-hard.
+\end{theorem}
+
+\begin{proof}
 Let's take an instance $I$ of $\TDPM$ and construct an instance $I'$
 of $\RS(2)+\FP+\CC+\BW$ in the way described above.  We show that $I'$
 has solution of cost $\leq \Thr$ if and only if $I \in \TDPM$ (there
@@ -2362,6 +2382,7 @@ types that correspond to $x\in A\cup B\cup C$ exactly one was
 processed in the {\MatchSubtree}, and therefore each element of
 $A\cup B\cup C$ is covered.
 
+\end{proof}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Related Work}\label{sec:relwork}
 
