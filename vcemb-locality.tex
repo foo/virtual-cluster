@@ -2337,7 +2337,11 @@ nodes spawned in it.
   By observation \ref{obs:nodes-match-cover} we know that we have
   exactly $3\cdot n$ spawned in {\MatchSubtree}. Therefore, by
   pidgeonhole principle we know that we have at most $n$
-  {\TripleGadgets} are active. Let's consider the number of pairwise communications in {\MatchSubtree} of length of 4 hops.
+  {\TripleGadgets} are active. What remains to be shown is that there are no half-active {\TripleGadgets} in the solution of cost $\leq \Thr$.
+
+  By observations \ref{obs:nodes-match-cover} and \ref{obs:deg-min-one} we know that the cost of communication of nodes in {\CoverSubtree} is the same for every feasible solution (let's name it $P$). We also know that the cost of communication between nodes in {\CoverSubtree} and {\MatchSubtree} is the same for every feasible solution (let's name it $Q$). Let's name $R$ the would-be cost of communication in {\MatchSubtree} if there were exactly $n$ active gadgets.
+
+  We can see that $\Thr = P+Q+R$. If we have at least one half-active gadget, then the cost of communication in {\MatchSubtree} is greater than $R$, because we increase the number of 4-hop communications by at least one per each half-active gadget in comparison to solution where we have exactly $n$ active gadgets.
 \end{proof}
 
 \noindent \textbf{Reduction.}
