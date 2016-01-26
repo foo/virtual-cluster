@@ -1904,114 +1904,105 @@ $1$ (positive subtree) or $0$ (negative subtree).
 
 \subsection{Two Replicas without Bandwidth Constraints}
 
-We now show that the 2-replica selection problem is even NP-hard without
-capacity constraints. 
-In particular, we consider the problem variant $\FP+\RS(2)+\MA(4)$
-with two replicas and assignment factor four.
-There are no capacity constraints on links.
+We now show that the 2-replica selection problem is even NP-hard
+without capacity constraints.  In particular, we consider the problem
+variant $\FP+\RS(2)+\MA(4)$ with two replicas and assignment factor
+four.  There are no capacity constraints on links.
 
-The reduction is from 
- \emph{3D Perfect Matching}~\cite{3dmatch},
- short $\TDM$. 
-Recall that in
-$\TDM$, we are given three finite and disjoint
-sets $X$, $Y$, and $Z$ of cardinality $n$, as well as a subset of triples $T\subset
-X \times Y \times Z$.  Set $M \subseteq T$ is a 3-dimensional matching
-if and only if, for any two distinct triples $t_1=(x_1, y_1, z_1) \in M$
-and $t_2=(x_2, y_2, z_2) \in M$, it holds that $x_1\neq x_2$, $y_1\neq
-y_2$, and $z_1\neq z_2$. Our goal is to decide if we can construct
-a $M \subseteq T$ which is \emph{perfect}, that is, a subset which covers all
-elements of $X \times Y \times Z$ exactly once.
+The reduction is from \emph{3D Perfect Matching}~\cite{3dmatch}, short
+$\TDM$.  Recall that in $\TDM$, we are given three finite and disjoint
+sets $X$, $Y$, and $Z$ of cardinality $n$, as well as a subset of
+triples $T\subset X \times Y \times Z$.  Set $M \subseteq T$ is a
+3-dimensional matching if and only if, for any two distinct triples
+$t_1=(x_1, y_1, z_1) \in M$ and $t_2=(x_2, y_2, z_2) \in M$, it holds
+that $x_1\neq x_2$, $y_1\neq y_2$, and $z_1\neq z_2$. Our goal is to
+decide if we can construct a $M \subseteq T$ which is \emph{perfect},
+that is, a subset which covers all elements of $X \times Y \times Z$
+exactly once.
 
-We use $\deg(e)$ to refer to the number of triples that contain element
-$e\in X\cup Y\cup Z$. 
-We use $t$ for the number of triples. We call $t(e)$ the
-set of triples containing element $e$. We call
-$\lbrace e_1(t), e_2(t), e_3(t) \rbrace$ the elements of triple $t$. 
-We call $m$ the number of triples.
+We use $\deg(e)$ to refer to the number of triples that contain
+element $e\in X\cup Y\cup Z$.  We use $t$ for the number of
+triples. We call $t(e)$ the set of triples containing element $e$. We
+call $\lbrace e_1(t), e_2(t), e_3(t) \rbrace$ the elements of triple
+$t$.  We call $m$ the number of triples.
 
 \begin{figure}[t]
-\centering
-\includegraphics[width=0.99\columnwidth]{reduction/overview.pdf}
-\vspace{-1em}
-\caption{Overview of the substrate network}
-\vspace{-1em}
+  \centering
+  \includegraphics[width=0.99\columnwidth]{reduction/overview.pdf}
+  \vspace{-1em}
+  \caption{Overview of the substrate network}
+  \vspace{-1em}
 \end{figure}
 
 
-\textbf{Construction.}
-\maciek{Picture of how chunks are used twice?}\stefan{that would be great}
+\textbf{Construction.}  \maciek{Picture of how chunks are used
+  twice?}\stefan{that would be great}
 
 Let's take any instance $I$ of $\TDM$ and create a $\FP+\RS(2)+\MA(4)$
 instance $I'$ as follows.
 
-\paragraph{Chunk Types} 
+\paragraph{Chunk Types}
 We construct the following chunk types:
 \begin{enumerate}
-\item For each element $e\in X\cup Y\cup Z$, we construct $\deg(e)$
-  chunk types with two replicas each. 
-  We refer to the chunk types
-  of element $e$ by $t(e)$, 
-  and will also use the notation $e_i(t)$ for 
+  \item For each element $e\in X\cup Y\cup Z$, we construct $\deg(e)$
+  chunk types with two replicas each.  We refer to the chunk types of
+  element $e$ by $t(e)$, and will also use the notation $e_i(t)$ for
   triple $t$ and index $i \in \{1,2,3\}$.
-\item We construct $n$ additional chunk types named $u_1, \ldots, u_n$.
-  Intuitively, we want $n$ (remember that $n=|X|=|Y|=|Z|$) nodes to process one of these chunks each
-  as well as $3$ chunks from \TripleGadget.
-\item \emph{Unique Chunks:} For each element $e\in X\cup Y\cup Z$, we 
- construct additional $3\cdot(\deg(e) - 1)$ \emph{unique chunks}. 
-We call this set $\UniqueE$.
+  \item We construct $n$ additional chunk types named
+  $u_1, \ldots, u_n$.  Intuitively, we want $n$ (remember that
+  $n=|X|=|Y|=|Z|$) nodes to process one of these chunks each as well
+  as $3$ chunks from \TripleGadget.
+  \item \emph{Unique Chunks:} For each element $e\in X\cup Y\cup Z$,
+  we construct additional $3\cdot(\deg(e) - 1)$ \emph{unique chunks}.
+  We call this set $\UniqueE$.
 \end{enumerate}
 
-\paragraph{Tree} 
+\paragraph{Tree}
 We construct the following tree.
 \begin{enumerate}
-%\item (chunk types) There are the following chunk types: (1) For each
-%  element $e \in A\cup B\cup C$ we create $4\cdot deg(e)$ chunk types,
-%  where $a\in{0,1,2}$ is to make $deg(e)-1+a$ divisible by 3. We those
-%  chunk types $core(e)$ (both corresponding to degree and those
-%  additional).
-%\item (unique chunk types) We create additional chunk types which will
-%  have only one replica. We create $n$ chunk types and we call this
-%  set $mtch$. For each element $e\in A\cup B\cup C$ we create
-%  $core(e)/3$ chunk types called $unqCore(e)$.
-%\item (convention for core chunk types naming) Let's say that $e$ is
-%  in triples $t_1,t_2,\ldots,t_{deg(e)}$; then
-%  $core(e) = \{ e^{t_1}, e^{t_2}, \ldots, e^{t_{deg(e)}} \} \cup
-%  ADDITIONAL$,
-%  where $ADDITIONAL$ are the chunk types that were added to make
-%  $deg(e)-1+a$ divisible by 3.
-\item The physical network consists of two parts: 
-A {\MatchSubtree}
-  and a {\CoverSubtree}. In the {\MatchSubtree} we put $2t$ gadgets: $t$ {\TripleGadgets} and $t$ {\UnqGadgets} (remember that $t$ is the number of triples in {\TDPM} instance). Cover subtrees consist of
+  % \item (chunk types) There are the following chunk types: (1) For
+  % each element $e \in A\cup B\cup C$ we create $4\cdot deg(e)$ chunk
+  % types, where $a\in{0,1,2}$ is to make $deg(e)-1+a$ divisible by
+  % 3. We those chunk types $core(e)$ (both corresponding to degree
+  % and those additional).
+  % \item (unique chunk types) We create additional chunk types which
+  % will have only one replica. We create $n$ chunk types and we call
+  % this set $mtch$. For each element $e\in A\cup B\cup C$ we create
+  % $core(e)/3$ chunk types called $unqCore(e)$.
+  % \item (convention for core chunk types naming) Let's say that $e$
+  % is in triples $t_1,t_2,\ldots,t_{deg(e)}$; then
+  % $core(e) = \{ e^{t_1}, e^{t_2}, \ldots, e^{t_{deg(e)}} \} \cup
+  % ADDITIONAL$,
+  % where $ADDITIONAL$ are the chunk types that were added to make
+  % $deg(e)-1+a$ divisible by 3.
+  \item The physical network consists of two parts: A {\MatchSubtree}
+  and a {\CoverSubtree}. In the {\MatchSubtree} we put $2t$ gadgets:
+  $t$ {\TripleGadgets} and $t$ {\UnqGadgets} (remember that $t$ is the
+  number of triples in {\TDPM} instance). Cover subtrees consist of
   $n$ element gadgets.
-\item \TripleGadget: For each triple, we create a subtree
-  consisisting of four vertices: three leaves and one triple root. 
-  We attach the root of the triple to the root of the matching
-  subtree.
-\item \UnqGadget: We create one leaf and one 
-middle node and
-  connect it to the root of the matching subtree. 
-  Note that we create middle
+  \item \TripleGadget: For each triple, we create a subtree
+  consisisting of four vertices: three leaves and one triple root.  We
+  attach the root of the triple to the root of the matching subtree.
+  \item \UnqGadget: We create one leaf and one middle node and connect
+  it to the root of the matching subtree.  Note that we create middle
   nodes not only to keep the tree balanced, but also to keep leaves of
   {\UnqGadgets} far from leaves of other \UnqGadgets.
-\item \ElGadget: For each element $e \in X\cup Y\cup Z$, we
+  \item \ElGadget: For each element $e \in X\cup Y\cup Z$, we
   construct a subtree consisting of the root of the element (attached
-  to the root of the cover subtree), and $4\cdot(t(e)-1)+1$
-  leaves.
+  to the root of the cover subtree), and $4\cdot(t(e)-1)+1$ leaves.
 \end{enumerate}
 
 \paragraph{Chunk Placement}
 The chunks are placed as follows:
 \begin{enumerate}
-\item \emph{Chunks in triples subtree:} For each triple
-  $t$ we put three chunks at the leaves of
-  the corresponding \TripleGadget, $e_1(t), e_2(t), e_3(t)$.
-\item \emph{Chunks in unique subtree:} We place chunks $u_1,\ldots, u_n$ 
-at the leaves of
-  \UnqGadgets.
-\item \emph{Chunks in element gadget:} For each element $e\in X\cup Y\cup Z$, 
-we place the chunks
-  $t(e)\cup \UniqueE$ at the leaves of each element subtree.
+  \item \emph{Chunks in triples subtree:} For each triple $t$ we put
+  three chunks at the leaves of the corresponding \TripleGadget,
+  $e_1(t), e_2(t), e_3(t)$.
+  \item \emph{Chunks in unique subtree:} We place chunks
+  $u_1,\ldots, u_n$ at the leaves of \UnqGadgets.
+  \item \emph{Chunks in element gadget:} For each element
+  $e\in X\cup Y\cup Z$, we place the chunks $t(e)\cup \UniqueE$ at the
+  leaves of each element subtree.
 \end{enumerate}
 
 \paragraph{Other properties of the instance}
@@ -2147,32 +2138,38 @@ For the reduction we proceed as follows:
 
 \begin{proof}
   
-Let's take an instance $I$ of $\TDPM$ and construct an instance $I'$
-of $\RS(2)+\MA+\FP$ in the way described above.  We show that $I'$
-has solution of cost $\leq \Thr$ if and only if $I \in \TDPM$ (there
-exists a perfect 3D matching).
+  Let's take an instance $I$ of $\TDPM$ and construct an instance $I'$
+  of $\RS(2)+\MA+\FP$ in the way described above.  We show that $I'$
+  has solution of cost $\leq \Thr$ if and only if $I \in \TDPM$ (there
+  exists a perfect 3D matching).
 
-($\leftarrow$) Let's take any feasible solution $\Sol$ to $I$. We construct a solution $\Sol'$ to $I'$ in the following way:
-\begin{enumerate}
-  \item We place $n$ nodes in $n$ {\TripleGadgets} (one per gadget) that correspond to triples in $\Sol$. We match each of such nodes to chunks in the gadget it is placed, as well as one arbitrary chunk in {\UnqSubtree}.
-  \item In each {\ElGadget} that correspond to element $e$, we place $\deg(e) - 1$ nodes and match them to arbitrary chunks in this gadget, which is not yet matched in any {\TripleGadget}
-\end{enumerate}
+  ($\leftarrow$) Let's take any feasible solution $\Sol$ to $I$. We
+  construct a solution $\Sol'$ to $I'$ in the following way:
+  \begin{enumerate}
+    \item We place $n$ nodes in $n$ {\TripleGadgets} (one per gadget)
+    that correspond to triples in $\Sol$. We match each of such nodes
+    to chunks in the gadget it is placed, as well as one arbitrary
+    chunk in {\UnqSubtree}.
+    \item In each {\ElGadget} that correspond to element $e$, we place
+    $\deg(e) - 1$ nodes and match them to arbitrary chunks in this
+    gadget, which is not yet matched in any {\TripleGadget}
+  \end{enumerate}
 
-We can observe that every chunk type was processed. By simple calculations we see that $\Sol'$ indeed has cost $\leq \Thr$.
+  We can observe that every chunk type was processed. By simple
+  calculations we see that $\Sol'$ indeed has cost $\leq \Thr$.
 
-($\rightarrow$)
-Let's take any feasible solution $\Sol'$ to $I'$.
-We construct the solution $\Sol$ to $I$ in the following way:
+  ($\rightarrow$) Let's take any feasible solution $\Sol'$ to $I'$.
+  We construct the solution $\Sol$ to $I$ in the following way:
 
-We call the {\TripleGadget} \textit{active}, if we
-  have a node spawned in any leaf of it. We refer to the active nodes
-  in {\TripleGadgets} by \ActiveNodes. We construct $\TDPM$
-  solution from triples that correspond to active
-  \TripleGadgets.
+  We call the {\TripleGadget} \textit{active}, if we have a node
+  spawned in any leaf of it. We refer to the active nodes in
+  {\TripleGadgets} by \ActiveNodes. We construct $\TDPM$ solution from
+  triples that correspond to active \TripleGadgets.
 
   We observe the following properties of $\Solution$:
   \begin{enumerate}
-    \item From lemmas \ref{th:no-unique} and \ref{th:np-balance} we know that exactly $n$ {\TripleGadgets} are \emph{active}.
+    \item From lemmas \ref{th:no-unique} and \ref{th:np-balance} we
+    know that exactly $n$ {\TripleGadgets} are \emph{active}.
     \item In $\Solution$ only one node is spawned in Active
     \TripleGadget.
     \item Each {\ActiveNode} $v$ processes the 3 chunks that are
@@ -2233,8 +2230,7 @@ $\numNodes := 3\cdot n + \sum_e (\deg(e)-1)$. We set the threshold to:
   $T$ with $l$ leaves and the bandwidth capacity on uplink of $T$ is
   $\Band(k)$. Assume that no chunk transportation is allowed
   ($\CostTrans = \infty$, so every node must be colocated with the
-  chunk it processes in every feasible solution), and $\CostCom =
-  1$.
+  chunk it processes in every feasible solution), and $\CostCom = 1$.
   Then in any feasible solution the number of nodes spawned in $T$ (we
   name it $s$) satisfies:
 
@@ -2337,11 +2333,24 @@ nodes spawned in it.
   By observation \ref{obs:nodes-match-cover} we know that we have
   exactly $3\cdot n$ spawned in {\MatchSubtree}. Therefore, by
   pidgeonhole principle we know that we have at most $n$
-  {\TripleGadgets} are active. What remains to be shown is that there are no half-active {\TripleGadgets} in the solution of cost $\leq \Thr$.
+  {\TripleGadgets} are active. What remains to be shown is that there
+  are no half-active {\TripleGadgets} in the solution of cost
+  $\leq \Thr$.
 
-  By observations \ref{obs:nodes-match-cover} and \ref{obs:deg-min-one} we know that the cost of communication of nodes in {\CoverSubtree} is the same for every feasible solution (let's name it $P$). We also know that the cost of communication between nodes in {\CoverSubtree} and {\MatchSubtree} is the same for every feasible solution (let's name it $Q$). Let's name $R$ the would-be cost of communication in {\MatchSubtree} if there were exactly $n$ active gadgets.
+  By observations \ref{obs:nodes-match-cover} and
+  \ref{obs:deg-min-one} we know that the cost of communication of
+  nodes in {\CoverSubtree} is the same for every feasible solution
+  (let's name it $P$). We also know that the cost of communication
+  between nodes in {\CoverSubtree} and {\MatchSubtree} is the same for
+  every feasible solution (let's name it $Q$). Let's name $R$ the
+  would-be cost of communication in {\MatchSubtree} if there were
+  exactly $n$ active gadgets.
 
-  We can see that $\Thr = P+Q+R$. If we have at least one half-active gadget, then the cost of communication in {\MatchSubtree} is greater than $R$, because we increase the number of 4-hop communications by at least one per each half-active gadget in comparison to solution where we have exactly $n$ active gadgets.
+  We can see that $\Thr = P+Q+R$. If we have at least one half-active
+  gadget, then the cost of communication in {\MatchSubtree} is greater
+  than $R$, because we increase the number of 4-hop communications by
+  at least one per each half-active gadget in comparison to solution
+  where we have exactly $n$ active gadgets.
 \end{proof}
 
 \noindent \textbf{Reduction.}
@@ -2351,36 +2360,36 @@ nodes spawned in it.
 \end{theorem}
 
 \begin{proof}
-Let's take an instance $I$ of $\TDPM$ and construct an instance $I'$
-of $\RS(2)+\FP+\CC+\BW$ in the way described above.  We show that $I'$
-has solution of cost $\leq \Thr$ if and only if $I \in \TDPM$ (there
-exists a perfect 3D matching).
+  Let's take an instance $I$ of $\TDPM$ and construct an instance $I'$
+  of $\RS(2)+\FP+\CC+\BW$ in the way described above.  We show that
+  $I'$ has solution of cost $\leq \Thr$ if and only if $I \in \TDPM$
+  (there exists a perfect 3D matching).
 
-($\leftarrow$) Let's take any feasible solution $\Sol$ to $I$ and
-produce a solution $\Sol'$ to $I'$. We show that cost of $\Sol'$ is
-indeed $\leq \Thr$.
+  ($\leftarrow$) Let's take any feasible solution $\Sol$ to $I$ and
+  produce a solution $\Sol'$ to $I'$. We show that cost of $\Sol'$ is
+  indeed $\leq \Thr$.
 
-For each triple $t_1,\ldots, t_n$ in $\Sol$ we put $3$ nodes in leaves
-of triple gadgets corresponding to those triples.  In each element
-gadget (that corresponds to element $e$) we put $\deg(e)-1$ nodes. In
-each element gadget there is only one leaf without the node placed in
-it: this node contains the chunk replica that is processed in
-{\MatchSubtree}.
+  For each triple $t_1,\ldots, t_n$ in $\Sol$ we put $3$ nodes in
+  leaves of triple gadgets corresponding to those triples.  In each
+  element gadget (that corresponds to element $e$) we put $\deg(e)-1$
+  nodes. In each element gadget there is only one leaf without the
+  node placed in it: this node contains the chunk replica that is
+  processed in {\MatchSubtree}.
 
-It is easy to see that $\Sol'$ has cost exactly $\Thr$ and no
-bandwidth constraint was violated. Each chunk type was processed.
+  It is easy to see that $\Sol'$ has cost exactly $\Thr$ and no
+  bandwidth constraint was violated. Each chunk type was processed.
  
 
 
-($\rightarrow$) Let's take any feasible solution $\Sol'$ to $I'$ and
-produce a solution $\Sol$ to $I$ by taking triples that correspond to
-active triple gadgets. Using lemma \ref{lem:full-or-empty} we conclude
-that there are exactly $n$ active triple gadgets. By feasibility of
-the $\Sol'$ we know that each chunk type was processed. From
-observation \ref{obs:deg-min-one} we know that out of $\deg(e)$ chunk
-types that correspond to $x\in A\cup B\cup C$ exactly one was
-processed in the {\MatchSubtree}, and therefore each element of
-$A\cup B\cup C$ is covered.
+  ($\rightarrow$) Let's take any feasible solution $\Sol'$ to $I'$ and
+  produce a solution $\Sol$ to $I$ by taking triples that correspond
+  to active triple gadgets. Using lemma \ref{lem:full-or-empty} we
+  conclude that there are exactly $n$ active triple gadgets. By
+  feasibility of the $\Sol'$ we know that each chunk type was
+  processed. From observation \ref{obs:deg-min-one} we know that out
+  of $\deg(e)$ chunk types that correspond to $x\in A\cup B\cup C$
+  exactly one was processed in the {\MatchSubtree}, and therefore each
+  element of $A\cup B\cup C$ is covered.
 
 \end{proof}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
