@@ -2205,7 +2205,7 @@ We set $\CostTrans = \infty$ \maciek{or some big constant, e.g. sum of all the p
 \noindent \textbf{Properties of the substrate network.}
 
 \begin{lemma}
-Assume we have a $\RS(2)+\FP+\CC+\BW$ instance $I$ with a subtree $T$ with $l$ leaves and the bandwidth capacity on uplink of $T$ is $\Band(k)$. Assume that no chunk transportation is allowed (every node must be colocated with the chunk it processes), and $\CostCom = 1$. Then in any feasible solution the number of nodes spawned in $T$ (we name it $s$) satisfies:
+Assume we have a $\RS(2)+\FP+\CC+\BW$ instance $I$ with a subtree $T$ with $l$ leaves and the bandwidth capacity on uplink of $T$ is $\Band(k)$. Assume that no chunk transportation is allowed ($\TransCost = \infty$, so every node must be colocated with the chunk it processes in every feasible solution), and $\CostCom = 1$. Then in any feasible solution the number of nodes spawned in $T$ (we name it $s$) satisfies:
 
 $s \leq k \vee n-s\leq k$, and $s \leq l$.
 \label{lem:bandwidth1}
@@ -2213,7 +2213,7 @@ $s \leq k \vee n-s\leq k$, and $s \leq l$.
 
 \begin{proof}
 $s\leq l$ is trivial, as we cannot spawn more nodes than leaves.
-Bandwidth allocation on uplink of $T$ is $uplink(s,T) := s\cdot (\numNodes - s)$, as no chunk transportation is allowed, and every node in $T$ has to communicate over $T$'s uplink with nodes spawned outside of $T$. Therefore, in every feasible solution we have: $uplink(s, T) \leq \Band(k)$.
+Bandwidth allocation on uplink of $T$ is $uplink(s,T) := s\cdot (\numNodes - s)$, as no chunk transportation is allowed ($\TransCost = \infty$), and every node in $T$ has to communicate over $T$'s uplink with nodes spawned outside of $T$. Therefore, in every feasible solution we have: $uplink(s, T) \leq \Band(k)$.
 Let's define the remaining bandwidth on uplink of T: $\remainBw(s) := \Band(k)-uplink(s, T) = s^2 - s\cdot \numNodes - k^2+k\cdot \numNodes $.
 Every feasible solution has $\remainBw(s) \geq 0$, which is true for $s \leq k \vee \numNodes-s\leq k$ (follows from the properties of quadratic function).
 \end{proof}
