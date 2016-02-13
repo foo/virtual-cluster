@@ -2287,7 +2287,13 @@ $\numNodes := 3\cdot n + \sum_e (\deg(e)-1) + |U|$. We set the threshold to:
 \end{proof}
 
 
-Next, we show how to precisely control the number of nodes in the constructed subtree. First, we observe that in every feasible solution we have exactly $|U|$ nodes spawned in {\UnqSubtree\} (no chunk transportation is allowed). Furthermore we can reason about the number of nodes spawned in the rest of the tree:
+Next, we show how to precisely control the number of nodes in the constructed subtree.
+
+\begin{obs}
+  In every feasible solution we have exactly $|U|$ nodes spawned in {\UnqSubtree} (no chunk transportation is allowed, and every chunk type must be processed).
+    \label{obs:unq-full}
+\end{obs}
+
 
 \begin{lemma}
   Assume we have a $\RS(2)+\FP+\CC+\BW$ instance $I$ constructed in the described way from $\TDPM$ instance.  Assume that no
@@ -2295,14 +2301,46 @@ Next, we show how to precisely control the number of nodes in the constructed su
 
   Then we have that:
   \begin{enumerate}
-    \item The number of nodes spawned in {\MatchSubtree} is $3\cdot n$
-    \item The number of nodes spawned in {\TripleGadget} of element $e$ is $\deg(e)-1$
+    \item The number of nodes spawned in {\MatchSubtree} is $3\cdot n$.
+    \item The number of nodes spawned in {\CoverSubtree} is $\sum_e(\deg(e)-1)$
   \end{enumerate}
+
+  \label{lem:bandwidth2}
 \end{lemma}
 
 \begin{proof}
-  
+ From observation \ref{obs:unq-full} we know that we have $|U|$ nodes in {\UnqSubtree}. Let's call $M$ the number of nodes spawned in {\MatchSubtree}, and $C$ the number of nodes spawned in {\CoverSubtree}. By applying lemma \ref{lem:bandwidth1} to {\MatchSubtree} we know that:
+
+  $$ M \leq 3\cdot n \vee M \geq |V| - 3\cdot n$$
+
+  We observe that $|V| - 3\cdot n$ is greater than the number of leaves in {\MatchSubtree}.
+ By applying lemma \ref{lem:bandwidth1} to {\CoverSubtree} we know that:
+
+  $$ C \leq \sum_e(\deg(e)-1) \vee C \geq |V| - \sum_e(\deg(e)-1) $$
+
+  We observe that $|V| - \sum_e(\deg(e)-1)$ is greater than the number of leaves in {\CoverSubtree}.
+
+  We know that $|V| = |U| + C + M$. Therefore by pidgeonhole principle $C = \sum_e(\deg(e)-1)$ and $M = 3\cdot n$.
 \end{proof}
+
+
+\begin{lemma}
+  Assume we have a $\RS(2)+\FP+\CC+\BW$ instance $I$ constructed in the described way from $\TDPM$ instance.  Assume that no
+  chunk transportation is allowed, and $\CostCom = 1$.
+
+  Then we have that the number of nodes spawned in {\TripleGadget} of element $e$ is $\deg(e)-1$
+
+  \label{lem:bandwidth3}
+\end{lemma}
+
+\begin{proof}
+  Let's name $x_e$ the number of nodes spawned in {\TripleGadget} of element $e$.
+  From lemma \ref{lem:bandwidth1} we know that $x_e \leq \deg(e) - 1 \vee x_e \geq |V| - \deg(e) + 1$. We observe that $|V| - \deg(e) + 1$ is greater than the number of leaves of the gadget, which is $\deg(e)$.
+  From lemma \ref{lem:bandwidth2} we know that the number of nodes spawned in the entire {\CoverSubtree} is $\sum_e (\deg(e)-1)$. Therefore by pidgeonhole principle we have that $x_e = \deg(e)-1$.
+\end{proof}
+
+From above lemmas we know the precise number of nodes spawned in certain parts of the tree. The only difference between feasible solutions is then the choice of $\deg(e) - 1$ out of $\deg(e)$ chunks in each {\TripleGadget}, and the placement of nodes in {\MatchSubtree}.
+
 %
 %\begin{lemma}
 % 
@@ -2345,6 +2383,7 @@ Next, we show how to precisely control the number of nodes in the constructed su
 %  element $e$ was processed in {\MatchSubtree}.
 %\end{obs}
 %
+
 Similar in spirit to the NP-completeness proof of $\RS(2)+\MA(4)+\FP$,
 we call the {\TripleGadget} active if it has exactly three nodes
 spawned in it. In addition we call the {\TripleGadget} inactive if it
