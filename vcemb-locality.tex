@@ -1995,7 +1995,7 @@ We construct the following tree.
 \paragraph{Chunk Placement}
 The chunks are placed as follows:
 \begin{enumerate}
-  \item \emph{Chunks in triples subtree:} For each triple $t$ we put
+  \item \emph{Chunks in matching subtree:} For each triple $t$ we put
   three chunks at the leaves of the corresponding \TripleGadget,
   $e_1(t), e_2(t), e_3(t)$.
   \item \emph{Chunks in unique subtree:} We place chunks
@@ -2196,7 +2196,7 @@ assignment.
 \emph{Chunk Types.}  We construct the following chunk types: For each
 element $e\in X\cup Y\cup Z$, we construct $\deg(e)$ chunk types with
 two replicas. Additionally, we construct $|U| := \max\{3\cdot t + 3\cdot n + 1, \sum_e(2\cdot \deg(e)-1)\}$
-chunk types called \emph{unique chunks}, where $n = |X| = |Y| = |Z|$, and $t$ denotes the number of triples in the \TDPM instance.
+chunk types called \emph{unique chunks}, where $n = |X| = |Y| = |Z|$, and $t$ denotes the number of triples in the $\TDPM$ instance. We refer to the set of unique chunks as $U$.
 
 \noindent \textbf{The substrate network.}
 
@@ -2215,7 +2215,22 @@ chunk types called \emph{unique chunks}, where $n = |X| = |Y| = |Z|$, and $t$ de
   to the root of the cover subtree), and $4\cdot(\deg(e)-1)+1$ leaves.
 \end{enumerate}
 
+\noindent \textbf{Chunk placement}
 
+The chunks are placed as follows:
+\begin{enumerate}
+  \item \emph{Chunks in matching subtree:} For each triple $t$ we put
+  three chunks at the leaves of the corresponding \TripleGadget,
+  $e_1(t), e_2(t), e_3(t)$.
+  \item \emph{Chunks in unique subtree:} We place unique chunks $U$
+  at the leaves of {\UnqSubtree}.
+  \item \emph{Chunks in element gadget:} For each element
+  $e\in X\cup Y\cup Z$, we place the chunks $t(e)$ at the
+  leaves of each element subtree.
+\end{enumerate}
+
+
+\noindent \textbf{Bandwidth constraints}
 
 We use bandwidth constraints of form:
 $\Band(k) := k\cdot(\numNodes - k)$. Namely, we set bandwidth
@@ -2229,12 +2244,14 @@ set $\CostTrans = \infty$ \maciek{or some big constant, e.g. sum of
   all the pairwise node communication, times 6 hops}, and
 $\CostCom = 1$, and we host only one node per machine. We set the
 number of machines to spawn to:
-$\numNodes := 3\cdot n + \sum_e (\deg(e)-1)$. We set the threshold to:
+$\numNodes := 3\cdot n + \sum_e (\deg(e)-1) + |U|$. We set the threshold to:
 \begin{align*}
   \Thr  & = 2\cdot (3\cdot \numNodes + \sum_e (\deg(e) - 1)) & \mbox{(over 2 hops)}\\
         & + 4\cdot (n\cdot (3 \cdot (3\cdot \numNodes - 3)) / 2) & \mbox{(over 4 hops in {\MatchSubtree})}\\
         & + 4\cdot (\sum_e((\deg(e) - 1)\cdot (\sum_{f\neq e} \deg(f) - 1)/2)) & \mbox{(over 4 hops in {\CoverSubtree})}\\
         & + 6\cdot (3\cdot \numNodes \cdot \sum_e(\deg(e) - 1)) & \mbox{(between {\MatchSubtree} and {\CoverSubtree})} \\
+        & + |U|\cdot (|U|-1)/2 & \mbox{(inside {\UnqSubtree})} \\
+        & + |U| \cdot (3\cdot n + \sum_e (\deg(e)-1) & \mbox{(between the {\UnqSubtree} and the rest of the tree} \\
 \end{align*}
 
 
@@ -2254,7 +2271,7 @@ $\numNodes := 3\cdot n + \sum_e (\deg(e)-1)$. We set the threshold to:
 \end{lemma}
 
 \begin{proof}
-  $s\leq l$ is trivial, as we cannot spawn more nodes than leaves.
+  $s\leq l$ holds as we cannot spawn more nodes than leaves.
   Bandwidth allocation on uplink of $T$ is
   $uplink(s,T) := s\cdot (\numNodes - s)$, as no chunk transportation
   is allowed ($\CostTrans = \infty$), and every node in $T$ has to
@@ -2269,50 +2286,65 @@ $\numNodes := 3\cdot n + \sum_e (\deg(e)-1)$. We set the threshold to:
   quadratic function).
 \end{proof}
 
-Next, we show how to precisely control the number of nodes in any
-subtree.
+
+Next, we show how to precisely control the number of nodes in the constructed subtree. First, we observe that in every feasible solution we have exactly $|U|$ nodes spawned in {\UnqSubtree\} (no chunk transportation is allowed). Furthermore we can reason about the number of nodes spawned in the rest of the tree:
 
 \begin{lemma}
- 
-  Assume we have a $\RS(2)+\FP+\CC+\BW$ instance $I$.  Assume that no
+  Assume we have a $\RS(2)+\FP+\CC+\BW$ instance $I$ constructed in the described way from $\TDPM$ instance.  Assume that no
   chunk transportation is allowed, and $\CostCom = 1$.
 
-  Assume that we have a subtree $T$ with subtries
-  $S_1, S_2, \ldots S_a$ attached to the root of $T$. Assume that in
-  every feasible solution we have exactly $Q$ machines in $T$ (and the
-  rest $\numNodes - Q$ machines outside of $T$). The bandwidth
-  capacity on uplink of $S_i$ is set to $\Band(x_i)$, where
-  $\sum_i x_i = Q$. Then, in every feasible solution the number of
-  nodes spawned in $S_i$ is $x_i$.
-
-  \label{lem:bandwidth2}
-\end{lemma}
- 
-
-\begin{obs}
-  \label{obs:nodes-match-cover}
-  Using lemma \ref{lem:bandwidth2} with $T$ being the whole tree, and
-  $Q = \numNodes$ we conclude that
+  Then we have that:
   \begin{enumerate}
-    \item In every feasible solution there are $3\cdot \numNodes$
-    nodes spawned in {\MatchSubtree}.
-    \item In every feasible solution there are $\sum_e (\deg(e)-1)$
-    nodes spawned in {\CoverSubtree}.
+    \item The number of nodes spawned in {\MatchSubtree} is $3\cdot n$
+    \item The number of nodes spawned in {\TripleGadget} of element $e$ is $\deg(e)-1$
   \end{enumerate}
-\end{obs}
+\end{lemma}
 
-\begin{obs}
-  \label{obs:deg-min-one}
-
-  Using lemma \ref{lem:bandwidth2} with $T$ being the {\CoverSubtree},
-  and $Q = \sum_e (\deg(e)-1)$ we conclude that in every feasible
-  solution the number of nodes spawned in {\ElGadget} of element $e$
-  is exactly $\deg(e)-1$.
-
-  Therefore, at least one of $\deg(e)$ chunks that correspond to
-  element $e$ was processed in {\MatchSubtree}.
-\end{obs}
-
+\begin{proof}
+  
+\end{proof}
+%
+%\begin{lemma}
+% 
+%  Assume we have a $\RS(2)+\FP+\CC+\BW$ instance $I$.  Assume that no
+%  chunk transportation is allowed, and $\CostCom = 1$.
+%
+%  Assume that we have a subtree $T$ with subtries
+%  $S_1, S_2, \ldots S_a$ attached to the root of $T$. Assume that in
+%  every feasible solution we have exactly $Q$ machines in $T$ (and the
+%  rest $\numNodes - Q$ machines outside of $T$). The bandwidth
+%  capacity on uplink of $S_i$ is set to $\Band(x_i)$, where
+%  $\sum_i x_i = Q$. Then, in every feasible solution the number of
+%  nodes spawned in $S_i$ is $x_i$.
+%
+%  \label{lem:bandwidth2}
+%\end{lemma}
+% 
+%
+%\begin{obs}
+%  \label{obs:nodes-match-cover}
+%  Using lemma \ref{lem:bandwidth2} with $T$ being the whole tree, and
+%  $Q = \numNodes$ we conclude that
+%  \begin{enumerate}
+%    \item In every feasible solution there are $3\cdot \numNodes$
+%    nodes spawned in {\MatchSubtree}.
+%    \item In every feasible solution there are $\sum_e (\deg(e)-1)$
+%    nodes spawned in {\CoverSubtree}.
+%  \end{enumerate}
+%\end{obs}
+%
+%\begin{obs}
+%  \label{obs:deg-min-one}
+%
+%  Using lemma \ref{lem:bandwidth2} with $T$ being the {\CoverSubtree},
+%  and $Q = \sum_e (\deg(e)-1)$ we conclude that in every feasible
+%  solution the number of nodes spawned in {\ElGadget} of element $e$
+%  is exactly $\deg(e)-1$.
+%
+%  Therefore, at least one of $\deg(e)$ chunks that correspond to
+%  element $e$ was processed in {\MatchSubtree}.
+%\end{obs}
+%
 Similar in spirit to the NP-completeness proof of $\RS(2)+\MA(4)+\FP$,
 we call the {\TripleGadget} active if it has exactly three nodes
 spawned in it. In addition we call the {\TripleGadget} inactive if it
