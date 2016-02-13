@@ -1975,10 +1975,10 @@ We construct the following tree.
   % ADDITIONAL$,
   % where $ADDITIONAL$ are the chunk types that were added to make
   % $deg(e)-1+a$ divisible by 3.
-  \item The physical network consists of two parts: A {\MatchSubtree}
+  \item The physical network consists of two subtries connected to the root: A {\MatchSubtree}
   and a {\CoverSubtree}. In the {\MatchSubtree} we put $2t$ gadgets:
   $t$ {\TripleGadgets} and $t$ {\UnqGadgets} (remember that $t$ is the
-  number of triples in {\TDPM} instance). Cover subtrees consist of
+  number of triples in {\TDPM} instance). {\CoverSubtree} consist of
   $n$ element gadgets.
   \item \TripleGadget: For each triple, we create a subtree
   consisisting of four vertices: three leaves and one triple root.  We
@@ -1989,7 +1989,7 @@ We construct the following tree.
   {\UnqGadgets} far from leaves of other \UnqGadgets.
   \item \ElGadget: For each element $e \in X\cup Y\cup Z$, we
   construct a subtree consisting of the root of the element (attached
-  to the root of the cover subtree), and $4\cdot(t(e)-1)+1$ leaves.
+  to the root of the cover subtree), and $4\cdot(\deg(e)-1)+1$ leaves.
 \end{enumerate}
 
 \paragraph{Chunk Placement}
@@ -2195,12 +2195,27 @@ assignment.
 
 \emph{Chunk Types.}  We construct the following chunk types: For each
 element $e\in X\cup Y\cup Z$, we construct $\deg(e)$ chunk types with
-two replicas.
+two replicas. Additionally, we construct $|U| := \max\{3\cdot t + 3\cdot n + 1, \sum_e(2\cdot \deg(e)-1)\}$
+chunk types called \emph{unique chunks}, where $n = |X| = |Y| = |Z|$, and $t$ denotes the number of triples in the \TDPM instance.
 
-\noindent \textbf{The substrate network.}  The network is reduced
-network from previous proof (no \UnqSubtree, no unique chunks in
-Elements Subtree).  Chunks are placed the same way, with an exception
-that we have no unique chunk types.
+\noindent \textbf{The substrate network.}
+
+\begin{enumerate}
+  \item The physical network consists of three subtries connected to the root: A {\MatchSubtree},
+  a {\CoverSubtree}, and a {\UnqSubtree}. In the {\MatchSubtree} we put $2t$ gadgets:
+  $t$ {\TripleGadgets} (remember that $t$ is the
+  number of triples in {\TDPM} instance). {\CoverSubtree} consist of
+  $n$ element gadgets.
+  \item {\UnqSubtree} consist of $|U|$ leaves, and two middle nodes: lower and upper. The upper middle node is a child of root. The lower middle node is the only child of upper middle node. Each leaf is a child of the lower middle node.
+  \item \TripleGadget: For each triple, we create a subtree
+  consisisting of four vertices: three leaves and one triple root.  We
+  attach the root of the triple to the root of the matching subtree.
+  \item \ElGadget: For each element $e \in X\cup Y\cup Z$, we
+  construct a subtree consisting of the root of the element (attached
+  to the root of the cover subtree), and $4\cdot(\deg(e)-1)+1$ leaves.
+\end{enumerate}
+
+
 
 We use bandwidth constraints of form:
 $\Band(k) := k\cdot(\numNodes - k)$. Namely, we set bandwidth
@@ -2258,6 +2273,7 @@ Next, we show how to precisely control the number of nodes in any
 subtree.
 
 \begin{lemma}
+ 
   Assume we have a $\RS(2)+\FP+\CC+\BW$ instance $I$.  Assume that no
   chunk transportation is allowed, and $\CostCom = 1$.
 
@@ -2271,20 +2287,7 @@ subtree.
 
   \label{lem:bandwidth2}
 \end{lemma}
-
-\begin{proof}
-
-  \maciek{Sketch only!}
-
-  Let's assume by contrary that we feasible solution $\Sol$ to $I$ and
-  call $y_i$ the number of nodes spawned in $S_i$. We know that
-  $\sum_i y_i = Q$.
-
-  Let's take any $i$ such that $y_i \neq x_i$.  From lemma
-  \ref{lem:bandwidth1} we know that
-  $y_i \leq x_i \vee y_i \geq \numNodes - x_i$.
-
-\end{proof}
+ 
 
 \begin{obs}
   \label{obs:nodes-match-cover}
