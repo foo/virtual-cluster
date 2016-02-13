@@ -1923,8 +1923,8 @@ exactly once.
 We use $\deg(e)$ to refer to the number of triples that contain
 element $e\in X\cup Y\cup Z$.  We use $t$ for the number of
 triples. We call $t(e)$ the set of triples containing element $e$. We
-call $\lbrace e_1(t), e_2(t), e_3(t) \rbrace$ the elements of triple
-$t$.  We call $m$ the number of triples.
+call $\lbrace e_1(t_i), e_2(t_i), e_3(t_i) \rbrace$ the elements of triple
+$t_i$.
 
 \begin{figure}[t]
   \centering
@@ -2251,7 +2251,7 @@ $\numNodes := 3\cdot n + \sum_e (\deg(e)-1) + |U|$. We set the threshold to:
         & + 4\cdot (\sum_e((\deg(e) - 1)\cdot (\sum_{f\neq e} \deg(f) - 1)/2)) & \mbox{(over 4 hops in {\CoverSubtree})}\\
         & + 6\cdot (3\cdot \numNodes \cdot \sum_e(\deg(e) - 1)) & \mbox{(between {\MatchSubtree} and {\CoverSubtree})} \\
         & + |U|\cdot (|U|-1)/2 & \mbox{(inside {\UnqSubtree})} \\
-        & + |U| \cdot (3\cdot n + \sum_e (\deg(e)-1) & \mbox{(between the {\UnqSubtree} and the rest of the tree} \\
+        & + |U| \cdot (3\cdot n + \sum_e (\deg(e)-1) & \mbox{({\UnqSubtree} to other nodes)} \\
 \end{align*}
 
 
