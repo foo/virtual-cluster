@@ -1946,8 +1946,8 @@ We construct the following chunk types:
 \begin{enumerate}
   \item For each element $e\in X\cup Y\cup Z$, we construct $\deg(e)$
   chunk types with two replicas each.  We refer to the chunk types of
-  element $e$ by $t(e)$, and will also use the notation $e_i(t)$ for
-  triple $t$ and index $i \in \{1,2,3\}$.
+  element $e$ by $t(e)$, and will also use the notation $e_j(t_i)$ for
+  triple $t_i$ and index $j \in \{1,2,3\}$.
   \item We construct $n$ additional chunk types named
   $u_1, \ldots, u_n$.  Intuitively, we want $n$ (remember that
   $n=|X|=|Y|=|Z|$) nodes to process one of these chunks each as well
@@ -1975,11 +1975,11 @@ We construct the following tree.
   % ADDITIONAL$,
   % where $ADDITIONAL$ are the chunk types that were added to make
   % $deg(e)-1+a$ divisible by 3.
-  \item The physical network consists of two subtries connected to the root: A {\MatchSubtree}
-  and a {\CoverSubtree}. In the {\MatchSubtree} we put $2t$ gadgets:
-  $t$ {\TripleGadgets} and $t$ {\UnqGadgets} (remember that $t$ is the
-  number of triples in {\TDPM} instance). {\CoverSubtree} consist of
-  $n$ element gadgets.
+  \item The physical network consists of two subtries connected to the
+  root: A {\MatchSubtree} and a {\CoverSubtree}. In the
+  {\MatchSubtree} we put $2t$ gadgets: $t$ {\TripleGadgets} and $t$
+  {\UnqGadgets} (remember that $t$ is the number of triples in {\TDPM}
+  instance). {\CoverSubtree} consist of $n$ element gadgets.
   \item \TripleGadget: For each triple, we create a subtree
   consisisting of four vertices: three leaves and one triple root.  We
   attach the root of the triple to the root of the matching subtree.
@@ -2195,18 +2195,24 @@ assignment.
 
 \emph{Chunk Types.}  We construct the following chunk types: For each
 element $e\in X\cup Y\cup Z$, we construct $\deg(e)$ chunk types with
-two replicas. Additionally, we construct $|U| := \max\{3\cdot t + 3\cdot n + 1, \sum_e(2\cdot \deg(e)-1)\}$
-chunk types called \emph{unique chunks}, where $n = |X| = |Y| = |Z|$, and $t$ denotes the number of triples in the $\TDPM$ instance. We refer to the set of unique chunks as $U$.
+two replicas. Additionally, we construct
+$|U| := \max\{3\cdot t + 3\cdot n + 1, \sum_e(2\cdot \deg(e)-1)\}$
+chunk types called \emph{unique chunks}, where $n = |X| = |Y| = |Z|$,
+and $t$ denotes the number of triples in the $\TDPM$ instance. We
+refer to the set of unique chunks as $U$.
 
 \noindent \textbf{The substrate network.}
 
 \begin{enumerate}
-  \item The physical network consists of three subtries connected to the root: A {\MatchSubtree},
-  a {\CoverSubtree}, and a {\UnqSubtree}. In the {\MatchSubtree} we put $2t$ gadgets:
-  $t$ {\TripleGadgets} (remember that $t$ is the
-  number of triples in {\TDPM} instance). {\CoverSubtree} consist of
-  $n$ element gadgets.
-  \item {\UnqSubtree} consist of $|U|$ leaves, and two middle nodes: lower and upper. The upper middle node is a child of root. The lower middle node is the only child of upper middle node. Each leaf is a child of the lower middle node.
+  \item The physical network consists of three subtries connected to
+  the root: A {\MatchSubtree}, a {\CoverSubtree}, and a
+  {\UnqSubtree}. In the {\MatchSubtree} we put $2t$ gadgets: $t$
+  {\TripleGadgets} (remember that $t$ is the number of triples in
+  {\TDPM} instance). {\CoverSubtree} consist of $n$ element gadgets.
+  \item {\UnqSubtree} consist of $|U|$ leaves, and two middle nodes:
+  lower and upper. The upper middle node is a child of root. The lower
+  middle node is the only child of upper middle node. Each leaf is a
+  child of the lower middle node.
   \item \TripleGadget: For each triple, we create a subtree
   consisisting of four vertices: three leaves and one triple root.  We
   attach the root of the triple to the root of the matching subtree.
@@ -2222,11 +2228,11 @@ The chunks are placed as follows:
   \item \emph{Chunks in matching subtree:} For each triple $t$ we put
   three chunks at the leaves of the corresponding \TripleGadget,
   $e_1(t), e_2(t), e_3(t)$.
-  \item \emph{Chunks in unique subtree:} We place unique chunks $U$
-  at the leaves of {\UnqSubtree}.
+  \item \emph{Chunks in unique subtree:} We place unique chunks $U$ at
+  the leaves of {\UnqSubtree}.
   \item \emph{Chunks in element gadget:} For each element
-  $e\in X\cup Y\cup Z$, we place the chunks $t(e)$ at the
-  leaves of each element subtree.
+  $e\in X\cup Y\cup Z$, we place the chunks $t(e)$ at the leaves of
+  each element subtree.
 \end{enumerate}
 
 
@@ -2244,7 +2250,8 @@ set $\CostTrans = \infty$ \maciek{or some big constant, e.g. sum of
   all the pairwise node communication, times 6 hops}, and
 $\CostCom = 1$, and we host only one node per machine. We set the
 number of machines to spawn to:
-$\numNodes := 3\cdot n + \sum_e (\deg(e)-1) + |U|$. We set the threshold to:
+$\numNodes := 3\cdot n + \sum_e (\deg(e)-1) + |U|$. We set the
+threshold to:
 \begin{align*}
   \Thr  & = 2\cdot (3\cdot \numNodes + \sum_e (\deg(e) - 1)) & \mbox{(over 2 hops)}\\
         & + 4\cdot (n\cdot (3 \cdot (3\cdot \numNodes - 3)) / 2) & \mbox{(over 4 hops in {\MatchSubtree})}\\
@@ -2287,101 +2294,125 @@ $\numNodes := 3\cdot n + \sum_e (\deg(e)-1) + |U|$. We set the threshold to:
 \end{proof}
 
 
-Next, we show how to precisely control the number of nodes in the constructed subtree.
+Next, we show how to precisely control the number of nodes in the
+constructed subtree.
 
 \begin{obs}
-  In every feasible solution we have exactly $|U|$ nodes spawned in {\UnqSubtree} (no chunk transportation is allowed, and every chunk type must be processed).
-    \label{obs:unq-full}
+  In every feasible solution we have exactly $|U|$ nodes spawned in
+  {\UnqSubtree} (no chunk transportation is allowed, and every chunk
+  type must be processed).
+  \label{obs:unq-full}
 \end{obs}
 
 
 \begin{lemma}
-  Assume we have a $\RS(2)+\FP+\CC+\BW$ instance $I$ constructed in the described way from $\TDPM$ instance.  Assume that no
-  chunk transportation is allowed, and $\CostCom = 1$.
+  Assume we have a $\RS(2)+\FP+\CC+\BW$ instance $I$ constructed in
+  the described way from $\TDPM$ instance.  Assume that no chunk
+  transportation is allowed, and $\CostCom = 1$.
 
   Then we have that:
   \begin{enumerate}
-    \item The number of nodes spawned in {\MatchSubtree} is $3\cdot n$.
-    \item The number of nodes spawned in {\CoverSubtree} is $\sum_e(\deg(e)-1)$
+    \item The number of nodes spawned in {\MatchSubtree} is
+    $3\cdot n$.
+    \item The number of nodes spawned in {\CoverSubtree} is
+    $\sum_e(\deg(e)-1)$
   \end{enumerate}
 
   \label{lem:bandwidth2}
 \end{lemma}
 
 \begin{proof}
- From observation \ref{obs:unq-full} we know that we have $|U|$ nodes in {\UnqSubtree}. Let's call $M$ the number of nodes spawned in {\MatchSubtree}, and $C$ the number of nodes spawned in {\CoverSubtree}. By applying lemma \ref{lem:bandwidth1} to {\MatchSubtree} we know that:
+  From observation \ref{obs:unq-full} we know that we have $|U|$ nodes
+  in {\UnqSubtree}. Let's call $M$ the number of nodes spawned in
+  {\MatchSubtree}, and $C$ the number of nodes spawned in
+  {\CoverSubtree}. By applying lemma \ref{lem:bandwidth1} to
+  {\MatchSubtree} we know that:
 
   $$ M \leq 3\cdot n \vee M \geq |V| - 3\cdot n$$
 
-  We observe that $|V| - 3\cdot n$ is greater than the number of leaves in {\MatchSubtree}.
- By applying lemma \ref{lem:bandwidth1} to {\CoverSubtree} we know that:
+  We observe that $|V| - 3\cdot n$ is greater than the number of
+  leaves in {\MatchSubtree}.  By applying lemma \ref{lem:bandwidth1}
+  to {\CoverSubtree} we know that:
 
   $$ C \leq \sum_e(\deg(e)-1) \vee C \geq |V| - \sum_e(\deg(e)-1) $$
 
-  We observe that $|V| - \sum_e(\deg(e)-1)$ is greater than the number of leaves in {\CoverSubtree}.
+  We observe that $|V| - \sum_e(\deg(e)-1)$ is greater than the number
+  of leaves in {\CoverSubtree}.
 
-  We know that $|V| = |U| + C + M$. Therefore by pidgeonhole principle $C = \sum_e(\deg(e)-1)$ and $M = 3\cdot n$.
+  We know that $|V| = |U| + C + M$. Therefore by pidgeonhole principle
+  $C = \sum_e(\deg(e)-1)$ and $M = 3\cdot n$.
 \end{proof}
 
 
 \begin{lemma}
-  Assume we have a $\RS(2)+\FP+\CC+\BW$ instance $I$ constructed in the described way from $\TDPM$ instance.  Assume that no
-  chunk transportation is allowed, and $\CostCom = 1$.
+  Assume we have a $\RS(2)+\FP+\CC+\BW$ instance $I$ constructed in
+  the described way from $\TDPM$ instance.  Assume that no chunk
+  transportation is allowed, and $\CostCom = 1$.
 
-  Then we have that the number of nodes spawned in {\TripleGadget} of element $e$ is $\deg(e)-1$
+  Then we have that the number of nodes spawned in {\TripleGadget} of
+  element $e$ is $\deg(e)-1$
 
   \label{lem:bandwidth3}
 \end{lemma}
 
 \begin{proof}
-  Let's name $x_e$ the number of nodes spawned in {\TripleGadget} of element $e$.
-  From lemma \ref{lem:bandwidth1} we know that $x_e \leq \deg(e) - 1 \vee x_e \geq |V| - \deg(e) + 1$. We observe that $|V| - \deg(e) + 1$ is greater than the number of leaves of the gadget, which is $\deg(e)$.
-  From lemma \ref{lem:bandwidth2} we know that the number of nodes spawned in the entire {\CoverSubtree} is $\sum_e (\deg(e)-1)$. Therefore by pidgeonhole principle we have that $x_e = \deg(e)-1$.
+  Let's name $x_e$ the number of nodes spawned in {\TripleGadget} of
+  element $e$.  From lemma \ref{lem:bandwidth1} we know that
+  $x_e \leq \deg(e) - 1 \vee x_e \geq |V| - \deg(e) + 1$. We observe
+  that $|V| - \deg(e) + 1$ is greater than the number of leaves of the
+  gadget, which is $\deg(e)$.  From lemma \ref{lem:bandwidth2} we know
+  that the number of nodes spawned in the entire {\CoverSubtree} is
+  $\sum_e (\deg(e)-1)$. Therefore by pidgeonhole principle we have
+  that $x_e = \deg(e)-1$.
 \end{proof}
 
-From above lemmas we know the precise number of nodes spawned in certain parts of the tree. The only difference between feasible solutions is then the choice of $\deg(e) - 1$ out of $\deg(e)$ chunks in each {\TripleGadget}, and the placement of nodes in {\MatchSubtree}.
+From above lemmas we know the precise number of nodes spawned in
+certain parts of the tree. The only difference between feasible
+solutions is then the choice of $\deg(e) - 1$ out of $\deg(e)$ chunks
+in each {\TripleGadget}, and the placement of nodes in
+{\MatchSubtree}.
 
 %
-%\begin{lemma}
+% \begin{lemma}
 % 
-%  Assume we have a $\RS(2)+\FP+\CC+\BW$ instance $I$.  Assume that no
-%  chunk transportation is allowed, and $\CostCom = 1$.
+%   Assume we have a $\RS(2)+\FP+\CC+\BW$ instance $I$.  Assume that
+%   no chunk transportation is allowed, and $\CostCom = 1$.
 %
-%  Assume that we have a subtree $T$ with subtries
-%  $S_1, S_2, \ldots S_a$ attached to the root of $T$. Assume that in
-%  every feasible solution we have exactly $Q$ machines in $T$ (and the
-%  rest $\numNodes - Q$ machines outside of $T$). The bandwidth
-%  capacity on uplink of $S_i$ is set to $\Band(x_i)$, where
-%  $\sum_i x_i = Q$. Then, in every feasible solution the number of
-%  nodes spawned in $S_i$ is $x_i$.
+%   Assume that we have a subtree $T$ with subtries
+%   $S_1, S_2, \ldots S_a$ attached to the root of $T$. Assume that in
+%   every feasible solution we have exactly $Q$ machines in $T$ (and
+%   the rest $\numNodes - Q$ machines outside of $T$). The bandwidth
+%   capacity on uplink of $S_i$ is set to $\Band(x_i)$, where
+%   $\sum_i x_i = Q$. Then, in every feasible solution the number of
+%   nodes spawned in $S_i$ is $x_i$.
 %
-%  \label{lem:bandwidth2}
-%\end{lemma}
+%   \label{lem:bandwidth2}
+% \end{lemma}
 % 
 %
-%\begin{obs}
-%  \label{obs:nodes-match-cover}
-%  Using lemma \ref{lem:bandwidth2} with $T$ being the whole tree, and
-%  $Q = \numNodes$ we conclude that
-%  \begin{enumerate}
-%    \item In every feasible solution there are $3\cdot \numNodes$
-%    nodes spawned in {\MatchSubtree}.
-%    \item In every feasible solution there are $\sum_e (\deg(e)-1)$
-%    nodes spawned in {\CoverSubtree}.
-%  \end{enumerate}
-%\end{obs}
+% \begin{obs}
+%   \label{obs:nodes-match-cover}
+%   Using lemma \ref{lem:bandwidth2} with $T$ being the whole tree,
+%   and $Q = \numNodes$ we conclude that
+%   \begin{enumerate}
+%     \item In every feasible solution there are $3\cdot \numNodes$
+%     nodes spawned in {\MatchSubtree}.
+%     \item In every feasible solution there are $\sum_e (\deg(e)-1)$
+%     nodes spawned in {\CoverSubtree}.
+%   \end{enumerate}
+% \end{obs}
 %
-%\begin{obs}
-%  \label{obs:deg-min-one}
+% \begin{obs}
+%   \label{obs:deg-min-one}
 %
-%  Using lemma \ref{lem:bandwidth2} with $T$ being the {\CoverSubtree},
-%  and $Q = \sum_e (\deg(e)-1)$ we conclude that in every feasible
-%  solution the number of nodes spawned in {\ElGadget} of element $e$
-%  is exactly $\deg(e)-1$.
+%   Using lemma \ref{lem:bandwidth2} with $T$ being the
+%   {\CoverSubtree}, and $Q = \sum_e (\deg(e)-1)$ we conclude that in
+%   every feasible solution the number of nodes spawned in {\ElGadget}
+%   of element $e$ is exactly $\deg(e)-1$.
 %
-%  Therefore, at least one of $\deg(e)$ chunks that correspond to
-%  element $e$ was processed in {\MatchSubtree}.
-%\end{obs}
+%   Therefore, at least one of $\deg(e)$ chunks that correspond to
+%   element $e$ was processed in {\MatchSubtree}.
+% \end{obs}
 %
 
 Similar in spirit to the NP-completeness proof of $\RS(2)+\MA(4)+\FP$,
