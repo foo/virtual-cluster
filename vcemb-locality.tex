@@ -2367,16 +2367,16 @@ spawned nodes.
 \begin{proof}
   Since~$I$ is feasible, we know that it has a solution~$\Sol$ of
   cost~$\leq \Thr$.
-  By Observation~\ref{obs:nodes-match-cover}, we know that there are
+  By Lemma~\ref{lem:bandwidth2}, we know that there are
   exactly~$3\cdot n$ spawned nodes in the {\MatchSubtree}. Therefore, by
   the pigeon-hole principle, we know that we have at most~$n$
   active {\TripleGadgets}. It remains to show that there
   are no partially active {\TripleGadgets} in the solution of cost
  ~$\leq \Thr$.
-  By Observations~\ref{obs:nodes-match-cover} and~\ref{obs:deg-min-one}, 
-  we know that the communication cost of
+  Using the Lemma~\ref{lem:bandwidth3}, 
+  we conclude that the communication cost of
   nodes in the {\CoverSubtree} is the same for every feasible solution
-  (let's name it~$P$). We also know that the communication cost
+  (let's name that cost~$P$). We also know that the communication cost
   between nodes in {\CoverSubtree} and {\MatchSubtree} is the same for
   every feasible solution (let's name it~$Q$). Let's call the
   would-be cost of communication in the {\MatchSubtree}, if there were
@@ -2417,7 +2417,7 @@ spawned nodes.
   to active triple gadgets. Using Lemma~\ref{lem:full-or-empty}, we
   conclude that there are exactly~$n$ active triple gadgets. By
   feasibility of~$\Sol'$, we know that each chunk type is
-  processed. From Observation~\ref{obs:deg-min-one}, we know that out
+  processed. From Lemma~\ref{lem:bandwidth3}, we know that out
   of~$\deg(e)$ chunk types that correspond to~$x\in A\cup B\cup C$,
   exactly one is processed in the {\MatchSubtree}, and therefore each
   element of~$A\cup B\cup C$ is covered.
