@@ -1474,19 +1474,8 @@ introduce intractability.
 
 We now show that the 2-replica selection problem is even NP-hard
 without capacity constraints.  In particular, we consider the problem
-variant~$\FP+\RS(2)+\MA(4)$ with two replicas and assignment factor
+variant~$\FP+\RS(2)+\MA(4)$ with at most two replicas of each chunk type and assignment factor
 four. There are no capacity constraints on links.
-
-The reduction is from \emph{3D Perfect Matching}~\cite{3dmatch}, short
-$\TDM$.  Recall that in~$\TDM$, we are given three finite and disjoint
-sets~$X$,~$Y$, and~$Z$ of cardinality~$n$, as well as a subset of
-triples~$T\subset X \times Y \times Z$.  Set~$M \subseteq T$ is a
-3-dimensional matching if and only if, for any two distinct triples
-$t_1=(x_1, y_1, z_1) \in M$ and~$t_2=(x_2, y_2, z_2) \in M$, it holds
-that~$x_1\neq x_2$,~$y_1\neq y_2$, and~$z_1\neq z_2$. Our goal is to
-decide if we can construct a~$M \subseteq T$ which is \emph{perfect},
-that is, a subset which covers all elements of~$X \times Y \times Z$
-exactly once.
 
 We use~$\deg(e)$ to refer to the number of triples that contain
 element~$e\in X\cup Y\cup Z$.  We use~$t$ for the number of
