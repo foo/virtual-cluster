@@ -134,6 +134,8 @@
 
 \newcommand{\Band}{\textsc{bw}}
 
+\newcommand{\VCEMB}{VCEMB}
+
 \newtheorem{defn}{Definition}
 \newtheorem{obs}{Observation}
 
@@ -1470,21 +1472,35 @@ and explore the minimal requirements for rendering replica selection hard.
 In particular, we will show that already two replicas for each chunk type are sufficient to
 introduce intractability.
 
+\subsection{TODOs}
+
+\begin{enumerate}
+  \item Figure how chunk replicas are placed twice
+\end{enumerate}
+
 \subsection{Notation}
 
 Notation $\TDPM$:
 
 \begin{enumerate}
-  \item $\mathbb{U}$ -- set of elements of universe
-  \item $A, B, C$ -- disjoint sets that covers $\mathbb{U}$
-  \item $n := |A|$
-  \item $e$ -- an element of universe ($e \in A \cup B \cup C$)
+  \item $n := |X|$ (remember that $|X| = |Y| = |Z|$)
+  \item $e$ -- an element of universe ($e \in X \cup Y \cup Z$)
   \item $T$ -- set of triples
   \item $t$ -- a triple ($t \in T$)
   \item $T_e$ -- set of triples that contain element $e$
   \item $\deg(e) := |T(e)|$
-  \item $E(t)$ -- elements of triple $t$
+  \item $\lbrace t_X, t_Y, t_Z \rbrace$ -- elements of triple $t$
+  \item $I_{\TDPM}$ -- an instance of $\TDPM$
+  \item $S_{\TDPM}$ -- a solution to $\TDPM$ instance
 \end{enumerate}
+
+Notation virtual cluster embedding:
+
+\begin{enumerate}
+  \item 
+  \item $I_{\VCEMB}$ -- an instance of particular variant of virtual cluster embedding (e.g. $\FP+\RS(2)+\MA(4)$ or $\FP+\RS(2)+\CC+\BW$)
+  \item $S_{\TDPM}$ -- a solution to $\TDPM$ instance
+end{enumerate}
 
 \subsection{Two Replicas without Bandwidth Constraints}
 
@@ -1493,11 +1509,26 @@ without capacity constraints.  In particular, we consider the problem
 variant~$\FP+\RS(2)+\MA(4)$ with at most two replicas of each chunk type and assignment factor
 four. There are no capacity constraints on links.
 
-We use~$\deg(e)$ to refer to the number of triples that contain
-element~$e\in X\cup Y\cup Z$.  We use~$t$ for the number of
-triples. We call~$t(e)$ the set of triples containing element~$e$. We
-call~$\lbrace e_1(t_i), e_2(t_i), e_3(t_i) \rbrace$ the elements of triple
-$t_i$.
+\textbf{Construction.}
+
+Let's take any instance~$I_{\TDPM}$ of~$\TDM$ and create a~$\FP+\RS(2)+\MA(4)$
+instance~$I_{\VCEMB}$ as follows.
+
+\paragraph{Chunks}
+
+We construct three types of chunks. First type correspond to covers of elements by triples, with two replicas each. Other two types are chunk types with one replica only, distinguished by a different role in the construction.
+
+\begin{enumerate}
+  \item For each triple $t\in T$ we construct $3$ chunk types, with two replicas each. We construct different chunk type for each triple $t$ that contain element $e$. We refer to those replicas as $ch_1(e, t)$ and $ch_2(e, t)$.
+  \item We construct~$n$ additional chunk types named
+  ~$u_1, \ldots, u_n$, with one replica each.
+  \item For each element~$e\in X\cup Y\cup Z$,
+  we construct additional~$3\cdot(\deg(e) - 1)$ chunks, with one replica each.
+  We call this set~$\UniqueE$.
+\end{enumerate}
+
+\paragraph{Tree}
+
 
 \begin{figure}[t]
   \centering
@@ -1508,29 +1539,6 @@ $t_i$.
 \end{figure}
 
 
-\textbf{Construction.}  \maciek{Picture of how chunks are used
-  twice?}\stefan{that would be great}
-
-Let's take any instance~$I$ of~$\TDM$ and create a~$\FP+\RS(2)+\MA(4)$
-instance~$I'$ as follows.
-
-\paragraph{Chunk Types}
-We construct the following chunk types:
-\begin{enumerate}
-  \item For each element~$e\in X\cup Y\cup Z$, we construct~$\deg(e)$
-  chunk types with two replicas each.  We refer to the chunk types of
-  element~$e$ by~$t(e)$, and will also use the notation~$e_j(t_i)$ for
-  triple~$t_i$ and index~$j \in \{1,2,3\}$.
-  \item We construct~$n$ additional chunk types named
- ~$u_1, \ldots, u_n$.  Intuitively, we want~$n$ (remember that
- ~$n=|X|=|Y|=|Z|$) nodes to process one of these chunks each as well
-  as~$3$ chunks from \TripleGadget.
-  \item \emph{Unique Chunks:} For each element~$e\in X\cup Y\cup Z$,
-  we construct additional~$3\cdot(\deg(e) - 1)$ \emph{unique chunks}.
-  We call this set~$\UniqueE$.
-\end{enumerate}
-
-\paragraph{Tree}
 We construct the following tree.
 \begin{enumerate}
   % \item (chunk types) There are the following chunk types: (1) For
