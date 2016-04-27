@@ -1500,7 +1500,7 @@ Notation virtual cluster embedding:
   \item 
   \item $I_{\VCEMB}$ -- an instance of particular variant of virtual cluster embedding (e.g. $\FP+\RS(2)+\MA(4)$ or $\FP+\RS(2)+\CC+\BW$)
   \item $S_{\TDPM}$ -- a solution to $\TDPM$ instance
-end{enumerate}
+\end{enumerate}
 
 \subsection{Two Replicas without Bandwidth Constraints}
 
@@ -1529,6 +1529,7 @@ We construct three types of chunks. First type correspond to covers of elements 
 
 \paragraph{Tree}
 
+We construct the following tree.
 
 \begin{figure}[t]
   \centering
@@ -1539,38 +1540,17 @@ We construct three types of chunks. First type correspond to covers of elements 
 \end{figure}
 
 
-We construct the following tree.
 \begin{enumerate}
-  % \item (chunk types) There are the following chunk types: (1) For
-  % each element~$e \in A\cup B\cup C$ we create~$4\cdot deg(e)$ chunk
-  % types, where~$a\in{0,1,2}$ is to make~$deg(e)-1+a$ divisible by
-  % 3. We those chunk types~$core(e)$ (both corresponding to degree
-  % and those additional).
-  % \item (unique chunk types) We create additional chunk types which
-  % will have only one replica. We create~$n$ chunk types and we call
-  % this set~$mtch$. For each element~$e\in A\cup B\cup C$ we create
-  %~$core(e)/3$ chunk types called~$unqCore(e)$.
-  % \item (convention for core chunk types naming) Let's say that~$e$
-  % is in triples~$t_1,t_2,\ldots,t_{deg(e)}$; then
-  %~$core(e) = \{ e^{t_1}, e^{t_2}, \ldots, e^{t_{deg(e)}} \} \cup
-  % ADDITIONAL$,
-  % where~$ADDITIONAL$ are the chunk types that were added to make
-  %~$deg(e)-1+a$ divisible by 3.
   \item The physical network consists of two subtrees connected to the
-  root: A {\MatchSubtree} and a {\CoverSubtree}. In the
-  {\MatchSubtree} we put~$2t$ gadgets:~$t$ {\TripleGadgets} and~$t$
-  {\UnqGadgets} (remember that~$t$ is the number of triples in the {\TDPM}
-  instance). The {\CoverSubtree} consist of~$n$ element gadgets.
-  \item \TripleGadget: For each triple, we create a subtree
-  consisisting of four vertices: three leaves and one triple root.  We
-  attach the root of the triple to the root of the matching subtree.
-  \item \UnqGadget: We create one leaf and one middle node and connect
-  it to the root of the matching subtree.  Note that we create middle
+  root: A {\MatchSubtree} and a {\CoverSubtree}. The
+  {\MatchSubtree} consists of $|T|$ {\TripleGadgets} and $n$
+  {\UnqGadgets}. The {\CoverSubtree} consist of~$n$ {\ElGadgets}, one for each element $e\in X\cup Y\cup Z$.
+  \item \TripleGadget consists of four vertices: three leaves and the root of the gadget.
+  \item \UnqGadget consists of two vertices: the leaf and the root of the gadget. Note that we construct
   nodes not only to keep the tree balanced, but also to keep leaves of
   {\UnqGadgets} far from leaves of other \UnqGadgets.
-  \item \ElGadget: For each element~$e \in X\cup Y\cup Z$, we
-  construct a subtree consisting of the root of the element (attached
-  to the root of the cover subtree), and~$4\cdot(\deg(e)-1)+1$ leaves.
+  \item \ElGadget of element $e$ has a structure that depends on the number of triples that covers $e$. The \ElGadget consists of the
+  to the root, and~$4\cdot(\deg(e)-1)+1$ leaves.
 \end{enumerate}
 
 \paragraph{Chunk Placement}
