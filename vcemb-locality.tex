@@ -1489,7 +1489,7 @@ Notation $\TDPM$:
   \item $t$ -- a triple ($t \in T$)
   \item $T_e$ -- set of triples that contain element $e$
   \item $\deg(e) := |T(e)|$
-  \item $\lbrace t_X, t_Y, t_Z \rbrace$ -- elements of triple $t$
+  \item $\lbrace e_X(t), e_Y(t), e_Z(t) \rbrace$ -- elements of triple $t$
   \item $I_{\TDPM}$ -- an instance of $\TDPM$
   \item $S_{\TDPM}$ -- a solution to $\TDPM$ instance
 \end{enumerate}
@@ -1516,7 +1516,9 @@ instance~$I_{\VCEMB}$ as follows.
 
 \paragraph{Chunks}
 
-We construct three types of chunks. First type correspond to covers of elements by triples, with two replicas each. Other two types are chunk types with one replica only, distinguished by a different role in the construction.
+We construct three types of chunks. First type correspond to covers of elements by triples, with two replicas each. Other two types are chunk types with one replica only, therefore called \emph{unique}. We construct two types of unique chunks, distinguished by a different role in the construction. For unique chunks we co-note the chunk type with chunk replica.
+
+Thus, the constructed instance uses at most two replicas of each chunk type.
 
 \begin{enumerate}
   \item For each triple $t\in T$ we construct $3$ chunk types, with two replicas each. We construct different chunk type for each triple $t$ that contain element $e$. We refer to those replicas as $ch_1(e, t)$ and $ch_2(e, t)$.
@@ -1543,40 +1545,38 @@ We construct the following tree.
 \begin{enumerate}
   \item The physical network consists of two subtrees connected to the
   root: A {\MatchSubtree} and a {\CoverSubtree}. The
-  {\MatchSubtree} consists of $|T|$ {\TripleGadgets} and $n$
+  {\MatchSubtree} consists of $|T|$ {\TripleGadgets}, one per each triple $t\in T$ and $n$
   {\UnqGadgets}. The {\CoverSubtree} consist of~$n$ {\ElGadgets}, one for each element $e\in X\cup Y\cup Z$.
   \item \TripleGadget consists of four vertices: three leaves and the root of the gadget.
   \item \UnqGadget consists of two vertices: the leaf and the root of the gadget. Note that we construct
   nodes not only to keep the tree balanced, but also to keep leaves of
   {\UnqGadgets} far from leaves of other \UnqGadgets.
   \item \ElGadget of element $e$ has a structure that depends on the number of triples that covers $e$. The \ElGadget consists of the
-  to the root, and~$4\cdot(\deg(e)-1)+1$ leaves.
+  root, and~$4\cdot(\deg(e)-1)+1$ leaves.
 \end{enumerate}
 
 \paragraph{Chunk Placement}
 The chunks are placed as follows:
 \begin{enumerate}
-  \item \emph{Chunks in matching subtree:} For each triple~$t$, we put
-  three chunks at the leaves of the corresponding \TripleGadget,
- ~$e_1(t), e_2(t), e_3(t)$.
-  \item \emph{Chunks in unique subtree:} We place chunks
+  \item \emph{Chunks in matching subtree:} In {\TripleGadget} of triple $t$ we put
+  three replicas:
+ ~$ch_1(e_X(t), t), ch_1(e_Y(t), t), ch_1(e_Z(t), t)$, one per each leaf.
+  \item \emph{Chunks in unique subtree:} We place replicas
  ~$u_1,\ldots, u_n$ at the leaves of \UnqGadgets.
-  \item \emph{Chunks in element gadget:} For each element
- ~$e\in X\cup Y\cup Z$, we place the chunks~$t(e)\cup \UniqueE$ at the
-  leaves of each element subtree.
+ \item \emph{Chunks in element gadget:} In leaves {\ElGadget} of element $e$ we put replicas $ch_2(t, e)$ for each $t \in T_e$. Additionally, we put replicas $\UniqueE$.
 \end{enumerate}
 
 \paragraph{Other properties of the instance}
 \begin{enumerate}
-  \item \emph{Multiple assignment:} We set the number of processed
-  chunks by each node to four.
+  \item \emph{Multiple assignment:} We set the assignment factor (number of processed
+  chunks by each node) to four.
   \item \emph{Number of nodes:} We allow to spawn
- ~$\numNodes = n + \sum_{e}(\deg(e)-1)$ nodes.
+ ~$\numNodes := n + \sum_{e}(\deg(e)-1)$ nodes.
   \item \emph{Threshold:}
  ~$\Thr := 8\cdot n + 6\cdot\sum_{e}(\deg(e)-1)$
 \end{enumerate}
 
-Thus, the constructed instance uses two replicas of each chunk type.
+\maciek{Finished here}
 
 \textbf{Reduction.}  We can make the following observations.
 
