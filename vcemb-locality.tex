@@ -1470,6 +1470,22 @@ and explore the minimal requirements for rendering replica selection hard.
 In particular, we will show that already two replicas for each chunk type are sufficient to
 introduce intractability.
 
+\subsection{Notation}
+
+Notation $\TDPM$:
+
+\begin{enumerate}
+  \item $\mathbb{U}$ -- set of elements of universe
+  \item $A, B, C$ -- disjoint sets that covers $\mathbb{U}$
+  \item $n := |A|$
+  \item $e$ -- an element of universe ($e \in A \cup B \cup C$)
+  \item $T$ -- set of triples
+  \item $t$ -- a triple ($t \in T$)
+  \item $T_e$ -- set of triples that contain element $e$
+  \item $\deg(e) := |T(e)|$
+  \item $E(t)$ -- elements of triple $t$
+\end{enumerate}
+
 \subsection{Two Replicas without Bandwidth Constraints}
 
 We now show that the 2-replica selection problem is even NP-hard
