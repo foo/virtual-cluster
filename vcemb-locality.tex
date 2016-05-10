@@ -1497,7 +1497,6 @@ Notation $\TDPM$:
 Notation virtual cluster embedding:
 
 \begin{enumerate}
-  \item 
   \item $I_{\VCEMB}$ -- an instance of particular variant of virtual cluster embedding (e.g. $\FP+\RS(2)+\MA(4)$ or $\FP+\RS(2)+\CC+\BW$)
   \item $S_{\TDPM}$ -- a solution to $\TDPM$ instance
 \end{enumerate}
@@ -1547,8 +1546,8 @@ We construct the following tree.
   root: A {\MatchSubtree} and a {\CoverSubtree}. The
   {\MatchSubtree} consists of $|T|$ {\TripleGadgets}, one per each triple $t\in T$ and $n$
   {\UnqGadgets}. The {\CoverSubtree} consist of~$n$ {\ElGadgets}, one for each element $e\in X\cup Y\cup Z$.
-  \item \TripleGadget consists of four vertices: three leaves and the root of the gadget.
-  \item \UnqGadget consists of two vertices: the leaf and the root of the gadget. Note that we construct
+  \item {\TripleGadget} consists of four vertices: three leaves and the root of the gadget.
+  \item {\UnqGadget} consists of two vertices: the leaf and the root of the gadget. Note that we construct
   nodes not only to keep the tree balanced, but also to keep leaves of
   {\UnqGadgets} far from leaves of other \UnqGadgets.
   \item \ElGadget of element $e$ has a structure that depends on the number of triples that covers $e$. The \ElGadget consists of the
@@ -1576,7 +1575,6 @@ The chunks are placed as follows:
  ~$\Thr := 8\cdot n + 6\cdot\sum_{e}(\deg(e)-1)$
 \end{enumerate}
 
-\maciek{Finished here}
 
 \textbf{Reduction.}  We can make the following observations.
 
@@ -1644,9 +1642,9 @@ For the reduction we proceed as follows:
   From the structure of the substrate network and placement of chunks
   we know that~$\CostSol \geq \CostEstimOne(\ell)$.
   It can be verified that for each~$\ell$ we have that
- ~$\CostEstimOne(\ell)) > \Thr$. To do so, we first show that
- ~$\CostEstimOne(\ell+1)) \geq \CostEstimOne(\ell))$, for
- ~$1\leq \ell \leq t-1$. We have that~$\CostEstimOne(1)) > \Thr$, and
+ ~$\CostEstimOne(\ell) > \Thr$. To do so, we first show that
+ ~$\CostEstimOne(\ell+1) \geq \CostEstimOne(\ell)$, for
+ ~$1\leq \ell \leq t-1$. We have that~$\CostEstimOne(1) > \Thr$, and
   thus~$\CostSol > \Thr$.
 \end{proof}
 
