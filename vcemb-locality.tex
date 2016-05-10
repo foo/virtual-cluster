@@ -1550,7 +1550,7 @@ We construct the following tree.
   \item {\UnqGadget} consists of two vertices: the leaf and the root of the gadget. Note that we construct
   nodes not only to keep the tree balanced, but also to keep leaves of
   {\UnqGadgets} far from leaves of other \UnqGadgets.
-  \item \ElGadget of element $e$ has a structure that depends on the number of triples that covers $e$. The \ElGadget consists of the
+  \item {\ElGadget} of element $e$ has a structure that depends on the number of triples that covers $e$. The \ElGadget consists of the
   root, and~$4\cdot(\deg(e)-1)+1$ leaves.
 \end{enumerate}
 
@@ -1571,7 +1571,7 @@ The chunks are placed as follows:
   chunks by each node) to four.
   \item \emph{Number of nodes:} We allow to spawn
  ~$\numNodes := n + \sum_{e}(\deg(e)-1)$ nodes.
-  \item \emph{Threshold:}
+  \item \emph{Threshold:} We set the following threshold for any solution to be feasible.
  ~$\Thr := 8\cdot n + 6\cdot\sum_{e}(\deg(e)-1)$
 \end{enumerate}
 
@@ -1581,10 +1581,10 @@ The chunks are placed as follows:
 \begin{obs}
   The construction fulfills the following properties:
   \begin{enumerate}
-    \item There is one instance of each chunk type in the
+    \item There is exactly one replica of each chunk type in the
     \MatchSubtree.
 
-    \item There is one instance of each chunk type in the
+    \item There is exactly one replica of each chunk type in the
     \CoverSubtree.
 
     \item There are at most two replicas of each chunk type in the
@@ -1594,11 +1594,12 @@ The chunks are placed as follows:
 
 For the reduction we proceed as follows:
 \begin{enumerate}
-  \item We place~$n$ (remember that~$n=|X|=|Y|=|Z|$) nodes at any leaf
-  of the {\TripleGadgets} chosen for the~$\TDM$ solution. We
+  \item Let's take any instance $I_{\TDM}$ of $\TDM$ and produce an instance $I_{VCEMB}$ as described in the construction section.
+  \item Let's take any feasible solution $S_{\TDM}$ to $I_{\TDM}$ and place $n$ (remember that~$n=|X|=|Y|=|Z|$) nodes at any leaf
+  of the {\TripleGadgets} chosen in $S_{\TDM}$ solution. We
   match each such node to three chunks that are put in its
-  {\TripleGadget} (it is sitting on one of them), and we match it to
-  any unmatched chunk in any \UnqGadget.
+  {\TripleGadget} (it is co-located with one of the chunks), and we match it to
+  arbitrary unmatched chunk in any \UnqGadget.
   \item We put~$\deg(e)-1$ nodes in each \emph{Element Subtree}. We match all
   remaining chunks from this \emph{Element Subtree} to those nodes in
   arbitrary way.
