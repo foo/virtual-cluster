@@ -1690,7 +1690,7 @@ $\CostEstimTwo(u) := 4\cdot t + (4\cdot
 \begin{proof}
   
   Let's take an instance~$I$ of~$\TDPM$ and construct an instance~$I'$
-  of~$\RS(2)+\MA+\FP$ in the way described above.  We show that~$I'$
+  of~$\RS(2)+\MA+\FP$ in the way described in the construction section.  We show that~$I'$
   has a solution of cost~$\leq \Thr$ if and only if~$I \in \TDPM$ (there
   exists a perfect 3D matching).
 
@@ -1745,7 +1745,7 @@ assignment.
 \emph{Chunk Types.}  We construct the following chunk types: For each
 element~$e\in X\cup Y\cup Z$, we construct~$\deg(e)$ chunk types with
 two replicas. Additionally, we construct
-$|U| := \max\{3\cdot t + 3\cdot n + 1, \sum_e(2\cdot \deg(e)-1)\}$
+$\max\{3\cdot t + 3\cdot n + 1, \sum_e(2\cdot \deg(e)-1)\}$
 chunk types called \emph{unique chunks}, where~$n = |X| = |Y| = |Z|$,
 and~$t$ denotes the number of triples in the~$\TDPM$ instance. We
 refer to the set of unique chunks by~$U$.
