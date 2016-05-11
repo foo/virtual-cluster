@@ -1605,6 +1605,24 @@ For the reduction we proceed as follows:
 \end{enumerate}
 
 \textbf{Proof of correctness.}
+
+  Let
+ ~$\CostEstimOne(u) := u \cdot 12 + (t-u)\cdot 4 + (4\cdot \numNodes -
+  \numNodes - 4\cdot u - (t-u))\cdot 2$, and 
+$\CostEstimTwo(u) = 4\cdot t + (4\cdot
+\numNodes - \numNodes - t)\cdot 2$.
+
+\begin{lemma}
+  For each $u \in \{ 1, \ldots, t-1 \}$ we have that $\CostEstimOne(u) > \Thr$ and
+  $\CostEstimTwo(u) > \Thr$.
+  \label{lem:cost-estims}
+\end{lemma}
+
+\begin{proof}
+  We have that $\CostEstimOne(u+1) \geq \CostEstimOne(u)$ and $\CostEstimTwo(u+1) \geq \CostEstimTwo(u)$ , for
+ ~$1\leq u \leq t-1$. It is easy to verify that $\CostEstimOne(1) > \Thr$ and $\CostEstimTwo(1) > \Thr$.
+\end{proof}
+
 \begin{lemma}
   Take any feasible solution~$\Solution$ to the instance~$I$ of
  ~$\FP+\RS(2)+\MA(4)$ (as constructed above). If the cost of
@@ -1617,8 +1635,8 @@ For the reduction we proceed as follows:
   For the sake of contradiction, let us assume a feasible solution
  ~$\Solution$ with at least one node spawned in {\UnqSubtree}. We show
   that in this case, the cost of solution~$\Solution$ is greater than
- ~$\Thr$.  We denote the set of nodes spawned in the {\UnqSubtree} by
- ~$\SpawnedUnqSubtree$. Let~$\ell := |\SpawnedUnqSubtree|$. We know
+ ~$\Thr$. Let $\ell$ be the number of nodes spawned in the {\UnqSubtree} by
+ ~$\SpawnedUnqSubtree$. We know
   that~$1 \leq \ell \leq t$.  In~$\Solution$ we have exactly
  ~$4 \cdot \numNodes$ chunk transportations, some incurring cost
  ~$0, 2, 4$ or~$6$ (the tree has an edge-height of~$3$). At most
@@ -1629,19 +1647,11 @@ For the reduction we proceed as follows:
   {\UnqSubtree} are unique, therefore we need to transport~$t - \ell$
   chunks to nodes outside the \UnqSubtree, incurring cost~$4$ for each
   chunk.
-
- 
-  Let
- ~$\CostEstimOne(u) = u \cdot 12 + (t-u)\cdot 4 + (4\cdot \numNodes -
-  \numNodes - 4\cdot u - (t-u))\cdot 2$.
-  From the structure of the substrate network and placement of chunks
-  we know that~$\CostSol \geq \CostEstimOne(\ell)$.
-  It can be verified that for each~$\ell$ we have that
- ~$\CostEstimOne(\ell) > \Thr$. To do so, we first show that
- ~$\CostEstimOne(\ell+1) \geq \CostEstimOne(\ell)$, for
- ~$1\leq \ell \leq t-1$. We have that~$\CostEstimOne(1) > \Thr$, and
-  thus~$\CostSol > \Thr$.
+  Therefore $\CostSol \geq \CostEstimOne(\ell)$, and by Lemma \ref{lem:cost-estims}
+  we conclude that $\CostSol > \Thr$.
 \end{proof}
+
+
 
 \begin{lemma}
   Given any feasible solution~$\Solution$ to a given instance~$I$ of
@@ -1662,21 +1672,15 @@ For the reduction we proceed as follows:
    ~$u := 4 \cdot (n-\ell)$ chunks in the {\MatchSubtree} that are not
     processed in the {\MatchSubtree}, each incurring transportation
     cost of~$6$.
-    Let
-   ~$\CostEstimTwo(u) = 4\cdot t + (4\cdot
-    \numNodes - \numNodes - t)\cdot 2$.
-    From the structure of the substrate network and placement of
-    chunks we know that~$\CostSol \geq \CostEstimTwo(\ell)$.
-    It can be verified that for each~$u$ we have that
-   ~$\CostEstimTwo(u) > \Thr$. To do so, we first show that
-   ~$\CostEstimTwo(u+1) \geq \CostEstimTwo(u)$, for
-   ~$1\leq u \leq n-1$. Then we show that
-   ~$\CostEstimTwo(1) \geq \Thr$.
+     From the structure of the substrate network and placement of
+    chunks we know that~$\CostSol \geq \CostEstimTwo(\ell)$, and by Lemma \ref{lem:cost-estims}
+  we conclude that $\CostSol > \Thr$.
+.
 
     \item \textbf{Case $>n$ nodes spawned in the \MatchSubtree:} In this case
     we use the fact that there are not enough nodes in
     {\CoverSubtree}, and we need to transport over~$6$ hops at least 3
-    unique chunks for each node missing.
+    unique chunks for each node missing from {\CoverSubtree}.
   \end{enumerate}
 \end{proof}
 
