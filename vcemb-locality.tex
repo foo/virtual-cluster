@@ -1753,15 +1753,13 @@ refer to the set of unique chunks by~$U$.
 \emph{The substrate network.}
 
 \begin{enumerate}
-  \item \stefan{I dont get this:} The physical network consists of three subtrees connected to
+  \item The physical network consists of three subtrees connected to
   the root: A {\MatchSubtree}, a {\CoverSubtree}, and a
-  {\UnqSubtree}. In the {\MatchSubtree} we put~$2t$ gadgets:~$t$
+  {\UnqSubtree}. In the {\MatchSubtree} we put $t$
   {\TripleGadgets} (remember that~$t$ is the number of triples in
   {\TDPM} instance). {\CoverSubtree} consist of~$n$ element gadgets.
   \item The {\UnqSubtree} consist of~$|U|$ leaves, and two middle nodes:
-  a lower and an upper middle node. The upper middle node is a child of the root. The lower
-  middle node is the only child of the upper middle node. Each leaf is a
-  child of the lower middle node.
+  a lower and an upper middle node. Note that this is different than in $\RS(2)+\FP+\MA(4)$ NP-completeness proof, where {\UnqSubtree} was placed in the {\MatchSubtree}
   \item \TripleGadget: For each triple, we create a subtree
   consisisting of four vertices: three leaves and one triple root.  We
   attach the root of the triple to the root of the matching subtree.
