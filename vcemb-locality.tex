@@ -1472,9 +1472,7 @@ and explore the minimal requirements for rendering replica selection hard.
 In particular, we will show that already two replicas for each chunk type are sufficient to
 introduce intractability.
 
-\subsection{Notation}
-
-Notation $\TDPM$:
+Across the next sections, we use the following notation:
 
 \begin{enumerate}
   \item $n := |X|$ (remember that $|X| = |Y| = |Z|$)
@@ -1484,15 +1482,6 @@ Notation $\TDPM$:
   \item $T_e$ -- set of triples that contain element $e$
   \item $\deg(e) := |T(e)|$
   \item $\lbrace e_X(t), e_Y(t), e_Z(t) \rbrace$ -- elements of triple $t$
-  \item $I_{\TDPM}$ -- an instance of $\TDPM$
-  \item $S_{\TDPM}$ -- a solution to $\TDPM$ instance
-\end{enumerate}
-
-Notation virtual cluster embedding:
-
-\begin{enumerate}
-  \item $I_{\VCEMB}$ -- an instance of particular variant of virtual cluster embedding (e.g. $\FP+\RS(2)+\MA(4)$ or $\FP+\RS(2)+\CC+\BW$)
-  \item $S_{\TDPM}$ -- a solution to $\TDPM$ instance
 \end{enumerate}
 
 \subsection{Two Replicas without Bandwidth Constraints}
@@ -1808,9 +1797,10 @@ threshold for cost of any solution to the following value:
 set~$\CostTrans$, the cost of chunk transportation to $\Thr+1$ (so that no chunk transportation happens in any feasible solution), and
 $\CostCom = 1$, and we host only one node per machine. We set the
 number of machines to spawn to:
-$\numNodes := 3\cdot n + \sum_e (\deg(e)-1) + |U|$. 
-\noindent \textbf{Properties of the substrate network.}
+$\numNodes := 3\cdot n + \sum_e (\deg(e)-1) + |U|$.
+\\
 
+\noindent \textbf{Properties of the substrate network.}
 \begin{lemma}
   Assume we have a~$\RS(2)+\FP+\CC+\BW$ instance~$I$ with a subtree
  ~$T$ with~$l$ leaves and the bandwidth capacity on uplink of~$T$ is
@@ -1977,7 +1967,7 @@ spawned nodes.
   every feasible solution (let's name it~$Q$). Let's call the
   would-be cost of communication in the {\MatchSubtree}, if there were
   exactly~$n$ active gadgets,~$R$.
-  We know that~$\Thr = P+Q+R$. If we have at least one partially active
+  The threshold value was chosen so that~$\Thr = P+Q+R$. If we have at least one partially active
   gadget, then the cost of communication in {\MatchSubtree} is greater
   than~$R$, because we increase the number of 4-hop communications by
   at least one per each partially active gadget in comparison to a solution
