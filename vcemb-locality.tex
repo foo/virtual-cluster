@@ -1609,7 +1609,7 @@ For the reduction we proceed as follows:
   Let
  ~$\CostEstimOne(u) := u \cdot 12 + (t-u)\cdot 4 + (4\cdot \numNodes -
   \numNodes - 4\cdot u - (t-u))\cdot 2$, and 
-$\CostEstimTwo(u) = 4\cdot t + (4\cdot
+$\CostEstimTwo(u) := 4\cdot t + (4\cdot
 \numNodes - \numNodes - t)\cdot 2$.
 
 \begin{lemma}
@@ -1644,7 +1644,7 @@ $\CostEstimTwo(u) = 4\cdot t + (4\cdot
   {\UnqSubtree} are separated from other leaves of the tree by at
   least~$4$ edges.  The cost of chunk transportation to nodes
  ~$v \in \SpawnedUnqSubtree$ is at least~$12$. The chunks in
-  {\UnqSubtree} are unique, therefore we need to transport~$t - \ell$
+  {\UnqSubtree} are unique, therefore the solution transports~$t - \ell$
   chunks to nodes outside the \UnqSubtree, incurring cost~$4$ for each
   chunk.
   Therefore $\CostSol \geq \CostEstimOne(\ell)$, and by Lemma \ref{lem:cost-estims}
@@ -1668,7 +1668,7 @@ $\CostEstimTwo(u) = 4\cdot t + (4\cdot
   \UnqSubtree. Then we consider two cases:
   \begin{enumerate}
     
-    \item~\textbf{Case $\ell \leq n$:} In this case there are at least
+    \item~\textbf{Case $\ell \leq n$:} There are at least
    ~$u := 4 \cdot (n-\ell)$ chunks in the {\MatchSubtree} that are not
     processed in the {\MatchSubtree}, each incurring transportation
     cost of~$6$.
@@ -1677,8 +1677,7 @@ $\CostEstimTwo(u) = 4\cdot t + (4\cdot
   we conclude that $\CostSol > \Thr$.
 .
 
-    \item \textbf{Case $>n$ nodes spawned in the \MatchSubtree:} In this case
-    we use the fact that there are not enough nodes in
+    \item \textbf{Case $\ell>n$} We use the fact that there are not enough nodes in
     {\CoverSubtree}, and we need to transport over~$6$ hops at least 3
     unique chunks for each node missing from {\CoverSubtree}.
   \end{enumerate}
