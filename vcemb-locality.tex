@@ -1790,13 +1790,8 @@ $\Band(\deg(e)-1)$, the bandwidth of an uplink of a~$\MatchSubtree$ to
 $\Band(n)$, and an uplink of a~$\CoverSubtree$ to 
 $\Band(\sum_e (\deg(e)-1)$.
 
-\emph{The threshold value and other properties of the instance.}  We
-set~$\CostTrans = \infty$ \maciek{or some big constant, e.g. sum of
-  all the pairwise node communication, times 6 hops}, and
-$\CostCom = 1$, and we host only one node per machine. We set the
-number of machines to spawn to:
-$\numNodes := 3\cdot n + \sum_e (\deg(e)-1) + |U|$. We set the
-threshold to:
+\emph{The threshold value and other properties of the instance.}We set the
+threshold for cost of any solution to the following value:
 
 \begin{tiny}
 \begin{align*}
@@ -1809,7 +1804,11 @@ threshold to:
 \end{align*}
 \end{tiny}
 
-
+  We
+set~$\CostTrans$, the cost of chunk transportation to $\Thr+1$ (so that no chunk transportation happens in any feasible solution), and
+$\CostCom = 1$, and we host only one node per machine. We set the
+number of machines to spawn to:
+$\numNodes := 3\cdot n + \sum_e (\deg(e)-1) + |U|$. 
 \noindent \textbf{Properties of the substrate network.}
 
 \begin{lemma}
