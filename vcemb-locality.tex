@@ -1482,6 +1482,7 @@ Across the next sections, we use the following notation:
   \item $T_e$ -- set of triples that contain element $e$
   \item $\deg(e) := |T_e|$
   \item $\lbrace e_X(t), e_Y(t), e_Z(t) \rbrace$ -- elements of triple $t$
+  \item $V$ -- set of nodes to be spawned in VCEMB instance
 \end{enumerate}
 
 \subsection{Two Replicas without Bandwidth Constraints}
@@ -1624,8 +1625,7 @@ $\CostEstimTwo(u) := 4\cdot t + (4\cdot
   For the sake of contradiction, let us assume a feasible solution
  ~$\Solution$ with at least one node spawned in {\UnqSubtree}. We show
   that in this case, the cost of solution~$\Solution$ is greater than
- ~$\Thr$. Let $\ell$ be the number of nodes spawned in the {\UnqSubtree} by
- ~$\SpawnedUnqSubtree$. We know
+ ~$\Thr$. Let $\ell$ be the number of nodes spawned in the {\UnqSubtree}. We know
   that~$1 \leq \ell \leq |T|$.  In~$\Solution$ we have exactly
  ~$4 \cdot \numNodes$ chunk transportations, some incurring cost
  ~$0, 2, 4$ or~$6$ (the tree has an edge-height of~$3$). At most
