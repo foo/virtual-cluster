@@ -167,7 +167,7 @@
 \newcommand{\positive}{\ensuremath{positive}}
 \newcommand{\negative}{\ensuremath{negative}}
 \newcommand{\Val}{\ensuremath{Val}}
-\newcommand{\Sol}{\ensuremath{SOL}}
+\newcommand{\Sol}{\ensuremath{S}}
 
 
 
@@ -1480,7 +1480,7 @@ Across the next sections, we use the following notation:
   \item $T$ -- set of triples
   \item $t$ -- a triple ($t \in T$)
   \item $T_e$ -- set of triples that contain element $e$
-  \item $\deg(e) := |T(e)|$
+  \item $\deg(e) := |T_e|$
   \item $\lbrace e_X(t), e_Y(t), e_Z(t) \rbrace$ -- elements of triple $t$
 \end{enumerate}
 
@@ -1633,7 +1633,7 @@ $\CostEstimTwo(u) := 4\cdot t + (4\cdot
   {\UnqSubtree} are separated from other leaves of the tree by at
   least~$4$ edges.  The cost of chunk transportation to nodes
  ~$v \in \SpawnedUnqSubtree$ is at least~$12$. The chunks in
-  {\UnqSubtree} are unique, therefore the solution transports~$t - \ell$
+  {\UnqSubtree} are unique, therefore the solution transports~$|T| - \ell$
   chunks to nodes outside the \UnqSubtree, incurring cost~$4$ for each
   chunk.
   Therefore $\CostSol \geq \CostEstimOne(\ell)$, and by Lemma \ref{lem:cost-estims}
@@ -1734,9 +1734,8 @@ assignment.
 \emph{Chunk Types.}  We construct the following chunk types: For each
 element~$e\in X\cup Y\cup Z$, we construct~$\deg(e)$ chunk types with
 two replicas. Additionally, we construct
-$\max\{3\cdot t + 3\cdot n + 1, \sum_e(2\cdot \deg(e)-1)\}$
-chunk types called \emph{unique chunks}, where~$n = |X| = |Y| = |Z|$,
-and~$t$ denotes the number of triples in the~$\TDPM$ instance. We
+$\max\{3\cdot |T| + 3\cdot n + 1, \sum_e(2\cdot \deg(e)-1)\}$
+chunk types called \emph{unique chunks}. We
 refer to the set of unique chunks by~$U$.
 
 \emph{The substrate network.}
@@ -1744,8 +1743,8 @@ refer to the set of unique chunks by~$U$.
 \begin{enumerate}
   \item The physical network consists of three subtrees connected to
   the root: A {\MatchSubtree}, a {\CoverSubtree}, and a
-  {\UnqSubtree}. In the {\MatchSubtree} we put $t$
-  {\TripleGadgets} (remember that~$t$ is the number of triples in
+  {\UnqSubtree}. In the {\MatchSubtree} we put $|T|$
+  {\TripleGadgets} (remember that~$|T|$ is the number of triples in
   {\TDPM} instance). {\CoverSubtree} consist of~$n$ element gadgets.
   \item The {\UnqSubtree} consist of~$|U|$ leaves, and two middle nodes:
   a lower and an upper middle node. Note that this is different than in $\RS(2)+\FP+\MA(4)$ NP-completeness proof, where {\UnqSubtree} was placed in the {\MatchSubtree}
@@ -1803,7 +1802,7 @@ $\numNodes := 3\cdot n + \sum_e (\deg(e)-1) + |U|$.
 \noindent \textbf{Properties of the substrate network.}
 \begin{lemma}
   Assume we have a~$\RS(2)+\FP+\CC+\BW$ instance~$I$ with a subtree
- ~$T$ with~$l$ leaves and the bandwidth capacity on uplink of~$T$ is
+ ~$T'$ with~$l$ leaves and the bandwidth capacity on uplink of~$T'$ is
  ~$\Band(k)$. Assume that no chunk transportation is allowed
   ($\CostTrans = \infty$, so every node must be colocated with the
   chunk it processes in every feasible solution), and~$\CostCom = 1$.
@@ -1814,13 +1813,13 @@ $\numNodes := 3\cdot n + \sum_e (\deg(e)-1) + |U|$.
 
 \begin{proof}
 It holds that ~$s\leq l$ as we cannot spawn more nodes than leaves.
-  The bandwidth allocation on the uplink of~$T$ is
+  The bandwidth allocation on the uplink of~$T'$ is
  ~$uplink(s,T) := s\cdot (\numNodes - s)$, as no chunk transportation
   is allowed ($\CostTrans = \infty$), and every node in~$T$ has to
-  communicate over~$T$'s uplink with nodes spawned outside of
- ~$T$. Therefore, in every feasible solution we have:
- ~$uplink(s, T) \leq \Band(k)$.  Let's define the remaining bandwidth
-  on the uplink of T~$\remainBw(s) := \Band(k)-uplink(s, T) = s^2 - s\cdot \numNodes -
+  communicate over~$T'$'s uplink with nodes spawned outside of
+ ~$T'$. Therefore, in every feasible solution we have:
+ ~$uplink(s, T') \leq \Band(k)$.  Let's define the remaining bandwidth
+  on the uplink of $T'$~$\remainBw(s) := \Band(k)-uplink(s, T') = s^2 - s\cdot \numNodes -
   k^2+k\cdot \numNodes~$.
   Every feasible solution fulfills~$\remainBw(s) \geq 0$, which is true for
  ~$s \leq k \vee \numNodes-s\leq k$ (follows from the properties of the
