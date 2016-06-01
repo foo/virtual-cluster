@@ -216,7 +216,8 @@ supports an optimized mapping of virtual machines as well as their interconnecti
 to their
 physical counterparts: a graph embedding problem.
 
-However, existing virtual cluster embedding algorithms such as Oktopus and Proteus
+However, existing virtual cluster embedding algorithms such as Oktopus,
+Proteus, and Kraken,
 often ignore a crucial dimension of the problem, namely \emph{data locality}:
 the input to a cloud application such as MapReduce is typically stored in a distributed,
 and sometimes redundant, file system. Since moving
@@ -1476,13 +1477,13 @@ Across the next sections, we use the following notation:
 
 \begin{enumerate}
   \item $n := |X|$ (remember that $|X| = |Y| = |Z|$)
-  \item $e$ -- an element of universe ($e \in X \cup Y \cup Z$)
+  \item $e$ -- an element of the universe ($e \in X \cup Y \cup Z$)
   \item $T$ -- set of triples
   \item $t$ -- a triple ($t \in T$)
   \item $T_e$ -- set of triples that contain element $e$
   \item $\deg(e) := |T_e|$
   \item $\lbrace e_X(t), e_Y(t), e_Z(t) \rbrace$ -- elements of triple $t$
-  \item $V$ -- set of nodes to be spawned in VCEMB instance
+  \item $V$ -- set of nodes to be spawned in embedding instance
 \end{enumerate}
 
 \subsection{Two Replicas without Bandwidth Constraints}
@@ -1499,12 +1500,12 @@ instance~$I_{\VCEMB}$ as follows.
 
 \paragraph{Chunks}
 
-We construct three types of chunks. First type correspond to covers of elements by triples, with two replicas each. Other two types are chunk types with one replica only, therefore called \emph{unique}. We construct two types of unique chunks, distinguished by a different role in the construction. For unique chunks we co-note the chunk type with chunk replica.
-
+We construct three types of chunks. The first type corresponds to covers of elements by triples, with two replicas each. The other two types are chunk types with one replica only, therefore called \emph{unique}. We construct two types of unique chunks, distinguished by a different role in the construction. For unique chunks we simply annotate the chunk type with chunk replica.
 Thus, the constructed instance uses at most two replicas of each chunk type.
 
 \begin{enumerate}
-  \item For each triple $t\in T$ we construct $3$ chunk types, with two replicas each. We construct different chunk type for each triple $t$ that contain element $e$. We refer to those replicas as $ch_1(e, t)$ and $ch_2(e, t)$.
+  \item For each triple $t\in T$, we construct $3$ chunk types, with two replicas each. We construct different chunk types for each triple $t$, which 
+  contain element $e$. We refer to those replicas by $ch_1(e, t)$ and $ch_2(e, t)$.
   \item We construct~$n$ additional chunk types named
   ~$u_1, \ldots, u_n$, with one replica each.
   \item For each element~$e\in X\cup Y\cup Z$,
@@ -1534,7 +1535,7 @@ We construct the following tree.
   \item {\UnqGadget} consists of two vertices: the leaf and the root of the gadget. Note that we construct
   nodes not only to keep the tree balanced, but also to keep leaves of
   {\UnqGadgets} far from leaves of other \UnqGadgets.
-  \item {\ElGadget} of element $e$ has a structure that depends on the number of triples that covers $e$. The {\ElGadget} consists of the
+  \item {\ElGadget} of element $e$ has a structure that depends on the number of triples that cover $e$. The {\ElGadget} consists of the
   root, and~$4\cdot(\deg(e)-1)+1$ leaves.
 \end{enumerate}
 
@@ -1578,14 +1579,14 @@ The chunks are placed as follows:
 
 For the reduction we proceed as follows:
 \begin{enumerate}
-  \item Let's take any instance $I_{\TDM}$ of $\TDM$ and produce an instance $I_{VCEMB}$ as described in the construction section.
+  \item Let's take any instance $I_{\TDM}$ of $\TDM$ and produce an instance $I$ as described in the construction section.
   \item Let's take any feasible solution $S_{\TDM}$ to $I_{\TDM}$ and place $n$ (remember that~$n=|X|=|Y|=|Z|$) nodes at any leaf
   of the {\TripleGadgets} chosen in $S_{\TDM}$ solution. We
   match each such node to three chunks that are put in its
-  {\TripleGadget} (it is co-located with one of the chunks), and we match it to
+  {\TripleGadget} (it is co-located with one of the chunks), and we match it to an
   arbitrary unmatched chunk in any \UnqGadget.
   \item We put~$\deg(e)-1$ nodes in each \emph{Element Subtree}. We match all
-  remaining chunks from this \emph{Element Subtree} to those nodes in
+  remaining chunks from this \emph{Element Subtree} to those nodes in an
   arbitrary way.
   \item This solution has cost~$\leq \Thr$ (easy to see by summing up the
   costs of transporting chunks to each node).
@@ -1627,7 +1628,7 @@ $\CostEstimTwo(u) := 4\cdot t + (4\cdot
   that in this case, the cost of solution~$\Solution$ is greater than
  ~$\Thr$. Let $\ell$ be the number of nodes spawned in the {\UnqSubtree}. We know
   that~$1 \leq \ell \leq |T|$.  In~$\Solution$ we have exactly
- ~$4 \cdot \numNodes$ chunk transportations, some incurring cost
+ ~$4 \cdot \numNodes$ chunk transportations, incurring cost
  ~$0, 2, 4$ or~$6$ (the tree has an edge-height of~$3$). At most
  ~$\numNodes$ transportations are of cost~$0$. Note that the leaves of the
   {\UnqSubtree} are separated from other leaves of the tree by at
@@ -1687,12 +1688,12 @@ $\CostEstimTwo(u) := 4\cdot t + (4\cdot
   construct a solution~$\Sol'$ to~$I'$ in the following way:
   \begin{enumerate}
     \item We place~$n$ nodes in~$n$ {\TripleGadgets} (one per gadget)
-    that correspond to triples in~$\Sol$. We match each of such nodes
+    that correspond to triples in~$\Sol$. We match each such node
     to chunks in the gadget it is placed, as well as one arbitrary
     chunk in {\UnqSubtree}.
-    \item In each {\ElGadget} that correspond to element~$e$, we place
+    \item In each {\ElGadget} that corresponds to element~$e$, we place
    ~$\deg(e) - 1$ nodes and match them to arbitrary chunks in this
-    gadget, which are not yet matched in any {\TripleGadget}
+    gadget, which are not yet matched in any {\TripleGadget}.
   \end{enumerate}
 
   We can observe that every chunk type was processed. By simple
@@ -1747,7 +1748,7 @@ refer to the set of unique chunks by~$U$.
   {\TripleGadgets} (remember that~$|T|$ is the number of triples in
   {\TDPM} instance). {\CoverSubtree} consist of~$n$ element gadgets.
   \item The {\UnqSubtree} consist of~$|U|$ leaves, and two middle nodes:
-  a lower and an upper middle node. Note that this is different than in $\RS(2)+\FP+\MA(4)$ NP-completeness proof, where {\UnqSubtree} was placed in the {\MatchSubtree}
+  a lower and an upper middle node. Note that this is different from $\RS(2)+\FP+\MA(4)$ NP-completeness proof, where {\UnqSubtree} was placed in the {\MatchSubtree}.
   \item \TripleGadget: For each triple, we create a subtree
   consisisting of four vertices: three leaves and one triple root.  We
   attach the root of the triple to the root of the matching subtree.
@@ -1778,8 +1779,8 @@ $\Band(\deg(e)-1)$, the bandwidth of an uplink of a~$\MatchSubtree$ to
 $\Band(n)$, and an uplink of a~$\CoverSubtree$ to 
 $\Band(\sum_e (\deg(e)-1)$.
 
-\emph{The threshold value and other properties of the instance.}We set the
-threshold for cost of any solution to the following value:
+\emph{The threshold value and other properties of the instance.} We set the
+cost threshold for any solution to the following value:
 
 \begin{tiny}
 \begin{align*}
@@ -1793,7 +1794,7 @@ threshold for cost of any solution to the following value:
 \end{tiny}
 
   We
-set~$\CostTrans$, the cost of chunk transportation to $\Thr+1$ (so that no chunk transportation happens in any feasible solution), and
+set~$\CostTrans$, the cost of chunk transportation to $\Thr+1$ (so that no chunk transportation happens in any feasible solution), 
 $\CostCom = 1$, and we host only one node per machine. We set the
 number of machines to spawn to:
 $\numNodes := 3\cdot n + \sum_e (\deg(e)-1) + |U|$.
@@ -1804,7 +1805,7 @@ $\numNodes := 3\cdot n + \sum_e (\deg(e)-1) + |U|$.
   Assume we have a~$\RS(2)+\FP+\CC+\BW$ instance~$I$ with a subtree
  ~$T'$ with~$l$ leaves and the bandwidth capacity on uplink of~$T'$ is
  ~$\Band(k)$. Assume that no chunk transportation is allowed
-  ($\CostTrans = \infty$, so every node must be colocated with the
+  ($\CostTrans = \infty$, so every node must be collocated with the
   chunk it processes in every feasible solution), and~$\CostCom = 1$.
   Then in any feasible solution the number of nodes spawned in~$T$ (we
   name it~$s$) satisfies~$s \leq k \vee n-s\leq k$, and~$s \leq l$.
@@ -1958,7 +1959,7 @@ spawned nodes.
   active {\TripleGadgets}. It remains to show that there
   are no partially active {\TripleGadgets} in the solution of cost
  ~$\leq \Thr$.
-  Using the Lemma~\ref{lem:bandwidth3}, 
+  Using Lemma~\ref{lem:bandwidth3}, 
   we conclude that the communication cost of
   nodes in the {\CoverSubtree} is the same for every feasible solution
   (let's name that cost~$P$). We also know that the communication cost
