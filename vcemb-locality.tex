@@ -1597,11 +1597,11 @@ For the reduction we proceed as follows:
 
 \textbf{Proof of correctness of the reduction.}
 
-  Let
- ~$\CostEstimOne(u) := u \cdot 12 + (t-u)\cdot 4 + (4\cdot \numNodes -
-  \numNodes - 4\cdot u - (t-u))\cdot 2$, and 
-$\CostEstimTwo(u) := 4\cdot t + (4\cdot
-\numNodes - \numNodes - t)\cdot 2$.
+  For each $u \in \{ 1, \ldots, t-1 \}$ let us define
+ ~$\CostEstimOne(u) = u \cdot 12 + (t-u)\cdot 4 + (4\cdot n -
+  n - 4\cdot u - (t-u))\cdot 2$, and 
+$\CostEstimTwo(u) = 4\cdot t + (4\cdot
+n - n - t)\cdot 2$, where $t$ is the number of triples and $n = |X| = |Y| = |Z|$ in a given instance of $\TDM$.
 
 \begin{lemma}
   For each $u \in \{ 1, \ldots, t-1 \}$ we have that $\CostEstimOne(u) > \Thr$ and

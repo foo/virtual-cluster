@@ -206,6 +206,14 @@ We changed the "Proof of correctness" to "Proof of correctness of the reduction"
        used for a triple from T.  (3) Similarly, it is only in Lemma 6 that
        you specify the domain for u.
 
+%%%%%%%%%% RESPONSE %%%%%%%%%% 
+We explicitly bounded t to be the number of triples in a given 3D Perfect Matching instance. We explicitly specified the domain for u.
+
+%maciek: TODO: t is used previously in a different way! Resolve this issue
+%maciek: TODO: write an introduction to cost functions
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 - Lemma 7: Just like the "Element Subtree", "Unique Subtree" was not defined.
    And neither was sigma.
 
