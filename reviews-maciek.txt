@@ -167,6 +167,11 @@ slightly off.
    two subtrees, so clearly, they do not have exactly one replica in the other;
    please refomulate.
 
+%%%%%%%%%% RESPONSE %%%%%%%%%% 
+We changed the Observation in such way that it excludes U_e
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 - "Reduction" (page 26):
    * In point 2: (1) the n nodes should be placed each in a distinct leaf,
        not all in the same one, as your writing suggests; (2) the 3D-Matching
@@ -234,6 +239,16 @@ p4l14-17: The sentence "The standard datacenter topologies today are
    (multi-rooted) fat-tree resp. Clos topologies [2, 21], hierarchical networks 
    recursively made of sub-trees at each level; servers are located at the tree
    leaves." sounds gibberish --- please reformulate.
+
+%%%%%%%%%% RESPONSE %%%%%%%%%%
+%maciek: I suggest to change the sentence to:
+"The standard datacenter topologies today are
+   (multi-rooted) fat-tree and Clos topologies [2, 21], the hierarchical networks 
+   recursively made of sub-trees at each level. Servers are located at the tree
+   leaves."
+%maciek: however, I haven't committed the change yet
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 p8l48: remove the first 'a' from "can now be computed a from a solution to the"
 
