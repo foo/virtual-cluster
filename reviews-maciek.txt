@@ -231,10 +231,21 @@ SECTION 5.2:
 
 - Lemma 10:
    * last line of statement: n should be replaced by |V|
+   
+%%%%%%%%%% RESPONSE %%%%%%%%%% 
+We changed |V| to n
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
    * could you explain in detail how you arrive at the final inequalities?
 
 - Lemma 12 and its proof: It appears that you mean the "Element Gadget", even
    though you are referring to the "Triple Gadget"
+   
+%%%%%%%%%% RESPONSE %%%%%%%%%% 
+We changed the "Triple Gadget" to "Element Gadget"
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 MINOR COMMENTS:
 
@@ -307,6 +318,11 @@ We changed the Cartesian product to the union
 
 NP-hardness proofs: I think you should use a single symbol, perhaps \tau, for
    the threshold; $Th$ rather confusingly looks like two disconnected symbols.
+
+%%%%%%%%%% RESPONSE %%%%%%%%%% 
+We changed the Th to \xi
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 p22-23: Lemma 4 and Theorem 5 --- since you do the easy calculation of the cost
    a specified solution in proof of Theorem 5, I believe you should also

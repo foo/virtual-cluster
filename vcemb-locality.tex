@@ -160,7 +160,7 @@
 \newcommand{\Vars}{\ensuremath{Var(\Formula)}}
 \newcommand{\NVars}{\ensuremath{|\Vars|}}
 \newcommand{\ChunkTypes}{\ensuremath{ch}}
-\newcommand{\Thr}{\ensuremath{Th}}
+\newcommand{\Thr}{\ensuremath{\xi}}
 \newcommand{\VCB}{\ensuremath{VCB}}
 \newcommand{\VCNB}{\ensuremath{VCNB}}
 \newcommand{\varx}{\ensuremath{x}}
@@ -1815,15 +1815,15 @@ $\numNodes := 3\cdot n + \sum_e (\deg(e)-1) + |U|$.
 \begin{proof}
 It holds that ~$s\leq l$ as we cannot spawn more nodes than leaves.
   The bandwidth allocation on the uplink of~$T'$ is
- ~$uplink(s,T) := s\cdot (\numNodes - s)$, as no chunk transportation
+ ~$uplink(s,T) := s\cdot (n - s)$, as no chunk transportation
   is allowed ($\CostTrans = \infty$), and every node in~$T$ has to
   communicate over~$T'$'s uplink with nodes spawned outside of
  ~$T'$. Therefore, in every feasible solution we have:
  ~$uplink(s, T') \leq \Band(k)$.  Let's define the remaining bandwidth
-  on the uplink of $T'$~$\remainBw(s) := \Band(k)-uplink(s, T') = s^2 - s\cdot \numNodes -
-  k^2+k\cdot \numNodes~$.
+  on the uplink of $T'$~$\remainBw(s) := \Band(k)-uplink(s, T') = s^2 - s\cdot n -
+  k^2+k\cdot n~$.
   Every feasible solution fulfills~$\remainBw(s) \geq 0$, which is true for
- ~$s \leq k \vee \numNodes-s\leq k$ (follows from the properties of the
+ ~$s \leq k \vee n-s\leq k$ (follows from the properties of the
   quadratic function).
 \end{proof}
 
@@ -1870,14 +1870,14 @@ constructed subtree.
 
 \begin{lemma}
   Assume an instance~$I$ of~$\TDPM$. We construct the~$\RS(2)+\FP+\CC+\BW$ instance~$I'$
- as described above. Then we have that in~$I'$ the number of nodes spawned in {\TripleGadget} of
+ as described above. Then we have that in~$I'$ the number of nodes spawned in Element Gadget of
   element~$e$ is~$\deg(e)-1$.
   \label{lem:bandwidth3}
 \end{lemma}
 
 \begin{proof}
-  Let's call the number of nodes spawned in the {\TripleGadget} of
-  element~$e$~$x_e$.  From Lemma~\ref{lem:bandwidth1}, we know that
+  Let's call the number of nodes spawned in the Element Gadget of
+  element~$e$ the $x_e$.  From Lemma~\ref{lem:bandwidth1}, we know that
  ~$x_e \leq \deg(e) - 1 \vee x_e \geq |V| - \deg(e) + 1$. We observe
   that~$|V| - \deg(e) + 1$ is greater than the number of leaves of the
   gadget, which is~$\deg(e)$.  From Lemma~\ref{lem:bandwidth2}, we know
@@ -1889,7 +1889,7 @@ constructed subtree.
 From the above lemmas we know the precise number of nodes spawned in
 certain parts of the tree. Feasible solutions only differ in 
 the choice of the~$\deg(e) - 1$ out of~$\deg(e)$ chunks
-in each {\TripleGadget}, and the placement of nodes in the
+in each Element Gadget, and the placement of nodes in the
 {\MatchSubtree}.
 
 %
