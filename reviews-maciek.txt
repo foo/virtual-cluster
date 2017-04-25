@@ -177,6 +177,13 @@ We changed the Observation in such way that it excludes U_e
        not all in the same one, as your writing suggests; (2) the 3D-Matching
        solution selects a triple, not a Triple Gadget --- the latter
        corresponds to the former
+
+%%%%%%%%%% RESPONSE %%%%%%%%%% 
+We clarified the construction.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+       
    * In point 3, you refer to "Element Subtree" but, strictly speaking,
        you have never defined it.
        

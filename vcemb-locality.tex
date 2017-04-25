@@ -1580,8 +1580,8 @@ The chunks are placed as follows:
 For the reduction we proceed as follows:
 \begin{enumerate}
   \item Let's take any instance $I_{\TDM}$ of $\TDM$ and produce an instance $I$ as described in the construction section.
-  \item Let's take any feasible solution $S_{\TDM}$ to $I_{\TDM}$ and place $n$ (remember that~$n=|X|=|Y|=|Z|$) nodes at any leaf
-  of the {\TripleGadgets} chosen in $S_{\TDM}$ solution. We
+  \item Let's take any feasible solution $S_{\TDM}$ to $I_{\TDM}$ and place $n$ (remember that~$n=|X|=|Y|=|Z|$) nodes in the following way: for each triple $r$ chosen in $S_{\TDM}$ solution, we select an arbitrary leaf of the Triple Gadget corresponding to $r$ and place a node there.
+  We
   match each such node to three chunks that are put in its
   {\TripleGadget} (it is co-located with one of the chunks), and we match it to an
   arbitrary unmatched chunk in any \UnqGadget.
