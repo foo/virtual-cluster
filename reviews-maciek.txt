@@ -150,6 +150,11 @@ SPECIFIC COMMENTS:
 SECTION 5 in general: You keep changing the names for instances of the two
    problems.  Be consistent!
 
+%%%%%%%%%% RESPONSE %%%%%%%%%% 
+We changed every occurence of FP+RS(2)+MA(4) to RS(2)+MS(4)+FP. The naming convention is to list all the variants in the following order: RS, MA, FP, NI, BW.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 SECTION 5.1:
 
 Let me reiterate that I firmly believe that this section requires a major

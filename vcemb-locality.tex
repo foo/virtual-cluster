@@ -1490,12 +1490,12 @@ Across the next sections, we use the following notation:
 
 We now show that the 2-replica selection problem is even NP-hard
 without capacity constraints.  In particular, we consider the problem
-variant~$\FP+\RS(2)+\MA(4)$ with at most two replicas of each chunk type and assignment factor
+variant~$\RS(2)+\MA(4)+\FP$ with at most two replicas of each chunk type and assignment factor
 four. There are no capacity constraints on links.
 
 \textbf{Construction.}
 
-Let's take any instance~$I_{\TDPM}$ of~$\TDM$ and create a~$\FP+\RS(2)+\MA(4)$
+Let's take any instance~$I_{\TDPM}$ of~$\TDM$ and create a~$\RS(2)+\MA(4)+\FP$
 instance~$I_{\VCEMB}$ as follows.
 
 \paragraph{Chunks}
@@ -1616,7 +1616,7 @@ $\CostEstimTwo(u) := 4\cdot t + (4\cdot
 
 \begin{lemma}
   Take any feasible solution~$\Solution$ to the instance~$I$ of
- ~$\FP+\RS(2)+\MA(4)$ (as constructed above). If the cost of
+ ~$\RS(2)+\MA(4)+\FP$ (as constructed above). If the cost of
  ~$\Solution$ is at most~$\Thr$, then no node is spawned in the Unique
   Subtree.
   \label{th:no-unique}
@@ -1645,7 +1645,7 @@ $\CostEstimTwo(u) := 4\cdot t + (4\cdot
 
 \begin{lemma}
   Given any feasible solution~$\Solution$ to a given instance~$I$ of
- ~$\FP+\RS(2)+\MA(4)$ (as constructed above). If the cost of
+ ~$\RS(2)+\MA(4)+\FP$ (as constructed above). If the cost of
  ~$\Solution$ is at most~$\Thr$, then exactly~$n$ nodes are spawned in the
   \MatchSubtree.
   \label{th:np-balance}
