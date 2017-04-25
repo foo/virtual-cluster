@@ -97,17 +97,52 @@ QUESTIONS / FUTURE WORK that the authors or others might consider interesting:
    but perhaps something changes in the dynamic programming approach?
    I.e., perhaps some of them become pseudopolynomial?
 
+%%%%%%%%%% RESPONSE %%%%%%%%%% 
+Flow-, dynamic programming- and matching-based algorithms remain correct for arbitrary non-negative edge weight function.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 2) Perhaps some relaxation of the requirement that replicas are distributed
    uniformly between nodes makes sense?
 
+%%%%%%%%%% RESPONSE %%%%%%%%%% 
+%maciek: I do not understand the usage of "uniform distribution" with respect to input. I assume that this question is indeed about the co-location of more than one chunk replica in a single node. Hence, we can respond something like:
+"Presented algorithms remain correct for any distribution of chunk replicas. In addition, we do not restrict the number of replicas that are hosted in a single node."
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 3) As some of the problems are NP-hard, and moreover of practical interest,
    considering approximation algorithms seems a worthwhile direction.
+
+%%%%%%%%%% RESPONSE %%%%%%%%%% 
+Quality approximation algorithms for stated problems are broad topic on its own. Such solutions are under ongoing research.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 3) I suppose that one might argue that in the applications the underlying
    physical network is (more or less) fixed.  In such case, when the instance
    specifies only the data distribution, number of nodes to be embedded,
    and the b_1 and b_2 coefficients, would some of the previously NP-hard
    problems become tractable?
+
+%%%%%%%%%% RESPONSE %%%%%%%%%%
+Assume that the physical network is fixed and name it T_fixed. We presented hardness results for two variants:
+1) RS+MA+NI using the construction that we name (for sake of this response) the C1
+2) RS+MA+FP using the construction that we name (for sake of this response) the C2
+3) RS(2)+MA+FP using the construction that we name (for sake of this response) the C3
+4) RS(2)+NI+FP+BW using the construction that we name (for sake of this response) the C4
+
+The remaining hardness results (RS+MA+FP+NI, RS+MA+FP+BW, RS+FP+NI+BW, RS+MA+FP+NI+BW) are the consequences of hardness results (1) and (2).
+
+Consider the hardness result of RS+MA+NI. If the construction C1 can be embedded in T_fixed (which requires certain height of the tree as well as the number of nodes and the existance of desired links), then the hardness result holds. The carefully-crafted threshold value can be satisfied only by solutions that co-locates nodes with replicas. Hence, the reduction is correct with possible additional leaves in Triple Gadgets.
+
+Consider the hardness result of RS+MA+FP.  If the construction C2 can be embedded in T_fixed, then the hardness result holds. The threshold value can be satisfied only by solutions that place exactly one node in every Triple Gadget. Hence, the reduction is correct with possible additional leaves in any Triple Gadget, as well as additional leaves outside Triple Gadgets.
+
+Consider the hardness result of RS(2)+MA+FP. If the construction C2 can be embedded in T_fixed, then the hardness result holds. Due to the value of threshold, leaves without chunk replicas cannot be considered candidates for hosting the node.
+
+Consider the hardness result of RS(2)+NI+FP+BW. If the construction C2 can be embedded in T_fixed and number of nodes to be placed is at least two, then the hardness result holds. In presence of bandwidth capacities (the BW variant), each edge has the specified bandwidth capacity. For each edge of T_fixed that is outside of C2, we set its capacity to zero, disallowing the placement of any node in such leaf.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 
 SPECIFIC COMMENTS:
@@ -265,6 +300,6 @@ Summary of results is presented in Table 1 at page 34.
 Lastly, for the problems that are hard, I would also like the authors to mention how hard they are to approximate, or whether one can get a nice approximate solution.
 
 %%%%%%%%%% RESPONSE %%%%%%%%%% 
-%maciek: I propose to answer something like: "Quality approximation algorithms for stated problems are broad topic on its own. Such solutions are under ongoing research."
+Quality approximation algorithms for stated problems are broad topic on its own. Such solutions are under ongoing research.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
