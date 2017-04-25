@@ -137,9 +137,10 @@ slightly off.
        
 - "Proof of correctness" (right after the "reduction"):
    * Correctness of what?
-%%%%%%%%%%
+
+%%%%%%%%%% RESPONSE %%%%%%%%%% 
 We changed the "Proof of correctness" to "Proof of correctness of the reduction"
-%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
    * (1) The two costs you introduce presumably correspond to something,
@@ -184,6 +185,11 @@ throughout article: I think you never define/explain the term "uplink"
 
 p3l54-55: "constituting parts" --> "constituent parts"
 
+%%%%%%%%%% RESPONSE %%%%%%%%%% 
+We changed the "constituting parts" to "constituent parts"
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 p4l14-17: The sentence "The standard datacenter topologies today are
    (multi-rooted) fat-tree resp. Clos topologies [2, 21], hierarchical networks 
    recursively made of sub-trees at each level; servers are located at the tree
@@ -191,16 +197,46 @@ p4l14-17: The sentence "The standard datacenter topologies today are
 
 p8l48: remove the first 'a' from "can now be computed a from a solution to the"
 
+%%%%%%%%%% RESPONSE %%%%%%%%%% 
+Excessive 'a' was removed
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 p8l40: insert space in "withthe"
+
+%%%%%%%%%% RESPONSE %%%%%%%%%% 
+We inserted the space in the desired location.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 p11l54: change "we can computed" to either "can be computed" or "we can compute"
 
+%%%%%%%%%% RESPONSE %%%%%%%%%% 
+We changed "we can computed" to "can be computed"
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 p1626-27: was "communicated" supposed to be "connected"?
+
+%%%%%%%%%% RESPONSE %%%%%%%%%% 
+We changed "communicated" to "connected" for clarity purposes. However, please note that in our model the connection implies the communication and the reservation of bandwith for such communication.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 p16l44: remove the repetition of "formula"
 
+%%%%%%%%%% RESPONSE %%%%%%%%%% 
+We removed the excessive repetition of "formula"
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 p19l23 (end of the paragraph): all elements of the *union* of X,Y,Z have to be
    covered (once), not their Cartesian product.
+
+%%%%%%%%%% RESPONSE %%%%%%%%%% 
+We changed the Cartesian product to the union
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 NP-hardness proofs: I think you should use a single symbol, perhaps \tau, for
    the threshold; $Th$ rather confusingly looks like two disconnected symbols.
@@ -219,4 +255,16 @@ The solutions/algorithms are fairly simple, and I would not claim that the techn
 
 Given the number of problems (32), I would have liked the authors to perhaps create a table; it is hard for a reviewer to keep track of which problems can be solved efficiently and which are hard. Also, the optimization function - the footprint, is just stated and not discussed at all. Perhaps this is a well-agreed upon function in this field (which is new to me). Why is this the idea function to optimize? 
 
-Lastly, for the problems that are hard, I would also like the authors to mention how hard they are to approximate, or whether one can get a nice approximate solution. 
+%%%%%%%%%% RESPONSE %%%%%%%%%% 
+Summary of results is presented in Table 1 at page 34.
+
+%maciek: I cannot answer the question about the optimization function being the footprint.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+Lastly, for the problems that are hard, I would also like the authors to mention how hard they are to approximate, or whether one can get a nice approximate solution.
+
+%%%%%%%%%% RESPONSE %%%%%%%%%% 
+%maciek: I propose to answer something like: "Quality approximation algorithms for stated problems are broad topic on its own. Such solutions are under ongoing research."
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+

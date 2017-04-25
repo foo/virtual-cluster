@@ -337,7 +337,7 @@ we conclude our work in Section~\ref{sec:conclusion}.
 
 \section{Model}\label{sec:model}
 
-To get started, and before introducing our formal model and its constituting parts in detail,
+To get started, and before introducing our formal model and its constituent parts in detail,
 we will discuss the practical motivation.
 Figure~\ref{fig:overview} gives an overview of our model.
 
@@ -617,7 +617,7 @@ cost nothing.
 %Recall that~$\RS+\CC+\MA+\BW$ boils down to
 %$\RS+\MA+\BW$ in the absence of~$\FP$
 A solution to the~$\RS+\MA+\BW$ problem can now be computed
-a from a solution to the \emph{Min-Cost-Max-Flow} problem between super-source
+from a solution to the \emph{Min-Cost-Max-Flow} problem between super-source
 $\Source$ and
 super-sink~$\Sink$ on the artificial graph~$\Tree^*$.
 
@@ -711,7 +711,7 @@ and uncapacitated networks, we can simply set~$U=\tau$.
 \end{figure}
 This section presents faster algorithms to solve 
 the two problem variants
-$\RS+\MA+\CC$ and~$\MA+\CC+\BW$ which can also be solved withthe flow approach
+$\RS+\MA+\CC$ and~$\MA+\CC+\BW$ which can also be solved with the flow approach
 introduced above.
 In general, we refer to the algorithms presented in this section
 as matching approaches.
@@ -794,7 +794,7 @@ the actual matching computation. The constructed graph consists of
 $\MaFactor \cdot n_V \cdot \ChunkType$
 many edges,
 and for each edge we need to compute its cost, i.e., the shortest distance
-which in a tree we can computed in time~$n_S$; thus, the overall construction time
+which in a tree can be computed in time~$n_S$; thus, the overall construction time
 is
 $\mathcal{O}(n_S \cdot \tau^2)$.
 The state of the art algorithm to compute matchings are based on scaling techniques~\cite{scale-match}.
@@ -1029,7 +1029,7 @@ and original children as left descendants.
 %right son of last clone.
 
 As usual in dynamic programs, we define, over the structure of the tree, a
-recursive formula formula~$f$ for
+recursive formula~$f$ for
 the minimal cost solution \emph{given} any possible number of nodes
 embedded in a given subtree. The actual set does not matter,
 due to symmetry arguments.
@@ -1223,7 +1223,7 @@ if and only if, for any two distinct triples~$t_1=(x_1, y_1, z_1) \in M$
 and~$t_2=(x_2, y_2, z_2) \in M$, it holds that~$x_1\neq x_2$,~$y_1\neq
 y_2$, and~$z_1\neq z_2$. Our goal is to decide if we can construct
 a~$M \subseteq T$ which is \emph{perfect}, that is, a subset which covers all
-elements of~$X \times Y \times Z$ exactly once.
+elements of~$X \cup Y \cup Z$ exactly once.
 
 
 \subsection{Multi-Assignments are hard ($\FP+\RS+\MA$)}\label{ssec:fprsma}
