@@ -186,7 +186,12 @@ We clarified the construction.
        
    * In point 3, you refer to "Element Subtree" but, strictly speaking,
        you have never defined it.
-       
+ 
+%%%%%%%%%% RESPONSE %%%%%%%%%% 
+We changed the Element Subtree to Element Gadget, as it was the object that we meant to refer to.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+      
 - "Proof of correctness" (right after the "reduction"):
    * Correctness of what?
 
