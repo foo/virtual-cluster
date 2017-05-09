@@ -165,6 +165,14 @@ in the current version. When you do, please provide the calculations.  And check
 if the threshold value is what it should be, because it appears to me that it is
 slightly off.
 
+%%%%%%%%%% RESPONSE %%%%%%%%%% 
+%maciek: TODO:
+1) provide the calculations
+2) check the threshold value
+3) major revision (?)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 - Observation 2, points 1 and 2: some chunk types are unique to either of the
    two subtrees, so clearly, they do not have exactly one replica in the other;
    please refomulate.
