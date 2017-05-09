@@ -1,0 +1,23 @@
+We have seen that replica selection flexibilities can render embeddings computationally hard.
+We will now provide a more detailed look at this hardness result
+and explore the minimal requirements for rendering replica selection hard.
+In particular, we will show that already two replicas for each chunk type are sufficient to
+introduce intractability.
+
+Namely, we provide the NP-hardness results for two restricted variants of Virtual Cluster Embedding (Sections~\ref{ap:tworep-ma} and \ref{ap:tworep-ni}).
+We augment the $\RS$ variant of $\VCEMB$ problem in the following way: by $\RS(k)$ we denote the problem where each chunk has the redundancy factor at most $k$.
+In Section~\ref{ap:tworep-ma} we provide the hardness result for $\RS(2)+\MA+\FP$, and in Section~\ref{ap:tworep-ni} we provide the hardness result for $\RS(2)+\FP+\CC+\BW$.
+
+Both problems are reduced from the problem $\TDPM$ (see Section~\ref{sec:3dm_intro} with no further restrictions.
+The constructions are based upon the reduction of $\TDPM$ to $\FP+\RS+\MA$ (see Section~\ref{ssec:fprsma}) and the reduction of $\TDPM$ to $\FP+\RS+\CC$ (see Section~\ref{ssec:fprscc}).
+However, in contrast to Section~\ref{ssec:fprscc}, in two replica variant without multiple assignment, we added the bandwidth constraints.
+It is currently unknown to the authors of this very paper, whether the hardness result holds without bandwidth constraints (namely, whether the problem $\RS(2)+\FP+\CC$ is NP-hard).
+The necessity for bandwidth constraints arises as to deal with restricted factor of replication, we need to introduce gadgets in the tree that makes the tree asymmetric.
+Introducing bandwidth constraints allows to control the number of nodes spawning in certain parts of the tree.
+
+\subsection{Two Replicas without Bandwidth Constraints}\label{ap:tworep-ma}
+\subsection{Two replicas without Multiple Assignment}\label{ap:tworep-ni}
+
+\begin{enumerate}
+  \item Two groups of nodes: for matching and for redundancy
+\end{enumerate}

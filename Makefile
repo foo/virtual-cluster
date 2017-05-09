@@ -1,5 +1,5 @@
 FILE = vcemb-locality
-FILES = dynamic_embedding.tex models.tex np-completeness.tex flow.tex matching.tex two-replicas.tex
+FILES = two-replicas-old.tex two-replicas-new.tex
 PICT = 
 
 all: $(FILE).pdf
