@@ -1597,6 +1597,8 @@ For the reduction we proceed as follows:
 
 \textbf{Proof of correctness of the reduction.}
 
+Before we start the reduction, let us introduce two functions that will help us show that certain node placements are infeasible, as their cost exceeds the threshold.
+
   For each $u \in \{ 1, \ldots, t-1 \}$ let us define
  ~$\CostEstimOne(u) = u \cdot 12 + (t-u)\cdot 4 + (4\cdot n -
   n - 4\cdot u - (t-u))\cdot 2$, and 

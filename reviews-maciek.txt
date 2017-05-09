@@ -190,7 +190,7 @@ We clarified the construction.
        you have never defined it.
  
 %%%%%%%%%% RESPONSE %%%%%%%%%% 
-We changed the Element Subtree to Element Gadget, as it was the object that we meant to refer to.
+We changed the Element Subtree to Element Gadget, as it was indeed the object that we meant to refer to.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
       
