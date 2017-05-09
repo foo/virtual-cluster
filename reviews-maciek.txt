@@ -216,22 +216,42 @@ We wrote an introduction to cost functions, in which we say why those were defin
 The variable t was redefined as the number of triples in the paragraph starting the subsection "Proof of correctness of the reduction", which was a bad idea. We removed the ambiguity, by renaming the number of triples to \tau.
 
 %maciek: TODO: write an introduction to cost functions
+%maciek: TODO: there is probably a flaw in the proof
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 - Lemma 7: Just like the "Element Subtree", "Unique Subtree" was not defined.
    And neither was sigma.
+   
+%%%%%%%%%% RESPONSE %%%%%%%%%%
+%maciek: TODO
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 - Lemma 8: \ell was not defined.  I can only assume it is *not* the \ell from
    the previous Lemma, since that one was to prove that \ell=0.
+ 
+%%%%%%%%%% RESPONSE %%%%%%%%%%
+%maciek: TODO
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 SECTION 5.2:
 
 - I believe that you should provide a figure with the tree, similar to the one
    in Section 5.1
+ 
+%%%%%%%%%% RESPONSE %%%%%%%%%%
+%maciek: TODO
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 - Element Gadget: you write that it has 4*(deg(e)-1)+1 leaves, but it seems that
    this was copied verbatim from Section 5.1 and that the right number is deg(e)
+ 
+%%%%%%%%%% RESPONSE %%%%%%%%%%
+%maciek: TODO
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 - The threshold value formula (bottom of page 29):
    * Could you please increase the font size?
@@ -241,6 +261,11 @@ SECTION 5.2:
        be \binom{deg(e)-1}{2} rather than deg(e)-1?
    * Are you sure of the coefficient (i.e., their lack) next to the terms in
        the last two lines?
+ 
+%%%%%%%%%% RESPONSE %%%%%%%%%%
+%maciek: TODO
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 - Lemma 10:
    * last line of statement: n should be replaced by |V|
@@ -263,6 +288,11 @@ We changed the "Triple Gadget" to "Element Gadget"
 MINOR COMMENTS:
 
 throughout article: I think you never define/explain the term "uplink"
+ 
+%%%%%%%%%% RESPONSE %%%%%%%%%%
+%maciek: TODO
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 p3l54-55: "constituting parts" --> "constituent parts"
 
@@ -342,6 +372,11 @@ p22-23: Lemma 4 and Theorem 5 --- since you do the easy calculation of the cost
    properly explain the argument in the proof of Lemma 4: it is straightforward
    but definitely no easier than the mere calculations in Theorem 5, as the
    claim is that that specific solution minimizes the cost.
+ 
+%%%%%%%%%% RESPONSE %%%%%%%%%%
+%maciek: TODO
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 
 
