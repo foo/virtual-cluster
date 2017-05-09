@@ -106,7 +106,9 @@ Flow-, dynamic programming- and matching-based algorithms remain correct for arb
    uniformly between nodes makes sense?
 
 %%%%%%%%%% RESPONSE %%%%%%%%%% 
-%maciek: I do not understand the usage of "uniform distribution" with respect to input. I assume that this question is indeed about the co-location of more than one chunk replica in a single node. Hence, we can respond something like:
+%maciek: I do not understand the usage of "uniform distribution" with respect to input.
+
+Let me guess that this question is indeed about the co-location of more than one chunk replica in a single node. Hence, we can respond something like:
 "Presented algorithms remain correct for any distribution of chunk replicas. In addition, we do not restrict the number of replicas that are hosted in a single node."
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
