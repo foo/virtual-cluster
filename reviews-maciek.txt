@@ -211,6 +211,8 @@ We changed the "Proof of correctness" to "Proof of correctness of the reduction"
 %%%%%%%%%% RESPONSE %%%%%%%%%% 
 We explicitly bounded t to be the number of triples in a given 3D Perfect Matching instance. We explicitly specified the domain for u.
 
+We wrote an introduction to cost functions, in which we say why those were defined.
+
 %maciek: TODO: t is used previously in a different way! Resolve this issue
 %maciek: TODO: write an introduction to cost functions
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
