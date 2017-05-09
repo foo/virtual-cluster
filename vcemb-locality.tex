@@ -1479,10 +1479,10 @@ Across the next sections, we use the following notation:
   \item $n := |X|$ (remember that $|X| = |Y| = |Z|$)
   \item $e$ -- an element of the universe ($e \in X \cup Y \cup Z$)
   \item $T$ -- set of triples
-  \item $t$ -- a triple ($t \in T$)
+  \item $t = |T|$
   \item $T_e$ -- set of triples that contain element $e$
   \item $\deg(e) := |T_e|$
-  \item $\lbrace e_X(t), e_Y(t), e_Z(t) \rbrace$ -- elements of triple $t$
+  \item $\lbrace e_X(\tau), e_Y(\tau), e_Z(\tau) \rbrace$ -- elements of triple $t$
   \item $V$ -- set of nodes to be spawned in embedding instance
 \end{enumerate}
 
@@ -1504,8 +1504,8 @@ We construct three types of chunks. The first type corresponds to covers of elem
 Thus, the constructed instance uses at most two replicas of each chunk type.
 
 \begin{enumerate}
-  \item For each triple $t\in T$, we construct $3$ chunk types, with two replicas each. We construct different chunk types for each triple $t$, which 
-  contain element $e$. We refer to those replicas by $ch_1(e, t)$ and $ch_2(e, t)$.
+  \item For each triple $\tau \in T$, we construct $3$ chunk types, with two replicas each. We construct different chunk types for each triple $\tau$, which 
+  contain element $e$. We refer to those replicas by $ch_1(e, \tau)$ and $ch_2(e, \tau)$.
   \item We construct~$n$ additional chunk types named
   ~$u_1, \ldots, u_n$, with one replica each.
   \item For each element~$e\in X\cup Y\cup Z$,
@@ -1542,12 +1542,12 @@ We construct the following tree.
 \paragraph{Chunk Placement}
 The chunks are placed as follows:
 \begin{enumerate}
-  \item \emph{Chunks in matching subtree:} In {\TripleGadget} of triple $t$ we put
+  \item \emph{Chunks in matching subtree:} In {\TripleGadget} of triple $\tau$ we put
   three replicas:
- ~$ch_1(e_X(t), t), ch_1(e_Y(t), t), ch_1(e_Z(t), t)$, one per each leaf.
+ ~$ch_1(e_X(\tau), \tau), ch_1(e_Y(\tau), \tau), ch_1(e_Z(\tau), \tau)$, one per each leaf.
   \item \emph{Chunks in unique subtree:} We place replicas
  ~$u_1,\ldots, u_n$ at the leaves of \UnqGadgets.
- \item \emph{Chunks in element gadget:} In leaves {\ElGadget} of element $e$ we put replicas $ch_2(t, e)$ for each $t \in T_e$. Additionally, we put replicas $\UniqueE$.
+ \item \emph{Chunks in element gadget:} In leaves {\ElGadget} of element $e$ we put replicas $ch_2(\tau, e)$ for each $\tau \in T_e$. Additionally, we put replicas $\UniqueE$.
 \end{enumerate}
 
 \paragraph{Other properties of the instance}
@@ -1765,13 +1765,13 @@ refer to the set of unique chunks by~$U$.
 \emph{Chunk placement.}
 The chunks are placed as follows:
 \begin{enumerate}
-  \item \emph{Chunks in matching subtree:} For each triple~$t$ we put
+  \item \emph{Chunks in matching subtree:} For each triple~$\tau$ we put
   three chunks at the leaves of the corresponding \TripleGadget,
- ~$e_1(t), e_2(t), e_3(t)$.
+ ~$e_1(\tau), e_2(\tau), e_3(\tau)$.
   \item \emph{Chunks in unique subtree:} We place unique chunks~$U$ at
   the leaves of {\UnqSubtree}.
   \item \emph{Chunks in element gadget:} For each element
- ~$e\in X\cup Y\cup Z$, we place the chunks~$t(e)$ at the leaves of
+ ~$e\in X\cup Y\cup Z$, we place the chunks~$\tau(e)$ at the leaves of
   each Element Gadget.
 \end{enumerate}
 
