@@ -290,7 +290,7 @@ MINOR COMMENTS:
 throughout article: I think you never define/explain the term "uplink"
  
 %%%%%%%%%% RESPONSE %%%%%%%%%%
-%maciek: TODO
+We defined the term "uplink" before its first usage.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -307,6 +307,7 @@ p4l14-17: The sentence "The standard datacenter topologies today are
    leaves." sounds gibberish --- please reformulate.
 
 %%%%%%%%%% RESPONSE %%%%%%%%%%
+%maciek: TODO
 %maciek: I suggest to change the sentence to:
 "The standard datacenter topologies today are
    (multi-rooted) fat-tree and Clos topologies [2, 21], the hierarchical networks 
@@ -374,7 +375,7 @@ p22-23: Lemma 4 and Theorem 5 --- since you do the easy calculation of the cost
    claim is that that specific solution minimizes the cost.
  
 %%%%%%%%%% RESPONSE %%%%%%%%%%
-%maciek: TODO
+%maciek: TODO. Define yet another cost function and prove by induction.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
