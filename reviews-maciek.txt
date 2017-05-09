@@ -298,7 +298,7 @@ MINOR COMMENTS:
 throughout article: I think you never define/explain the term "uplink"
  
 %%%%%%%%%% RESPONSE %%%%%%%%%%
-We defined the term "uplink" before its first usage.
+As suggested, we defined the term "uplink" before its first usage.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
