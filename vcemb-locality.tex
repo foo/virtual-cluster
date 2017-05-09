@@ -1599,10 +1599,10 @@ For the reduction we proceed as follows:
 
 Before we start the reduction, let us introduce two functions that will help us show that certain node placements are infeasible, as their cost exceeds the threshold.
   For each $u \in \{ 1, \ldots, t-1 \}$ let us define
- ~$\CostEstimOne(u) = u \cdot 12 + (t-u)\cdot 4 + (4\cdot n -
-  n - 4\cdot u - (t-u))\cdot 2$, and 
-$\CostEstimTwo(u) = 4\cdot t + (4\cdot
-n - n - t)\cdot 2$, where $t$ is the number of triples and $n = |X| = |Y| = |Z|$ in a given instance of $\TDM$.
+ ~$\CostEstimOne(u) = u \cdot 12 + (\tau-u)\cdot 4 + (4\cdot n -
+  n - 4\cdot u - (\tau-u))\cdot 2$, and 
+$\CostEstimTwo(u) = 4\cdot \tau + (4\cdot
+n - n - \tau)\cdot 2$, where $\tau$ is the number of triples and $n = |X| = |Y| = |Z|$ in a given instance of $\TDM$.
 We use the function $\CostEstimOne(u)$ in Lemma~\ref{th:no-unique} to show that no node spawned in the Unique Subtree: the $\CostEstimOne(u)$ is the lower-bound on the total cost of the solution, assumming that $u$ nodes spawned in the Unique Subtree.
 By Lemma~\ref{lem:cost-estims}, for non-zero $u$ the cost lower-bound already exceeds the threshold.
 and we use the function $\CostEstimTwo$ in Lemma~\ref{th:np-balance} to show that exactly $n$ nodes spawned in the Matching Subtree. \maciek{After fixing the proof np-balance, write what $u$ corresponds to}

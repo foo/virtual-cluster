@@ -213,7 +213,8 @@ We explicitly bounded t to be the number of triples in a given 3D Perfect Matchi
 
 We wrote an introduction to cost functions, in which we say why those were defined.
 
-%maciek: TODO: t is used previously in a different way! Resolve this issue
+The variable t was redefined as the number of triples in the paragraph starting the subsection "Proof of correctness of the reduction", which was a bad idea. We removed the ambiguity, by renaming the number of triples to \tau.
+
 %maciek: TODO: write an introduction to cost functions
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
