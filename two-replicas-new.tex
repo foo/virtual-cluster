@@ -22,12 +22,41 @@ without capacity constraints.  In particular, we consider the problem
 variant~$\RS(2)+\MA(4)+\FP$ with at most two replicas of each chunk type and assignment factor
 four. There are no capacity constraints on links.
 
-Our construction consists of two major modifications to hardness result without replication factor restrictions (for that result, refer to Section~\ref{ssec:fprsma}.
+Our construction consists of two major modifications to hardness result without replication factor restrictions (for that result, refer to Section~\ref{ssec:fprsma}).
 
-First, we provide the tools for restricting the placement of nodes in certain parts of the tree.
+\textbf{Unique chunks on the comb} First, we provide the tools for restricting the placement of nodes in certain parts of the tree.
 In Section~\ref{ssec:fprsma}, due to symmetric structure of the tree, the carefully crafted threshold value allowed us to proof that e.g. no Triple Gadget ever had two or more nodes placed in it.
 We still use the threshold value as the placement mechanism, but in this section, due to asymmetrical tree construction, we cope it with the concept of unique chunks on the comb (by the \emph{comb} we denote the balanced tree, where all non-root vertices has at most one child).
 
+For the introduction to the concept of unique chunks, see the following example.
+Suppose that within one $\VCEMB$ construction, we would like to encode not one $\TDPM$ instance, but two $\TDPM$ instances: $M_1$ and $M_2$, with disjoint universe and distinct number of triples to be chosen: $n_1$ and $n_2$.
+We perform the following modifications to encoding provided in Section~\ref{ssec:fprsma}.
+The multi-assignment factor grows by $1$, that is the instance we construct is the $\RS+\MA(4)+\FP$ instance.
+We construct two subtrees $T_1$ and $T_2$, that correspond to resp. $M_1$ and $M_2$; we construct two two-edge-level combs $C_1$ and $C_2$, with number of leaves $n_1$, resp. $n_2$.
+We attach $M_1$ and $C_1$ (resp. $M_2$ and $C_2$) to the common root and we name the resulting subtree the $P_1$, resp. $P_2$.
+Next, we attach $P_1$ and $P_2$ to the common root.
+In the end, the height of the tree grew by $2$.
+Finally, we populate both combs with unique chunks, and we set the number of to-be-placed nodes to $n_1+n_2$.
+We modify the threshold to be sum of the threshold for constructions for $M_1$ and $M_2$ plus $4\cdot (n_1 + n_2)$.
+The last substrate of the threshold value corresponds to transportation of fourth chunk processed by each machine for the distance of four.
+
+To see why the example indeed can solve two instances of $\TDPM$, we need the following observations.
+First, we claim that no node is ever placed in a comb.
+To prove this fact, we use the property of the comb that the leaves are highly separated, and the fact that each machine has to process $4$ chunks.
+Next, we claim that the number of nodes spawned in $P_1$ (resp. $P_2$) is $n_1$ (resp. $n_2$).
+To see this, consider any imbalance of number of spawned nodes; notice that some chunks in the underpopulated comb are processed outside of its $P_i$ subtree, resulting in the solution that exceeds the threshold.
+
+\textbf{Families of chunk types} The second tool that we introduce allows us to express the redundancy of chunks without actually replicating chunks more than two-fold.
+For simplicity of introduction, we consider the scenario with multi-assignment factor of $1$.
+For each chunk type $c$ with redundancy, we count the number of occurrences of replicas of such chunk in the tree, and name it $r_c$.
+We replace the chunk type $c$ with $r$ chunk types, which we call the family $F_c$ of that chunk type.
+For each occarrence of replica of $c$, we replace it with replica of any chunk type from the family (without repetitions).
+To this point, the redundancy factor was reduced from $r_c$ to $1$.
+Now, we construct the gadget $G_c$ for chunk type $c$, which consists of $r_c$ leaves, each hosting the second replica of each chunk type from family $F_c$.
+We use the technique of unique chunks on the comb to constraint the number of nodes in $G_c$ to be exactly $r_c - 1$.
+We provide necessary additional $r_c-1$ nodes to be placed.
+Hence, exactly $1$ node is placed on chunk type of family $F_c$ outside the gadget $G_c$, and exactly $r_c-1$ nodes cover remaining $r_c-1$ chunk types inside gadget $G_c$.
+All chunk types are processed, the replication factor was reduced to $2$, and the size of construction grew polynomially.
 
 
 \subsection{Two replicas without Multiple Assignment}\label{ap:tworep-ni}
