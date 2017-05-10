@@ -16,6 +16,20 @@ The necessity for bandwidth constraints arises as to deal with restricted factor
 Introducing bandwidth constraints allows to control the number of nodes spawning in certain parts of the tree.
 
 \subsection{Two Replicas without Bandwidth Constraints}\label{ap:tworep-ma}
+
+We now show that the 2-replica selection problem is even NP-hard
+without capacity constraints.  In particular, we consider the problem
+variant~$\RS(2)+\MA(4)+\FP$ with at most two replicas of each chunk type and assignment factor
+four. There are no capacity constraints on links.
+
+Our construction consists of two major modifications to hardness result without replication factor restrictions (for that result, refer to Section~\ref{ssec:fprsma}.
+
+First, we provide the tools for restricting the placement of nodes in certain parts of the tree.
+In Section~\ref{ssec:fprsma}, due to symmetric structure of the tree, the carefully crafted threshold value allowed us to proof that e.g. no Triple Gadget ever had two or more nodes placed in it.
+We still use the threshold value as the placement mechanism, but in this section, due to asymmetrical tree construction, we cope it with the concept of unique chunks on the comb (by the \emph{comb} we denote the balanced tree, where all non-root vertices has at most one child).
+
+
+
 \subsection{Two replicas without Multiple Assignment}\label{ap:tworep-ni}
 
 \begin{enumerate}
