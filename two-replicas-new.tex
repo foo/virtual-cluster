@@ -24,7 +24,7 @@ four. There are no capacity constraints on links.
 
 Our construction consists of two major modifications to hardness result without replication factor restrictions (for that result, refer to Section~\ref{ssec:fprsma}).
 
-\textbf{Unique chunks on the comb} First, we provide the tools for restricting the placement of nodes in certain parts of the tree.
+\textbf{Unique chunks on the comb.} First, we provide the tools for restricting the placement of nodes in certain parts of the tree.
 In Section~\ref{ssec:fprsma}, due to symmetric structure of the tree, the carefully crafted threshold value allowed us to proof that e.g. no Triple Gadget ever had two or more nodes placed in it.
 We still use the threshold value as the placement mechanism, but in this section, due to asymmetrical tree construction, we cope it with the concept of unique chunks on the comb (by the \emph{comb} we denote the balanced tree, where all non-root vertices has at most one child).
 
@@ -46,7 +46,7 @@ To prove this fact, we use the property of the comb that the leaves are highly s
 Next, we claim that the number of nodes spawned in $P_1$ (resp. $P_2$) is $n_1$ (resp. $n_2$).
 To see this, consider any imbalance of number of spawned nodes; notice that some chunks in the underpopulated comb are processed outside of its $P_i$ subtree, resulting in the solution that exceeds the threshold.
 
-\textbf{Families of chunk types} The second tool that we introduce allows us to express the redundancy of chunks without actually replicating chunks more than two-fold.
+\textbf{Families of chunk types.} The second tool that we introduce allows us to express the redundancy of chunks without actually replicating chunks more than two-fold.
 For simplicity of introduction, we consider the scenario with multi-assignment factor of $1$.
 For each chunk type $c$ with redundancy, we count the number of occurrences of replicas of such chunk in the tree, and name it $r_c$.
 We replace the chunk type $c$ with $r$ chunk types, which we call the family $F_c$ of that chunk type.
@@ -57,6 +57,13 @@ We use the technique of unique chunks on the comb to constraint the number of no
 We provide necessary additional $r_c-1$ nodes to be placed.
 Hence, exactly $1$ node is placed on chunk type of family $F_c$ outside the gadget $G_c$, and exactly $r_c-1$ nodes cover remaining $r_c-1$ chunk types inside gadget $G_c$.
 All chunk types are processed, the replication factor was reduced to $2$, and the size of construction grew polynomially.
+
+\textbf{Introduction to the reduction.} As we already stated, we modify the construction from Section~\ref{ssec:fprsma}.
+As the way to deal with replication, we use the families of chunk types, which uses the unique chunks on the comb.
+We extend the construction of a gadget for chunk type with redundancy, by incorporating the fact that the multi-assignment factor is $4$.
+For the construction to remain correct with such multi-assignment factor, we introduce further chunks types with one chunk replica to place in the chunk gadget and use the excessive $3$ data processing capacities.
+
+Notation
 
 
 \subsection{Two replicas without Multiple Assignment}\label{ap:tworep-ni}
