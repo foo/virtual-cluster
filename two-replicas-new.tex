@@ -116,7 +116,7 @@ We construct the tree of the following structure (see Figure~\ref{fig:red-ma}):
   \item {\TripleGadget} consists of four vertices: three leaves and the root of the gadget.
   \item {\UnqGadget} consists of two vertices: the leaf and the root of the gadget. Note that we construct
   nodes not only to keep the tree balanced, but also to keep leaves of
-  {\UnqGadgets} far from leaves of other \UnqGadgets. We refer to the collection of \UnqGadgets as the unique comb.
+  {\UnqGadgets} far from leaves of other \UnqGadgets. Note that Unique Gadgets form a comb.
   \item {\ElGadget} of element $e$ has a structure that depends on the number of triples that cover $e$. The {\ElGadget} consists of the
   root, and~$4\cdot(\deg(e)-1)+1$ leaves.
 \end{enumerate}
@@ -184,7 +184,7 @@ and we use the function $\CostEstimTwo$ in Lemma~\ref{th:np-balance} to show tha
  ~$\numNodes$ transportations are of cost~$0$. Note that the leaves of the
   {\UnqSubtree} are separated from other leaves of the tree by at
   least~$4$ edges.  The cost of chunk transportation to nodes
- ~$v \in \SpawnedUnqSubtree$ is at least~$12$. The chunks in
+spawned in the Unique Subtree is at least~$12$. The chunks in
   {\UnqSubtree} are unique, therefore the solution transports~$|T| - \ell$
   chunks to nodes outside the \UnqSubtree, incurring cost~$4$ for each
   chunk.
@@ -266,9 +266,7 @@ and we use the function $\CostEstimTwo$ in Lemma~\ref{th:np-balance} to show tha
   We construct the solution~$\Sol$ to~$I$ in the following way:
   We call the {\TripleGadget} \textit{active}, if they contain a node
   at any leaf. We call active node in
-  {\TripleGadgets} the \ActiveNode. We construct a~$\TDPM$ solution from
-  triples that correspond to active \TripleGadgets.
-  We observe the following properties of~$\Solution$:
+  {\TripleGadgets} the \ActiveNode.   We observe the following properties of~$\Solution$:
   \begin{enumerate}
     \item By Lemmas~\ref{th:no-unique} and~\ref{th:np-balance}, exactly~$n$ {\TripleGadgets} are \emph{active}.
     \item In~$\Solution$, only one node is spawned in an active
@@ -284,7 +282,9 @@ and we use the function $\CostEstimTwo$ in Lemma~\ref{th:np-balance} to show tha
     The set~$\Unmatched$ is covered by \ActiveNodes
   \end{enumerate}
 
-  From above observations we conclude that~$M_S$ is indeed feasible.
+  We construct a~$\TDPM$ solution $M_S$ from
+  triples that correspond to active \TripleGadgets.
+  From above observations we conclude that~$M_S$ is indeed feasible, that is the $n$ triples that correspond to active \TripleGadgets cover all the elements of universe.
 \end{proof}
 
 
