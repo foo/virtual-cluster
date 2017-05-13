@@ -65,10 +65,12 @@ For the construction to remain correct with such multi-assignment factor, we int
 
 \textbf{Construction.}
 For arbitrary instance~$I_{\TDPM}$ of~$\TDM$ we construct a~$\RS(2)+\MA(4)+\FP$ instance~$I_{\VCEMB}$ the way described in the remainder of this section.
-By $T$ we denote the set of all triples of $I_{\TDPM}$.
-For each $e\in X\cup Y\cup Z$, by $T_e$ we denote the set of all triples that contain element $e$, and $\deg(e) = |T_e|$.
-To access the elements of a triple $\tau \in T$, we introduce the following notation: $\tau = \langle e_X(\tau), e_Y(\tau), e_Z(\tau) \rangle$.
 Let $n = |X|\cup|Y|\cup|Z|$.
+By $T$ we denote the set of all triples of $I_{\TDPM}$.
+To access the elements of a triple $\tau \in T$, we introduce the following notation: $\tau = \langle e_X(\tau), e_Y(\tau), e_Z(\tau) \rangle$.
+For each $e\in X\cup Y\cup Z$, by $T_e$ we denote the set of all triples that contain element $e$.
+Let $\deg(e) = |T_e|$, and note that $\sum_e \deg(e) = 3\cdot |T|$.
+
 We proceed with the construction as follows.
 
 \paragraph{Chunk types and replicas}
@@ -140,8 +142,11 @@ The chunks are placed as follows:
 \begin{enumerate}
   \item \emph{Multiple assignment:} We set the multi-assignment factor to $4$.
   \item \emph{Number of nodes:} We allow to spawn
- ~$\numNodes = n + \sum_{e}(\deg(e)-1)$ nodes.
-  \item \emph{Threshold:} We set the following threshold:~$\Thr = 8\cdot n + 6\cdot\sum_{e}(\deg(e)-1)$
+ %~$\numNodes = n + \sum_{e}(\deg(e)-1)$ nodes.
+ ~$\numNodes = 3\cdot |T| - 2\cdot n$ nodes.
+ \item \emph{Threshold:} We set the following threshold:
+ %~$\Thr = 8\cdot n + 6\cdot\sum_{e}(\deg(e)-1)$
+ ~$\Thr = 18\cdot |T| + 5\cdot n$.
 \end{enumerate}
 
 \textbf{The reduction.}
