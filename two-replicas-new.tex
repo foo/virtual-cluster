@@ -168,11 +168,11 @@ Note that $\CostEstimOne(0) = \Thr$.
   Each node $v\in V$ spawned in \ElGadget{} incurrs the transportation cost at least $6$, as $v$ is collocated with at most one replica, and remaining $3$ replicas (remember that multi-assignment factor is $4$) are transported for at least $2$ hops.
   Each node $v\in V$ spawned in \TripleGadget{} incurrs the transportation cost at least $8$, as $v$ is collocated with at most one replica, at most two replicas that are assigned to $v$ are in the same \TripleGadget{}, hence those are transported over $2$ hops, and the last remaining replica is transported over at least $4$ hops.
   Each node $v\in V$ spawned in \UnqGadget{} incurrs the transportation cost at least $12$, as $v$ is collocated with at most one replica, and remaining $3$ replicas are transported over at least $4$ hops.
-  At most $\sum_e(\deg(e)-1)=t-3\cdot n$ nodes can spawn in \ElGadget{}.
+  At most $\sum_e(\deg(e)-1)=t-3\cdot n$ nodes can spawn in \ElGadget{}.\maciek{Wrong!}
   For the remaining $n$ nodes, by lemma assumption $u$ nodes spawn in \UnqGadgets{}, hence at least $n-u$ nodes spawn in \TripleGadgets{}.
   Let $c_E$ and $c_T$ be the number of nodes spawned in \ElGadget{} and \TripleGadget, respectively.
   The lower-bound on the total cost is then $6\cdot c_E + 8\cdot c_T + 12\cdot u$.
-  As $c_T \leq t-3\cdot n$ and $c_E+c_T+u=\numNodes$, the total cost is at least $6\cdot (t-3\cdot n) + 8\cdot (n-u) + 12\cdot u = \CostEstimOne(u)$.
+  As $c_T \leq t-3\cdot n$ and $c_E+c_T+u=\numNodes$, the total cost is at least $6\cdot (t-3\cdot n) + 8\cdot (n-u) + 12\cdot u = \CostEstimOne(u)$.\maciek{Wrong!}
 \end{proof}
 
 We define $\ldots$ and $\CostEstimTwo(u) = \ldots$.
