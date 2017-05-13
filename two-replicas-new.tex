@@ -63,13 +63,12 @@ As the way to deal with replication, we use the families of chunk types, which u
 We extend the construction of a gadget for chunk type with redundancy, by incorporating the fact that the multi-assignment factor is $4$.
 For the construction to remain correct with such multi-assignment factor, we introduce further chunks types with one chunk replica to place in the chunk gadget and use the excessive $3$ data processing capacities.
 
-Notation
-\maciek{TODO}
-
 \textbf{Construction.}
+Let's take any instance~$I_{\TDPM}$ of~$\TDM$ and construct a~$\RS(2)+\MA(4)+\FP$ instance~$I_{\VCEMB}$ the way described in the remainder of this section.
+By $T$ we denote the set of all triples of $I_{\TDPM}$.
+Let $n = |X|\cup|Y|\cup|Z|$.
+We proceed with the construction as follows.
 
-Let's take any instance~$I_{\TDPM}$ of~$\TDM$ and create a~$\RS(2)+\MA(4)+\FP$
-instance~$I_{\VCEMB}$ as follows.
 
 \paragraph{Chunk types and replicas}
 
@@ -111,7 +110,7 @@ We construct the tree that has the following structure (see Figure~\ref{fig:red-
 \begin{enumerate}
   \item The physical network consists of two subtrees connected to the
   root: A {\MatchSubtree} and a {\CoverSubtree}. The
-  {\MatchSubtree} consists of a {\TripleGadget} per each triple $t\in T$ and $n$
+  {\MatchSubtree} consists of a {\TripleGadget} per each triple $\tau\in T$ and $n$
   {\UnqGadgets}. The {\CoverSubtree} consist of~$n$ {\ElGadgets}, one for each element $e\in X\cup Y\cup Z$.
   \item {\TripleGadget} consists of four vertices: three leaves and the root of the gadget.
   \item {\UnqGadget} consists of two vertices: the leaf and the root of the gadget. Note that we construct
