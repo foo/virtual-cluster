@@ -66,9 +66,10 @@ For the construction to remain correct with such multi-assignment factor, we int
 \textbf{Construction.}
 Let's take any instance~$I_{\TDPM}$ of~$\TDM$ and construct a~$\RS(2)+\MA(4)+\FP$ instance~$I_{\VCEMB}$ the way described in the remainder of this section.
 By $T$ we denote the set of all triples of $I_{\TDPM}$.
+For each $e\in X\cup Y\cup Z$, by $T_e$ we denote the set of all triples that contain element $e$, and $\deg(e) = |T_e|$.
+To access the elements of a triple $\tau \in T$, we introduce the following notation: $\tau = \langle e_X(\tau), e_Y(\tau), e_Z(\tau) \rangle$.
 Let $n = |X|\cup|Y|\cup|Z|$.
 We proceed with the construction as follows.
-
 
 \paragraph{Chunk types and replicas}
 
@@ -87,7 +88,7 @@ Formally, the construction of chunk types and replicas unfolds as follows:
   \item For each triple $\tau \in T$, we construct $3$ chunk types, with two replicas each. We construct different chunk types for each triple $\tau$, which 
   contain element $e$. We refer to those replicas by $ch_1(e, \tau)$ and $ch_2(e, \tau)$.
   \item We construct~$n$ additional chunk types named
-  ~$u_1, \ldots, u_n$, with one replica each.
+  ~$u_1, \ldots, u_n$ with one replica each.
   \item For each element~$e\in X\cup Y\cup Z$,
   we construct additional~$3\cdot(\deg(e) - 1)$ chunks, with one replica each.
   We call this set~$\UniqueE$.
@@ -110,12 +111,12 @@ We construct the tree that has the following structure (see Figure~\ref{fig:red-
 \begin{enumerate}
   \item The physical network consists of two subtrees connected to the
   root: A {\MatchSubtree} and a {\CoverSubtree}. The
-  {\MatchSubtree} consists of a {\TripleGadget} per each triple $\tau\in T$ and $n$
+  {\MatchSubtree} consists of $|T|$ {\TripleGadgets}, one per each triple $\tau\in T$ and $n$
   {\UnqGadgets}. The {\CoverSubtree} consist of~$n$ {\ElGadgets}, one for each element $e\in X\cup Y\cup Z$.
   \item {\TripleGadget} consists of four vertices: three leaves and the root of the gadget.
   \item {\UnqGadget} consists of two vertices: the leaf and the root of the gadget.
   We construct the root node of the gadget not only to keep the tree balanced, but also to keep leaves of
-  {\UnqGadgets} far from leaves of other \UnqGadgets. Note that Unique Gadgets form a comb.
+  {\UnqGadgets} far from leaves of other \UnqGadgets. Note that \UnqGadgets{} form a comb.
   \item {\ElGadget} of element $e$ has a structure that depends on the number of triples that cover $e$. The {\ElGadget} consists of the
   root, and~$4\cdot(\deg(e)-1)+1$ leaves.
 \end{enumerate}
@@ -123,18 +124,21 @@ We construct the tree that has the following structure (see Figure~\ref{fig:red-
 \paragraph{Chunk Placement}
 The chunks are placed as follows:
 \begin{enumerate}
-  \item \emph{Chunks in matching subtree:} In {\TripleGadget} of triple $\tau$ we put
+  \item \emph{Chunks in the Matching Subtree:} In {\TripleGadget} of triple $\tau$ we put
   three replicas:
  ~$ch_1(e_X(\tau), \tau), ch_1(e_Y(\tau), \tau), ch_1(e_Z(\tau), \tau)$, one per each leaf.
-  \item \emph{Chunks in Unique Subtree:} We place replicas
+  \item \emph{Chunks in the Unique Subtree:} We place replicas
  ~$u_1,\ldots, u_n$ at the leaves of \UnqGadgets.
- \item \emph{Chunks in Element Gadget:} In leaves {\ElGadget} of element $e$ we put replicas $ch_2(\tau, e)$ for each $\tau \in T_e$. Additionally, we put replicas $\UniqueE$.
+ \item \emph{Chunks in Element Gadgets:} Consider the \ElGadget{} for the element $e \in X\cup Y\cup Z$.
+ We place two types of replicas in the leaves of the gadget.
+ We put $\deg(e)$ replicas of chunks $ch_2(\tau, e)$ for each $\tau \in T_e$.
+ Additionally, we place all the replicas from set $\UniqueE$.
+ In total, we place $4\cdot \deg(e) + 1$ replicas, one per each leaf of the gadget.
 \end{enumerate}
 
 \paragraph{Other properties of the instance}
 \begin{enumerate}
-  \item \emph{Multiple assignment:} We set the multi-assignment factor (number of processed
-  chunks by each node) to $4$.
+  \item \emph{Multiple assignment:} We set the multi-assignment factor to $4$.
   \item \emph{Number of nodes:} We allow to spawn
  ~$\numNodes = n + \sum_{e}(\deg(e)-1)$ nodes.
   \item \emph{Threshold:} We set the following threshold:~$\Thr = 8\cdot n + 6\cdot\sum_{e}(\deg(e)-1)$
