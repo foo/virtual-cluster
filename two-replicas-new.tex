@@ -96,7 +96,7 @@ Formally, the construction of chunk types and replicas unfolds as follows:
 
 \paragraph{Tree}
 
-We construct the tree of the following structure (see Figure~\ref{fig:red-ma}):
+We construct the tree that has the following structure (see Figure~\ref{fig:red-ma}):
 
 \begin{figure}[t]
   \centering
@@ -111,7 +111,7 @@ We construct the tree of the following structure (see Figure~\ref{fig:red-ma}):
 \begin{enumerate}
   \item The physical network consists of two subtrees connected to the
   root: A {\MatchSubtree} and a {\CoverSubtree}. The
-  {\MatchSubtree} consists of $|T|$ {\TripleGadgets}, one per each triple $t\in T$ and $n$
+  {\MatchSubtree} consists of a {\TripleGadget} per each triple $t\in T$ and $n$
   {\UnqGadgets}. The {\CoverSubtree} consist of~$n$ {\ElGadgets}, one for each element $e\in X\cup Y\cup Z$.
   \item {\TripleGadget} consists of four vertices: three leaves and the root of the gadget.
   \item {\UnqGadget} consists of two vertices: the leaf and the root of the gadget. Note that we construct
