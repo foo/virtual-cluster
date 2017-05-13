@@ -70,6 +70,7 @@ By $T$ we denote the set of all triples of $I_{\TDPM}$.
 To access the elements of a triple $\tau \in T$, we introduce the following notation: $\tau = \langle e_X(\tau), e_Y(\tau), e_Z(\tau) \rangle$.
 For each $e\in X\cup Y\cup Z$, by $T_e$ we denote the set of all triples that contain element $e$.
 Let $\deg(e) = |T_e|$, and note that $\sum_e \deg(e) = 3\cdot |T|$.
+Finally, let $t = |T|$.
 
 We proceed with the construction as follows.
 
@@ -87,8 +88,10 @@ For unique chunks we simply co-notate the chunk type with chunk replica.
 
 Formally, the construction of chunk types and replicas unfolds as follows:
 \begin{enumerate}
-  \item For each triple $\tau \in T$, we construct $3$ chunk types, with two replicas each. We construct different chunk types for each triple $\tau$, which 
-  contain element $e$. We refer to those replicas by $ch_1(e, \tau)$ and $ch_2(e, \tau)$.
+  \item For each triple $\tau \in T$, we construct $3$ chunk types, with two replicas each.
+  We construct different chunk types for each triple $\tau$, which contain element $e$ (in total $\deg(e)$ chunk types).
+  We refer to those replicas by $ch_1(e, \tau)$ and $ch_2(e, \tau)$.
+  In total we construct $2\cdot \deg(e)$ chunk replicas.
   \item We construct~$n$ additional chunk types named
   ~$u_1, \ldots, u_n$ with one replica each.
   \item For each element~$e\in X\cup Y\cup Z$,
@@ -113,7 +116,7 @@ We construct the tree that has the following structure (see Figure~\ref{fig:red-
 \begin{enumerate}
   \item The physical network consists of two subtrees connected to the
   root: A {\MatchSubtree} and a {\CoverSubtree}. The
-  {\MatchSubtree} consists of $|T|$ {\TripleGadgets}, one per each triple $\tau\in T$ and $n$
+  {\MatchSubtree} consists of $t$ {\TripleGadgets}, one per each triple $\tau\in T$ and $n$
   {\UnqGadgets}. The {\CoverSubtree} consist of~$n$ {\ElGadgets}, one for each element $e\in X\cup Y\cup Z$.
   \item {\TripleGadget} consists of four vertices: three leaves and the root of the gadget.
   \item {\UnqGadget} consists of two vertices: the leaf and the root of the gadget.
@@ -135,7 +138,7 @@ The chunks are placed as follows:
  We place two types of replicas in the leaves of the gadget.
  We put replicas $ch_2(\tau, e)$ for each $\tau \in T_e$.
  Additionally, we place all the replicas from set $\UniqueE$.
- In total, we place $4\cdot \deg(e) + 1$ replicas, one per each leaf of the gadget.
+ In total, we place $4\cdot (\deg(e) - 1) + 1$ replicas, one per each leaf of the gadget.
 \end{enumerate}
 
 \paragraph{Other properties of the instance}
@@ -143,24 +146,38 @@ The chunks are placed as follows:
   \item \emph{Multiple assignment:} We set the multi-assignment factor to $4$.
   \item \emph{Number of nodes:} We allow to spawn
  %~$\numNodes = n + \sum_{e}(\deg(e)-1)$ nodes.
- ~$\numNodes = 3\cdot |T| - 2\cdot n$ nodes.
+ ~$\numNodes = 3\cdot t - 2\cdot n$ nodes.
  \item \emph{Threshold:} We set the following threshold:
  %~$\Thr = 8\cdot n + 6\cdot\sum_{e}(\deg(e)-1)$
- ~$\Thr = 18\cdot |T| + 5\cdot n$.
+ ~$\Thr = 18\cdot t + 5\cdot n$.
 \end{enumerate}
 
 \textbf{The reduction.}
 
-\maciek{TODO: rewrite start}
 Before we start the reduction, let us introduce two functions that will help us show that certain node placements are infeasible, as their cost exceeds the threshold.
-  For each $u \in \{ 1, \ldots, t-1 \}$ let us define
- ~$\CostEstimOne(u) = u \cdot 12 + (\tau-u)\cdot 4 + (4\cdot n -
-  n - 4\cdot u - (\tau-u))\cdot 2$, and 
-$\CostEstimTwo(u) = 4\cdot \tau + (4\cdot
-n - n - \tau)\cdot 2$, where $\tau$ is the number of triples and $n = |X| = |Y| = |Z|$ in a given instance of $\TDM$.
-We use the function $\CostEstimOne(u)$ in Lemma~\ref{th:no-unique} to show that no node spawned in the Unique Subtree: the $\CostEstimOne(u)$ is the lower-bound on the total cost of the solution, assumming that $u$ nodes spawned in the Unique Subtree.
+For each $u \in \{ 0, \ldots, n \}$ let us define~$\CostEstimOne(u) = 8\cdot n + 6\cdot t - 4\cdot u$.
+We use the function $\CostEstimOne(u)$ in Lemma~\ref{th:no-unique} to show that no node spawned in the \UnqGadget{}: the $\CostEstimOne(u)$ is the lower-bound on the total cost of the solution, assumming that $u$ nodes spawned in \UnqGadgets{}.
 By Lemma~\ref{lem:cost-estims}, for non-zero $u$ the cost lower-bound already exceeds the threshold.
-and we use the function $\CostEstimTwo$ in Lemma~\ref{th:np-balance} to show that exactly $n$ nodes spawned in the Matching Subtree. \maciek{After fixing the proof np-balance, write what $u$ corresponds to}
+Note that $\CostEstimOne(0) = \Thr$.
+
+\begin{lemma}
+  Every solution with $u$ nodes spawned in \UnqGadgets{} has cost at least $\CostEstimOne(u)$.
+\end{lemma}
+\begin{proof}
+  The proof follows from the properties of the tree.
+  Each node $v\in V$ spawned in \ElGadget{} incurrs the transportation cost at least $6$, as $v$ is collocated with at most one replica, and remaining $3$ replicas (remember that multi-assignment factor is $4$) are transported for at least $2$ hops.
+  Each node $v\in V$ spawned in \TripleGadget{} incurrs the transportation cost at least $8$, as $v$ is collocated with at most one replica, at most two replicas that are assigned to $v$ are in the same \TripleGadget{}, hence those are transported over $2$ hops, and the last remaining replica is transported over at least $4$ hops.
+  Each node $v\in V$ spawned in \UnqGadget{} incurrs the transportation cost at least $12$, as $v$ is collocated with at most one replica, and remaining $3$ replicas are transported over at least $4$ hops.
+  At most $\sum_e(\deg(e)-1)=t-3\cdot n$ nodes can spawn in \ElGadget{}.
+  For the remaining $n$ nodes, by lemma assumption $u$ nodes spawn in \UnqGadgets{}, hence at least $n-u$ nodes spawn in \TripleGadgets{}.
+  Let $c_E$ and $c_T$ be the number of nodes spawned in \ElGadget{} and \TripleGadget, respectively.
+  The lower-bound on the total cost is then $6\cdot c_E + 8\cdot c_T + 12\cdot u$.
+  As $c_T \leq t-3\cdot n$ and $c_E+c_T+u=\numNodes$, the total cost is at least $6\cdot (t-3\cdot n) + 8\cdot (n-u) + 12\cdot u = \CostEstimOne(u)$.
+\end{proof}
+
+We define $\ldots$ and $\CostEstimTwo(u) = \ldots$.
+
+We use the function $\CostEstimTwo$ in Lemma~\ref{th:np-balance} to show that exactly $n$ nodes spawned in the Matching Subtree. \maciek{After fixing the proof np-balance, write what $u$ corresponds to}
 
 \begin{lemma}
   For each $u \in \{ 1, \ldots, t-1 \}$ we have that $\CostEstimOne(u) > \Thr$ and
