@@ -113,8 +113,8 @@ We construct the tree that has the following structure (see Figure~\ref{fig:red-
   {\MatchSubtree} consists of a {\TripleGadget} per each triple $\tau\in T$ and $n$
   {\UnqGadgets}. The {\CoverSubtree} consist of~$n$ {\ElGadgets}, one for each element $e\in X\cup Y\cup Z$.
   \item {\TripleGadget} consists of four vertices: three leaves and the root of the gadget.
-  \item {\UnqGadget} consists of two vertices: the leaf and the root of the gadget. Note that we construct
-  nodes not only to keep the tree balanced, but also to keep leaves of
+  \item {\UnqGadget} consists of two vertices: the leaf and the root of the gadget.
+  We construct the root node of the gadget not only to keep the tree balanced, but also to keep leaves of
   {\UnqGadgets} far from leaves of other \UnqGadgets. Note that Unique Gadgets form a comb.
   \item {\ElGadget} of element $e$ has a structure that depends on the number of triples that cover $e$. The {\ElGadget} consists of the
   root, and~$4\cdot(\deg(e)-1)+1$ leaves.
