@@ -64,7 +64,7 @@ We extend the construction of a gadget for chunk type with redundancy, by incorp
 For the construction to remain correct with such multi-assignment factor, we introduce further chunks types with one chunk replica to place in the chunk gadget and use the excessive $3$ data processing capacities.
 
 \textbf{Construction.}
-Let's take any instance~$I_{\TDPM}$ of~$\TDM$ and construct a~$\RS(2)+\MA(4)+\FP$ instance~$I_{\VCEMB}$ the way described in the remainder of this section.
+For arbitrary instance~$I_{\TDPM}$ of~$\TDM$ we construct a~$\RS(2)+\MA(4)+\FP$ instance~$I_{\VCEMB}$ the way described in the remainder of this section.
 By $T$ we denote the set of all triples of $I_{\TDPM}$.
 For each $e\in X\cup Y\cup Z$, by $T_e$ we denote the set of all triples that contain element $e$, and $\deg(e) = |T_e|$.
 To access the elements of a triple $\tau \in T$, we introduce the following notation: $\tau = \langle e_X(\tau), e_Y(\tau), e_Z(\tau) \rangle$.
@@ -131,7 +131,7 @@ The chunks are placed as follows:
  ~$u_1,\ldots, u_n$ at the leaves of \UnqGadgets.
  \item \emph{Chunks in Element Gadgets:} Consider the \ElGadget{} for the element $e \in X\cup Y\cup Z$.
  We place two types of replicas in the leaves of the gadget.
- We put $\deg(e)$ replicas of chunks $ch_2(\tau, e)$ for each $\tau \in T_e$.
+ We put replicas $ch_2(\tau, e)$ for each $\tau \in T_e$.
  Additionally, we place all the replicas from set $\UniqueE$.
  In total, we place $4\cdot \deg(e) + 1$ replicas, one per each leaf of the gadget.
 \end{enumerate}
