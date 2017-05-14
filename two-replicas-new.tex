@@ -122,7 +122,7 @@ We construct the tree that has the following structure (see Figure~\ref{fig:red-
   \item {\UnqGadget} consists of two vertices: the leaf and the root of the gadget.
   We construct the root node of the gadget not only to keep the tree balanced, but also to keep leaves of
   {\UnqGadgets} far from leaves of other \UnqGadgets. Note that \UnqGadgets{} form a comb.
-  \item {\ElGadget} of element $e$ has a structure that depends on the number of triples that cover $e$. The {\ElGadget} consists of the
+  \item {\ElGadget} for element $e$ has a structure that depends on the number of triples that cover $e$. The {\ElGadget} consists of the
   root, and~$4\cdot(\deg(e)-1)+1$ leaves.
 \end{enumerate}
 
@@ -155,104 +155,6 @@ The chunks are placed as follows:
 
 \textbf{The reduction.}
 
-
-
-Before we start the reduction, let us introduce two functions that will help us show that certain node placements are infeasible, as their cost exceeds the threshold.
-For each $u \in \{ 0, \ldots, n \}$ let us define~$\CostEstimOne(u) = 8\cdot n + 6\cdot t - 4\cdot u$.
-We use the function $\CostEstimOne(u)$ in Lemma~\ref{th:no-unique} to show that no node spawned in the \UnqGadget{}: the $\CostEstimOne(u)$ is the lower-bound on the total cost of the solution, assumming that $u$ nodes spawned in \UnqGadgets{}.
-By Lemma~\ref{lem:cost-estims}, for non-zero $u$ the cost lower-bound already exceeds the threshold.
-Note that $\CostEstimOne(0) = \Thr$.
-
-\begin{lemma}
-  Every solution with $u$ nodes spawned in \UnqGadgets{} has cost at least $\CostEstimOne(u)$.
-\end{lemma}
-\begin{proof}
-  The proof follows from the properties of the tree.
-  Each node $v\in V$ spawned in \ElGadget{} incurrs the transportation cost at least $6$, as $v$ is collocated with at most one replica, and remaining $3$ replicas (remember that multi-assignment factor is $4$) are transported for at least $2$ hops.
-  Each node $v\in V$ spawned in \TripleGadget{} incurrs the transportation cost at least $8$, as $v$ is collocated with at most one replica, at most two replicas that are assigned to $v$ are in the same \TripleGadget{}, hence those are transported over $2$ hops, and the last remaining replica is transported over at least $4$ hops.
-  Each node $v\in V$ spawned in \UnqGadget{} incurrs the transportation cost at least $12$, as $v$ is collocated with at most one replica, and remaining $3$ replicas are transported over at least $4$ hops.
-  At most $\sum_e(\deg(e)-1)=t-3\cdot n$ nodes can spawn in \ElGadget{}.\maciek{Wrong!}
-  For the remaining $n$ nodes, by lemma assumption $u$ nodes spawn in \UnqGadgets{}, hence at least $n-u$ nodes spawn in \TripleGadgets{}.
-  Let $c_E$ and $c_T$ be the number of nodes spawned in \ElGadget{} and \TripleGadget, respectively.
-  The lower-bound on the total cost is then $6\cdot c_E + 8\cdot c_T + 12\cdot u$.
-  As $c_T \leq t-3\cdot n$ and $c_E+c_T+u=\numNodes$, the total cost is at least $6\cdot (t-3\cdot n) + 8\cdot (n-u) + 12\cdot u = \CostEstimOne(u)$.\maciek{Wrong!}
-\end{proof}
-
-We define $\ldots$ and $\CostEstimTwo(u) = \ldots$.
-
-We use the function $\CostEstimTwo$ in Lemma~\ref{th:np-balance} to show that exactly $n$ nodes spawned in the Matching Subtree. \maciek{After fixing the proof np-balance, write what $u$ corresponds to}
-
-\begin{lemma}
-  For each $u \in \{ 1, \ldots, t-1 \}$ we have that $\CostEstimOne(u) > \Thr$ and
-  $\CostEstimTwo(u) > \Thr$.
-  \label{lem:cost-estims}
-\end{lemma}
-
-\begin{proof}
-  We have that $\CostEstimOne(u+1) \geq \CostEstimOne(u)$ and $\CostEstimTwo(u+1) \geq \CostEstimTwo(u)$ , for
- ~$1\leq u \leq t-1$. It is easy to verify that $\CostEstimOne(1) > \Thr$ and $\CostEstimTwo(1) > \Thr$.
-\end{proof}
-
-\begin{lemma}
-  Take any feasible solution~$\Solution$ to the instance~$I$ of
- ~$\RS(2)+\MA(4)+\FP$ (as constructed above). If the cost of
- ~$\Solution$ is at most~$\Thr$, then no node is spawned in the Unique
-  Subtree.
-  \label{th:no-unique}
-\end{lemma}
-
-\begin{proof}
-  For the sake of contradiction, let us assume a feasible solution
- ~$\Solution$ with at least one node spawned in {\UnqSubtree}. We show
-  that in this case, the cost of solution~$\Solution$ is greater than
- ~$\Thr$. Let $\ell$ be the number of nodes spawned in the {\UnqSubtree}. We know
-  that~$1 \leq \ell \leq |T|$.  In~$\Solution$ we have exactly
- ~$4 \cdot \numNodes$ chunk transportations, incurring cost
- ~$0, 2, 4$ or~$6$ (the tree has an edge-height of~$3$). At most
- ~$\numNodes$ transportations are of cost~$0$. Note that the leaves of the
-  {\UnqSubtree} are separated from other leaves of the tree by at
-  least~$4$ edges.  The cost of chunk transportation to nodes
-spawned in the Unique Subtree is at least~$12$. The chunks in
-  {\UnqSubtree} are unique, therefore the solution transports~$|T| - \ell$
-  chunks to nodes outside the \UnqSubtree, incurring cost~$4$ for each
-  chunk.
-  Therefore $\CostSol \geq \CostEstimOne(\ell)$, and by Lemma \ref{lem:cost-estims}
-  we conclude that $\CostSol > \Thr$.
-\end{proof}
-
-
-
-\begin{lemma}
-  Given any feasible solution~$\Solution$ to a given instance~$I$ of
- ~$\RS(2)+\MA(4)+\FP$ (as constructed above). If the cost of
- ~$\Solution$ is at most~$\Thr$, then exactly~$n$ nodes are spawned in the
-  \MatchSubtree.
-  \label{th:np-balance}
-\end{lemma}
-\begin{proof}
-    \maciek{This proof requires revision}
-  Let~$\ell$ be the number of nodes spawned in
-  {\MatchSubtree}.  Let us assume the contrary, namely that
- ~$\ell \neq n$.  First, we use
-  Theorem~\ref{th:no-unique} to restrict the placement of nodes in
-  \UnqSubtree. Then we consider two cases:
-  \begin{enumerate}
-    
-    \item~\textbf{Case $\ell \leq n$:} There are at least
-   ~$u := 4 \cdot (n-\ell)$ chunks in the {\MatchSubtree} that are not
-    processed in the {\MatchSubtree}, each incurring transportation
-    cost of~$6$.
-     From the structure of the substrate network and placement of
-    chunks we know that~$\CostSol \geq \CostEstimTwo(\ell)$, and by Lemma \ref{lem:cost-estims}
-  we conclude that $\CostSol > \Thr$.
-.
-
-    \item \textbf{Case $\ell>n$:} We use the fact that there are not enough nodes in
-    {\CoverSubtree}, and we need to transport over~$6$ hops at least 3
-    unique chunks for each node missing from {\CoverSubtree}.
-  \end{enumerate}
-\end{proof}
-\maciek{TODO: rewrite end}
 
 \begin{theorem}
  ~$\RS(2)+\MA+\FP$ is NP-hard.
