@@ -155,7 +155,7 @@ The chunks are placed as follows:
 
 \textbf{The reduction.}
 
-The reduction unfolds in two stages.
+The reduction (Theorem~\ref{th:ma-reduction}) unfolds in two stages.
 First, given a solution to a $\TDPM$ instance, we construct a solution to $\RS(2)+\MA+\FP$ instance.
 This part is the easier of the two, and mainly consists of placing nodes in Triple Gadgets for triples chosen in $\TDPM$ solution.
 
@@ -163,7 +163,7 @@ In the second stage, given a solution to $\RS(2)+\MA+\FP$ instance, we construct
 In this stage, the main difficulty lies in showing that the solution to $\RS(2)+\MA+\FP$ has certain structure.
 
 We call the {\TripleGadget} \textit{active}, if it contains a node at any leaf, and we call the node \textit{active} if it is placed in {\TripleGadget}.
-Our goal is to show that in every feasible solution, exactly $n$ \TripleGadgets{} are active, and hence the $\TDPM$ solution can be constructed from the triples that correspond to active \TripleGadgets{}.
+Our goal is to show that in every feasible solution, exactly $n$ \TripleGadgets{} are active (Lemma~\ref{lem:n-active-ma}), and hence the $\TDPM$ solution can be constructed from the triples that correspond to active \TripleGadgets{}.
 
 \begin{lemma}
   Assume that $S$ is a feasible solution to $\RS(2)+\MA+\FP$ instance constructed from $\TDPM$ instance in the way described in the construction section.
@@ -172,13 +172,13 @@ Our goal is to show that in every feasible solution, exactly $n$ \TripleGadgets{
 \end{lemma}
 
 \begin{proof}
-  In the constructed $\RS(2)+\MA+\FP$ solution, chunks can be matched to nodes at distance $0, 2, 4$ or $6$.
-  We call matches at distance $0$ the \emph{free matches}, the matches at distance $0$ or $2$ the \emph{short matches}, and the matches at distance $4$ or $6$ the \emph{long matches}.
+  In the constructed $\RS(2)+\MA+\FP$ instance, chunks can be matched to nodes at distance $0, 2, 4$ or $6$.
+  We call the matches at distance $0$ or $2$ the \emph{short matches}, and the matches at distance $4$ or $6$ the \emph{long matches}.
   We call the distance between the pair of leaves the \emph{short distance}, if the distance between them is at most $2$, otherwise we call said distance the \emph{long distance}.
-Notice that at most $|V|$ matches can be free, as there exist exactly one chunk replica in each leaf, and the node has to be collocated with the replica for the match to be free.
 
 Proving the existance of more than $n$ long matches is sufficient to show that the instance is infeasible, as its cost exceeds the threshold.
-The threshold value $\Thr$ corresponds to the cost of solution, where $n$ nodes are matched to $4$ chunks that are in distance: $0, 2, 2$ and $4$ to the node, and remaining $|V|-n$ nodes are matched to $4$ chunks that are in distance: $0, 2, 2$ and $2$ to the node.
+The threshold value $\Thr$ corresponds to the cost of solution, where $n$ nodes has $3$ short matches and $1$ long match in distance of $4$ hops, and remaining $|V|-n$ nodes has $4$ short matches assigned.
+Hence, at most $n$ long matches are present in any feasible solution.
 
 We start by observing that each node spawned in the \MatchSubtree{} results in at least one long match.
 This fact is a consequence of the structure of the tree and the fact that multi-assignment factor is set to $4$.
@@ -187,16 +187,16 @@ Hence, we conclude that spawning more than $n$ nodes in the \MatchSubtree{} resu
 In addition, each node spawned in \UnqGadget{} results in at least $3$ long matches, as the only leaf in short distance is the leaf collocated with the node.
 
 As at most $n$ nodes are spawned in \MatchSubtree{}, at least $|V|-n$ nodes are spawned in the \CoverSubtree.
-Assume then, that $|V|-n+i$ nodes spawned in the \CoverSubtree{} for non-negative $i$.
+Assume then that $|V|-n+i$ nodes spawned in the \CoverSubtree{} for non-negative $i$.
 Now, we argue that such node configuration results in $3\cdot i$ long matches.
 Consider the \ElGadget{} $g_e$ for element $e$.
 The gadget $g_e$ has exactly $4\cdot(\deg(e)-1)+1$ leaves, each hosting exactly one chunk replica.
 As $4\cdot(\deg(e)-1)+1 \mod 4 = 1$, spawnining $\deg(e)-1+j$ nodes in $g_e$ for non-negative $j$ results in at least $3\cdot j$ long matches by the fact that there are insufficient chunk replicas in the short distance.
-Using the fact that $\sum_e(\deg(e)-1) = 3\cdot t - 3\cdot n = |V| - n$, by pidgeon-hole principle we conclude that indeed spawning $|V|-n+i$ nodes in the \CoverSubtree{} results in $3\cdot i$ long matches.
+Using the fact that $\sum_e(\deg(e)-1) = 3\cdot t - 3\cdot n = |V| - n$, by pidgeon-hole principle we conclude that indeed spawning $|V|-n+i$ nodes in the \CoverSubtree{} results in at least $3\cdot i$ long matches.
 
 Consider the configuration with $|V|-n+i$ nodes spawned in the \CoverSubtree{}, and $n-i$ nodes spawned in the \MatchSubtree{}.
 Such configuration results in at least $2\cdot i + n$ long matches, where $3\cdot i$ long matches come from the excessive nodes spawned in the \CoverSubtree{}, and $n-i$ long matches come from $n-i$ nodes in the \MatchSubtree{}.
-Hence we deduce that $i = 0$, as otherwise the number of long matches exceeds $n$.
+Hence we deduce that $i = 0$, as otherwise the number of long matches would exceed $n$.
 
 Suppose that out of $n$ nodes in the \MatchSubtree{}, a non-negative number of nodes $j$ spawned in the \UnqGadgets{}.
 As every node spawned in \UnqGadget{} result in at least $3$ long matches, the total number of long matches is at least $n-j + 3\cdot j$.
@@ -208,7 +208,8 @@ Hence, exactly $n$ \TripleGadgets{} are active.
 \end{proof}
 
 \begin{theorem}
- ~$\RS(2)+\MA+\FP$ is NP-hard.
+  ~$\RS(2)+\MA+\FP$ is NP-hard.
+  \label{th:ma-reduction}
 \end{theorem}
 
 \begin{proof}
