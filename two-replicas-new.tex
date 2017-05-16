@@ -68,6 +68,7 @@ For arbitrary instance~$I_{\TDPM}$ of~$\TDM$ we construct a~$\RS(2)+\MA(4)+\FP$ 
 Let $n = |X|=|Y|=|Z|$.
 By $T$ we denote the set of all triples of $I_{\TDPM}$, and let $t = |T|$.
 To access the elements of a triple $\tau \in T$, we introduce the following notation: $\tau = \langle e_X(\tau), e_Y(\tau), e_Z(\tau) \rangle$.
+\maciek{are we using this notation?}
 For each $e\in X\cup Y\cup Z$, by $T_e$ we denote the set of all triples that contain element $e$.
 Let $\deg(e) = |T_e|$, and note that $\sum_e \deg(e) = 3\cdot t$.
 
@@ -155,11 +156,11 @@ The chunks are placed as follows:
 
 \textbf{The reduction.}
 
-Given a $\TDPM$ instance $I_{\TDPM}$, we produce corresponding instance of $\VCEMB$ variant, namely the $\RS(2)+\MA+\FP$ instance, in the way described above.
-We refer to such $\RS(2)+\MA+\FP$ as the $I_{\VCEMB}$.
+Given any $\TDPM$ instance $I_{\TDPM}$, we produce corresponding instance of $\VCEMB$ variant, namely the $\RS(2)+\MA+\FP$ instance, in the way described above (in the construction paragraph\maciek{paragraph?}).
+We refer to such $\RS(2)+\MA+\FP$ instance as the $I_{\VCEMB}$.
 
 The reduction (Theorem~\ref{th:ma-reduction}) unfolds in two stages.
-First, given a solution $S_{\TDPM}$ to a $I_{\TDPM}$, we construct a solution $S_{\VCEMB}$ to $I_{\VCEMB}$.
+First, given a solution $S_{\TDPM}$ to $I_{\TDPM}$, we construct a solution $S_{\VCEMB}$ to $I_{\VCEMB}$.
 This part is the easier of the two, and mainly consists of placing nodes in Triple Gadgets for triples chosen in $S_{\TDPM}$.
 
 In the second stage, given $S_{\VCEMB}$, we construct the $S_{\TDPM}$.
@@ -259,7 +260,8 @@ Hence, exactly $n$ \TripleGadgets{} are active.
   We can observe that every chunk type was processed, exactly $n + \sum_e(\deg(e) - 1)$ nodes are spawned, and each of the nodes process exactly $4$ chunk replicas.
   To see that indeed the produced solution do not exceed the threshold $\Thr$,
   we sum up the total transportation cost as follows.
-  
+
+  \maciek{This paragraph needs reformulation in terms of free, short and long}
   First, we focus on $n$ nodes that spawned in the Matching Subtree.
   Each of such nodes is collocated with one chunk replica that it is matched to,
   and it transports two chunk replicas from the same Triple Gadget, for each incurring the cost $2$.
