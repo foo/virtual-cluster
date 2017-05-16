@@ -165,6 +165,12 @@ In this stage, the main difficulty lies in showing that the solution to $\RS(2)+
 We call the {\TripleGadget} \textit{active}, if it contains a node at any leaf, and we call the node \textit{active} if it is placed in {\TripleGadget}.
 Our goal is to show that in every feasible solution, exactly $n$ \TripleGadgets{} are active, and hence the $\TDPM$ solution can be constructed from the triples that correspond to active \TripleGadgets{}.
 
+\begin{lemma}
+  Assume that $S$ is a feasible solution to $\RS(2)+\MA+\FP$ instance constructed from $\TDPM$ instance in the way described in the construction section.
+  Then in $S$ we have exactly $n$ active \TripleGadgets{}.
+\end{lemma}
+
+\begin{proof}
 In the constructed $\RS(2)+\MA+\FP$ solution, chunks can be matched to nodes at distance $0, 2, 4$ and $6$.
 We call matches at distance $0$ the free matches, the matches at distance $0$ or $2$ the short matches, and the matches at distance $4$ or $6$ the long matches.
 Notice that at most $|V|$ matches can be free, as there exist exactly one chunk replica in each leaf, and the node has to be collocated with the replica for the match to be free.
@@ -187,7 +193,7 @@ Now, we deduce that no node spawned in the \UnqSubtree{}. \maciek{TODO}
 
 Hence, we conclude that exactly $n$ nodes spawn in the \TripleGadget{}.
 Combine this with the fact that at most one node spawned in each \TripleGadget{}, and we conclude that exactly $n$ \TripleGadgets{} are active.
-
+\end{proof}
 
 \begin{theorem}
  ~$\RS(2)+\MA+\FP$ is NP-hard.
