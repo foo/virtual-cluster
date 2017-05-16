@@ -173,11 +173,12 @@ Our goal is to show that in every feasible solution, exactly $n$ \TripleGadgets{
 
 \begin{proof}
   In the constructed $\RS(2)+\MA+\FP$ instance, chunks can be matched to nodes at distance $0, 2, 4$ or $6$.
-  We call the matches at distance $0$ or $2$ the \emph{short matches}, and the matches at distance $4$ or $6$ the \emph{long matches}.
+  We call the matches at distance $0$ the \emph{free matches}, the matches at distance $2$ the \emph{neighbouring matches}.
+  In addition we call the matches at distance $0$ or $2$ the \emph{short matches}, and the matches at distance $4$ or $6$ the \emph{long matches}.
   We call the distance between the pair of leaves the \emph{short distance}, if the distance between them is at most $2$, otherwise we call said distance the \emph{long distance}.
 
 Proving the existance of more than $n$ long matches is sufficient to show that the instance is infeasible, as its cost exceeds the threshold.
-To see this, note that the threshold value $\Thr$ corresponds to the cost of solution, where $n$ nodes has $3$ short matches and $1$ long match in distance of $4$ hops, and remaining $|V|-n$ nodes has $4$ short matches assigned.
+To see this, note that the threshold value $\Thr$ corresponds to the cost of solution, where $n$ nodes has $1$ free match, $2$ neighbouring matches and $1$ long match at distance of $4$ hops, and remaining $|V|-n$ nodes has $1$ free match and $3$ neighbouring matches assigned.
 Hence, at most $n$ long matches are present in any feasible solution.
 
 We start by observing that each node spawned in the \MatchSubtree{} results in at least one long match.
