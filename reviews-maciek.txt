@@ -212,6 +212,13 @@ We did a major rewrite of whole Section 5.1
 
 - The threshold value formula (bottom of page 29):
    * Could you please increase the font size?
+ 
+%%%%%%%%%% RESPONSE %%%%%%%%%%
+We increased the font size
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+   
    * It appears that every single occurrence of |V| in the formula should be
        replaced by n
    * Shouldn't the summand for e in the sum on the right end of the first line
