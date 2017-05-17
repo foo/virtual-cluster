@@ -47,7 +47,7 @@ Next, we claim that the number of nodes spawned in $P_1$ (resp. $P_2$) is $n_1$ 
 To see this, consider any imbalance of number of spawned nodes; notice that some chunks in the underpopulated comb are processed outside of its $P_i$ subtree, resulting in the solution that exceeds the threshold.
 
 \textbf{Families of chunk types.} The second tool that we introduce allows us to express the redundancy of chunks without actually replicating chunks more than two-fold.
-For simplicity of introduction, we consider the scenario with multi-assignment factor of $1$.
+For simplicity of introduction, we consider the scenario with no multi-assignment.
 For each chunk type $c$ with redundancy, we count the number of occurrences of replicas of such chunk in the tree, and name it $r_c$.
 We replace the chunk type $c$ with $r$ chunk types, which we call the family $F_c$ of that chunk type.
 For each occarrence of replica of $c$, we replace it with replica of any chunk type from the family (without repetitions).
