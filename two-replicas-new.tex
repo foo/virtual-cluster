@@ -109,8 +109,6 @@ We construct the tree that has the following structure (see Figure~\ref{fig:red-
   \caption{Overview of the substrate network}
   \vspace{-1em}
 \end{figure}
-\maciek{TODO FIGURE: $3\cdot n$ elements instead of $n$}
-
 
 \begin{enumerate}
   \item The physical network consists of two subtrees connected to the
@@ -143,7 +141,7 @@ The chunks are placed as follows:
 \paragraph{Other properties of the instance}
 \begin{enumerate}
   \item \emph{Multiple assignment:} We set the multi-assignment factor to $4$.
-  \item \emph{Number of nodes:} We allow to spawn
+  \item \emph{Number of nodes:} We set the number of nodes to spawn to
  %~$\numNodes = n + \sum_{e}(\deg(e)-1)$ nodes.
  ~$\numNodes = n + \sum_{e}(\deg(e)-1) = 3\cdot t - 2\cdot n$ nodes.
  \item \emph{Threshold:} We set the following threshold:
