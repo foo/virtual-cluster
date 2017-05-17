@@ -14,7 +14,7 @@ More precisely, bandwidth constraints in such form excludes configurations with 
 
 However, we are interested only in lower-bounding the number of nodes to spawn in a subtree, and in fact the upper-bound on the number of nodes is only a liability.
 We make sure that the upper-bound on the number of nodes is always satisfied by artificially increasing the number of total nodes to be spawned.
-In this way the upper-bound on number of nodes always exceeds the number of leaves of any subtree in which we would like to have $k$ nodes spawned.
+In this way the upper-bound on number of nodes always exceeds the number of leaves of any subtree in which we would like to have $k$ nodes spawned, see Lemmas~\ref{lem:bandwidth2} and \ref{lem:bandwidth3}.
 Additional nodes do not interfere with the rest of the construction, as we provide unique chunks for them to process.
 
 
@@ -30,7 +30,6 @@ Let $\deg(e) = |T_e|$, and note that $\sum_e \deg(e) = 3\cdot t$.
 We proceed with the construction as follows.
 
 \emph{Chunk Types.}
-
 We construct two sets of chunk types.
 The first set corresponds to elements of the universe (that is, $X\cup Y\cup Z$).
 The construction of such chunk types is similar to construction of chunk types in Section~\ref{ssec:fprscc}, but to take into consideration the restricted replication factor, we construct the familiy of chunk types (as described in the introduction to this section).
@@ -53,7 +52,6 @@ refer to the set of unique chunks by~$U$.
 \end{enumerate}
 
 \emph{The substrate network.}
-
 \begin{enumerate}
   \item The physical network consists of three subtrees connected to
   the root: the {\MatchSubtree}, the {\CoverSubtree}, and a
@@ -66,11 +64,10 @@ refer to the set of unique chunks by~$U$.
   attach the root of the triple to the root of the matching subtree.
   \item \ElGadget: For each element~$e \in X\cup Y\cup Z$, we
   construct a subtree consisting of the root of the element (attached
-  to the root of the cover subtree), and~$4\cdot(\deg(e)-1)+1$ leaves.
+  to the root of the cover subtree), and~$\deg(e)$ leaves.
 \end{enumerate}
 
 \emph{Chunk placement.}
-
 The chunks are placed as follows:
 \begin{enumerate}
   \item \emph{Chunks in the Matching Subtree:} In {\TripleGadget} of triple $\tau$ we put
@@ -81,16 +78,16 @@ The chunks are placed as follows:
  \item \emph{Chunks in Element Gadgets:} Consider the \ElGadget{} for the element $e \in X\cup Y\cup Z$.
  We place two types of replicas in the leaves of the gadget.
  We put replicas $ch_2(\tau, e)$ for each $\tau \in T_e$.
- In total, we place $\deg(e) - 1$ replicas, one per each leaf of the gadget.
+ In total, we place $\deg(e)$ replicas, one per each leaf of the gadget.
 \end{enumerate}
 
-\emph{Bandwidth constraints.}
-We use bandwidth constraints of the form
-$\Band(k) := k\cdot(\numNodes - k)$. Namely, we set the bandwidth
+\emph{Bandwidth constraints.} We use bandwidth constraints of the form
+$\Band(k) := k\cdot(\numNodes - k)$, where $\Vms$ is the total number of nodes to be spawned in the instance. Namely, we set the bandwidth
 constraints of an uplink of an {\ElGadget} for each element~$e$ to 
 $\Band(\deg(e)-1)$, the bandwidth of an uplink of a~$\MatchSubtree$ to 
 $\Band(n)$, and an uplink of a~$\CoverSubtree$ to 
 $\Band(\sum_e (\deg(e)-1)$.
+Note that out of $\deg(e)$ leaves of \ElGadget{} for element $e$, we allow to spawn $\deg(e)-1$ nodes.
 
 \emph{The threshold value and other properties of the instance.} We set the
 cost threshold for any solution to the following value:
@@ -102,10 +99,10 @@ cost threshold for any solution to the following value:
         & + 4\cdot (\sum_e((\deg(e) - 1)\cdot (\sum_{f\neq e} \deg(f) - 1)/2)) & \mbox{(over 4 hops in {\CoverSubtree})}\\
         & + 6\cdot (3\cdot \numNodes \cdot \sum_e(\deg(e) - 1)) & \mbox{(between {\MatchSubtree} and {\CoverSubtree})} \\
         & + |U|\cdot (|U|-1)/2 & \mbox{(inside {\UnqSubtree})} \\
-        & + |U| \cdot (3\cdot n + \sum_e (\deg(e)-1) & \mbox{({\UnqSubtree} to other nodes)} \\
+        & + |U| \cdot (3\cdot n + \sum_e (\deg(e)-1) & \mbox{({\UnqSubtree} to other nodes)}
 \end{align*}
 \end{footnotesize}
-
+where $\Vms$ is the total number of nodes to be spawned in the instance.
   We
 set~$\CostTrans$, the cost of chunk transportation to $\Thr+1$ (so that no chunk transportation happens in any feasible solution), 
 $\CostCom = 1$, and we host only one node per machine. We set the
@@ -120,8 +117,7 @@ $\numNodes := 3\cdot n + \sum_e (\deg(e)-1) + |U|$.
  ~$\Band(k)$. Assume that no chunk transportation is allowed
   ($\CostTrans = \infty$, so every node must be collocated with the
   chunk it processes in every feasible solution), and~$\CostCom = 1$.
-  Then in any feasible solution the number of nodes spawned in~$T$ (we
-  name it~$s$) satisfies~$s \leq k \vee \Vms-s\leq k$, and~$s \leq l$.
+  Then in any feasible solution the number $s$ of nodes spawned in~$T$ satisfies~$s \leq k \vee \Vms-s\leq k$, and~$s \leq l$.
   \label{lem:bandwidth1}
 \end{lemma}
 
@@ -170,13 +166,13 @@ constructed subtree.
   in the {\UnqSubtree}. Let's refer to the number of nodes spawned in
   a {\MatchSubtree} by~$M$, and to the number of nodes spawned in
   {\CoverSubtree} by~$C$. By applying Lemma~\ref{lem:bandwidth1} to
-  {\MatchSubtree}, we know that: $ M \leq 3\cdot n \vee M \geq |V| - 3\cdot n$.
-  We observe that~$|V| - 3\cdot n$ is greater than the number of
+  {\MatchSubtree}, we know that: $ M \leq 3\cdot n \vee M \geq \Vms - 3\cdot n$.
+  We observe that~$\Vms - 3\cdot n$ is greater than the number of
   leaves in a {\MatchSubtree}.  By applying Lemma~\ref{lem:bandwidth1}
-  to the {\CoverSubtree} we know that:~$ C \leq \sum_e(\deg(e)-1) \vee C$ $\geq |V| - \sum_e(\deg(e)-1)$.
-  We observe that~$|V| - \sum_e(\deg(e)-1)$ is greater than the number
+  to the {\CoverSubtree} we know that:~$ C \leq \sum_e(\deg(e)-1) \vee C$ $\geq \Vms - \sum_e(\deg(e)-1)$.
+  We observe that~$\Vms - \sum_e(\deg(e)-1)$ is greater than the number
   of leaves in the {\CoverSubtree}.
-  We also know that~$|V| = |U| + C + M$. Therefore, by the pigeon-hole principle
+  We also know that~$\Vms = |U| + C + M$. Therefore, by the pigeon-hole principle
  ~$C = \sum_e(\deg(e)-1)$ and~$M = 3\cdot n$.
 \end{proof}
 
@@ -191,8 +187,8 @@ constructed subtree.
 \begin{proof}
   Let's call the number of nodes spawned in the Element Gadget of
   element~$e$ the $x_e$.  From Lemma~\ref{lem:bandwidth1}, we know that
- ~$x_e \leq \deg(e) - 1 \vee x_e \geq |V| - \deg(e) + 1$. We observe
-  that~$|V| - \deg(e) + 1$ is greater than the number of leaves of the
+ ~$x_e \leq \deg(e) - 1 \vee x_e \geq \Vms - \deg(e) + 1$. We observe
+  that~$\Vms - \deg(e) + 1$ is greater than the number of leaves of the
   gadget, which is~$\deg(e)$.  From Lemma~\ref{lem:bandwidth2}, we know
   that the number of nodes spawned in the entire {\CoverSubtree} is
  ~$\sum_e (\deg(e)-1)$. Therefore, by the pigeon-hole principle, we have
@@ -288,6 +284,7 @@ spawned nodes.
 \end{proof}
 
 \noindent \textbf{The reduction.}
+Using the properties of the substrate network, we perform the reduction in the following way.
 
 \begin{theorem}
  ~$\RS(2)+\FP+\CC+\BW$ is NP-hard.
@@ -302,7 +299,7 @@ spawned nodes.
   ($\Leftarrow$) Let's take any feasible solution~$\Sol$ to~$I$ and
   produce a solution~$\Sol'$ to~$I'$. We show that the cost of~$\Sol'$ is
   indeed~$\leq \Thr$.
-  For each triple~$t_1,\ldots, t_n$ in~$\Sol$, we put~$3$ nodes at
+  For each triple~$t\in T$ in~$\Sol$, we put~$3$ nodes at
   leaves of triple gadgets corresponding to those triples.  In each
   element gadget (that corresponds to element~$e$), we put~$\deg(e)-1$
   nodes. In each element gadget there is only one leaf without the
