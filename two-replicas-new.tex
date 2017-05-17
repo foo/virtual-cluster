@@ -74,13 +74,13 @@ We proceed with the construction as follows.
 
 \paragraph{Chunk types and replicas}
 
-We construct three types of chunks.
-The first type corresponds to elements of the universe (that is, $X\cup Y\cup Z$).
-The construction of such chunk types is similar to construction of chunk types in Section\ref{ssec:fprsma}, but to take into consideration the restricted replication factor, we construct the familiy of chunk types (as described in the introduction to this section).
+We construct three sets of chunk types.
+The first set corresponds to elements of the universe (that is, $X\cup Y\cup Z$).
+The construction of such chunk types is similar to construction of chunk types in Section~\ref{ssec:fprsma}, but to take into consideration the restricted replication factor, we construct the familiy of chunk types (as described in the introduction to this section).
 Namely, for each element of universe $e$, we construct as many chunk types as there are occurences of $e$ in triples of $I_{\TDPM}$.
 Each such chunk type has exactly two replicas.
 
-The other two types are chunk types with one replica only, therefore called \emph{unique}.
+The other two sets of chunk types has one replica, therefore those are called called \emph{unique} chunks.
 We construct two types of unique chunks, distinguished by a different role in the construction.
 For unique chunks we simply co-notate the chunk type with chunk replica.
 
@@ -89,7 +89,7 @@ Formally, the construction of chunk types and replicas unfolds as follows:
   \item For each triple $\tau \in T$, we construct $3$ chunk types, with two replicas each.
   We construct different chunk types for each triple $\tau$, which contain element $e$ (in total $\deg(e)$ chunk types).
   We refer to those replicas by $ch_1(e, \tau)$ and $ch_2(e, \tau)$.
-  In total we construct $2\cdot \deg(e)$ chunk replicas.
+  In total we construct $2\cdot \sum_e\deg(e) = 6\cdot t$ chunk replicas.
   \item We construct~$n$ additional chunk types named
   ~$u_1, \ldots, u_n$ with one replica each.
   \item For each element~$e\in X\cup Y\cup Z$,
@@ -114,15 +114,15 @@ We construct the tree that has the following structure (see Figure~\ref{fig:red-
 
 \begin{enumerate}
   \item The physical network consists of two subtrees connected to the
-  root: A {\MatchSubtree} and a {\CoverSubtree}. The
+  root: the {\MatchSubtree} and the {\CoverSubtree}. The
   {\MatchSubtree} consists of $t$ {\TripleGadgets}, one per each triple $\tau\in T$ and $n$
-  {\UnqGadgets}. The {\CoverSubtree} consist of~$3\cdot n$ {\ElGadgets}, one for each element $e\in X\cup Y\cup Z$
+  {\UnqGadgets}. The {\CoverSubtree} consist of~$3\cdot n$ {\ElGadgets}, one for each element $e\in X\cup Y\cup Z$.
   \item {\TripleGadget} consists of four vertices: three leaves and the root of the gadget.
   \item {\UnqGadget} consists of two vertices: the leaf and the root of the gadget.
   We construct the root node of the gadget not only to keep the tree balanced, but also to keep leaves of
   {\UnqGadgets} far from leaves of other \UnqGadgets. Note that \UnqGadgets{} form a comb.
   \item {\ElGadget} for element $e$ has a structure that depends on the number of triples that cover $e$. The {\ElGadget} consists of the
-  root, and~$4\cdot(\deg(e)-1)+1$ leaves.
+  root and~$4\cdot(\deg(e)-1)+1$ leaves.
 \end{enumerate}
 
 \paragraph{Chunk Placement}
@@ -149,12 +149,12 @@ The chunks are placed as follows:
  \item \emph{Threshold:} We set the following threshold:
  %~$\Thr = 8\cdot n + 6\cdot\sum_{e}(\deg(e)-1)$
  ~$\Thr = 18\cdot t - 10\cdot n$.
- This value corresponds to the cost of solution, where $n$ nodes are matched to $4$ chunks that are in distance: $0, 2, 2$ and $4$ to the node, and remaining $|V|-n$ nodes are matched to $4$ chunks that are in distance: $0, 2, 2$ and $2$ to the node.
+ This value corresponds to the cost of solution, where $n$ nodes are matched to $4$ chunks that are in distance: $0, 2, 2$ and $4$ to the node, and remaining $\Vms-n$ nodes are matched to $4$ chunks that are in distance: $0, 2, 2$ and $2$ to the node.
 \end{enumerate}
 
 \textbf{The reduction.}
 
-Given any $\TDPM$ instance $I_{\TDPM}$, we produce corresponding instance of $\VCEMB$ variant, namely the $\RS(2)+\MA+\FP$ instance, in the way described above (in the construction paragraph\maciek{paragraph?}).
+Given any $\TDPM$ instance $I_{\TDPM}$, we produce corresponding instance of $\VCEMB$ variant, namely the $\RS(2)+\MA+\FP$ instance, in the way described above.
 We refer to such $\RS(2)+\MA+\FP$ instance as the $I_{\VCEMB}$.
 
 The reduction (Theorem~\ref{th:ma-reduction}) unfolds in two stages.
@@ -173,7 +173,8 @@ In $I_{\VCEMB}$, chunks can be matched to nodes at distance $0, 2, 4$ or $6$.
   We call the distance between the pair of leaves the \emph{short distance}, if the distance between them is at most $2$, otherwise we call said distance the \emph{long distance}.
 
 Proving the existance of more than $n$ long matches is sufficient to show that the instance is infeasible, as its cost exceeds the threshold.
-To see this, note that the threshold value $\Thr$ corresponds to the cost of solution, where $n$ nodes has $1$ free match, $2$ neighbouring matches and $1$ long match at distance of $4$ hops, and remaining $|V|-n$ nodes has $1$ free match and $3$ neighbouring matches assigned.
+To see this, note that the threshold value $\Thr$ corresponds to the cost of solution, where $n$ nodes has $1$ free match, $2$ neighbouring matches and $1$ long match at distance of $4$ hops, and remaining $\Vms-n$ nodes has $1$ free match and $3$ neighbouring matches assigned.
+Note that the limit of $\Vms$ free matches is exhausted, hence excessive long matches cannot be compensated in any way.
 Hence, at most $n$ long matches are present in any feasible solution.
 
 
@@ -189,15 +190,15 @@ For each node spawned in the \MatchSubtree{}, by the construction of the tree, t
 Hence, we conclude that spawning more than $n$ nodes in the \MatchSubtree{} results in more than $n$ long matches, which results in infeasibility of the solution.
 In addition, each node spawned in \UnqGadget{} results in at least $3$ long matches, as the only leaf in short distance is the leaf collocated with the node.
 
-As at most $n$ nodes are spawned in \MatchSubtree{}, at least $|V|-n$ nodes are spawned in the \CoverSubtree.
-Assume then that $|V|-n+i$ nodes spawned in the \CoverSubtree{} for non-negative $i$.
+As at most $n$ nodes are spawned in \MatchSubtree{}, at least $\Vms-n$ nodes are spawned in the \CoverSubtree.
+Assume then that $\Vms-n+i$ nodes spawned in the \CoverSubtree{} for non-negative $i$.
 Now, we argue that such node configuration results in $3\cdot i$ long matches.
 Consider the \ElGadget{} $g_e$ for element $e$.
 The gadget $g_e$ has exactly $4\cdot(\deg(e)-1)+1$ leaves, each hosting exactly one chunk replica.
 As $4\cdot(\deg(e)-1)+1 \mod 4 = 1$, spawnining $\deg(e)-1+j$ nodes in $g_e$ for non-negative $j$ results in at least $3\cdot j$ long matches by the fact that there are insufficient chunk replicas in the short distance.
-Using the fact that $\sum_e(\deg(e)-1) = 3\cdot t - 3\cdot n = |V| - n$, by pidgeon-hole principle we conclude that indeed spawning $|V|-n+i$ nodes in the \CoverSubtree{} results in at least $3\cdot i$ long matches.
+Using the fact that $\sum_e(\deg(e)-1) = 3\cdot t - 3\cdot n = \Vms - n$, by pidgeon-hole principle we conclude that indeed spawning $\Vms-n+i$ nodes in the \CoverSubtree{} results in at least $3\cdot i$ long matches.
 
-Consider the configuration with $|V|-n+i$ nodes spawned in the \CoverSubtree{}, and $n-i$ nodes spawned in the \MatchSubtree{}.
+Consider the configuration with $\Vms-n+i$ nodes spawned in the \CoverSubtree{}, and $n-i$ nodes spawned in the \MatchSubtree{}.
 Such configuration results in at least $2\cdot i + n$ long matches, where $3\cdot i$ long matches come from the excessive nodes spawned in the \CoverSubtree{}, and $n-i$ long matches come from $n-i$ nodes in the \MatchSubtree{}.
 Hence we deduce that $i = 0$, as otherwise the number of long matches would exceed $n$.
 
@@ -275,7 +276,7 @@ Hence, exactly $n$ \TripleGadgets{} are active.
 
   It remains to show that $S_{\TDPM}$ indeed matches every element of $X\cup Y\cup Z$.
   By Lemma~\ref{lem:short-ma}, each match of $ch(e, \tau)$ for each $e\in X\cup Y\cup Z$ and each $\tau \in T$ is matched by a short match.
-  Hence, each active node~$v$ processes the 3 chunks that are placed in~$v$'s \TripleGadget.
+  Hence, each active node processes the 3 chunks that are placed in its \TripleGadget.
   In each {\ElGadget} for element~$e$, one chunk $ch(e, \tau)$ for some $\tau \in T$ is not matched.
   Let's call this chunk instance~$\Unmatched(e)$, and let's call~$\Unmatched = \cup_e \Unmatched(e)$.
   Note that~$|\Unmatched| = 3\cdot n$.

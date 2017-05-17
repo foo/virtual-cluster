@@ -113,7 +113,7 @@
 \newcommand{\CostSol}{\textit{cost}(\Solution)}
 \newcommand{\CostEstimOne}{\widehat{cost}}
 \newcommand{\CostEstimTwo}{\widehat{cost'}}
-\newcommand{\numNodes}{\ensuremath{|V|}}
+\newcommand{\numNodes}{\Vms}
 
 \newcommand{\UnqSubtree}{{{\emph{Unique Subtree}}}}
 \newcommand{\MatchSubtree}{{\emph{Matching Subtree}}}
@@ -145,7 +145,7 @@
 \newcommand{\Tree}{\ensuremath{T}}
 \newcommand{\CostTrans}{\ensuremath{b_1}}
 \newcommand{\CostCom}{\ensuremath{b_2}}
-\newcommand{\Vms}{\ensuremath{n_V}}
+\newcommand{\Vms}{\ensuremath{m}}
 \newcommand{\TSC}{\textsc{3-SC}}
 \newcommand{\TDM}{\textsc{3-DM}}
 \newcommand{\TSAT}{\textsc{3-Sat}}
@@ -1218,7 +1218,7 @@ which we can see as a generalization of bipartite matchings to 3-uniform
 hypergraphs. We will refer to this problem by~$\TDM$, and for completeness,
 review it quickly:
 $\TDM$ is defined as follows. We are given three finite and disjoint
-sets~$X$,~$Y$, and~$Z$ of cardinality~$k$, as well as a subset of triples~$T\subset
+sets~$X$,~$Y$, and~$Z$ of cardinality~$k$, as well as a subset of triples~$T\subseteq
 X \times Y \times Z$.  Set~$M \subseteq T$ is a 3-dimensional matching
 if and only if, for any two distinct triples~$t_1=(x_1, y_1, z_1) \in M$
 and~$t_2=(x_2, y_2, z_2) \in M$, it holds that~$x_1\neq x_2$,~$y_1\neq
