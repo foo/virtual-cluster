@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE ipe SYSTEM "ipe.dtd">
 <ipe version="70005" creator="Ipe 7.1.4">
-<info created="D:20151212231243" modified="D:20170517153210"/>
+<info created="D:20151212231243" modified="D:20170517205601"/>
 <ipestyle name="basic">
 <symbol name="arrow/arc(spx)">
 <path stroke="sym-stroke" fill="sym-stroke" pen="sym-pen">
@@ -478,7 +478,6 @@ h
 <text transformations="translations" pos="328 832" stroke="black" type="label" width="18.027" height="6.128" depth="0" valign="baseline">$root$</text>
 <text matrix="1 0 0 1 -24 0" transformations="translations" pos="136 792" stroke="black" type="label" width="77.515" height="6.926" depth="1.93" valign="baseline">Matching Subtree</text>
 <text transformations="translations" pos="472 792" stroke="black" type="label" width="61.768" height="6.918" depth="0" valign="baseline">Cover Subtree</text>
-<text matrix="1 0 0 1 -16 12" transformations="translations" pos="456 592" stroke="black" type="label" width="54.801" height="7.711" depth="0.99" valign="baseline" size="large">$3\cdot t - 3\cdot n$</text>
 <path stroke="black">
 56 648 m
 56 640 l
@@ -502,12 +501,6 @@ h
 496 648 l
 552 648 l
 552 656 l
-</path>
-<path stroke="black">
-368 624 m
-368 616 l
-552 616 l
-552 624 l
 </path>
 <text matrix="1 0 0 1 24 16" transformations="translations" pos="48 744" stroke="black" type="label" width="64.633" height="6.926" depth="1.93" valign="baseline">Triple Gadgets</text>
 <text matrix="1 0 0 1 -40 16" transformations="translations" pos="304 744" stroke="black" type="label" width="69.863" height="6.926" depth="1.93" valign="baseline">Unique Gadgets</text>
