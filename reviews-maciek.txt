@@ -165,85 +165,34 @@ in the current version. When you do, please provide the calculations.  And check
 if the threshold value is what it should be, because it appears to me that it is
 slightly off.
 
-%%%%%%%%%% RESPONSE %%%%%%%%%% 
-%maciek: TODO:
-1) provide the calculations
-2) check the threshold value
-3) major revision (?)
+%%%%%%%%%% RESPONSE %%%%%%%%%%
+We did a major rewrite of whole Section 5.1
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 - Observation 2, points 1 and 2: some chunk types are unique to either of the
    two subtrees, so clearly, they do not have exactly one replica in the other;
    please refomulate.
-
-%%%%%%%%%% RESPONSE %%%%%%%%%% 
-We changed the Observation in such way that it excludes U_e
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
 - "Reduction" (page 26):
    * In point 2: (1) the n nodes should be placed each in a distinct leaf,
        not all in the same one, as your writing suggests; (2) the 3D-Matching
        solution selects a triple, not a Triple Gadget --- the latter
        corresponds to the former
-
-%%%%%%%%%% RESPONSE %%%%%%%%%% 
-We clarified the construction.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-       
    * In point 3, you refer to "Element Subtree" but, strictly speaking,
        you have never defined it.
- 
-%%%%%%%%%% RESPONSE %%%%%%%%%% 
-We changed the Element Subtree to Element Gadget, as it was indeed the object that we meant to refer to.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-      
 - "Proof of correctness" (right after the "reduction"):
    * Correctness of what?
-
-%%%%%%%%%% RESPONSE %%%%%%%%%% 
-We changed the "Proof of correctness" to "Proof of correctness of the reduction"
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
    * (1) The two costs you introduce presumably correspond to something,
        but you never explain that.  (2) Moreover, t is undefined, and should
        probably not be used at all, since on page 23 you state that t will be
        used for a triple from T.  (3) Similarly, it is only in Lemma 6 that
        you specify the domain for u.
-
-%%%%%%%%%% RESPONSE %%%%%%%%%% 
-We explicitly bounded t to be the number of triples in a given 3D Perfect Matching instance. We explicitly specified the domain for u.
-
-We wrote an introduction to cost functions, in which we say why those were defined.
-
-The variable t was redefined as the number of triples in the paragraph starting the subsection "Proof of correctness of the reduction", which was a bad idea. We removed the ambiguity, by renaming the number of triples to \tau.
-
-%maciek: TODO: write an introduction to cost functions
-%maciek: TODO: there is probably a flaw in the proof
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
 - Lemma 7: Just like the "Element Subtree", "Unique Subtree" was not defined.
    And neither was sigma.
-   
-%%%%%%%%%% RESPONSE %%%%%%%%%%
-%maciek: TODO
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 - Lemma 8: \ell was not defined.  I can only assume it is *not* the \ell from
    the previous Lemma, since that one was to prove that \ell=0.
- 
-%%%%%%%%%% RESPONSE %%%%%%%%%%
-%maciek: TODO
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
-SECTION 5.2:
+   SECTION 5.2:
 
 - I believe that you should provide a figure with the tree, similar to the one
    in Section 5.1
@@ -279,7 +228,7 @@ SECTION 5.2:
    * last line of statement: n should be replaced by |V|
    
 %%%%%%%%%% RESPONSE %%%%%%%%%% 
-We changed |V| to n
+We changed n to |V|
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
