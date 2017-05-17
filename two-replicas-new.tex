@@ -1,9 +1,14 @@
 \subsection{Two replicas without Multiple Assignment}\label{ap:tworep-ni}
 
-
 We now show that~$\RS(2)+\FP+\CC+\BW$ is even NP-hard without multiple
 assignment.
 The proof is similar in spirit to proof of hardness of $\RS(2)+\FP+\MA$.
+
+The reduction (Theorem~\ref{th:ma-reduction}) unfolds in two stages.
+First, given a solution $S_{\TDPM}$ to $I_{\TDPM}$, we construct a solution $S_{\VCEMB}$ to $I_{\VCEMB}$.
+This part is the easier of the two, and mainly consists of placing nodes in Triple Gadgets for triples chosen in $S_{\TDPM}$.
+
+In the second stage, given $S_{\VCEMB}$, we construct the $S_{\TDPM}$.
 Again, we use the technique that we call ``families of chunk types'', which was introduced in previous section.
 The main technical difficulty lies in controlling the number of nodes that are spawned in certain parts of (asymmetric) tree.
 To guantee the desired number of spawned nodes, we use the bandwidth constraints.
@@ -149,8 +154,7 @@ constructed subtree.
 
 
 \begin{lemma}
-  Consider an instance~$I$ of~$\TDPM$. We construct the~$\RS(2)+\FP+\CC+\BW$ instance~$I'$
- as described above. Then we have that in~$I'$:
+  The following properties holds in $S_{\VCEMB}$:
   \begin{enumerate}
     \item The number of nodes spawned in a {\MatchSubtree} is
    ~$3\cdot n$.
@@ -178,8 +182,7 @@ constructed subtree.
 
 
 \begin{lemma}
-  Assume an instance~$I$ of~$\TDPM$. We construct the~$\RS(2)+\FP+\CC+\BW$ instance~$I'$
- as described above. Then we have that in~$I'$ the number of nodes spawned in Element Gadget of
+  In $S_{\VCEMB}$ the number of nodes spawned in Element Gadget of
   element~$e$ is~$\deg(e)-1$.
   \label{lem:bandwidth3}
 \end{lemma}
@@ -252,9 +255,7 @@ has one or two
 spawned nodes.
 
 \begin{lemma}
-  Consider an~$\RS(2)+\FP+\CC+\BW$ instance~$I$.  Assume that 
-  chunk transportation is not allowed, and~$\CostCom = 1$.
-  In every feasible solution to~$I$, we have exactly~$n$ active
+  In $S_{\VCEMB}$, we have exactly~$n$ active
   {\TripleGadgets}.
   \label{lem:full-or-empty}
 \end{lemma}
@@ -291,28 +292,32 @@ Using the properties of the substrate network, we perform the reduction in the f
 \end{theorem}
 
 \begin{proof}
+  Let's take any instance $I_{\TDPM}$ of~$\TDPM$.
+  We show that~$I_{\VCEMB}$ has a solution of cost~$\leq \Thr$ if and only if~$I_{\TDPM} \in \TDPM$ (there exists a perfect 3D matching in $I_{\TDPM}$).
+
+
   Let's take an instance~$I$ of~$\TDPM$ and construct an instance~$I'$
   of~$\RS(2)+\FP+\CC+\BW$ in the way described above.  We show that
  ~$I'$ has solution of cost~$\leq \Thr$ if and only if~$I \in \TDPM$
   (there exists a perfect 3D matching).
 
-  ($\Leftarrow$) Let's take any feasible solution~$\Sol$ to~$I$ and
-  produce a solution~$\Sol'$ to~$I'$. We show that the cost of~$\Sol'$ is
+  ($\Leftarrow$) Let's take any feasible solution~$S_{\TDPM}$ to~$I_{\TDPM}$ and
+  produce a solution~$S_{\VCEMB}$ to~$I_{\VCEMB}$. We show that the cost of~$S_{\VCEMB}$ is
   indeed~$\leq \Thr$.
-  For each triple~$t\in T$ in~$\Sol$, we put~$3$ nodes at
+  For each triple~$t\in T$ in~$S_{\TDPM}$, we put~$3$ nodes at
   leaves of triple gadgets corresponding to those triples.  In each
   element gadget (that corresponds to element~$e$), we put~$\deg(e)-1$
   nodes. In each element gadget there is only one leaf without the
   node placed in it: this node contains the chunk replica that is
   processed in the {\MatchSubtree}.
-  It is easy to see that~$\Sol'$ has cost exactly~$\Thr$ and no
+  It is easy to see that~$S_{\VCEMB}$ has cost exactly~$\Thr$ and no
   bandwidth constraint is violated. Each chunk type is processed.
 
-  ($\Rightarrow$) Let's take any feasible solution~$\Sol'$ to~$I'$ and
-  produce a solution~$\Sol$ to~$I$ by taking triples that correspond
+  ($\Rightarrow$) Let's take any feasible solution~$S_{\VCEMB}$ to~$I_{\VCEMB}$ and
+  produce a solution~$S_{\TDPM}$ to~$I_{\TDPM}$ by taking triples that correspond
   to active triple gadgets. Using Lemma~\ref{lem:full-or-empty}, we
   conclude that there are exactly~$n$ active triple gadgets. By
-  feasibility of~$\Sol'$, we know that each chunk type is
+  feasibility of~$S_{\TDPM}$, we know that each chunk type is
   processed. From Lemma~\ref{lem:bandwidth3}, we know that out
   of~$\deg(e)$ chunk types that correspond to~$e\in X\cup Y\cup Z$,
   exactly one is processed in the {\MatchSubtree}, hence each
