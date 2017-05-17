@@ -257,17 +257,10 @@ Hence, exactly $n$ \TripleGadgets{} are active.
   \end{enumerate}
 
   We can observe that every chunk type was processed, exactly $n + \sum_e(\deg(e) - 1)$ nodes are spawned, and each of the nodes process exactly $4$ chunk replicas.
-  To see that indeed the produced solution do not exceed the threshold $\Thr$,
-  we sum up the total transportation cost as follows.
-
-  \maciek{This paragraph needs reformulation in terms of free, short and long}
-  First, we focus on $n$ nodes that spawned in the Matching Subtree.
-  Each of such nodes is collocated with one chunk replica that it is matched to,
-  and it transports two chunk replicas from the same Triple Gadget, for each incurring the cost $2$.
-  In addition, every such node process exactly one of chunks $u_i$, for each incurring the cost $4$.
-  In total, each node spawned in the Matching Subtree incurrs the cost $8$.
-  Next, we focus on the remaining $\sum_e(\deg(e)-1)$ nodes that are spawned in the Cover Subtree.
-  Each such such node is collocated with one chunk replica it is matched to, and transports $3$ chunks, incurring the cost of $6$.
+  To see that indeed the produced solution do not exceed the threshold $\Thr$, we sum up the total transportation cost.
+  The $n$ nodes placed in \TripleGadgets{} have $1$ free match and $2$ neighbouring matches to chunk replicas within the \TripleGadget{}, and $1$ long match of cost $4$ (to some \UnqGadget{}).
+  The remaining $\Vms-n$ nodes placed in the \CoverSubtree{} have $1$ free match and $3$ neighbouring matches.
+  In total, the cost incurred is $8\cdot n + 6\cdot (\Vms - n) = \Thr$.
   Hence, the solution is indeed feasible.
 
   ($\Rightarrow$) Let's take any feasible solution~$S_{\VCEMB}$ to~$I_{\VCEMB}$.
