@@ -3,24 +3,62 @@
 
 We now show that~$\RS(2)+\FP+\CC+\BW$ is even NP-hard without multiple
 assignment.
+The proof is similar in spirit to proof of hardness of $\RS(2)+\FP+\MA$.
+Again, we use the technique that we call ``families of chunk types'', which was introduced in previous section.
+The main technical difficulty lies in controlling the number of nodes that are spawned in certain parts of (asymmetric) tree.
+To guantee the desired number of spawned nodes, we use the bandwidth constraints.
+Namely, if the number of nodes to be spawned in a subtree is $k$, we set the bandwidth constraints on the uplink of the subtree to $k\cdot (m - k)$, where $m$ is the total number of machines to spawn in the instance.
+As we further see in Lemma~\ref{lem:bandwidth1}, such bandwidth constraint in form of a quadratic expression provides both lower- and upper-bound on the number of machines spawned in such subtree.
+To see this, consider a simple example: regardless of the bandwidth constraint on the uplink of the subtree, capacities are not exceeded in at least two scenarios: with all $m$ nodes spawned in the subtree, and with $0$ nodes spawned in the subtree.
+More precisely, bandwidth constraints in such form excludes configurations with number of nodes between $k$ and $m-k$.
+
+However, we are interested only in lower-bounding the number of nodes to spawn in a subtree, and in fact the upper-bound on the number of nodes is only a liability.
+We make sure that the upper-bound on the number of nodes is always satisfied by artificially increasing the number of total nodes to be spawned.
+In this way the upper-bound on number of nodes always exceeds the number of leaves of any subtree in which we would like to have $k$ nodes spawned.
+Additional nodes do not interfere with the rest of the construction, as we provide unique chunks for them to process.
+
+
 
 \noindent \textbf{Construction.}
 
-\emph{Chunk Types.}  We construct the following chunk types: For each
-element~$e\in X\cup Y\cup Z$, we construct~$\deg(e)$ chunk types with
-two replicas. Additionally, we construct
-$\max\{3\cdot |T| + 3\cdot n + 1, \sum_e(2\cdot \deg(e)-1)\}$
+For arbitrary instance~$I_{\TDPM}$ of~$\TDM$ we construct a~$\RS(2)+\FP+\CC+\BW$ instance~$I_{\VCEMB}$ the way described in the remainder of this section.
+Let $n = |X|=|Y|=|Z|$.
+By $T$ we denote the set of all triples of $I_{\TDPM}$, and let $t = |T|$.
+For each $e\in X\cup Y\cup Z$, by $T_e$ we denote the set of all triples that contain element $e$.
+Let $\deg(e) = |T_e|$, and note that $\sum_e \deg(e) = 3\cdot t$.
+
+We proceed with the construction as follows.
+
+\emph{Chunk Types.}
+
+We construct two sets of chunk types.
+The first set corresponds to elements of the universe (that is, $X\cup Y\cup Z$).
+The construction of such chunk types is similar to construction of chunk types in Section~\ref{ssec:fprscc}, but to take into consideration the restricted replication factor, we construct the familiy of chunk types (as described in the introduction to this section).
+Namely, for each element of universe $e$, we construct as many chunk types as there are occurences of $e$ in triples of $I_{\TDPM}$.
+Each such chunk type has exactly two replicas.
+
+The other set of chunk types has one replica, therefore those are called called \emph{unique} chunks.
+For unique chunks we simply co-notate the chunk type with chunk replica.
+
+Formally, the construction of chunk types and replicas unfolds as follows:
+\begin{enumerate}
+  \item For each triple $\tau \in T$, we construct $3$ chunk types, with two replicas each.
+  We construct different chunk types for each triple $\tau$, which contain element $e$ (in total $\deg(e)$ chunk types).
+  We refer to those replicas by $ch_1(e, \tau)$ and $ch_2(e, \tau)$.
+  In total we construct $2\cdot \sum_e\deg(e) = 6\cdot t$ chunk replicas.
+  \item Additionally, we construct
+$\max\{3\cdot t + 3\cdot n + 1, \sum_e(2\cdot \deg(e)-1)\}$
 chunk types called \emph{unique chunks}. We
 refer to the set of unique chunks by~$U$.
+\end{enumerate}
 
 \emph{The substrate network.}
 
 \begin{enumerate}
   \item The physical network consists of three subtrees connected to
-  the root: A {\MatchSubtree}, a {\CoverSubtree}, and a
-  {\UnqSubtree}. In the {\MatchSubtree} we put $|T|$
-  {\TripleGadgets} (remember that~$|T|$ is the number of triples in
-  {\TDPM} instance). {\CoverSubtree} consist of~$n$ element gadgets.
+  the root: the {\MatchSubtree}, the {\CoverSubtree}, and a
+  {\UnqSubtree}. In the {\MatchSubtree} we put $t$
+  {\TripleGadgets}. The {\CoverSubtree} consist of~$n$ element gadgets.
   \item The {\UnqSubtree} consist of~$|U|$ leaves, and two middle nodes:
   a lower and an upper middle node. Note that this is different from $\RS(2)+\FP+\MA(4)$ NP-completeness proof, where {\UnqSubtree} was placed in the {\MatchSubtree}.
   \item \TripleGadget: For each triple, we create a subtree
@@ -32,18 +70,19 @@ refer to the set of unique chunks by~$U$.
 \end{enumerate}
 
 \emph{Chunk placement.}
+
 The chunks are placed as follows:
 \begin{enumerate}
-  \item \emph{Chunks in matching subtree:} For each triple~$\tau$ we put
-  three chunks at the leaves of the corresponding \TripleGadget,
- ~$e_1(\tau), e_2(\tau), e_3(\tau)$.
-  \item \emph{Chunks in unique subtree:} We place unique chunks~$U$ at
-  the leaves of {\UnqSubtree}.
-  \item \emph{Chunks in element gadget:} For each element
- ~$e\in X\cup Y\cup Z$, we place the chunks~$\tau(e)$ at the leaves of
-  each Element Gadget.
+  \item \emph{Chunks in the Matching Subtree:} In {\TripleGadget} of triple $\tau$ we put
+  three replicas:
+ ~$ch_1(e_X(\tau), \tau), ch_1(e_Y(\tau), \tau), ch_1(e_Z(\tau), \tau)$, one per each leaf.
+  \item \emph{Chunks in the Unique Subtree:} We place replicas
+ ~$U$ at the leaves of \UnqGadgets.
+ \item \emph{Chunks in Element Gadgets:} Consider the \ElGadget{} for the element $e \in X\cup Y\cup Z$.
+ We place two types of replicas in the leaves of the gadget.
+ We put replicas $ch_2(\tau, e)$ for each $\tau \in T_e$.
+ In total, we place $\deg(e) - 1$ replicas, one per each leaf of the gadget.
 \end{enumerate}
-
 
 \emph{Bandwidth constraints.}
 We use bandwidth constraints of the form
@@ -82,22 +121,22 @@ $\numNodes := 3\cdot n + \sum_e (\deg(e)-1) + |U|$.
   ($\CostTrans = \infty$, so every node must be collocated with the
   chunk it processes in every feasible solution), and~$\CostCom = 1$.
   Then in any feasible solution the number of nodes spawned in~$T$ (we
-  name it~$s$) satisfies~$s \leq k \vee n-s\leq k$, and~$s \leq l$.
+  name it~$s$) satisfies~$s \leq k \vee \Vms-s\leq k$, and~$s \leq l$.
   \label{lem:bandwidth1}
 \end{lemma}
 
 \begin{proof}
 It holds that ~$s\leq l$ as we cannot spawn more nodes than leaves.
   The bandwidth allocation on the uplink of~$T'$ is
- ~$uplink(s,T) := s\cdot (n - s)$, as no chunk transportation
+ ~$uplink(s,T) := s\cdot (\Vms - s)$, as no chunk transportation
   is allowed ($\CostTrans = \infty$), and every node in~$T$ has to
   communicate over~$T'$'s uplink with nodes spawned outside of
  ~$T'$. Therefore, in every feasible solution we have:
  ~$uplink(s, T') \leq \Band(k)$.  Let's define the remaining bandwidth
-  on the uplink of $T'$~$\remainBw(s) := \Band(k)-uplink(s, T') = s^2 - s\cdot n -
-  k^2+k\cdot n~$.
+  on the uplink of $T'$~$\remainBw(s) := \Band(k)-uplink(s, T') = s^2 - s\cdot \Vms -
+  k^2+k\cdot \Vms~$.
   Every feasible solution fulfills~$\remainBw(s) \geq 0$, which is true for
- ~$s \leq k \vee n-s\leq k$ (follows from the properties of the
+ ~$s \leq k \vee \Vms-s\leq k$ (follows from the properties of the
   quadratic function).
 \end{proof}
 
