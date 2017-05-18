@@ -198,7 +198,7 @@ We did a major rewrite of whole Section 5.1
    in Section 5.1
  
 %%%%%%%%%% RESPONSE %%%%%%%%%%
-%maciek: TODO
+We provided the figure.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -206,7 +206,7 @@ We did a major rewrite of whole Section 5.1
    this was copied verbatim from Section 5.1 and that the right number is deg(e)
  
 %%%%%%%%%% RESPONSE %%%%%%%%%%
-%maciek: TODO
+We corrected the mistake
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -227,7 +227,7 @@ We increased the font size
        the last two lines?
  
 %%%%%%%%%% RESPONSE %%%%%%%%%%
-%maciek: TODO
+We provided the correct value in easier to follow way. E.g. we didn't expand the binomial coefficiants.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 

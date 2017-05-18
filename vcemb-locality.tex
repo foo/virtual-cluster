@@ -1859,15 +1859,26 @@ cost threshold for any solution to the following value:
 
 \begin{footnotesize}
 \begin{align*}
-  \Thr  & = 2\cdot (3\cdot \numNodes + \sum_e (\deg(e) - 1)) & \mbox{(over 2 hops)}\\
-        & + 4\cdot (n\cdot (3 \cdot (3\cdot \numNodes - 3)) / 2) & \mbox{(over 4 hops in {\MatchSubtree})}\\
-        & + 4\cdot (\sum_e((\deg(e) - 1)\cdot (\sum_{f\neq e} \deg(f) - 1)/2)) & \mbox{(over 4 hops in {\CoverSubtree})}\\
-        & + 6\cdot (3\cdot \numNodes \cdot \sum_e(\deg(e) - 1)) & \mbox{(between {\MatchSubtree} and {\CoverSubtree})} \\
-        & + |U|\cdot (|U|-1)/2 & \mbox{(inside {\UnqSubtree})} \\
-        & + |U| \cdot (3\cdot n + \sum_e (\deg(e)-1) & \mbox{({\UnqSubtree} to other nodes)}
+  \Thr  & = 2\cdot \binom{3}{2}\cdot n & \mbox{(over 2 hops in the \MatchSubtree{})}\\
+        & + 4 \cdot \binom{3\cdot n}{2} & \mbox{(over 4 hops in the \MatchSubtree{})}\\
+        & + 4 \cdot \binom{u}{2} & \mbox{(over 4 hops in the \UnqGadgets{})}\\
+        & + \sum_e 2\cdot\binom{\deg(e)-1}{2} & \mbox{(over 2 hops in the \CoverSubtree{})}\\
+        & + 4\cdot \binom{\sum_e(\deg(e)-1)}{2} & \mbox{(over 4 hops in the \CoverSubtree{})}\\
+        & + 6\cdot\binom{m}{2} & \mbox{(over 6 hops)}
 \end{align*}
 \end{footnotesize}
-where $\Vms$ is the total number of nodes to be spawned in the instance.
+
+%\begin{footnotesize}
+%\begin{align*}
+%  \Thr  & = 2\cdot (3\cdot \numNodes + \sum_e (\deg(e) - 1)) & \mbox{(over 2 hops)}\\
+%        & + 4\cdot (n\cdot (3 \cdot (3\cdot \numNodes - 3)) / 2) & \mbox{(over 4 hops in {\MatchSubtree})}\\
+%        & + 4\cdot (\sum_e((\deg(e) - 1)\cdot (\sum_{f\neq e} \deg(f) - 1)/2)) & \mbox{(over 4 hops in {\CoverSubtree})}\\
+%        & + 6\cdot (3\cdot \numNodes \cdot \sum_e(\deg(e) - 1)) & \mbox{(between {\MatchSubtree} and {\CoverSubtree})} \\
+%        & + |U|\cdot (|U|-1)/2 & \mbox{(inside {\UnqSubtree})} \\
+%        & + |U| \cdot (3\cdot n + \sum_e (\deg(e)-1) & \mbox{({\UnqSubtree} to other nodes)}
+%\end{align*}
+%\end{footnotesize}
+where $\Vms$ is the total number of nodes to be spawned in the instance, and $u = |U|$.
   We
 set~$\CostTrans$, the cost of chunk transportation to $\Thr+1$ (so that no chunk transportation happens in any feasible solution), 
 $\CostCom = 1$, and we host only one node per machine. We set the
