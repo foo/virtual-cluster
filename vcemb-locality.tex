@@ -145,7 +145,7 @@
 \newcommand{\Tree}{\ensuremath{T}}
 \newcommand{\CostTrans}{\ensuremath{b_1}}
 \newcommand{\CostCom}{\ensuremath{b_2}}
-\newcommand{\Vms}{\ensuremath{m}}
+\newcommand{\Vms}{\ensuremath{n_V}}
 \newcommand{\TSC}{\textsc{3-SC}}
 \newcommand{\TDM}{\textsc{3-DM}}
 \newcommand{\TSAT}{\textsc{3-Sat}}
@@ -1339,14 +1339,14 @@ $\FP+\RS+\MA$ constructed as described above. We prove that~$I'$ has a solution 
 ($\Leftarrow$)
 $I$ has a matching of size~$k$.
 
-($\Rightarrow$) Let us take a solution to~$\TDM$. We place a node in every
+($\Rightarrow$) Let us take a feasible solution to~$\TDM$. We place a node in every
 gadget that corresponds to the chosen triples. In each of the corresponding
 gadgets, we match every chunk to the node in this gadget. This
 solution has
 cost exactly~$\Thr$. As every element of the universe is covered, every
 chunk type is processed.
 
-($\Leftarrow$) Let us take a solution to~$\FP+\RS+\MA$ of cost~$\leq \Thr$. We
+($\Leftarrow$) Let us take a solution to~$\FP+\RS+\MA$ of cost at most$\Thr$. We
 choose triples that correspond to gadgets where there are nodes. Since
 all chunks are processed, every element of~$X$,~$Y$ and~$Z$ is matched. Each
 node must process chunks that
