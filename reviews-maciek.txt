@@ -232,7 +232,7 @@ We provided the correct value in easier to follow way. E.g. we didn't expand the
    * last line of statement: n should be replaced by |V|
    
 %%%%%%%%%% RESPONSE %%%%%%%%%% 
-We changed n to |V|
+We changed n to n_V, and we clarified the notation across the whole paper
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -332,7 +332,7 @@ p22-23: Lemma 4 and Theorem 5 --- since you do the easy calculation of the cost
    claim is that that specific solution minimizes the cost.
  
 %%%%%%%%%% RESPONSE %%%%%%%%%%
-%maciek: TODO. Define yet another cost function and prove by induction.
+The Section was rewritten, and we provided better arguments in the proof.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
