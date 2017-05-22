@@ -1640,7 +1640,7 @@ In $I_{\VCEMB}$, chunks can be matched to nodes at distance $0, 2, 4$ or $6$.
   We call the distance between the pair of leaves the \emph{short distance}, if the distance between them is at most $2$, otherwise we call said distance the \emph{long distance}.
 
 Proving the existance of more than $k$ long matches is sufficient to show that the instance is infeasible, as its cost exceeds the threshold.
-To see this, note that the threshold value $\Thr$ corresponds to the cost of solution, where $k$ nodes has $1$ free match, $2$ neighbouring matches and $1$ long match at distance of $4$ hops, and remaining $\Vms-n$ nodes has $1$ free match and $3$ neighbouring matches assigned.
+To see this, note that the threshold value $\Thr$ corresponds to the cost of solution, where $k$ nodes has $1$ free match, $2$ neighbouring matches and $1$ long match at distance of $4$ hops, and remaining $\Vms-k$ nodes has $1$ free match and $3$ neighbouring matches assigned.
 Note that the limit of $\Vms$ free matches is exhausted, hence excessive long matches cannot be compensated in any way.
 Hence, at most $k$ long matches are present in any feasible solution.
 
@@ -1657,16 +1657,16 @@ For each node spawned in the \MatchSubtree{}, by the construction of the tree, t
 Hence, we conclude that spawning more than $k$ nodes in the \MatchSubtree{} results in more than $k$ long matches, which results in infeasibility of the solution.
 In addition, each node spawned in \UnqGadget{} results in at least $3$ long matches, as the only leaf in short distance is the leaf collocated with the node.
 
-As at most $k$ nodes are spawned in \MatchSubtree{}, at least $\Vms-n$ nodes are spawned in the \CoverSubtree.
-Assume then that $\Vms-n+i$ nodes spawned in the \CoverSubtree{} for non-negative $i$.
+As at most $k$ nodes are spawned in \MatchSubtree{}, at least $\Vms-k$ nodes are spawned in the \CoverSubtree.
+Assume then that $\Vms-k+i$ nodes spawned in the \CoverSubtree{} for non-negative $i$.
 Now, we argue that such node configuration results in $3\cdot i$ long matches.
 Consider the \ElGadget{} $g_e$ for element $e$.
 The gadget $g_e$ has exactly $4\cdot(\deg(e)-1)+1$ leaves, each hosting exactly one chunk replica.
 As $4\cdot(\deg(e)-1)+1 \mod 4 = 1$, spawnining $\deg(e)-1+j$ nodes in $g_e$ for non-negative $j$ results in at least $3\cdot j$ long matches by the fact that there are insufficient chunk replicas in the short distance.
-Using the fact that $\sum_e(\deg(e)-1) = 3\cdot t - 3\cdot k = \Vms - k$, by pidgeon-hole principle we conclude that indeed spawning $\Vms-n+i$ nodes in the \CoverSubtree{} results in at least $3\cdot i$ long matches.
+Using the fact that $\sum_e(\deg(e)-1) = 3\cdot t - 3\cdot k = \Vms - k$, by pidgeon-hole principle we conclude that indeed spawning $\Vms-k+i$ nodes in the \CoverSubtree{} results in at least $3\cdot i$ long matches.
 
-Consider the configuration with $\Vms-n+i$ nodes spawned in the \CoverSubtree{}, and $k-i$ nodes spawned in the \MatchSubtree{}.
-Such configuration results in at least $2\cdot i + n$ long matches, where $3\cdot i$ long matches come from the excessive nodes spawned in the \CoverSubtree{}, and $k-i$ long matches come from $k-i$ nodes in the \MatchSubtree{}.
+Consider the configuration with $\Vms-k+i$ nodes spawned in the \CoverSubtree{}, and $k-i$ nodes spawned in the \MatchSubtree{}.
+Such configuration results in at least $2\cdot i + k$ long matches, where $3\cdot i$ long matches come from the excessive nodes spawned in the \CoverSubtree{}, and $k-i$ long matches come from $k-i$ nodes in the \MatchSubtree{}.
 Hence we deduce that $i = 0$, as otherwise the number of long matches would exceed $k$.
 
 \end{proof}
@@ -1726,7 +1726,7 @@ Hence, exactly $k$ \TripleGadgets{} are active.
   We can observe that every chunk type was processed, exactly $k + \sum_e(\deg(e) - 1)$ nodes are spawned, and each of the nodes process exactly $4$ chunk replicas.
   To see that indeed the produced solution do not exceed the threshold $\Thr$, we sum up the total transportation cost.
   The $k$ nodes placed in \TripleGadgets{} have $1$ free match and $2$ neighbouring matches to chunk replicas within the \TripleGadget{}, and $1$ long match of cost $4$ (to some \UnqGadget{}).
-  The remaining $\Vms-n$ nodes placed in the \CoverSubtree{} have $1$ free match and $3$ neighbouring matches.
+  The remaining $\Vms-k$ nodes placed in the \CoverSubtree{} have $1$ free match and $3$ neighbouring matches.
   In total, the cost incurred is $8\cdot n + 6\cdot (\Vms - k) = \Thr$.
   Hence, the solution is indeed feasible.
 
@@ -1739,7 +1739,7 @@ Hence, exactly $k$ \TripleGadgets{} are active.
   Hence, each active node processes the 3 chunks that are placed in its \TripleGadget.
   In each {\ElGadget} for element~$e$, one chunk $ch(e, \tau)$ for some $\tau \in T$ is not matched.
   Let's call this chunk instance~$\Unmatched(e)$, and let's call~$\Unmatched = \cup_e \Unmatched(e)$.
-  Note that~$|\Unmatched| = 3\cdot n$.
+  Note that~$|\Unmatched| = 3\cdot k$.
   The set~$\Unmatched$ is covered by \ActiveNodes{}, and hence the set of triples in $S_{\TDPM}$ form a 3D Perfect Matching of $X\cup Y\cup Z$.
 \end{proof}
 
@@ -1859,12 +1859,12 @@ cost threshold for any solution to the following value:
 
 \begin{footnotesize}
 \begin{align*}
-  \Thr  & = 2\cdot \binom{3}{2}\cdot n & \mbox{(over 2 hops in the \MatchSubtree{})}\\
-        & + 4 \cdot \binom{3\cdot n}{2} & \mbox{(over 4 hops in the \MatchSubtree{})}\\
+  \Thr  & = 2\cdot \binom{3}{2}\cdot k & \mbox{(over 2 hops in the \MatchSubtree{})}\\
+        & + 4 \cdot \binom{3\cdot k}{2} & \mbox{(over 4 hops in the \MatchSubtree{})}\\
         & + 4 \cdot \binom{u}{2} & \mbox{(over 4 hops in the \UnqGadgets{})}\\
         & + \sum_e 2\cdot\binom{\deg(e)-1}{2} & \mbox{(over 2 hops in the \CoverSubtree{})}\\
         & + 4\cdot \binom{\sum_e(\deg(e)-1)}{2} & \mbox{(over 4 hops in the \CoverSubtree{})}\\
-        & + 6\cdot\binom{m}{2} & \mbox{(over 6 hops)}
+        & + 6\cdot\binom{\Vms}{2} & \mbox{(over 6 hops)}
 \end{align*}
 \end{footnotesize}
 
@@ -1883,7 +1883,7 @@ where $\Vms$ is the total number of nodes to be spawned in the instance, and $u 
 set~$\CostTrans$, the cost of chunk transportation to $\Thr+1$ (so that no chunk transportation happens in any feasible solution), 
 $\CostCom = 1$, and we host only one node per machine. We set the
 number of machines to spawn to:
-$\numNodes := 3\cdot n + \sum_e (\deg(e)-1) + |U|$.
+$\numNodes := 3\cdot k + \sum_e (\deg(e)-1) + |U|$.
 \\
 
 \noindent \textbf{Properties of the substrate network.}
@@ -1941,14 +1941,14 @@ constructed subtree.
   in the {\UnqSubtree}. Let's refer to the number of nodes spawned in
   a {\MatchSubtree} by~$M$, and to the number of nodes spawned in
   {\CoverSubtree} by~$C$. By applying Lemma~\ref{lem:bandwidth1} to
-  {\MatchSubtree}, we know that: $ M \leq 3\cdot n \vee M \geq \Vms - 3\cdot n$.
-  We observe that~$\Vms - 3\cdot n$ is greater than the number of
+  {\MatchSubtree}, we know that: $ M \leq 3\cdot k \vee M \geq \Vms - 3\cdot k$.
+  We observe that~$\Vms - 3\cdot k$ is greater than the number of
   leaves in a {\MatchSubtree}.  By applying Lemma~\ref{lem:bandwidth1}
   to the {\CoverSubtree} we know that:~$ C \leq \sum_e(\deg(e)-1) \vee C$ $\geq \Vms - \sum_e(\deg(e)-1)$.
   We observe that~$\Vms - \sum_e(\deg(e)-1)$ is greater than the number
   of leaves in the {\CoverSubtree}.
   We also know that~$\Vms = |U| + C + M$. Therefore, by the pigeon-hole principle
- ~$C = \sum_e(\deg(e)-1)$ and~$M = 3\cdot n$.
+ ~$C = \sum_e(\deg(e)-1)$ and~$M = 3\cdot k$.
 \end{proof}
 
 
