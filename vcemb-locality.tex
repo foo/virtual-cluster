@@ -1219,7 +1219,7 @@ hypergraphs. We will refer to this problem by~$\TDM$, and for completeness,
 review it quickly:
 $\TDM$ is defined as follows. We are given three finite and disjoint
 sets~$X$,~$Y$, and~$Z$ of cardinality~$k$, as well as a subset of triples~$T\subseteq
-X \times Y \times Z$.  Set~$M \subseteq T$ is a 3-dimensional matching
+X \times Y \times Z$, and $t=|T|$.  Set~$M \subseteq T$ is a 3-dimensional matching
 if and only if, for any two distinct triples~$t_1=(x_1, y_1, z_1) \in M$
 and~$t_2=(x_2, y_2, z_2) \in M$, it holds that~$x_1\neq x_2$,~$y_1\neq
 y_2$, and~$z_1\neq z_2$. Our goal is to decide if we can construct
@@ -1533,7 +1533,7 @@ For the construction to remain correct with such multi-assignment factor, we int
 
 \textbf{Construction.}
 For arbitrary instance~$I_{\TDPM}$ of~$\TDM$ we construct a~$\RS(2)+\MA(4)+\FP$ instance~$I_{\VCEMB}$ the way described in the remainder of this section.
-Let $n = |X|=|Y|=|Z|$.
+Let $k = |X|=|Y|=|Z|$.
 
 By $T$ we denote the set of all triples of $I_{\TDPM}$, and let $t = |T|$.
 For each $e\in X\cup Y\cup Z$, by $T_e$ we denote the set of all triples that contain element $e$.
@@ -1559,8 +1559,8 @@ Formally, the construction of chunk types and replicas unfolds as follows:
   We construct different chunk types for each triple $\tau$, which contain element $e$ (in total $\deg(e)$ chunk types).
   We refer to those replicas by $ch_1(e, \tau)$ and $ch_2(e, \tau)$.
   In total we construct $2\cdot \sum_e\deg(e) = 6\cdot t$ chunk replicas.
-  \item We construct~$n$ additional chunk types named
-  ~$u_1, \ldots, u_n$ with one replica each.
+  \item We construct~$k$ additional chunk types named
+  ~$u_1, \ldots, u_k$ with one replica each.
   \item For each element~$e\in X\cup Y\cup Z$,
   we construct additional~$3\cdot(\deg(e) - 1)$ chunks, with one replica each.
   We call this set~$\UniqueE$.
@@ -1582,7 +1582,7 @@ We construct the tree that has the following structure (see Figure~\ref{fig:red-
 \begin{enumerate}
   \item The physical network consists of two subtrees connected to the
   root: the {\MatchSubtree} and the {\CoverSubtree}. The
-  {\MatchSubtree} consists of $t$ {\TripleGadgets}, one per each triple $\tau\in T$ and $n$
+  {\MatchSubtree} consists of $t$ {\TripleGadgets}, one per each triple $\tau\in T$ and $k$
   {\UnqGadgets}. The {\CoverSubtree} consist of~$3\cdot n$ {\ElGadgets}, one for each element $e\in X\cup Y\cup Z$.
   \item {\TripleGadget} consists of four vertices: three leaves and the root of the gadget.
   \item {\UnqGadget} consists of two vertices: the leaf and the root of the gadget.
@@ -1612,11 +1612,11 @@ The chunks are placed as follows:
   \item \emph{Multiple assignment:} We set the multi-assignment factor to $4$.
   \item \emph{Number of nodes:} We set the number of nodes to spawn to
  %~$\numNodes = n + \sum_{e}(\deg(e)-1)$ nodes.
- ~$\numNodes = n + \sum_{e}(\deg(e)-1) = 3\cdot t - 2\cdot n$ nodes.
+ ~$\numNodes = k + \sum_{e}(\deg(e)-1) = 3\cdot t - 2\cdot k$ nodes.
  \item \emph{Threshold:} We set the following threshold:
  %~$\Thr = 8\cdot n + 6\cdot\sum_{e}(\deg(e)-1)$
- ~$\Thr = 18\cdot t - 10\cdot n$.
- This value corresponds to the cost of solution, where $n$ nodes are matched to $4$ chunks that are in distance: $0, 2, 2$ and $4$ to the node, and remaining $\Vms-n$ nodes are matched to $4$ chunks that are in distance: $0, 2, 2$ and $2$ to the node.
+ ~$\Thr = 18\cdot t - 10\cdot k$.
+ This value corresponds to the cost of solution, where $k$ nodes are matched to $4$ chunks that are in distance: $0, 2, 2$ and $4$ to the node, and remaining $\Vms-k$ nodes are matched to $4$ chunks that are in distance: $0, 2, 2$ and $2$ to the node.
 \end{enumerate}
 
 \textbf{The reduction.}
@@ -1632,21 +1632,21 @@ In the second stage, given $S_{\VCEMB}$, we construct the $S_{\TDPM}$.
 In this stage, the main difficulty lies in showing that $S_{\VCEMB}$ has certain structure.
 
 We call the {\TripleGadget} \textit{active}, if it contains a node at any leaf, and we call the node \textit{active} if it is placed in {\TripleGadget}.
-Our goal is to show that in every feasible solution, exactly $n$ \TripleGadgets{} are active (Lemma~\ref{lem:n-active-ma}), and hence we can construct $S_{\TDPM}$ from the triples that correspond to active \TripleGadgets{} in $S_{\VCEMB}$.
+Our goal is to show that in every feasible solution, exactly $k$ \TripleGadgets{} are active (Lemma~\ref{lem:n-active-ma}), and hence we can construct $S_{\TDPM}$ from the triples that correspond to active \TripleGadgets{} in $S_{\VCEMB}$.
 
 In $I_{\VCEMB}$, chunks can be matched to nodes at distance $0, 2, 4$ or $6$.
   We call the matches at distance $0$ the \emph{free matches}, the matches at distance $2$ the \emph{neighbouring matches}.
   In addition we call the matches at distance $0$ or $2$ the \emph{short matches}, and the matches at distance $4$ or $6$ the \emph{long matches}.
   We call the distance between the pair of leaves the \emph{short distance}, if the distance between them is at most $2$, otherwise we call said distance the \emph{long distance}.
 
-Proving the existance of more than $n$ long matches is sufficient to show that the instance is infeasible, as its cost exceeds the threshold.
-To see this, note that the threshold value $\Thr$ corresponds to the cost of solution, where $n$ nodes has $1$ free match, $2$ neighbouring matches and $1$ long match at distance of $4$ hops, and remaining $\Vms-n$ nodes has $1$ free match and $3$ neighbouring matches assigned.
+Proving the existance of more than $k$ long matches is sufficient to show that the instance is infeasible, as its cost exceeds the threshold.
+To see this, note that the threshold value $\Thr$ corresponds to the cost of solution, where $k$ nodes has $1$ free match, $2$ neighbouring matches and $1$ long match at distance of $4$ hops, and remaining $\Vms-n$ nodes has $1$ free match and $3$ neighbouring matches assigned.
 Note that the limit of $\Vms$ free matches is exhausted, hence excessive long matches cannot be compensated in any way.
-Hence, at most $n$ long matches are present in any feasible solution.
+Hence, at most $k$ long matches are present in any feasible solution.
 
 
 \begin{lemma}
-  In $S_{\VCEMB}$ there are have exactly $n$ nodes spawned in the \MatchSubtree.
+  In $S_{\VCEMB}$ there are have exactly $k$ nodes spawned in the \MatchSubtree.
   \label{lem:n-matchsubtree-ma}
 \end{lemma}
 
@@ -1654,10 +1654,10 @@ Hence, at most $n$ long matches are present in any feasible solution.
  We claim that each node spawned in the \MatchSubtree{} results in at least one long match.
 This fact is a consequence of the structure of the tree and the fact that multi-assignment factor is set to $4$.
 For each node spawned in the \MatchSubtree{}, by the construction of the tree, the node has at most $3$ leaves in short distance, hence at least one of the matches is long.
-Hence, we conclude that spawning more than $n$ nodes in the \MatchSubtree{} results in more than $n$ long matches, which results in infeasibility of the solution.
+Hence, we conclude that spawning more than $k$ nodes in the \MatchSubtree{} results in more than $k$ long matches, which results in infeasibility of the solution.
 In addition, each node spawned in \UnqGadget{} results in at least $3$ long matches, as the only leaf in short distance is the leaf collocated with the node.
 
-As at most $n$ nodes are spawned in \MatchSubtree{}, at least $\Vms-n$ nodes are spawned in the \CoverSubtree.
+As at most $k$ nodes are spawned in \MatchSubtree{}, at least $\Vms-n$ nodes are spawned in the \CoverSubtree.
 Assume then that $\Vms-n+i$ nodes spawned in the \CoverSubtree{} for non-negative $i$.
 Now, we argue that such node configuration results in $3\cdot i$ long matches.
 Consider the \ElGadget{} $g_e$ for element $e$.
@@ -1665,9 +1665,9 @@ The gadget $g_e$ has exactly $4\cdot(\deg(e)-1)+1$ leaves, each hosting exactly 
 As $4\cdot(\deg(e)-1)+1 \mod 4 = 1$, spawnining $\deg(e)-1+j$ nodes in $g_e$ for non-negative $j$ results in at least $3\cdot j$ long matches by the fact that there are insufficient chunk replicas in the short distance.
 Using the fact that $\sum_e(\deg(e)-1) = 3\cdot t - 3\cdot n = \Vms - n$, by pidgeon-hole principle we conclude that indeed spawning $\Vms-n+i$ nodes in the \CoverSubtree{} results in at least $3\cdot i$ long matches.
 
-Consider the configuration with $\Vms-n+i$ nodes spawned in the \CoverSubtree{}, and $n-i$ nodes spawned in the \MatchSubtree{}.
-Such configuration results in at least $2\cdot i + n$ long matches, where $3\cdot i$ long matches come from the excessive nodes spawned in the \CoverSubtree{}, and $n-i$ long matches come from $n-i$ nodes in the \MatchSubtree{}.
-Hence we deduce that $i = 0$, as otherwise the number of long matches would exceed $n$.
+Consider the configuration with $\Vms-n+i$ nodes spawned in the \CoverSubtree{}, and $k-i$ nodes spawned in the \MatchSubtree{}.
+Such configuration results in at least $2\cdot i + n$ long matches, where $3\cdot i$ long matches come from the excessive nodes spawned in the \CoverSubtree{}, and $k-i$ long matches come from $k-i$ nodes in the \MatchSubtree{}.
+Hence we deduce that $i = 0$, as otherwise the number of long matches would exceed $k$.
 
 \end{proof}
 
@@ -1676,30 +1676,30 @@ Hence we deduce that $i = 0$, as otherwise the number of long matches would exce
   \label{lem:no-unq-ma}
 \end{lemma}
 \begin{proof}
-  By Lemma~\ref{lem:n-matchsubtree-ma}, exactly $n$ nodes spawned in the \MatchSubtree{}.
-Suppose that out of $n$ nodes in the \MatchSubtree{}, a non-negative number of nodes $j$ spawned in the \UnqGadgets{}.
+  By Lemma~\ref{lem:n-matchsubtree-ma}, exactly $k$ nodes spawned in the \MatchSubtree{}.
+Suppose that out of $k$ nodes in the \MatchSubtree{}, a non-negative number of nodes $j$ spawned in the \UnqGadgets{}.
 From the fact that each leaf of \UnqGadget{} has long distance to every other leaf, every node spawned in \UnqGadget{} result in at least $3$ long matches.
-Hence, the total number of long matches is at least $n-j + 3\cdot j$.
-Finally, for the solution to be feasible we allow at most $n$ long matches, therefore no node spawns in the \UnqGadget{}.
+Hence, the total number of long matches is at least $k-j + 3\cdot j$.
+Finally, for the solution to be feasible we allow at most $k$ long matches, therefore no node spawns in the \UnqGadget{}.
 \end{proof}
 
 \begin{lemma}
-  In $S_{\VCEMB}$ there are have exactly $n$ active \TripleGadgets{}.
+  In $S_{\VCEMB}$ there are have exactly $k$ active \TripleGadgets{}.
   \label{lem:n-active-ma}
 \end{lemma}
 \begin{proof}
-  By Lemmas~\ref{lem:no-unq-ma} and \ref{lem:n-matchsubtree-ma} we conclude that $n$ nodes spawned in the \TripleGadgets.
+  By Lemmas~\ref{lem:no-unq-ma} and \ref{lem:n-matchsubtree-ma} we conclude that $k$ nodes spawned in the \TripleGadgets.
 As there are exactly $3$ replicas in each \TripleGadget{}, spawning more than one node in a single \TripleGadget{} results in at least additional $3$ long matches.
-Hence, exactly $n$ \TripleGadgets{} are active.
+Hence, exactly $k$ \TripleGadgets{} are active.
 \end{proof}
 
 \begin{lemma}
-  In $S_{\VCEMB}$ every chunk replica besides $u_1, \ldots, u_n$ is matched by a short match.
+  In $S_{\VCEMB}$ every chunk replica besides $u_1, \ldots, u_k$ is matched by a short match.
   \label{lem:short-ma}
 \end{lemma}
 \begin{proof}
-  By Lemma~\ref{lem:n-active-ma}, exactly $n$ nodes are spawned in \TripleGadgets{}, and by Lemma~\ref{lem:no-unq-ma} we deduce that chunks $u_1, \ldots, u_n$ are matched by long matches.
-  As at most $n$ long matches are allowed for the solution to be feasible, remaining matches are short.
+  By Lemma~\ref{lem:n-active-ma}, exactly $k$ nodes are spawned in \TripleGadgets{}, and by Lemma~\ref{lem:no-unq-ma} we deduce that chunks $u_1, \ldots, u_k$ are matched by long matches.
+  As at most $k$ long matches are allowed for the solution to be feasible, remaining matches are short.
 \end{proof}
 
 \begin{theorem}
@@ -1715,7 +1715,7 @@ Hence, exactly $n$ \TripleGadgets{} are active.
   ($\Leftarrow$) Let's take any feasible solution~$S_{\TDPM}$ to $I_{\TDPM}$.
   We construct a solution~$S_{\VCEMB}$ in the following way:
   \begin{enumerate}
-    \item We place~$n$ nodes in~$n$ {\TripleGadgets} (one per gadget) that correspond to triples in~$S_{\TDPM}$.
+    \item We place~$k$ nodes in~$k$ {\TripleGadgets} (one per gadget) that correspond to triples in~$S_{\TDPM}$.
     The choice of exact leaf of the gadget to place a node is arbitrary.
     We match each such node to $3$ chunk replicas in the gadget it is placed, and we match $1$ arbitrary, unmatched chunk replica in {\UnqSubtree}.
     \item In each {\ElGadget} that corresponds to element~$e$, we place
@@ -1723,15 +1723,15 @@ Hence, exactly $n$ \TripleGadgets{} are active.
     gadget, which are not yet matched in any {\TripleGadget}.
   \end{enumerate}
 
-  We can observe that every chunk type was processed, exactly $n + \sum_e(\deg(e) - 1)$ nodes are spawned, and each of the nodes process exactly $4$ chunk replicas.
+  We can observe that every chunk type was processed, exactly $k + \sum_e(\deg(e) - 1)$ nodes are spawned, and each of the nodes process exactly $4$ chunk replicas.
   To see that indeed the produced solution do not exceed the threshold $\Thr$, we sum up the total transportation cost.
-  The $n$ nodes placed in \TripleGadgets{} have $1$ free match and $2$ neighbouring matches to chunk replicas within the \TripleGadget{}, and $1$ long match of cost $4$ (to some \UnqGadget{}).
+  The $k$ nodes placed in \TripleGadgets{} have $1$ free match and $2$ neighbouring matches to chunk replicas within the \TripleGadget{}, and $1$ long match of cost $4$ (to some \UnqGadget{}).
   The remaining $\Vms-n$ nodes placed in the \CoverSubtree{} have $1$ free match and $3$ neighbouring matches.
   In total, the cost incurred is $8\cdot n + 6\cdot (\Vms - n) = \Thr$.
   Hence, the solution is indeed feasible.
 
   ($\Rightarrow$) Let's take any feasible solution~$S_{\VCEMB}$ to~$I_{\VCEMB}$ in the way described in the construction section.
-  By Lemma~\ref{lem:n-active-ma}, exactly $n$ \TripleGadgets{} are active.
+  By Lemma~\ref{lem:n-active-ma}, exactly $k$ \TripleGadgets{} are active.
   We construct the solution $S_{\TDPM}$ from the set of triples that correspond to active \TripleGadgets{}.
 
   It remains to show that $S_{\TDPM}$ indeed matches every element of $X\cup Y\cup Z$.
@@ -1775,7 +1775,7 @@ Additional nodes do not interfere with the rest of the construction, as we provi
 \noindent \textbf{Construction.}
 
 For arbitrary instance~$I_{\TDPM}$ of~$\TDM$ we construct a~$\RS(2)+\FP+\CC+\BW$ instance~$I_{\VCEMB}$ the way described in the remainder of this section.
-Let $n = |X|=|Y|=|Z|$.
+Let $k = |X|=|Y|=|Z|$.
 By $T$ we denote the set of all triples of $I_{\TDPM}$, and let $t = |T|$.
 For each $e\in X\cup Y\cup Z$, by $T_e$ we denote the set of all triples that contain element $e$.
 Let $\deg(e) = |T_e|$, and note that $\sum_e \deg(e) = 3\cdot t$.
@@ -1799,7 +1799,7 @@ Formally, the construction of chunk types and replicas unfolds as follows:
   We refer to those replicas by $ch_1(e, \tau)$ and $ch_2(e, \tau)$.
   In total we construct $2\cdot \sum_e\deg(e) = 6\cdot t$ chunk replicas.
   \item Additionally, we construct
-$\max\{3\cdot t + 3\cdot n + 1, \sum_e(2\cdot \deg(e)-1)\}$
+$\max\{3\cdot t + 3\cdot k + 1, \sum_e(2\cdot \deg(e)-1)\}$
 chunk types called \emph{unique chunks}. We
 refer to the set of unique chunks by~$U$.
 \end{enumerate}
@@ -1821,7 +1821,7 @@ We construct the tree that has the following structure (see Figure~\ref{fig:red-
   \item The physical network consists of three subtrees connected to
   the root: the {\MatchSubtree}, the {\CoverSubtree}, and a
   {\UnqSubtree}. In the {\MatchSubtree} we put $t$
-  {\TripleGadgets}. The {\CoverSubtree} consist of~$n$ element gadgets.
+  {\TripleGadgets}. The {\CoverSubtree} consist of~$k$ element gadgets.
   \item The {\UnqSubtree} consist of~$|U|$ leaves, and two middle nodes:
   a lower and an upper middle node. Note that this is different from $\RS(2)+\FP+\MA(4)$ NP-completeness proof, where {\UnqSubtree} was placed in the {\MatchSubtree}.
   \item \TripleGadget: For each triple, we create a subtree
@@ -2026,7 +2026,7 @@ has one or two
 spawned nodes.
 
 \begin{lemma}
-  In $S_{\VCEMB}$, we have exactly~$n$ active
+  In $S_{\VCEMB}$, we have exactly~$k$ active
   {\TripleGadgets}.
   \label{lem:full-or-empty}
 \end{lemma}
@@ -2036,7 +2036,7 @@ spawned nodes.
   cost~$\leq \Thr$.
   By Lemma~\ref{lem:bandwidth2}, we know that there are
   exactly~$3\cdot n$ spawned nodes in the {\MatchSubtree}. Therefore, by
-  the pigeon-hole principle, we know that we have at most~$n$
+  the pigeon-hole principle, we know that we have at most~$k$
   active {\TripleGadgets}. It remains to show that there
   are no partially active {\TripleGadgets} in the solution of cost
  ~$\leq \Thr$.
@@ -2047,12 +2047,12 @@ spawned nodes.
   between nodes in {\CoverSubtree} and {\MatchSubtree} is the same for
   every feasible solution (let's name it~$Q$). Let's call the
   would-be cost of communication in the {\MatchSubtree}, if there were
-  exactly~$n$ active gadgets,~$R$.
+  exactly~$k$ active gadgets,~$R$.
   The threshold value was chosen so that~$\Thr = P+Q+R$. If we have at least one partially active
   gadget, then the cost of communication in {\MatchSubtree} is greater
   than~$R$, because we increase the number of 4-hop communications by
   at least one per each partially active gadget in comparison to a solution
-  where we have exactly~$n$ active gadgets.
+  where we have exactly~$k$ active gadgets.
 \end{proof}
 
 \noindent \textbf{The reduction.}
@@ -2087,7 +2087,7 @@ Using the properties of the substrate network, we perform the reduction in the f
   ($\Rightarrow$) Let's take any feasible solution~$S_{\VCEMB}$ to~$I_{\VCEMB}$ and
   produce a solution~$S_{\TDPM}$ to~$I_{\TDPM}$ by taking triples that correspond
   to active triple gadgets. Using Lemma~\ref{lem:full-or-empty}, we
-  conclude that there are exactly~$n$ active triple gadgets. By
+  conclude that there are exactly~$k$ active triple gadgets. By
   feasibility of~$S_{\TDPM}$, we know that each chunk type is
   processed. From Lemma~\ref{lem:bandwidth3}, we know that out
   of~$\deg(e)$ chunk types that correspond to~$e\in X\cup Y\cup Z$,
