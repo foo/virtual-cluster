@@ -1262,8 +1262,8 @@ considered to be infeasible.
 
 
 \textbf{Construction.}
-Given an instance~$I$ of~$\TDM$ in which~$k$ triples have to be
-choosen, we construct an instance~$I'$ of
+Let~$I$ be an instance of~$\TDM$ with $t$ triples and set cardinality $k$ ($k = |X| = |Y| = |Z|$).
+We construct an instance~$I'$ of
 $\FP+\RS+\MA$ as follows:
 \begin{itemize}
 \item \emph{Tree Construction:} We create a tree consisting of a root,
@@ -1306,8 +1306,7 @@ triple, the corresponding gadget contains a chunk of the
 type of the variable. The triple
 $(x_2, y_1, z_2)$ of the instance is represented by the middle gadget in
 Figure~\ref{fig:fprsma}. The objective of~$I'$ is to spawn~$k=2$ nodes,
-with the smallest possible footprint. If the total footprint is~$\leq
-2\cdot2\cdot k$, we can construct a solution to~$I$ from the solution to~$I'$.
+with the smallest possible footprint. If the total footprint is at most $4\cdot k$, we can construct a solution to~$I$ from the solution to~$I'$.
 The footprint consists of the costs which occur when a node is embedded in a
 gadget, and the three chunks of that gadget which are assigned to that node: one of
 the chunks is collocated with the node, the other two have to be transferred
@@ -1371,7 +1370,7 @@ their assigned chunks. We leverage the fact that any solution which does not
 assign 0 or 3 chunks to each gadget, will have higher communication costs.
 
 \textbf{Construction.}
-Let~$I$ be an instance of~$\TDM$. We will create an instance~$I'$
+Let~$I$ be an instance of~$\TDM$ with $t$ triples and set cardinality $k$ ($k = |X| = |Y| = |Z|$). We will create an instance~$I'$
 for~$\FP+\RS+\CC$ as follows:
 \begin{itemize}
 \item We will construct the same tree as in previous reduction with
@@ -1408,7 +1407,7 @@ helper lemma.
 In every valid solution of~$I'$ of cost~$\leq \Thr$, each gadget
 falls in one of two categories:
 $k$ gadgets have exactly
-$3$ nodes, and~$n-k$ gadgets remain empty.
+$3$ nodes, and~$t-k$ gadgets remain empty.
 \end{lemma}
 \begin{proof}
 Since~$W$ is large enough, the~$3\cdot k$ nodes have to be placed
@@ -1535,6 +1534,7 @@ For the construction to remain correct with such multi-assignment factor, we int
 \textbf{Construction.}
 For arbitrary instance~$I_{\TDPM}$ of~$\TDM$ we construct a~$\RS(2)+\MA(4)+\FP$ instance~$I_{\VCEMB}$ the way described in the remainder of this section.
 Let $n = |X|=|Y|=|Z|$.
+
 By $T$ we denote the set of all triples of $I_{\TDPM}$, and let $t = |T|$.
 For each $e\in X\cup Y\cup Z$, by $T_e$ we denote the set of all triples that contain element $e$.
 Let $\deg(e) = |T_e|$, and note that $\sum_e \deg(e) = 3\cdot t$.
