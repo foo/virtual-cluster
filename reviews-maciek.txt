@@ -105,11 +105,8 @@ Flow-, dynamic programming- and matching-based algorithms remain correct for arb
 2) Perhaps some relaxation of the requirement that replicas are distributed
    uniformly between nodes makes sense?
 
-%%%%%%%%%% RESPONSE %%%%%%%%%% 
-%maciek: I do not understand the usage of "uniform distribution" with respect to input.
-
-Let me guess that this question is indeed about the co-location of more than one chunk replica in a single node. Hence, we can respond something like:
-"Presented algorithms remain correct for any distribution of chunk replicas. In addition, we do not restrict the number of replicas that are hosted in a single node."
+%%%%%%%%%% RESPONSE %%%%%%%%%%
+The reviewer has a good point, and indeed, such a generalization would be interesting to study. However, for this paper and due to space and time constraints, we decided to stick to the existing problem variant, and leave generalizations for future research, hoping that the reviewer understands our decision.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -271,13 +268,9 @@ p4l14-17: The sentence "The standard datacenter topologies today are
    leaves." sounds gibberish --- please reformulate.
 
 %%%%%%%%%% RESPONSE %%%%%%%%%%
-%maciek: TODO
-%maciek: I suggest to change the sentence to:
-"The standard datacenter topologies today are
-   (multi-rooted) fat-tree and Clos topologies [2, 21], the hierarchical networks 
-   recursively made of sub-trees at each level. Servers are located at the tree
-   leaves."
-%maciek: however, I haven't committed the change yet
+We agree and simplified the sentence here. While the above description
+was taken from a networking paper, we agree that for a TCS journal, 
+the terminology needs to be adapted
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -354,7 +347,10 @@ Given the number of problems (32), I would have liked the authors to perhaps cre
 %%%%%%%%%% RESPONSE %%%%%%%%%% 
 Summary of results is presented in Table 1 at page 34.
 
-%maciek: I cannot answer the question about the optimization function being the footprint.
+
+The footprint is the standard and most common optimization function in the literature on virtual network embeddings. However, while the function is standard, different researchers use different terms to denote it. Often, it is also called "min-sum" objective function in the literature. There is some literature also on the min-max objective function, however, it is rare in the context of virtual network embeddings. (In contrast to say flow allocation problems.)
+
+We added to our revision some explanations of both of these aspects. 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 

@@ -357,10 +357,9 @@ Our model is motivated by batch-processing applications such as MapReduce.
 Such applications use multiple virtual machines to
 process data, often redundantly stored in a distributed file system implemented
 by multiple servers~\cite{local-schedule-1,mapreduce}.
-The standard datacenter topologies today are (multi-rooted) fat-tree resp.~\emph{Clos} topologies~\cite{fattree,vl2},
-hierarchical networks  recursively made of sub-trees at each level;
-servers are located at the
-tree leaves. Given the amount of multiplexing over the mesh of links
+Datacenter networks are typically organized as fat-trees, with servers are
+located at the tree leaves and inner nodes being switches or routers.
+Given the amount of multiplexing over the mesh of links
 and the availability of multi-path routing protocol, e.g.~ECMP, the redundant
 links can be considered as a single aggregate link for bandwidth
 reservations~\cite{oktopus,infocom16,ccr15emb,proteus}.
