@@ -9,7 +9,6 @@
 \usepackage{multirow}
 \usepackage{comment}
 \usepackage{wrapfig}
-
 \newcommand{\VmSlot}{\text{VM slot}}
 \newcommand{\VmSlots}{\VmSlot\text{s}}
 \newcommand{\VM}{\textsc{VM}}
@@ -78,6 +77,7 @@
 
 \newcommand{\MatchCost}{\textsc{MCost}}
 \newcommand{\chunkOf}{\textsc{chunkOf}}
+
 
 \newcommand{\TDPM}{\textsc{3DPM}}
 
@@ -204,7 +204,9 @@ our hardness results also hold in uncapacitated networks of small diameter.
 \end{frontmatter}
 
 \sloppy
-%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 
 Distributed cloud applications, such as batch-processing applications or scale-out databases, generate a significant amount of network traffic~\cite{talk-about}.
@@ -407,7 +409,8 @@ If the number of chunk types~$\tau$ is larger than the number of nodes,
 each node needs to be assigned multiple chunks. We will refer to such a scenario by~$\MA$. 
 Since all nodes are identical and no additional information regarding the chunks is available at request time, we assume that each node will process an identical integer number of chunks~$\MaFactor = \tau / n_V$. 
 
-\textbf{\emph{Flexible Placement ($\FP$).}}
+
+\textbf{\emph{Flexible Placement ($\FP$).}} %The third fundamental degree of freedom, besides replica selection and assignment,
 While the nodes are placed a priori in some cases, the node placement (or
 synonymously: \emph{embedding}) of nodes on physical servers can also be
 subject to optimization. We will refer to this degree of freedom by FP.
@@ -430,6 +433,7 @@ constraints, and will refer to the bandwidth-constrained version by~$\BW$; the c
 Note that capacity constraints introduce infeasible problem instances, where it is impossible to
 allocate sufficient resources to satisfy an embedding request.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Polynomial-Time Algorithms}\label{sec:poly}
 
 
@@ -617,14 +621,13 @@ the set of chunks.
 Concretely, we clone each node~$\MaFactor$ times,
 as each node needs to process
 $\MaFactor$ chunk types, and we collect all copies of a given chunk type in a
-single 
+single %$\ChunkType$
 ``super-node''. We connect each node to all chunk types using the
 \emph{lowest hop count} to one of the copies as the cost metric (the link weight).
 On the resulting bipartite graph, we can now compute a \emph{Minimum Weight
 Perfect
 Matching}~\cite{gabow_scaling_algorithm}:
 the resulting matching describes the optimal assignment of chunks to nodes.
-
 \begin{figure}
 \includegraphics[width = 0.49\columnwidth]{model_ma_r_cv_boxes}
 \hfill
@@ -952,8 +955,6 @@ resulting in an overall complexity of~$\mathcal{O}(n_S \cdot n_V^2)$.
 The runtime to binarize~$\Tree$ is asymptotically negligible.
 
 
-
-
 \subsection{Simple Problems}
 
 \begin{figure}
@@ -974,6 +975,7 @@ nodes to chunk locations.
 Figure~\ref{fig:venn_trivial}
 shows a Venn diagram of the trivial property combinations.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{NP-Hardness Results}\label{sec:np}
 
 We have seen that even problems with multiple dimensions of
@@ -1728,6 +1730,8 @@ the choice of the~$\deg(e) - 1$ out of~$\deg(e)$ chunks
 in each Element Gadget, and the placement of nodes in the
 {\MatchSubtree}.
 
+
+
 Similar in spirit to the NP-completeness proof of~$\RS(2)+\MA(4)+\FP$,
 we call the {\TripleGadget} active if it contains exactly three nodes. 
 Similarly, we call the {\TripleGadget} inactive if it
@@ -1807,6 +1811,7 @@ Using the properties of the substrate network, we perform the reduction in the f
 
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Related Work}\label{sec:relwork}
 
 There has recently been much interest in programming models and distributed
@@ -1852,6 +1857,7 @@ system~\cite{local-schedule-1,local-schedule-2,local-schedule-3}.
 \noindent \textbf{Bibliographic Note.} A preliminary version of this paper appeared
 at the 23rd IEEE International Conference on Network Protocols (ICNP), 2015~\cite{icnp15loc}.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Summary and Conclusion}\label{sec:conclusion}
 
 At the heart of locality and replica aware virtual cluster embeddings lie fundamental algorithmic problems.
@@ -1861,7 +1867,6 @@ and despite the large scale of modern datacenters,
 many problems can be solved efficiently. However, we have also
 shown that several embedding problems are NP-hard already in two-
 and three-level trees---a practically relevant result given today's datacenter topologies~\cite{fattree}).
-%--and even if the the number of replicas is bounded by two.
 \begin{table}
 \tiny
 \bgroup
@@ -1931,10 +1936,14 @@ Paolo Costa for many discussions.
 This research is in part supported by Polish National Science Centre grant DEC-2013/09/B/ST6/01538, the EU project Bigfoot FP7-ICT-317858,
 as well as by the German BMBF Software Campus grant 01IS12056.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\bibliographystyle{alpha}
 {\footnotesize \renewcommand{\baselinestretch}{.9}
 \bibliographystyle{abbrv}
 \bibliography{references}
 }
+
+%\begin{appendix}
 
 
 \end{document}
